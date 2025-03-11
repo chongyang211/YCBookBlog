@@ -48,7 +48,13 @@
 
 
 
-
+## 参考笔记
+23 | HTTPS是什么？SSL/TLS又是什么？
+https://blog.csdn.net/qq_37756660/article/details/134079523
+25 | 固若金汤的根本（下）：数字签名与证书
+https://blog.csdn.net/qq_37756660/article/details/134080398
+加密、摘要、签名、证书，一次说明白!
+https://juejin.cn/post/6995549209348816909
 
 
 
