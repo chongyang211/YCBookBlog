@@ -15,14 +15,6 @@ https://blog.csdn.net/qq_37756660/article/details/134079523
 https://blog.csdn.net/qq_37756660/article/details/134080398
 加密、摘要、签名、证书，一次说明白!
 https://juejin.cn/post/6995549209348816909
-01 | 网络模型和工具：网络为什么要分层？
-https://blog.csdn.net/qq_37756660/article/details/133521069
-03 | 握手：TCP连接都是用TCP协议沟通的吗？
-https://blog.csdn.net/qq_37756660/article/details/133523158
-05 | 定位防火墙（一）：传输层的对比分析
-https://blog.csdn.net/qq_37756660/article/details/133526241
-08 | 工欲善其事必先利其器：学会使用各种工具
-https://blog.csdn.net/qq_37756660/article/details/133869405
 网络排查案例
 https://blog.csdn.net/qq_37756660/category_12459022.html
 网络编程
