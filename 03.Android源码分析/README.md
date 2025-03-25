@@ -13,6 +13,8 @@
 **02.ActivityThread**
 
 - 启动Looper线程流程：ActivityThread创建了一个Looper对象，并启动了消息循环。Looper负责管理消息队列和消息的分发，使得应用程序能够接收和处理来自系统和应用的消息。这样，应用程序可以通过Handler机制来实现异步操作、UI更新和线程间通信等功能。
+- 启动Application流程：
+- 启动第一个Activity流程：
 
 **03.Context上下文**
 
@@ -21,6 +23,9 @@
 
 **04.Android组件设计**
 
+- 组件的设计思想：程序由组件组成；组件与进程剥离；组件皆程序入口
+- 进程的设计思想：
+- AMS是什么东西：AMS（Activity Manager Service）是Android操作系统中的一个核心组件，负责管理应用程序的生命周期、任务栈、进程和应用间的交互等。
 
 
 ## 06.Android应用窗口
