@@ -23,6 +23,7 @@
 - Context分类设计的意图是什么：这些不同类型的Context提供了不同级别和范围的功能和访问权限，以满足应用程序在不同场景下的需求。
 - Context类的代码设计：`Context`下有两个子类，`ContextWrapper`是上下文功能的封装类，而`ContextImpl`则是上下文功能的实现类。
 - 为什么不能用Application应用级上下文启动Activity：这是因为非Activity类型的Context并没有所谓的任务栈，所以待启动的Activity就找不到栈了。
+- 
 
 **04.Android组件设计**
 
