@@ -55,6 +55,8 @@
 - Activity架构设计的思想是什么：Activity并不负责视图控制，它只是控制生命周期和处理事件。真正控制视图的是Window，而Window通过定义不同的View组件实现不同的界面展示。
 - 包管理服务是做什么的：系统在启动的时候会启动PackageManagerService（包管理服务），PackageManagerService会对应用的AndroidManifest.xml进行解析，从而得到应用里所有的组件信息。
 - Activity布局创建流程：在onCreate()方法中，通过setContentView()设置加载View，然后将布局添加到根容器DecorView中。
+- Activity布局渲染流程：执行Activity的onResume方法，然后调用Activity#makeVisible()，将mDecor给显示到界面上，然后设置VISIBLE让布局可见。
+
 
 **02.Activity使用技巧**
 
