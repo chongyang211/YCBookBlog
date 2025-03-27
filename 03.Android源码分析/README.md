@@ -64,4 +64,5 @@
 - Activity正常生命周期：创建（Create）-> 启动（Start）-> 可见（Resume）-> 暂停（Pause）-> 停止（Stop）-> 销毁（Destroy）。
 - Activity三种运行状态设计：前台运行（Foreground）、暂停状态（Paused）和停止状态（Stopped）。
 - 横竖屏切换的过程中发生什么：会发生Activity被销毁并重建的过程。两个回调：**onSaveInstanceState和onRestoreInstanceState**。
+- Activity为何要设计不同的启动模式：可以灵活地控制Activity的启动和管理方式，以满足不同的需求，如界面的单一实例、任务栈的管理、界面的复用等。
 - Activity业务设计的思想是什么：通过合理的组织和分离关注点；将界面逻辑和业务逻辑分离；可以使得Activity的代码更加清晰、灵活和易于维护。
