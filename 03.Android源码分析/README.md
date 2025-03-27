@@ -62,4 +62,5 @@
 
 - `Activity`可以`new`吗？组件并不能采用普通的Java对象创建方式，new一下就能创建实例了，而是要有它们各自的上下文环境。Context是维持Android程序中各组件能够正常工作的一个核心功能类。
 - Activity正常生命周期：创建（Create）-> 启动（Start）-> 可见（Resume）-> 暂停（Pause）-> 停止（Stop）-> 销毁（Destroy）。
+- 横竖屏切换的过程中发生什么：会发生Activity被销毁并重建的过程。两个回调：**onSaveInstanceState和onRestoreInstanceState**。
 - Activity业务设计的思想是什么：通过合理的组织和分离关注点；将界面逻辑和业务逻辑分离；可以使得Activity的代码更加清晰、灵活和易于维护。
