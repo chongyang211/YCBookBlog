@@ -52,7 +52,7 @@
 
 **01.Activity设计和原理**
 
-- 
+- Activity架构设计的思想是什么：Activity并不负责视图控制，它只是控制生命周期和处理事件。真正控制视图的是Window，而Window通过定义不同的View组件实现不同的界面展示。
 
 **02.Activity使用技巧**
 
