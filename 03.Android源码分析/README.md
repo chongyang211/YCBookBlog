@@ -57,10 +57,9 @@
 - Activity布局创建流程：在onCreate()方法中，通过setContentView()设置加载View，然后将布局添加到根容器DecorView中。
 - Activity布局渲染流程：执行Activity的onResume方法，然后调用Activity#makeVisible()，将mDecor给显示到界面上，然后设置VISIBLE让布局可见。
 
-
 **02.Activity使用技巧**
 
-- `Activity`可以`new`吗？组件并不能采用普通的Java对象创建方式，new一下就能创建实例了，而是要有它们各自的上下文环境。Context是维持Android程序中各组件能够正常工作的一个核心功能类。
+- Activity可以new吗？组件并不能采用普通的Java对象创建方式，new一下就能创建实例了，而是要有它们各自的上下文环境。Context是维持Android程序中各组件能够正常工作的一个核心功能类。
 - Activity正常生命周期：创建（Create）-> 启动（Start）-> 可见（Resume）-> 暂停（Pause）-> 停止（Stop）-> 销毁（Destroy）。
 - Activity三种运行状态设计：前台运行（Foreground）、暂停状态（Paused）和停止状态（Stopped）。
 - 横竖屏切换的过程中发生什么：会发生Activity被销毁并重建的过程。两个回调：**onSaveInstanceState和onRestoreInstanceState**。
