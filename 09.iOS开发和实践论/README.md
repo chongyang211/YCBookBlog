@@ -18,3 +18,6 @@
 
 - iOS 学习笔记：https://github.com/xiusl/ObjectiveC_Day
 - iOS 学习视频：https://space.bilibili.com/226689868/lists/45553?type=season
+- iOS微信支付接入指南：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html
+- Android微信支付接入指南：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
+- 从0到1搞定iOS支付接入：微信、支付宝、订阅一文通关：https://blog.csdn.net/bryant_liu24/article/details/144997299
