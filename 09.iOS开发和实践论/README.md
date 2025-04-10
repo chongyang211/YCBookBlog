@@ -20,8 +20,8 @@
 - iOS 学习视频：https://space.bilibili.com/226689868/lists/45553?type=season
 - iOS微信支付接入指南：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html
 - Android微信支付接入指南：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
-- 从0到1搞定iOS支付接入：微信、支付宝、订阅一文通关：https://blog.csdn.net/bryant_liu24/article/details/144997299
 
+- 从0到1搞定iOS支付接入：微信、支付宝、订阅一文通关：https://blog.csdn.net/bryant_liu24/article/details/144997299
 - Swift调用微信支付宝SDK(Swift4.0):https://www.cnblogs.com/vlucht/p/11147540.html
 
 
@@ -32,5 +32,10 @@ wby1830248E@
 收付通app包名： com.wecard.pay
 收付通正式包名：com.johannli.WecardSDKDemo
 
+
+支付：
+1.微信调通
+2.缺少调试支付宝，支付宝缺少配置scheme
+3.加载本地html白屏
 
 
