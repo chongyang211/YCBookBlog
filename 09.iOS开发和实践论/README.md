@@ -22,6 +22,9 @@
 - Android微信支付接入指南：https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
 - 从0到1搞定iOS支付接入：微信、支付宝、订阅一文通关：https://blog.csdn.net/bryant_liu24/article/details/144997299
 
+- Swift调用微信支付宝SDK(Swift4.0):https://www.cnblogs.com/vlucht/p/11147540.html
+
+
 apple开发者账号申请好了，你可以到时候试试，我到时候去研究下怎么报销
 bingyiwei@tencent.com
 wby1830248E@
