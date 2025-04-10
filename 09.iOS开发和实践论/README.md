@@ -29,6 +29,8 @@ apple开发者账号申请好了，你可以到时候试试，我到时候去研
 bingyiwei@tencent.com
 wby1830248E@
 
+收付通app包名： com.wecard.pay
+收付通正式包名：com.johannli.WecardSDKDemo
 
 
 
