@@ -39,3 +39,8 @@ wby1830248E@
 3.加载本地html白屏
 
 
+
+Showing Recent Messages
+/Users/yangchong/Library/Developer/Xcode/DerivedData/WecardPaySDK-adpizimwomwxyafvauxynhynkqjh/Build/Intermediates.noindex/WecardPaySDK.build/Release-iphoneos/WecardPaySDK.build/VerifyModule/WecardPaySDK_objective-c++_arm64-apple-ios18.2_gnu++20/Test/Test.framework/Headers/Test.h:1:9: submodule of top-level module 'WecardPaySDK' implicitly imported here
+
+
