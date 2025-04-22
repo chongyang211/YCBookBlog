@@ -31,6 +31,7 @@
 - Context类的代码设计：`Context`下有两个子类，`ContextWrapper`是上下文功能的封装类，而`ContextImpl`则是上下文功能的实现类。
 - 为什么不能用Application应用级上下文启动Activity：这是因为非Activity类型的Context并没有所谓的任务栈，所以待启动的Activity就找不到栈了。
 - **5.Intent设计思想是什么**：
+- 为什么要设计Bundle：把数据封装至bundle对象中，这个是用来装数据的。而Intent负责四大组件之间的通信交互！
 
 
 
