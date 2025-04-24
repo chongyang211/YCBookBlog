@@ -29,7 +29,9 @@ apple开发者账号申请好了，你可以到时候试试，我到时候去研
 bingyiwei@tencent.com
 wby1830248E@
 
-收付通app包名： com.wecard.pay
+收付通app包名： com.wecard.zf
+微卡刷掌app包名：com.wecard.palm
+微卡空中录掌app包名：com.wecard.air
 收付通正式包名：com.johannli.WecardSDKDemo
 
 
@@ -43,4 +45,8 @@ wby1830248E@
 Showing Recent Messages
 /Users/yangchong/Library/Developer/Xcode/DerivedData/WecardPaySDK-adpizimwomwxyafvauxynhynkqjh/Build/Intermediates.noindex/WecardPaySDK.build/Release-iphoneos/WecardPaySDK.build/VerifyModule/WecardPaySDK_objective-c++_arm64-apple-ios18.2_gnu++20/Test/Test.framework/Headers/Test.h:1:9: submodule of top-level module 'WecardPaySDK' implicitly imported here
 
-
+Could not create a sandbox extension for /
+在ios9以下，loadRequest不能加载本地的html文件，如果要用wkwebView适配ios9以下，需要判断下。
+ios9以下，需要把html文件拷贝到tmp路径下，然后再loadRequest。
+ios9以后，提供了loadFileURL:allowingReadAccessToURL这个方法加载html本地文件。
+一定要注意！！！需要除了html文件之外的js文件和各种资源也要拷贝到tmp路径下！
