@@ -68,6 +68,7 @@
 - 传统的IPC通信机制为何不安全：首先传统IPC的接收方无法获得对方进程可靠的UID和PID（用户ID进程ID），从而无法鉴别对方身份
 - 为何说Binder机制通信安全：Android中PID和UID是由内核填写的，所以调用者进程不能通过伪造身份标识来获取超出系统允许的权限。
 - Binder使用场景有哪些：调用activity启动，
+- 总结一下Binder是什么：对于服务端进程来说Binder指的是Binder本地对象，对于客户端进程来说Binder指的是Binder代理对象。对于传输过程来说Binder是可以进行跨进程传递的对象。
 
 
 
