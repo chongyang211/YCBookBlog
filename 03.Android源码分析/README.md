@@ -58,6 +58,7 @@
 - performMeasure核心思路是什么：这是View测量入口，通过递归地测量子 View，整个 View 树能够正确地计算出每个 View 的大小和位置，从而实现正确的布局和显示效果。
 - 测量中MeasureSpec设计意图：大小（Size）和模式（Mode），用于指定 View 在父容器中的大小限制和测量模式。让开发者能够更好地控制 View 的大小和布局，同时保证 View 在不同情况下都能正确地测量和显示。
 - MeasureSpec值设计是什么：MeasureSpec用一个32位int值来表示布局要求描述。前2位代表了测量模式，后30位则表示了测量的大小，对于模式和大小值的获取，只需要通过位运算即可。
+- 单个View测量流程是什么：经过measure() -> onMeasure() -> setMeasuredDimension()函数的调用，最终View自身测量流程执行完毕。
 
 
 
