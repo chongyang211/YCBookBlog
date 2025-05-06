@@ -41,15 +41,10 @@
 
 ## 11.四大组件原理分析
 
-**01.Activity设计和原理**
-
 - Activity架构设计的思想是什么：Activity并不负责视图控制，它只是控制生命周期和处理事件。真正控制视图的是Window，而Window通过定义不同的View组件实现不同的界面展示。
 - 包管理服务是做什么的：系统在启动的时候会启动PackageManagerService（包管理服务），PackageManagerService会对应用的AndroidManifest.xml进行解析，从而得到应用里所有的组件信息。
 - Activity布局创建流程：在onCreate()方法中，通过setContentView()设置加载View，然后将布局添加到根容器DecorView中。
 - Activity布局渲染流程：执行Activity的onResume方法，然后调用Activity#makeVisible()，将mDecor给显示到界面上，然后设置VISIBLE让布局可见。
-
-**02.Activity使用技巧**
-
 - Activity可以new吗？组件并不能采用普通的Java对象创建方式，new一下就能创建实例了，而是要有它们各自的上下文环境。Context是维持Android程序中各组件能够正常工作的一个核心功能类。
 - Activity正常生命周期：创建（Create）-> 启动（Start）-> 可见（Resume）-> 暂停（Pause）-> 停止（Stop）-> 销毁（Destroy）。
 - Activity三种运行状态设计：前台运行（Foreground）、暂停状态（Paused）和停止状态（Stopped）。
@@ -58,6 +53,9 @@
 - Activity为何要设计不同的启动模式：可以灵活地控制Activity的启动和管理方式，以满足不同的需求，如界面的单一实例、任务栈的管理、界面的复用等。
 - Activity业务设计的思想是什么：通过合理的组织和分离关注点；将界面逻辑和业务逻辑分离；可以使得Activity的代码更加清晰、灵活和易于维护。
 
+## 13.View绘制流程设计
+
+- performMeasure核心思路是什么：这是View测量入口，通过递归地测量子 View，整个 View 树能够正确地计算出每个 View 的大小和位置，从而实现正确的布局和显示效果。
 
 ## 20.IPC通信机制设计
 
