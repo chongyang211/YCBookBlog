@@ -23,6 +23,8 @@
 
 - 从0到1搞定iOS支付接入：微信、支付宝、订阅一文通关：https://blog.csdn.net/bryant_liu24/article/details/144997299
 - Swift调用微信支付宝SDK(Swift4.0):https://www.cnblogs.com/vlucht/p/11147540.html
+- iOS-底层文章汇总：https://juejin.cn/post/6987548539198898183
+- iOS 底层原理文章列表：https://juejin.cn/post/7047391805167370253?from=search-suggest
 
 
 apple开发者账号申请好了，你可以到时候试试，我到时候去研究下怎么报销
@@ -39,14 +41,3 @@ wby1830248E@
 1.微信调通
 2.缺少调试支付宝，支付宝缺少配置scheme
 3.加载本地html白屏
-
-
-
-Showing Recent Messages
-/Users/yangchong/Library/Developer/Xcode/DerivedData/WecardPaySDK-adpizimwomwxyafvauxynhynkqjh/Build/Intermediates.noindex/WecardPaySDK.build/Release-iphoneos/WecardPaySDK.build/VerifyModule/WecardPaySDK_objective-c++_arm64-apple-ios18.2_gnu++20/Test/Test.framework/Headers/Test.h:1:9: submodule of top-level module 'WecardPaySDK' implicitly imported here
-
-Could not create a sandbox extension for /
-在ios9以下，loadRequest不能加载本地的html文件，如果要用wkwebView适配ios9以下，需要判断下。
-ios9以下，需要把html文件拷贝到tmp路径下，然后再loadRequest。
-ios9以后，提供了loadFileURL:allowingReadAccessToURL这个方法加载html本地文件。
-一定要注意！！！需要除了html文件之外的js文件和各种资源也要拷贝到tmp路径下！
