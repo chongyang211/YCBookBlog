@@ -6,6 +6,7 @@
 - 5.1 在OC中类规格是什么样：类规格说明包含了两个部分，声明interface与实现implementation。
 - 5.2 在OC中类的声明：类声明一般定义在.h头文件中。类声明以关键字@interface作为开始，@end作为结束。可以声明一些属性和方法！
 - 5.3 在OC中类的实现：以关键字@implementation作为区块起头，@end结尾。类实现包含了公开方法的实现，以及定义私有（private） 变量及方法。
+- 5.4 类的实例化如何理解：Objective-C创建对象需通过alloc以及init两个消息。alloc的作用是分配内存，init则是初始化对象。
 
 
 
