@@ -4,6 +4,7 @@
 ## 04.Objective-C编程上
 
 - 5.1 在OC中类规格是什么样：类规格说明包含了两个部分，声明interface与实现implementation。
+- 5.2 在OC中类的声明：类声明一般定义在.h头文件中。类声明以关键字@interface作为开始，@end作为结束。可以声明一些属性和方法！
 - 
 
 
