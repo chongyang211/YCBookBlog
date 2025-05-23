@@ -25,6 +25,7 @@
 - 1.4 BitmapFactory可以加载哪些内容：提供了四类方法来加载Bitmap：decodeFile加载文件、decodeResource加载资源、decodeStream加载流、decodeByteArray加载字节数组。
 - 1.5 如何理解图片大小和占用内存：图片大小是经过相对应的压缩算法将原图每个像素点信息转换用另一种数据格式表示；图片内存是这张图片加载进内存所占用的大小。
 - 1.6 Bitmap能直接存储吗：bitmap是一个对象，如果要存储成本地可以查看的图片文件，则必须对bitmap进行编码，然后通过io流写到本地file文件上。
+- 1.7 Bitmap创建的对象内存分配在哪里：8.0 之前版本为 Bitmap 像素从 Java heap 申请内存。 8.0 版本后为 Bitmap 像素从 Native heap 申请内存。
 
 
 
