@@ -68,8 +68,8 @@
 
 ## 17.App页面UI优化实践
 
-- 2.5 如何理解RenderThread：是 Android 系统中一个专门用于处理 View 渲染工作的线程，它的引入主要是为了优化渲染效率和提升用户体验。
-- 
+- 2.5.1 如何理解RenderThread：是 Android 系统中一个专门用于处理 View 渲染工作的线程，它的引入主要是为了优化渲染效率和提升用户体验。
+- 2.5.2 RenderThread和Main线程有何区别：RenderThread专注与View渲染工作，利用GPU硬件加速，主要是做渲染操作然后通过回调把结果通知给主线程。
 
 
 
