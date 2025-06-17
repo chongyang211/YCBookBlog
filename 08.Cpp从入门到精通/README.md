@@ -135,10 +135,11 @@
 
 ## 参考博客
 
-视频教程 https://www.bilibili.com/video/av41559729/
+黑马程序员：https://space.bilibili.com/37974444
 
+黑马程序员匠心之作|C++教程从0到1入门编程,学习编程不再难 ：https://www.bilibili.com/video/av41559729/
 
-
+最新QT从入门到实战完整版|传智教育：https://www.bilibili.com/video/BV1g4411H78N
 
 
 
