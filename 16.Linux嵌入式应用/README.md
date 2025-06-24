@@ -17,21 +17,8 @@
 
 ---
 
-### **3. 检查 Docker 进程**
-通过 `ps` 命令查看 Docker 进程是否在运行。
+### **3. 检查Docker进程**
 
-#### **查看 Docker 进程**
-```bash
-ps aux | grep docker
-```
-
-**输出示例：**
-- **Docker 已启动**：
-  ```
-  root      12345  0.0  0.1 123456 7890 ?        Ssl  10:00   0:00 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-  ```
-- **Docker 未启动**：
-  没有与 Docker 相关的进程。
 
 ---
 
