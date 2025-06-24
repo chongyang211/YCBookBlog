@@ -39,14 +39,7 @@ C 语言提供了以下函数来动态管理堆内存：
 #### **2.3 `realloc`**
 
 #### **2.4 `free`**
-- 释放动态分配的内存。
-- 只能释放由 `malloc`、`calloc` 或 `realloc` 分配的内存。
 
-**示例：**
-```c
-int *p = (int *)malloc(sizeof(int));
-free(p); // 释放内存
-```
 
 ---
 
