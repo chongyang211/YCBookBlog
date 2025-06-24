@@ -76,13 +76,6 @@
 
 ---
 
-### **9. Docker 的核心组件**
-- **Docker Engine**：Docker 的核心组件，负责创建和管理容器。
-- **Docker Image**：容器的模板，包含应用程序及其依赖项。
-- **Docker Container**：Docker 镜像的运行实例。
-- **Dockerfile**：用于定义 Docker 镜像的脚本文件。
-- **Docker Compose**：用于定义和运行多容器应用程序的工具。
-- **Docker Hub**：Docker 镜像的公共仓库，可以分享和下载镜像。
 
 ---
 
