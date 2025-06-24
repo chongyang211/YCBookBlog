@@ -35,19 +35,6 @@ C 语言提供了以下函数来动态管理堆内存：
 #### **2.1 `malloc`**
 
 #### **2.2 `calloc`**
-- 分配指定数量和大小的内存块。
-- 返回指向分配内存的指针。
-- 分配的内存初始化为 0。
-
-**示例：**
-```c
-int *p = (int *)calloc(5, sizeof(int)); // 分配 5 个 int 大小的内存
-if (p == NULL) {
-    perror("Failed to allocate memory");
-    return 1;
-}
-free(p); // 释放内存
-```
 
 #### **2.3 `realloc`**
 - 调整已分配内存块的大小。
