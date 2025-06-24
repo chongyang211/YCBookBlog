@@ -28,210 +28,761 @@
 - 7.1 
 
 
-
-
-
-
-
-
-
-
-
-
-### **4. 指针的类型**
-指针的类型决定了指针指向的数据类型以及指针的算术运算方式。
-
-| 指针类型       | 说明                     |
-|----------------|--------------------------|
-| `int *`        | 指向 `int` 类型的指针     |
-| `float *`      | 指向 `float` 类型的指针   |
-| `char *`       | 指向 `char` 类型的指针    |
-| `void *`       | 通用指针，可以指向任何类型 |
+在 C 语言中，**没有直接支持类（Class）** 的概念，因为 C 语言是一种面向过程的编程语言，而不是面向对象的编程语言（如 C++ 或 Java）。然而，可以通过结构体（`struct`）和函数指针来模拟类的行为，实现封装、继承和多态等面向对象的特性。
 
 ---
 
-### **5. 指针的算术运算**
-指针的算术运算基于指针指向的数据类型的大小。
+### **1. 使用结构体模拟类**
+结构体可以用来封装数据，类似于类中的成员变量。
 
-#### **(1) 指针加减整数**
+**示例：**
 ```c
-int arr[] = {1, 2, 3, 4, 5};
-int *p = arr;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-p++; // p 指向 arr[1]
-p += 2; // p 指向 arr[3]
-```
+// 定义一个结构体模拟类
+typedef struct {
+    char name[50];
+    int age;
+} Person;
 
-#### **(2) 指针相减**
-```c
-int *p1 = &arr[1];
-int *p2 = &arr[4];
-int diff = p2 - p1; // diff = 3
-```
+// 构造函数
+Person* Person_create(const char *name, int age) {
+    Person *p = (Person *)malloc(sizeof(Person));
+    if (p != NULL) {
+        strcpy(p->name, name);
+        p->age = age;
+    }
+    return p;
+}
 
----
+// 成员函数
+void Person_introduce(Person *p) {
+    printf("Hello, my name is %s and I am %d years old.\n", p->name, p->age);
+}
 
-### **6. 指针与数组的关系**
-- 数组名是数组首元素的地址。
-- 指针可以像数组一样使用下标访问元素。
+// 析构函数
+void Person_destroy(Person *p) {
+    free(p);
+}
 
-#### **示例**
-```c
-int arr[] = {1, 2, 3, 4, 5};
-int *p = arr;
+int main() {
+    // 创建对象
+    Person *person = Person_create("Alice", 25);
 
-printf("arr[2] = %d\n", arr[2]);
-printf("*(p + 2) = %d\n", *(p + 2));
-```
+    // 调用成员函数
+    Person_introduce(person);
 
-**输出：**
-```
-arr[2] = 3
-*(p + 2) = 3
+    // 销毁对象
+    Person_destroy(person);
+
+    return 0;
+}
 ```
 
 ---
 
-### **7. 指针与字符串**
-- 字符串是字符数组，可以用字符指针表示。
+### **2. 使用函数指针模拟成员方法**
+通过将函数指针作为结构体的成员，可以模拟类的成员方法。
 
-#### **示例**
+**示例：**
 ```c
-char str[] = "Hello";
-char *p = str;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-printf("String: %s\n", p);
-printf("First character: %c\n", *p);
-```
+// 定义一个结构体模拟类
+typedef struct {
+    char name[50];
+    int age;
+    void (*introduce)(struct Person *); // 函数指针
+} Person;
 
-**输出：**
-```
-String: Hello
-First character: H
+// 成员函数
+void Person_introduce(Person *p) {
+    printf("Hello, my name is %s and I am %d years old.\n", p->name, p->age);
+}
+
+// 构造函数
+Person* Person_create(const char *name, int age) {
+    Person *p = (Person *)malloc(sizeof(Person));
+    if (p != NULL) {
+        strcpy(p->name, name);
+        p->age = age;
+        p->introduce = Person_introduce; // 初始化函数指针
+    }
+    return p;
+}
+
+// 析构函数
+void Person_destroy(Person *p) {
+    free(p);
+}
+
+int main() {
+    // 创建对象
+    Person *person = Person_create("Bob", 30);
+
+    // 调用成员函数
+    person->introduce(person);
+
+    // 销毁对象
+    Person_destroy(person);
+
+    return 0;
+}
 ```
 
 ---
 
-### **8. 指针数组与数组指针**
-#### **(1) 指针数组**
-- 数组中的每个元素都是指针。
+### **3. 模拟继承**
+通过嵌套结构体，可以模拟继承的特性。
 
+**示例：**
 ```c
-int *arr[3]; // 指针数组
-int a = 1, b = 2, c = 3;
-arr[0] = &a;
-arr[1] = &b;
-arr[2] = &c;
-```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#### **(2) 数组指针**
-- 指向数组的指针。
+// 基类
+typedef struct {
+    char name[50];
+    int age;
+} Person;
 
-```c
-int arr[3] = {1, 2, 3};
-int (*p)[3] = &arr; // 数组指针
+// 派生类
+typedef struct {
+    Person base; // 继承基类
+    char job[50];
+} Employee;
+
+// 基类构造函数
+Person* Person_create(const char *name, int age) {
+    Person *p = (Person *)malloc(sizeof(Person));
+    if (p != NULL) {
+        strcpy(p->name, name);
+        p->age = age;
+    }
+    return p;
+}
+
+// 派生类构造函数
+Employee* Employee_create(const char *name, int age, const char *job) {
+    Employee *e = (Employee *)malloc(sizeof(Employee));
+    if (e != NULL) {
+        strcpy(e->base.name, name);
+        e->base.age = age;
+        strcpy(e->job, job);
+    }
+    return e;
+}
+
+// 基类成员函数
+void Person_introduce(Person *p) {
+    printf("Hello, my name is %s and I am %d years old.\n", p->name, p->age);
+}
+
+// 派生类成员函数
+void Employee_introduce(Employee *e) {
+    Person_introduce((Person *)e); // 调用基类方法
+    printf("I work as a %s.\n", e->job);
+}
+
+// 析构函数
+void Person_destroy(Person *p) {
+    free(p);
+}
+
+int main() {
+    // 创建派生类对象
+    Employee *employee = Employee_create("Charlie", 35, "Engineer");
+
+    // 调用派生类成员函数
+    Employee_introduce(employee);
+
+    // 销毁对象
+    Person_destroy((Person *)employee);
+
+    return 0;
+}
 ```
 
 ---
 
-### **9. 多级指针**
-- 指向指针的指针。
+### **4. 模拟多态**
+通过函数指针和类型转换，可以模拟多态的特性。
 
-#### **示例**
+**示例：**
 ```c
-int x = 10;
-int *p = &x;
-int **pp = &p;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-printf("x = %d\n", **pp);
-```
+// 基类
+typedef struct {
+    void (*introduce)(void *); // 函数指针
+} Animal;
 
-**输出：**
-```
-x = 10
+// 派生类：Dog
+typedef struct {
+    Animal base; // 继承基类
+    char name[50];
+} Dog;
+
+// 派生类：Cat
+typedef struct {
+    Animal base; // 继承基类
+    char name[50];
+} Cat;
+
+// Dog 的成员函数
+void Dog_introduce(void *dog) {
+    Dog *d = (Dog *)dog;
+    printf("Woof! My name is %s.\n", d->name);
+}
+
+// Cat 的成员函数
+void Cat_introduce(void *cat) {
+    Cat *c = (Cat *)cat;
+    printf("Meow! My name is %s.\n", c->name);
+}
+
+// Dog 构造函数
+Dog* Dog_create(const char *name) {
+    Dog *d = (Dog *)malloc(sizeof(Dog));
+    if (d != NULL) {
+        strcpy(d->name, name);
+        d->base.introduce = Dog_introduce; // 初始化函数指针
+    }
+    return d;
+}
+
+// Cat 构造函数
+Cat* Cat_create(const char *name) {
+    Cat *c = (Cat *)malloc(sizeof(Cat));
+    if (c != NULL) {
+        strcpy(c->name, name);
+        c->base.introduce = Cat_introduce; // 初始化函数指针
+    }
+    return c;
+}
+
+// 析构函数
+void Animal_destroy(Animal *a) {
+    free(a);
+}
+
+int main() {
+    // 创建对象
+    Dog *dog = Dog_create("Buddy");
+    Cat *cat = Cat_create("Whiskers");
+
+    // 调用多态方法
+    Animal *animals[] = {(Animal *)dog, (Animal *)cat};
+    for (int i = 0; i < 2; i++) {
+        animals[i]->introduce(animals[i]);
+    }
+
+    // 销毁对象
+    Animal_destroy((Animal *)dog);
+    Animal_destroy((Animal *)cat);
+
+    return 0;
+}
 ```
 
 ---
 
-### **10. 动态内存分配**
-- 使用 `malloc`、`calloc`、`realloc` 和 `free` 函数动态分配和释放内存。
+### **5. 总结**
+- C 语言没有类的概念，但可以通过结构体和函数指针模拟面向对象的特性。
+- 使用结构体封装数据，函数指针模拟成员方法。
+- 通过嵌套结构体模拟继承，通过函数指针和类型转换模拟多态。
+- 虽然 C 语言不是面向对象的语言，但通过这些技巧可以实现类似的功能。
 
-#### **示例**
+这些方法可以帮助你在 C 语言中实现面向对象的设计模式。
+
+
+
+在 C 语言中，**内存管理** 是一个非常重要的主题。C 语言提供了直接操作内存的能力，这使得它非常强大，但也容易引发错误（如内存泄漏、野指针等）。理解 C 语言中的内存模型和内存管理机制是编写高效、安全程序的关键。
+
+---
+
+### **1. 内存模型**
+在 C 语言中，程序的内存通常分为以下几个区域：
+
+#### **1.1 栈（Stack）**
+- 用于存储局部变量、函数参数和函数调用的上下文。
+- 内存由编译器自动分配和释放。
+- 大小有限，通常较小（几 MB）。
+- 访问速度快。
+
+**示例：**
+```c
+void func() {
+    int x = 10; // x 存储在栈中
+}
+```
+
+#### **1.2 堆（Heap）**
+- 用于动态内存分配。
+- 内存由程序员手动管理（使用 `malloc`、`calloc`、`realloc` 和 `free`）。
+- 大小较大，受系统内存限制。
+- 访问速度较慢。
+
+**示例：**
+```c
+int *p = (int *)malloc(sizeof(int)); // 在堆中分配内存
+free(p); // 释放内存
+```
+
+#### **1.3 全局/静态区（Global/Static Area）**
+- 用于存储全局变量和静态变量。
+- 内存由编译器在程序启动时分配，在程序结束时释放。
+- 分为初始化和未初始化两部分。
+
+**示例：**
+```c
+int global_var = 10; // 全局变量，存储在全局区
+static int static_var = 20; // 静态变量，存储在全局区
+```
+
+#### **1.4 常量区（Constant Area）**
+- 用于存储字符串常量和 `const` 变量。
+- 内存由编译器分配，程序结束时释放。
+- 通常是只读的。
+
+**示例：**
+```c
+const char *str = "Hello, World!"; // 字符串常量，存储在常量区
+```
+
+#### **1.5 代码区（Code Area）**
+- 用于存储程序的二进制代码（指令）。
+- 通常是只读的。
+
+---
+
+### **2. 动态内存管理**
+C 语言提供了以下函数来动态管理堆内存：
+
+#### **2.1 `malloc`**
+- 分配指定大小的内存块。
+- 返回指向分配内存的指针。
+- 分配的内存未初始化。
+
+**示例：**
+```c
+int *p = (int *)malloc(sizeof(int)); // 分配 4 字节内存
+if (p == NULL) {
+    perror("Failed to allocate memory");
+    return 1;
+}
+*p = 10;
+free(p); // 释放内存
+```
+
+#### **2.2 `calloc`**
+- 分配指定数量和大小的内存块。
+- 返回指向分配内存的指针。
+- 分配的内存初始化为 0。
+
+**示例：**
+```c
+int *p = (int *)calloc(5, sizeof(int)); // 分配 5 个 int 大小的内存
+if (p == NULL) {
+    perror("Failed to allocate memory");
+    return 1;
+}
+free(p); // 释放内存
+```
+
+#### **2.3 `realloc`**
+- 调整已分配内存块的大小。
+- 返回指向新内存块的指针。
+- 如果新大小大于原大小，新增部分未初始化。
+
+**示例：**
+```c
+int *p = (int *)malloc(5 * sizeof(int)); // 分配 5 个 int 大小的内存
+p = (int *)realloc(p, 10 * sizeof(int)); // 调整为 10 个 int 大小
+if (p == NULL) {
+    perror("Failed to reallocate memory");
+    return 1;
+}
+free(p); // 释放内存
+```
+
+#### **2.4 `free`**
+- 释放动态分配的内存。
+- 只能释放由 `malloc`、`calloc` 或 `realloc` 分配的内存。
+
+**示例：**
+```c
+int *p = (int *)malloc(sizeof(int));
+free(p); // 释放内存
+```
+
+---
+
+### **3. 常见内存问题**
+
+#### **3.1 内存泄漏**
+- 动态分配的内存未释放。
+- 导致程序占用内存不断增加。
+
+**示例：**
+```c
+void func() {
+    int *p = (int *)malloc(sizeof(int));
+    // 忘记调用 free(p);
+}
+```
+
+#### **3.2 野指针**
+- 指针指向已释放的内存。
+- 访问野指针会导致未定义行为。
+
+**示例：**
+```c
+int *p = (int *)malloc(sizeof(int));
+free(p);
+*p = 10; // 野指针访问
+```
+
+#### **3.3 双重释放**
+- 对同一块内存多次调用 `free`。
+- 导致程序崩溃。
+
+**示例：**
+```c
+int *p = (int *)malloc(sizeof(int));
+free(p);
+free(p); // 双重释放
+```
+
+#### **3.4 越界访问**
+- 访问超出分配内存范围的数据。
+- 导致程序崩溃或数据损坏。
+
+**示例：**
+```c
+int *p = (int *)malloc(5 * sizeof(int));
+p[5] = 10; // 越界访问
+free(p);
+```
+
+---
+
+### **4. 内存管理的最佳实践**
+1. **初始化指针**：在声明指针时初始化为 `NULL`。
+2. **检查返回值**：在使用 `malloc`、`calloc` 或 `realloc` 后检查返回值是否为 `NULL`。
+3. **及时释放内存**：动态分配的内存使用完毕后及时调用 `free`。
+4. **避免野指针**：释放内存后将指针置为 `NULL`。
+5. **使用工具检测内存问题**：如 Valgrind、AddressSanitizer 等。
+
+---
+
+### **5. 示例代码**
+
+#### **5.1 动态数组**
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
 int main() {
-    int *p = (int *)malloc(5 * sizeof(int)); // 分配 5 个 int 的内存
-    if (p == NULL) {
-        printf("Memory allocation failed\n");
+    int n = 5;
+    int *arr = (int *)malloc(n * sizeof(int));
+    if (arr == NULL) {
+        perror("Failed to allocate memory");
         return 1;
     }
 
-    for (int i = 0; i < 5; i++) {
-        p[i] = i + 1;
+    for (int i = 0; i < n; i++) {
+        arr[i] = i + 1;
     }
 
-    for (int i = 0; i < 5; i++) {
-        printf("%d ", p[i]);
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
     }
 
-    free(p); // 释放内存
+    free(arr);
     return 0;
 }
 ```
 
-**输出：**
-```
-1 2 3 4 5
+#### **5.2 二维动态数组**
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int rows = 3, cols = 4;
+    int **arr = (int **)malloc(rows * sizeof(int *));
+    if (arr == NULL) {
+        perror("Failed to allocate memory");
+        return 1;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        arr[i] = (int *)malloc(cols * sizeof(int));
+        if (arr[i] == NULL) {
+            perror("Failed to allocate memory");
+            return 1;
+        }
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            arr[i][j] = i * cols + j + 1;
+        }
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", arr[i][j]);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < rows; i++) {
+        free(arr[i]);
+    }
+    free(arr);
+
+    return 0;
+}
 ```
 
 ---
 
-### **11. 指针的注意事项**
-1. **空指针**：
-    - 指针未初始化时，应将其设置为 `NULL`。
-    - 示例：
-      ```c
-      int *p = NULL;
-      ```
+### **6. 总结**
+- C 语言的内存分为栈、堆、全局区、常量区和代码区。
+- 动态内存管理使用 `malloc`、`calloc`、`realloc` 和 `free`。
+- 常见内存问题包括内存泄漏、野指针、双重释放和越界访问。
+- 遵循最佳实践可以避免内存问题，编写高效、安全的程序。
 
-2. **野指针**：
-    - 指向已释放或无效内存的指针。
-    - 示例：
-      ```c
-      int *p = (int *)malloc(sizeof(int));
-      free(p);
-      // p 现在是野指针
-      ```
+通过掌握这些知识，你可以在 C 语言中更好地管理内存，避免常见的错误。
 
-3. **指针类型匹配**：
-    - 指针的类型必须与指向的数据类型匹配。
-    - 示例：
-      ```c
-      int x = 10;
-      float *p = &x; // 错误：类型不匹配
-      ```
 
-4. **指针的算术运算**：
-    - 指针的算术运算基于指向的数据类型的大小。
-    - 示例：
-      ```c
-      int arr[5];
-      int *p = arr;
-      p++; // p 指向 arr[1]
-      ```
+在 C 语言中，**字符串** 是由字符组成的数组，以空字符 `\0` 结尾。字符串是 C 语言中处理文本数据的基本方式。由于 C 语言没有内置的字符串类型，字符串通常通过字符数组或字符指针来表示。
 
 ---
 
-### **总结**
-- 指针是 C 语言的核心特性，提供了直接操作内存的能力。
-- 指针的类型、算术运算、与数组和函数的关系是理解指针的关键。
-- 熟练掌握指针的使用是编写高效、灵活 C 程序的基础。
+### **1. 字符串的表示**
+#### **1.1 字符数组**
+字符串可以通过字符数组来存储，数组的最后一个元素必须是 `\0`，表示字符串的结束。
 
+**示例：**
+```c
+char str[] = "Hello, World!";
+```
+等价于：
+```c
+char str[] = {'H', 'e', 'l', 'l', 'o', ',', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\0'};
+```
 
+#### **1.2 字符指针**
+字符串也可以通过字符指针来指向。
 
---------
+**示例：**
+```c
+const char *str = "Hello, World!";
+```
+
+---
+
+### **2. 字符串的输入输出**
+#### **2.1 输出字符串**
+使用 `printf` 函数输出字符串：
+```c
+printf("%s\n", str);
+```
+
+#### **2.2 输入字符串**
+使用 `scanf` 或 `gets` 函数输入字符串：
+```c
+char str[100];
+scanf("%s", str); // 输入字符串（遇到空格停止）
+gets(str);        // 输入一行字符串（不推荐使用，存在安全隐患）
+```
+
+**注意：**
+- `scanf` 遇到空格会停止输入。
+- `gets` 不检查缓冲区大小，可能导致缓冲区溢出，建议使用 `fgets`。
+
+**推荐使用 `fgets`：**
+```c
+char str[100];
+fgets(str, sizeof(str), stdin); // 安全地输入一行字符串
+```
+
+---
+
+### **3. 字符串操作函数**
+C 标准库提供了许多字符串操作函数，定义在 `<string.h>` 头文件中。
+
+#### **3.1 字符串长度**
+使用 `strlen` 函数获取字符串长度（不包括 `\0`）：
+```c
+size_t strlen(const char *str);
+```
+
+**示例：**
+```c
+char str[] = "Hello";
+int len = strlen(str); // len = 5
+```
+
+#### **3.2 字符串复制**
+使用 `strcpy` 或 `strncpy` 函数复制字符串：
+```c
+char *strcpy(char *dest, const char *src); // 复制整个字符串
+char *strncpy(char *dest, const char *src, size_t n); // 复制前 n 个字符
+```
+
+**示例：**
+```c
+char dest[20];
+strcpy(dest, "Hello"); // dest = "Hello"
+strncpy(dest, "World", 3); // dest = "Worlo"
+```
+
+#### **3.3 字符串连接**
+使用 `strcat` 或 `strncat` 函数连接字符串：
+```c
+char *strcat(char *dest, const char *src); // 连接整个字符串
+char *strncat(char *dest, const char *src, size_t n); // 连接前 n 个字符
+```
+
+**示例：**
+```c
+char dest[20] = "Hello";
+strcat(dest, " World"); // dest = "Hello World"
+strncat(dest, "!!!", 2); // dest = "Hello World!!"
+```
+
+#### **3.4 字符串比较**
+使用 `strcmp` 或 `strncmp` 函数比较字符串：
+```c
+int strcmp(const char *str1, const char *str2); // 比较整个字符串
+int strncmp(const char *str1, const char *str2, size_t n); // 比较前 n 个字符
+```
+
+**返回值：**
+- 如果 `str1` 小于 `str2`，返回负值。
+- 如果 `str1` 等于 `str2`，返回 0。
+- 如果 `str1` 大于 `str2`，返回正值。
+
+**示例：**
+```c
+int result = strcmp("apple", "banana"); // result < 0
+```
+
+#### **3.5 字符串查找**
+使用 `strchr` 或 `strstr` 函数查找字符或子字符串：
+```c
+char *strchr(const char *str, int c); // 查找字符 c 第一次出现的位置
+char *strstr(const char *haystack, const char *needle); // 查找子字符串 needle
+```
+
+**示例：**
+```c
+char *p = strchr("Hello", 'e'); // p 指向 'e'
+char *q = strstr("Hello, World!", "World"); // q 指向 "World"
+```
+
+---
+
+### **4. 字符串与数值的转换**
+C 标准库提供了将字符串转换为数值的函数，定义在 `<stdlib.h>` 头文件中。
+
+#### **4.1 字符串转整数**
+使用 `atoi` 或 `strtol` 函数：
+```c
+int atoi(const char *str); // 将字符串转换为整数
+long strtol(const char *str, char **endptr, int base); // 将字符串转换为长整数
+```
+
+**示例：**
+```c
+int num = atoi("123"); // num = 123
+```
+
+#### **4.2 字符串转浮点数**
+使用 `atof` 或 `strtod` 函数：
+```c
+double atof(const char *str); // 将字符串转换为浮点数
+double strtod(const char *str, char **endptr); // 将字符串转换为双精度浮点数
+```
+
+**示例：**
+```c
+double num = atof("3.14"); // num = 3.14
+```
+
+---
+
+### **5. 示例代码**
+
+#### **5.1 字符串操作**
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char str1[20] = "Hello";
+    char str2[20] = "World";
+
+    // 字符串连接
+    strcat(str1, " ");
+    strcat(str1, str2);
+    printf("%s\n", str1); // 输出 "Hello World"
+
+    // 字符串比较
+    if (strcmp(str1, "Hello World") == 0) {
+        printf("Strings are equal.\n");
+    }
+
+    // 字符串查找
+    char *p = strchr(str1, 'W');
+    if (p != NULL) {
+        printf("Found 'W' at position %ld.\n", p - str1);
+    }
+
+    return 0;
+}
+```
+
+#### **5.2 字符串与数值转换**
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char str[] = "12345";
+    int num = atoi(str);
+    printf("Number: %d\n", num); // 输出 "Number: 12345"
+
+    char str2[] = "3.14";
+    double num2 = atof(str2);
+    printf("Number: %.2f\n", num2); // 输出 "Number: 3.14"
+
+    return 0;
+}
+```
+
+---
+
+### **6. 总结**
+- 字符串是字符数组，以 `\0` 结尾。
+- 使用字符数组或字符指针表示字符串。
+- C 标准库提供了丰富的字符串操作函数，如 `strlen`、`strcpy`、`strcat`、`strcmp` 等。
+- 字符串与数值之间可以通过 `atoi`、`atof` 等函数进行转换。
+- 注意字符串操作的安全性，避免缓冲区溢出等问题。
+
+通过掌握这些知识，你可以在 C 语言中高效地处理字符串。
+
 
 
 
@@ -282,7 +833,6 @@ int main() {
 5.10 复习题
 5.11 编程练习
 
-
 6.1 再探while循环
 6.2 while语句
 6.4 不确定循环与计数循环
@@ -297,7 +847,6 @@ int main() {
 6.13 关键概念
 6.14 总结
 6.15 复习题
-
 
 
 7.1 if语句
@@ -325,6 +874,17 @@ int main() {
 8.10 复习题
 8.11 编程练习
 
+9.1 函数概述
+9.2 ANSI C的函数原型
+9.3 递归
+9.4 多源代码文件程序的编译
+9.5 地址运算符：&
+9.6 改变调用函数中的变量
+9.7 指针简介
+9.8 关键概念
+9.9 总结
+9.10 复习题
+9.11 编程练习
 
 10.1 数组
 10.2 多维数组
@@ -340,6 +900,18 @@ int main() {
 10.12 复习题
 10.13 编程练习
 
+12.1 存储类
+12.2 存储类说明符
+12.3 存储类和函数
+12.4 随机数函数和静态变量
+12.5 掷骰子
+12.6 分配内存：malloc()和free()
+12.7 ANSI C的类型限定词
+12.8 关键概念
+12.9 总结
+12.10 复习题
+12.11 编程练习
+
 
 13.1 和文件进行通信
 13.2 标准I/O
@@ -353,6 +925,24 @@ int main() {
 13.10 复习题
 13.11 编程练习
 
+14.1 示例问题：创建图书目录
+14.2 建立结构声明
+14.3 定义结构变量
+14.4 结构数组
+14.5 嵌套结构
+14.6 指向结构的指针
+14.7 向函数传递结构信息
+14.8 把结构内容保存到文件中
+14.9 结构：下一步是什么
+14.10 联合简介
+14.11 枚举类型
+14.12 typedef简介
+14.13 奇特的声明
+14.14 函数和指针
+14.15 关键概念
+14.16 总结
+14.17 复习题
+14.18 编程练习
 
 15.1 二进制数、位和字节
 15.2 其他基数
@@ -363,6 +953,36 @@ int main() {
 15.7 复习题
 15.8 编程练习
 
+第16章 C预处理器和C库
+16.1 翻译程序的第一步
+16.2 明显常量：#define
+16.3 在#define中使用参数
+16.4 宏，还是函数
+16.5 文件包含：#include
+16.6 其他指令
+16.7 内联函数
+16.8 C库
+16.9 数学库
+16.10 通用工具库
+16.11 诊断库
+16.12 string.h库中的memcpy()和memmove()
+16.13 可变参数：stdarg.h
+16.14 关键概念
+16.15 总结
+16.16 复习题
+16.17 编程练习
 
 
-
+第17章 高级数据表示
+17.1 研究数据表示
+17.2 从数组到链表
+17.3 抽象数据类型（ADT）
+17.4 队列ADT
+17.5 用队列进行模拟
+17.6 链表与数组
+17.7 二叉搜索树
+17.8 其他说明
+17.9 关键概念
+17.10 总结
+17.11 复习题
+17.12 编程练习
