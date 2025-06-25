@@ -30,6 +30,223 @@
 
 
 
+以下是关于 C 语言线程的详细说明和示例。
+
+---
+
+### **1. 线程的基本概念**
+- **线程**：线程是程序执行的最小单元，一个进程可以包含多个线程，线程共享进程的内存空间。
+- **多线程**：多线程允许程序同时执行多个任务，提高程序的并发性和效率。
+
+---
+
+### **2. 使用 pthread 创建线程**
+#### **2.1 头文件**
+```c
+#include <pthread.h>
+```
+
+#### **2.2 创建线程**
+使用 `pthread_create` 函数创建线程：
+```c
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);
+```
+- **参数**：
+    - `thread`：指向线程标识符的指针。
+    - `attr`：线程属性，通常为 `NULL`（使用默认属性）。
+    - `start_routine`：线程执行的函数。
+    - `arg`：传递给线程函数的参数。
+- **返回值**：成功返回 `0`，失败返回错误码。
+
+#### **2.3 示例代码**
+```c
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+// 线程函数
+void *thread_function(void *arg) {
+    int *value = (int *)arg;
+    printf("Thread is running, value = %d\n", *value);
+    sleep(2); // 模拟线程执行
+    printf("Thread is done\n");
+    return NULL;
+}
+
+int main() {
+    pthread_t thread;
+    int value = 42;
+
+    // 创建线程
+    if (pthread_create(&thread, NULL, thread_function, &value) != 0) {
+        perror("Failed to create thread");
+        return 1;
+    }
+
+    // 等待线程结束
+    if (pthread_join(thread, NULL) != 0) {
+        perror("Failed to join thread");
+        return 1;
+    }
+
+    printf("Main thread is done\n");
+    return 0;
+}
+```
+
+---
+
+### **3. 线程同步**
+多线程程序中，线程之间可能会竞争共享资源，导致数据不一致。常用的同步机制包括 **互斥锁** 和 **条件变量**。
+
+#### **3.1 互斥锁（Mutex）**
+互斥锁用于保护共享资源，确保同一时间只有一个线程访问资源。
+
+##### **示例代码**
+```c
+#include <stdio.h>
+#include <pthread.h>
+
+int shared_value = 0;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void *thread_function(void *arg) {
+    for (int i = 0; i < 100000; i++) {
+        pthread_mutex_lock(&mutex); // 加锁
+        shared_value++;
+        pthread_mutex_unlock(&mutex); // 解锁
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t thread1, thread2;
+
+    pthread_create(&thread1, NULL, thread_function, NULL);
+    pthread_create(&thread2, NULL, thread_function, NULL);
+
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
+    printf("Shared value = %d\n", shared_value);
+    return 0;
+}
+```
+
+#### **3.2 条件变量（Condition Variable）**
+条件变量用于线程之间的通信，通常与互斥锁一起使用。
+
+##### **示例代码**
+```c
+#include <stdio.h>
+#include <pthread.h>
+
+int ready = 0;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+void *producer(void *arg) {
+    pthread_mutex_lock(&mutex);
+    ready = 1;
+    printf("Producer: Data is ready\n");
+    pthread_cond_signal(&cond); // 通知消费者
+    pthread_mutex_unlock(&mutex);
+    return NULL;
+}
+
+void *consumer(void *arg) {
+    pthread_mutex_lock(&mutex);
+    while (!ready) {
+        pthread_cond_wait(&cond, &mutex); // 等待条件变量
+    }
+    printf("Consumer: Data is consumed\n");
+    pthread_mutex_unlock(&mutex);
+    return NULL;
+}
+
+int main() {
+    pthread_t thread1, thread2;
+
+    pthread_create(&thread1, NULL, consumer, NULL);
+    pthread_create(&thread2, NULL, producer, NULL);
+
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
+    return 0;
+}
+```
+
+---
+
+### **4. 线程的终止**
+#### **4.1 线程正常终止**
+线程函数执行完毕后，线程会自动终止。
+
+#### **4.2 线程强制终止**
+使用 `pthread_cancel` 强制终止线程：
+```c
+pthread_cancel(thread);
+```
+
+#### **4.3 线程分离**
+使用 `pthread_detach` 将线程设置为分离状态，线程结束后自动释放资源：
+```c
+pthread_detach(thread);
+```
+
+---
+
+### **5. 线程属性**
+可以通过 `pthread_attr_t` 设置线程属性，如栈大小、调度策略等。
+
+##### **示例代码**
+```c
+pthread_attr_t attr;
+pthread_attr_init(&attr);
+pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED); // 设置线程为分离状态
+pthread_create(&thread, &attr, thread_function, NULL);
+pthread_attr_destroy(&attr);
+```
+
+---
+
+### **6. 线程的返回值**
+线程函数可以通过 `return` 或 `pthread_exit` 返回结果，主线程使用 `pthread_join` 获取返回值。
+
+##### **示例代码**
+```c
+void *thread_function(void *arg) {
+    int *result = malloc(sizeof(int));
+    *result = 42;
+    pthread_exit(result); // 返回结果
+}
+
+int main() {
+    pthread_t thread;
+    void *retval;
+
+    pthread_create(&thread, NULL, thread_function, NULL);
+    pthread_join(thread, &retval);
+
+    printf("Thread returned: %d\n", *(int *)retval);
+    free(retval);
+    return 0;
+}
+```
+
+---
+
+### **7. 总结**
+- 使用 `pthread_create` 创建线程。
+- 使用 `pthread_join` 等待线程结束。
+- 使用互斥锁和条件变量实现线程同步。
+- 通过 `pthread_attr_t` 设置线程属性。
+- 线程函数可以通过 `return` 或 `pthread_exit` 返回结果。
+
+通过合理使用线程，可以提高程序的并发性和效率，但需要注意线程安全和同步问题。
+
+
 2.1 C语言的一个简单实例
 2.2 实例说明
 2.3 一个简单程序的结构
