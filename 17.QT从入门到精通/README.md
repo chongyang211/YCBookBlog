@@ -2,32 +2,10 @@
 
 
 
-在 Linux 环境下使用 **Qt** 进行开发是一种非常流行的选择，因为 Qt 是一个功能强大的跨平台 C++ 框架，支持 GUI 开发、网络编程、数据库操作等。以下是一个完整的指南，帮助你在 Linux 上开始 Qt 开发。
 
 ---
 
 ### **1. 安装 Qt**
-#### **1.1 使用包管理器安装**
-在大多数 Linux 发行版中，可以通过包管理器安装 Qt。
-
-- **Ubuntu/Debian**:
-  ```bash
-  sudo apt update
-  sudo apt install qt5-default qtcreator
-  ```
-
-- **Fedora**:
-  ```bash
-  sudo dnf install qt5 qt5-devel qt-creator
-  ```
-
-- **Arch Linux**:
-  ```bash
-  sudo pacman -S qt5-base qt5-tools qtcreator
-  ```
-
-#### **1.2 使用 Qt 官方安装程序**
-从 [Qt 官网](https://www.qt.io/download) 下载 Qt 安装程序，选择适合的版本并安装。
 
 ---
 
