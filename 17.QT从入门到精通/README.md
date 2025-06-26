@@ -11,16 +11,6 @@
 
 ### **2. 配置开发环境**
 #### **2.1 使用 Qt Creator**
-Qt Creator 是 Qt 官方提供的集成开发环境（IDE），支持代码编辑、调试、UI 设计等功能。
-
-- 启动 Qt Creator：
-  ```bash
-  qtcreator
-  ```
-
-- 配置编译器：
-    - 打开 Qt Creator，进入 `Tools` -> `Options` -> `Kits`。
-    - 确保已检测到系统安装的编译器（如 GCC）。
 
 #### **2.2 使用命令行开发**
 如果你更喜欢命令行开发，可以使用 `qmake` 和 `make` 构建 Qt 项目。
