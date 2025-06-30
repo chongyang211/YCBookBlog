@@ -4,22 +4,74 @@
 
 
 
-## 学习资源
-- [Qt 官方文档](https://doc.qt.io/)
-- [Qt 教程](https://qmlbook.github.io/)
+### 
+#### **特点：**
+- 轻量级，启动速度快。
+- 丰富的插件生态系统。
+- 跨平台支持（Windows、macOS、Linux）。
 
-## 学习资料
+#### **安装与使用：**
+1. **安装 VSCode**：
+    - 下载并安装 [VSCode](https://code.visualstudio.com/)。
 
-- 比较完整的QT学习资料：https://github.com/lichangke/QT
+4. **创建项目**：
+    - 使用 CMake 创建 Qt 项目。
+5. **编写与运行**：
+    - 在 VSCode 中编写代码并运行项目。
 
-## 视频资料
+---
 
-- 最新QT从入门到实战完整版|传智教育：https://www.bilibili.com/video/BV1g4411H78N
-- C++QT2024年最新版：https://www.bilibili.com/video/BV1GW42197ff/
+### **5. Xcode（macOS 平台）**
+Xcode 是苹果官方开发的 IDE，支持 macOS 和 iOS 开发，也可以用于 Qt 开发。
+
+#### **特点：**
+- 专为 macOS 和 iOS 开发设计。
+- 集成界面设计器和调试器。
+- 支持 Objective-C、Swift 和 C++。
+
+#### **安装与使用：**
+1. **安装 Xcode**：
+    - 从 Mac App Store 下载并安装 Xcode。
+2. **配置 Qt 环境**：
+    - 在 Xcode 中配置 Qt 的路径。
+3. **创建项目**：
+    - 使用 CMake 或 QMake 创建 Qt 项目。
+4. **编写与运行**：
+    - 在 Xcode 中编写代码并运行项目。
+
+---
+
+### **IDE 对比**
+
+| **IDE**         | **平台支持**       | **构建系统** | **特点**                          |
+|------------------|--------------------|--------------|-----------------------------------|
+| Qt Creator       | 跨平台             | QMake、CMake | 官方推荐，集成 Qt 设计器          |
+| Visual Studio    | Windows            | MSBuild      | 强大的调试功能，适合 Windows 开发 |
+| CLion            | 跨平台             | CMake        | 强大的代码分析，适合 C++ 开发     |
+| VSCode           | 跨平台             | CMake        | 轻量级，插件丰富                  |
+| Xcode            | macOS              | CMake        | 专为 macOS 开发设计               |
+
+---
+
+### **推荐选择**
+- **初学者**：建议使用 **Qt Creator**，官方支持，功能全面，易于上手。
+- **Windows 开发者**：可以选择 **Visual Studio**，调试功能强大。
+- **C++ 开发者**：推荐 **CLion**，代码分析和重构功能优秀。
+- **轻量级开发**：可以选择 **VSCode**，启动速度快，插件丰富。
+- **macOS 开发者**：推荐 **Xcode**，专为 macOS 开发设计。
+
+---
+
+希望以上推荐能帮助你选择合适的 Qt 开发工具！如果有其他问题，欢迎继续提问。
+
+
+
+
 
 ## 书籍
 
 - Qt 5编程入门
+
 
 第1章走进Qt Quick的世界1
 1.1全新的QML和Qt Quick1
@@ -35,6 +87,7 @@
 1.2.5Qt Quick程序的发布14
 1.3小结16
 第2章QML语法17
+2.1QML语法基础17
 2.2import导入语句20
 2.2.1模块（命名空间）导入语句20
 2.2.2目录导入语句21
@@ -308,7 +361,7 @@
 12.5小结406
 第13章QML与C++的集成407
 13.1快速选择正确的集成方式408
-13.2QML运行时C++类411
+13.2QML运行时的C++类411
 13.2.1QQmlEngine411
 13.2.2QQmlContext412
 13.2.3QQmlComponent414

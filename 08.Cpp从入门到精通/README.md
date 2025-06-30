@@ -139,8 +139,6 @@
 
 黑马程序员匠心之作|C++教程从0到1入门编程,学习编程不再难 ：https://www.bilibili.com/video/av41559729/
 
-最新QT从入门到实战完整版|传智教育：https://www.bilibili.com/video/BV1g4411H78N
-
 职工系统：https://github.com/zz2summer/StudentManageSystem
 
 五子棋：https://github.com/zz2summer/GoBangByCpp
@@ -163,313 +161,781 @@
 
 --------------------------------------------------------------------------------------------------
 
+### 8.4 初始化数组
 
-### **4. 函数对象**
-#### **4.1 自定义函数对象**
-```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
+根据职工的数据以及职工数据，初始化workerManager中的Worker ** m_EmpArray 指针
 
-struct Square {
-    int operator()(int x) const {
-        return x * x;
-    }
-};
+在WorkerManager.h中添加成员函数  `void initEmp();`
 
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    Square square;
-    std::transform(vec.begin(), vec.end(), vec.begin(), square);
-    for (int i : vec) {
-        std::cout << i << " "; // 输出: 1 4 9 16 25
-    }
-    return 0;
+```C++
+	//初始化员工
+	void init_Emp();
+```
+
+
+
+在WorkerManager.cpp中实现
+
+```C++
+void WorkerManager::init_Emp()
+{
+	ifstream ifs;
+	ifs.open(FILENAME, ios::in);
+
+	int id;
+	string name;
+	int dId;
+	
+	int index = 0;
+	while (ifs >> id && ifs >> name && ifs >> dId)
+	{
+		Worker * worker = NULL;
+		//根据不同的部门Id创建不同对象
+		if (dId == 1)  // 1普通员工
+		{
+			worker = new Employee(id, name, dId);
+		}
+		else if (dId == 2) //2经理
+		{
+			worker = new Manager(id, name, dId);
+		}
+		else //总裁
+		{
+			worker = new Boss(id, name, dId);
+		}
+		//存放在数组中
+		this->m_EmpArray[index] = worker;
+		index++;
+	}
 }
 ```
 
-#### **4.2 STL 提供的函数对象**
-STL 提供了许多内置函数对象，如 `std::plus`、`std::minus`、`std::greater` 等。
-```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <functional>
 
-int main() {
-    std::vector<int> vec = {5, 3, 1, 4, 2};
-    std::sort(vec.begin(), vec.end(), std::greater<int>());
-    for (int i : vec) {
-        std::cout << i << " "; // 输出: 5 4 3 2 1
-    }
-    return 0;
+
+在workerManager.cpp构造函数中追加代码
+
+```C++
+	//根据职工数创建数组
+	this->m_EmpArray = new Worker *[this->m_EmpNum];
+	//初始化职工
+	init_Emp();
+
+	//测试代码
+	for (int i = 0; i < m_EmpNum; i++)
+	{
+		cout << "职工号： " << this->m_EmpArray[i]->m_Id
+			<< " 职工姓名： " << this->m_EmpArray[i]->m_Name
+			<< " 部门编号： " << this->m_EmpArray[i]->m_DeptId << endl;
+	}
+```
+
+
+
+运行程序，测试从文件中获取的数据
+
+![1546436938152](assets/1546436938152.png)
+
+至此初始化数据功能完毕，测试代码可以注释或删除掉！
+
+
+
+
+
+
+
+
+
+
+
+
+### 9.2 显示职工函数实现
+
+在workerManager.cpp中实现成员函数 `void showEmp();`
+
+```C++
+//显示职工
+void WorkerManager::Show_Emp()
+{
+	if (this->m_FileIsEmpty)
+	{
+		cout << "文件不存在或记录为空！" << endl;
+	}
+	else
+	{
+		for (int i = 0; i < m_EmpNum; i++)
+		{
+			//利用多态调用接口
+			this->m_EmpArray[i]->showInfo();
+		}
+	}
+
+	system("pause");
+	system("cls");
 }
 ```
 
----
 
-### **5. 迭代器**
-#### **5.1 使用迭代器遍历容器**
-```cpp
-#include <iostream>
-#include <vector>
 
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    for (auto it = vec.begin(); it != vec.end(); ++it) {
-        std::cout << *it << " "; // 输出: 1 2 3 4 5
-    }
-    return 0;
+### 9.3 测试显示职工
+
+在main函数分支 2  选项中，调用显示职工接口
+
+![1546497336465](assets/1546497336465.png)
+
+
+
+测试时分别测试 文件为空和文件不为空两种情况
+
+测试效果：
+
+测试1-文件不存在或者为空情况
+
+![1546497082135](assets/1546497082135.png)
+
+测试2 - 文件存在且有记录情况
+
+![1546496947671](assets/1546496947671.png)
+
+
+
+测试完毕，至此，显示所有职工信息功能实现
+
+
+
+
+
+
+
+
+
+
+
+## 10.删除职工
+
+功能描述：按照职工的编号进行删除职工操作
+
+
+
+### 10.1 删除职工函数声明
+
+在workerManager.h中添加成员函数  `void Del_Emp();`
+
+```C++
+	//删除职工
+	void Del_Emp();
+```
+
+
+
+#### 10.2 职工是否存在
+
+很多功能都需要用到根据职工是否存在来进行操作如：删除职工、修改职工、查找职工
+
+因此添加该公告函数，以便后续调用
+
+在workerManager.h中添加成员函数  `int IsExist(int id);`
+
+```C++
+	//按照职工编号判断职工是否存在,若存在返回职工在数组中位置，不存在返回-1
+	int IsExist(int id);
+```
+
+在workerManager.cpp中实现成员函数 `int IsExist(int id);`
+
+```C++
+int WorkerManager::IsExist(int id)
+{
+	int index = -1;
+
+	for (int i = 0; i < this->m_EmpNum; i++)
+	{
+		if (this->m_EmpArray[i]->m_Id == id)
+		{
+			index = i;
+
+			break;
+		}
+	}
+
+	return index;
 }
 ```
 
-#### **5.2 反向迭代器**
-```cpp
-#include <iostream>
-#include <vector>
 
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    for (auto it = vec.rbegin(); it != vec.rend(); ++it) {
-        std::cout << *it << " "; // 输出: 5 4 3 2 1
-    }
-    return 0;
+
+
+
+#### 10.3 删除职工函数实现
+
+在workerManager.cpp中实现成员函数 ` void Del_Emp();`
+
+```C++
+//删除职工
+void WorkerManager::Del_Emp()
+{
+	if (this->m_FileIsEmpty)
+	{
+		cout << "文件不存在或记录为空！" << endl;
+	}
+	else
+	{
+		//按职工编号删除
+		cout << "请输入想要删除的职工号：" << endl;
+		int id = 0;
+		cin >> id;
+
+		int index = this->IsExist(id);
+
+		if (index != -1)  //说明index上位置数据需要删除
+		{
+			for (int i = index; i < this->m_EmpNum - 1; i++)
+			{
+				this->m_EmpArray[i] = this->m_EmpArray[i + 1];
+			}
+			this->m_EmpNum--;
+
+			this->save(); //删除后数据同步到文件中
+			cout << "删除成功！" << endl;
+		}
+		else
+		{
+			cout << "删除失败，未找到该职工" << endl;
+		}
+	}
+	
+	system("pause");
+	system("cls");
 }
 ```
 
----
 
-### **6. 总结**
-- **容器**：用于存储数据，如 `vector`、`list`、`map` 等。
-- **迭代器**：用于遍历容器中的元素。
-- **算法**：用于操作容器中的数据，如 `sort`、`find`、`accumulate` 等。
-- **函数对象**：可以像函数一样调用的对象，如 `std::greater`。
 
-STL 是 C++ 中强大的工具库，能够显著提高开发效率，减少代码重复。熟练掌握 STL 是成为高效 C++ 程序员的关键。
+#### 10.4 测试删除职工
+
+在main函数分支 3  选项中，调用删除职工接口
+
+![1546502698622](assets/1546502698622.png)
+
+测试1 - 删除不存在职工情况
+
+![1546500324196](assets/1546500324196.png)
+
+测试2 - 删除存在的职工情况
+
+删除成功提示图：
+
+![1546500350526](assets/1546500350526.png)
+
+再次显示所有职工信息，确保已经删除
+
+![1546500361889](assets/1546500361889.png)
+
+查看文件中信息，再次核实员工已被完全删除
+
+![1546500383570](assets/1546500383570.png)
+
+至此，删除职工功能实现完毕！
+
+
+
+
+
+
+
+
+
+## 11.修改职工
+
+功能描述：能够按照职工的编号对职工信息进行修改并保存
+
+### 11.1 修改职工函数声明
+
+在workerManager.h中添加成员函数  `void Mod_Emp();`
+
+```C++
+	//修改职工
+	void Mod_Emp();
+```
+
+
+
+#### 11.2 修改职工函数实现
+
+在workerManager.cpp中实现成员函数 ` void Mod_Emp();`
+
+```C++
+//修改职工
+void WorkerManager::Mod_Emp()
+{
+	if (this->m_FileIsEmpty)
+	{
+		cout << "文件不存在或记录为空！" << endl;
+	}
+	else
+	{
+		cout << "请输入修改职工的编号：" << endl;
+		int id;
+		cin >> id;
+
+		int ret = this->IsExist(id);
+		if (ret != -1)
+		{ 
+			//查找到编号的职工
+
+			delete this->m_EmpArray[ret];
+			
+			int newId = 0;
+			string newName = "";
+			int dSelect = 0;
+
+			cout << "查到： " << id << "号职工，请输入新职工号： " << endl;
+			cin >> newId;
+
+			cout << "请输入新姓名： " << endl;
+			cin >> newName;
+
+			cout << "请输入岗位： " << endl;
+			cout << "1、普通职工" << endl;
+			cout << "2、经理" << endl;
+			cout << "3、老板" << endl;
+			cin >> dSelect;
+
+			Worker * worker = NULL;
+			switch (dSelect)
+			{
+			case1:
+				worker = new Employee(newId, newName, dSelect);
+				break;
+			case2:
+				worker = new Manager(newId, newName, dSelect);
+				break;
+			case 3:
+				worker = new Boss(newId, newName, dSelect);
+				break;
+			default:
+				break;
+			}
+
+			//更改数据 到数组中
+			this->m_EmpArray[ret]= worker;
+			
+			cout << "修改成功！" << endl;
+
+			//保存到文件中
+			this->save();
+		}
+		else
+		{
+			cout << "修改失败，查无此人" << endl;
+		}
+	}
+
+	//按任意键 清屏
+	system("pause");
+	system("cls");
+}
+
+```
+
+
+
+
+
+#### 12.3 测试修改职工
+
+在main函数分支 4  选项中，调用修改职工接口
+
+![1546502651922](assets/1546502651922.png)
+
+
+
+测试1 - 修改不存在职工情况
+
+![1546502759643](assets/1546502759643.png)
+
+测试2 - 修改存在职工情况，例如将职工 "李四" 改为 "赵四"
+
+![1546502830350](assets/1546502830350.png)
+
+修改后再次查看所有职工信息，并确认修改成功
+
+![1546502865443](assets/1546502865443.png)
+
+再次确认文件中信息也同步更新
+
+![1546502898653](assets/1546502898653.png)
+
+至此，修改职工功能已实现！
+
+
+
+
+
+
+
+
+
+
+
+## 12.查找职工
+
+功能描述：提供两种查找职工方式，一种按照职工编号，一种按照职工姓名
+
+#### 12.1 查找职工函数声明
+
+在workerManager.h中添加成员函数  `void Find_Emp();`
+
+```c++
+	//查找职工
+	void Find_Emp();
+```
+
+
+
+#### 12.2 查找职工函数实现
+
+在workerManager.cpp中实现成员函数 ` void Find_Emp();`
+
+```C++
+//查找职工
+void WorkerManager::Find_Emp()
+{
+	if (this->m_FileIsEmpty)
+	{
+		cout << "文件不存在或记录为空！" << endl;
+	}
+	else
+	{
+		cout << "请输入查找的方式：" << endl;
+		cout << "1、按职工编号查找" << endl;
+		cout << "2、按姓名查找" << endl;
+
+		int select = 0;
+		cin >> select;
+
+
+		if (select == 1) //按职工号查找
+		{
+			int id;
+			cout << "请输入查找的职工编号：" << endl;
+			cin >> id;
+
+			int ret = IsExist(id);
+			if (ret != -1)
+			{
+				cout << "查找成功！该职工信息如下：" << endl;
+				this->m_EmpArray[ret]->showInfo();
+			}
+			else
+			{
+				cout << "查找失败，查无此人" << endl;
+			}
+		}
+		else if(select == 2) //按姓名查找
+		{
+			string name;
+			cout << "请输入查找的姓名：" << endl;
+			cin >> name;
+
+			bool flag = false;  //查找到的标志
+			for (int i = 0; i < m_EmpNum; i++)
+			{
+				if (m_EmpArray[i]->m_Name == name)
+				{
+					cout << "查找成功,职工编号为："
+                           << m_EmpArray[i]->m_Id
+                           << " 号的信息如下：" << endl;
+					
+					flag = true;
+
+					this->m_EmpArray[i]->showInfo();
+				}
+			}
+			if (flag == false)
+			{
+				//查无此人
+				cout << "查找失败，查无此人" << endl;
+			}
+		}
+		else
+		{
+			cout << "输入选项有误" << endl;
+		}
+	}
+
+
+	system("pause");
+	system("cls");
+}
+```
+
+
+
+
+
+#### 12.3 测试查找职工
+
+在main函数分支 5  选项中，调用查找职工接口
+
+![1546504714318](assets/1546504714318.png)
+
+测试1 - 按照职工编号查找 - 查找不存在职工
+
+![1546504767229](assets/1546504767229.png)
+
+测试2 - 按照职工编号查找 -  查找存在职工
+
+![1546505046521](assets/1546505046521.png)
+
+测试3 - 按照职工姓名查找 - 查找不存在职工
+
+![1546505115610](assets/1546505115610.png)
+
+
+
+测试4 - 按照职工姓名查找 - 查找存在职工（如果出现重名，也一并显示，在文件中可以添加重名职工）
+
+例如 添加两个王五的职工，然后按照姓名查找王五
+
+![1546507850441](assets/1546507850441.png)
+
+![1546507760284](assets/1546507760284.png)
+
+至此，查找职工功能实现完毕！
+
+
+
+
+
+
+
+## 13.职工排序
+
+功能描述：按照职工编号进行排序，排序的顺序由用户指定
+
+#### 13.1 排序函数声明
+
+在workerManager.h中添加成员函数  `void Sort_Emp();`
+
+```C++
+	//排序职工
+	void Sort_Emp();
+```
+
+
+
+#### 13.2 排序函数实现
+
+在workerManager.cpp中实现成员函数 ` void Sort_Emp();`
+
+```C++
+//排序职工
+void WorkerManager::Sort_Emp()
+{
+	if (this->m_FileIsEmpty)
+	{
+		cout << "文件不存在或记录为空！" << endl;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+		cout << "请选择排序方式： " << endl;
+		cout << "1、按职工号进行升序" << endl;
+		cout << "2、按职工号进行降序" << endl;
+
+		int select = 0;
+		cin >> select;
+
+
+		for (int i = 0; i < m_EmpNum; i++)
+		{
+			int minOrMax = i;
+			for (int j = i + 1; j < m_EmpNum; j++)
+			{
+				if (select == 1) //升序
+				{
+					if (m_EmpArray[minOrMax]->m_Id > m_EmpArray[j]->m_Id)
+					{
+						minOrMax = j;
+					}
+				}
+				else  //降序
+				{
+					if (m_EmpArray[minOrMax]->m_Id < m_EmpArray[j]->m_Id)
+					{
+						minOrMax = j;
+					}
+				}
+			}
+
+			if (i != minOrMax)
+			{
+				Worker * temp = m_EmpArray[i];
+				m_EmpArray[i] = m_EmpArray[minOrMax];
+				m_EmpArray[minOrMax] = temp;
+			}
+
+		}
+
+		cout << "排序成功,排序后结果为：" << endl;
+		this->save();
+		this->Show_Emp();
+	}
+
+}
+```
+
+
+
+
+
+#### 13.3 测试排序功能
+
+在main函数分支 6  选项中，调用排序职工接口
+
+![1546510145181](assets/1546510145181.png)
+
+测试：
+
+首先我们添加一些职工，序号是无序的，例如：
+
+![1546658169987](assets/1546658169987.png)
+
+
+
+测试 - 升序排序
+
+![1546658190479](assets/1546658190479.png)
+
+文件同步更新
+
+![1546658273581](assets/1546658273581.png)
+
+
+
+
+
+测试 - 降序排序
+
+![1546658288936](assets/1546658288936.png)
+
+文件同步更新
+
+![1546658313704](assets/1546658313704.png)
+
+至此，职工按照编号排序的功能实现完毕！
+
+
+
+
+
+
+
+
+
+
+
+## 14.清空文件
+
+功能描述：将文件中记录数据清空
+
+
+
+#### 14.1 清空函数声明
+
+在workerManager.h中添加成员函数  `void Clean_File();`
+
+```C++
+	//清空文件
+	void Clean_File();
+```
+
+
+
+
+
+#### 14.2 清空函数实现
+
+在workerManager.cpp中实现员函数 ` void Clean_File();`
+
+```C++
+//清空文件
+void WorkerManager::Clean_File()
+{
+	cout << "确认清空？" << endl;
+	cout << "1、确认" << endl;
+	cout << "2、返回" << endl;
+
+	int select = 0;
+	cin >> select;
+
+	if (select == 1)
+	{
+		//打开模式 ios::trunc 如果存在删除文件并重新创建
+		ofstream ofs(FILENAME, ios::trunc);
+		ofs.close();
+
+		if (this->m_EmpArray != NULL)
+		{
+            for (int i = 0; i < this->m_EmpNum; i++)
+			{
+				if (this->m_EmpArray[i] != NULL)
+				{
+					delete this->m_EmpArray[i];
+				}
+			}
+			this->m_EmpNum = 0;
+			delete[] this->m_EmpArray;
+			this->m_EmpArray = NULL;
+			this->m_FileIsEmpty = true;
+		}
+		cout << "清空成功！" << endl;
+	}
+
+	system("pause");
+	system("cls");
+}
+```
+
+
+
+
+
+#### 14.3 测试清空文件
+
+在main函数分支 7  选项中，调用清空文件接口
+
+![1546511085541](assets/1546511085541.png)
+
+测试：确认清空文件
+
+![1546510976745](assets/1546510976745.png)
+
+再次查看文件中数据，记录已为空
+
+![1546510994196](assets/1546510994196.png)
+
+打开文件，里面数据已确保清空，该功能需要慎用！
+
+![1546511018517](assets/1546511018517.png)
+
+
+
+随着清空文件功能实现，本案例制作完毕  ^ _ ^
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------
 
 
 --------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------
 
-C++ 标准模板库（STL）中的 **迭代器（Iterators）** 是一种抽象的概念，用于遍历容器中的元素。迭代器类似于指针，提供了访问和操作容器中元素的方法。STL 中的算法和容器都依赖于迭代器来实现通用性。
-
----
-
-### **1. 迭代器的分类**
-STL 迭代器分为以下几类，按功能从弱到强排列：
-
-#### **1.1 输入迭代器（Input Iterator）**
-- 支持读取元素。
-- 只能单向遍历（`++` 操作）。
-- 例如：`std::istream_iterator`。
-
-#### **1.2 输出迭代器（Output Iterator）**
-- 支持写入元素。
-- 只能单向遍历（`++` 操作）。
-- 例如：`std::ostream_iterator`。
-
-#### **1.3 前向迭代器（Forward Iterator）**
-- 支持读取和写入元素。
-- 只能单向遍历（`++` 操作）。
-- 例如：`std::forward_list` 的迭代器。
-
-#### **1.4 双向迭代器（Bidirectional Iterator）**
-- 支持读取和写入元素。
-- 支持双向遍历（`++` 和 `--` 操作）。
-- 例如：`std::list` 的迭代器。
-
-#### **1.5 随机访问迭代器（Random Access Iterator）**
-- 支持读取和写入元素。
-- 支持随机访问（`+`、`-`、`[]` 操作）。
-- 例如：`std::vector`、`std::deque` 的迭代器。
-
----
-
-### **2. 常用迭代器操作**
-迭代器的基本操作包括：
-- `*it`：访问迭代器指向的元素。
-- `it->member`：访问迭代器指向的对象的成员。
-- `++it`、`it++`：移动到下一个元素。
-- `--it`、`it--`：移动到上一个元素（仅限双向和随机访问迭代器）。
-- `it1 == it2`、`it1 != it2`：比较两个迭代器是否指向同一位置。
-- `it + n`、`it - n`：随机访问（仅限随机访问迭代器）。
-
----
-
-### **3. 迭代器的使用示例**
-#### **3.1 遍历 `vector`**
-```cpp
-#include <iostream>
-#include <vector>
-
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    for (auto it = vec.begin(); it != vec.end(); ++it) {
-        std::cout << *it << " "; // 输出: 1 2 3 4 5
-    }
-    return 0;
-}
-```
-
-#### **3.2 反向遍历 `vector`**
-```cpp
-#include <iostream>
-#include <vector>
-
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    for (auto it = vec.rbegin(); it != vec.rend(); ++it) {
-        std::cout << *it << " "; // 输出: 5 4 3 2 1
-    }
-    return 0;
-}
-```
-
-#### **3.3 使用 `std::find` 查找元素**
-```cpp
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    auto it = std::find(vec.begin(), vec.end(), 3);
-    if (it != vec.end()) {
-        std::cout << "Found: " << *it << std::endl; // 输出: Found: 3
-    }
-    return 0;
-}
-```
-
----
-
-### **4. 特殊迭代器**
-#### **4.1 `std::istream_iterator`**
-用于从输入流中读取数据。
-```cpp
-#include <iostream>
-#include <iterator>
-#include <vector>
-
-int main() {
-    std::vector<int> vec;
-    std::istream_iterator<int> input_it(std::cin), eof;
-    std::copy(input_it, eof, std::back_inserter(vec));
-    for (int i : vec) {
-        std::cout << i << " ";
-    }
-    return 0;
-}
-```
-
-#### **4.2 `std::ostream_iterator`**
-用于向输出流中写入数据。
-```cpp
-#include <iostream>
-#include <iterator>
-#include <vector>
-
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    std::ostream_iterator<int> output_it(std::cout, " ");
-    std::copy(vec.begin(), vec.end(), output_it); // 输出: 1 2 3 4 5
-    return 0;
-}
-```
-
-#### **4.3 `std::back_inserter`**
-用于在容器尾部插入元素。
-```cpp
-#include <iostream>
-#include <vector>
-#include <iterator>
-#include <algorithm>
-
-int main() {
-    std::vector<int> vec = {1, 2, 3};
-    std::fill_n(std::back_inserter(vec), 3, 10);
-    for (int i : vec) {
-        std::cout << i << " "; // 输出: 1 2 3 10 10 10
-    }
-    return 0;
-}
-```
-
----
-
-### **5. 迭代器适配器**
-迭代器适配器是对现有迭代器的封装，提供了额外的功能。
-
-#### **5.1 `std::reverse_iterator`**
-反向遍历容器。
-```cpp
-#include <iostream>
-#include <vector>
-
-int main() {
-    std::vector<int> vec = {1, 2, 3, 4, 5};
-    for (auto it = vec.rbegin(); it != vec.rend(); ++it) {
-        std::cout << *it << " "; // 输出: 5 4 3 2 1
-    }
-    return 0;
-}
-```
-
-#### **5.2 `std::move_iterator`**
-将元素移动到另一个容器。
-```cpp
-#include <iostream>
-#include <vector>
-#include <iterator>
-#include <algorithm>
-
-int main() {
-    std::vector<int> src = {1, 2, 3, 4, 5};
-    std::vector<int> dst;
-    std::copy(std::make_move_iterator(src.begin()), std::make_move_iterator(src.end()), std::back_inserter(dst));
-    for (int i : dst) {
-        std::cout << i << " "; // 输出: 1 2 3 4 5
-    }
-    return 0;
-}
-```
-
----
-
-### **6. 总结**
-- 迭代器是 STL 的核心概念，用于遍历和操作容器中的元素。
-- 迭代器分为输入、输出、前向、双向和随机访问迭代器。
-- 特殊迭代器（如 `std::istream_iterator`、`std::ostream_iterator`）提供了与流交互的功能。
-- 迭代器适配器（如 `std::reverse_iterator`、`std::move_iterator`）扩展了迭代器的功能。
-
-熟练掌握迭代器的使用是高效使用 STL 的关键。
-
---------------------------------------------------------------------------------------------------
-
-
-
-
-### **6. `noexcept` 关键字**
-
----
-
-### **7. 异常处理的最佳实践**
-1. **避免滥用异常**：异常处理适用于处理罕见的、不可恢复的错误，不应用于控制程序流程。
-2. **捕获特定异常**：尽量捕获特定类型的异常，而不是通用的 `std::exception`。
-3. **资源管理**：使用 RAII（资源获取即初始化）模式管理资源，确保异常发生时资源能够正确释放。
-4. **避免抛出析构函数中的异常**：析构函数中的异常可能导致程序终止。
-
----
-
-### **8. 总结**
-- 异常处理通过 `try`、`catch` 和 `throw` 实现。
-- 可以抛出和捕获基本类型、标准异常或自定义异常。
-- 异常会沿着调用栈传播，直到被捕获。
-- 使用 `noexcept` 标记不会抛出异常的函数。
-- 遵循最佳实践，确保代码的健壮性和可维护性。
-
-通过合理使用异常处理，可以有效地管理程序中的错误和异常情况。
 
 --------------------------------------------------------------------------------------------------
 
@@ -477,253 +943,12 @@ int main() {
 --------------------------------------------------------------------------------------------------
 
 
+--------------------------------------------------------------------------------------------------
 
-### **4. 多线程内存模型**
-C++11 引入了多线程内存模型，定义了多线程环境下的内存访问行为。
-
-#### **4.1 内存顺序（Memory Order）**
-C++ 提供了以下内存顺序选项：
-- `memory_order_relaxed`：无同步或顺序约束。
-- `memory_order_acquire`：确保当前操作之前的所有读操作不会被重排序。
-- `memory_order_release`：确保当前操作之后的所有写操作不会被重排序。
-- `memory_order_seq_cst`：最强的顺序约束，所有操作按顺序执行。
-
-示例：
-```cpp
-#include <atomic>
-#include <thread>
-#include <iostream>
-
-std::atomic<int> x(0);
-std::atomic<int> y(0);
-
-void thread1() {
-    x.store(1, std::memory_order_relaxed);
-    y.store(1, std::memory_order_release);
-}
-
-void thread2() {
-    while (y.load(std::memory_order_acquire) != 1) {}
-    std::cout << x.load(std::memory_order_relaxed) << std::endl; // 输出: 1
-}
-
-int main() {
-    std::thread t1(thread1);
-    std::thread t2(thread2);
-    t1.join();
-    t2.join();
-    return 0;
-}
-```
-
-#### **4.2 原子操作**
-原子操作是不可分割的操作，确保在多线程环境下的正确性。
-```cpp
-#include <atomic>
-#include <thread>
-#include <iostream>
-
-std::atomic<int> counter(0);
-
-void increment() {
-    for (int i = 0; i < 1000; ++i) {
-        counter.fetch_add(1, std::memory_order_relaxed);
-    }
-}
-
-int main() {
-    std::thread t1(increment);
-    std::thread t2(increment);
-    t1.join();
-    t2.join();
-    std::cout << "Counter: " << counter << std::endl; // 输出: Counter: 2000
-    return 0;
-}
-```
-
----
-
-#### **5.2 内存池**
-内存池是一种优化技术，用于减少频繁动态内存分配的开销。
-
----
-
-### **6. 总结**
-- C++ 的内存模型包括栈、堆、全局/静态存储区、常量存储区和代码区。
-- 对象生命周期由其存储位置决定。
-- 内存对齐可以提高访问效率。
-- 多线程内存模型定义了内存访问行为，原子操作确保线程安全。
-- 智能指针和内存池是常用的内存管理工具。
-
-理解 C++ 的内存模型有助于编写高效、安全的程序，尤其是在多线程环境下。
 
 --------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------
-
-
-#### **1.3 `std::unique_lock`**
-- 比 `std::lock_guard` 更灵活，支持手动加锁和解锁。
-- 适用于需要延迟加锁或条件变量的场景。
-
-示例：
-```cpp
-void increment() {
-    for (int i = 0; i < 1000; ++i) {
-        std::unique_lock<std::mutex> lock(mtx); // 自动加锁和解锁
-        ++sharedData;
-        lock.unlock(); // 手动解锁
-    }
-}
-```
-
----
-
-### **2. 读写锁（Read-Write Lock）**
-读写锁允许多个线程同时读取共享资源，但写操作需要独占访问。
-
-#### **2.1 `std::shared_mutex`**
-- C++17 引入的读写锁。
-- 使用 `lock_shared()` 和 `unlock_shared()` 进行读锁定。
-- 使用 `lock()` 和 `unlock()` 进行写锁定。
-
-示例：
-```cpp
-#include <iostream>
-#include <thread>
-#include <shared_mutex>
-
-std::shared_mutex rwMutex;
-int sharedData = 0;
-
-void readData() {
-    std::shared_lock<std::shared_mutex> lock(rwMutex); // 读锁定
-    std::cout << "Read Data: " << sharedData << std::endl;
-}
-
-void writeData() {
-    std::unique_lock<std::shared_mutex> lock(rwMutex); // 写锁定
-    ++sharedData;
-    std::cout << "Write Data: " << sharedData << std::endl;
-}
-
-int main() {
-    std::thread t1(readData);
-    std::thread t2(writeData);
-    t1.join();
-    t2.join();
-    return 0;
-}
-```
-
----
-
-### **3. 条件变量（Condition Variable）**
-条件变量用于线程间的同步，允许线程等待某个条件成立。
-
-#### **3.1 `std::condition_variable`**
-- 与 `std::mutex` 配合使用。
-- 使用 `wait()` 等待条件，`notify_one()` 或 `notify_all()` 通知等待的线程。
-
-示例：
-```cpp
-#include <iostream>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-
-std::mutex mtx;
-std::condition_variable cv;
-bool ready = false;
-
-void waitForReady() {
-    std::unique_lock<std::mutex> lock(mtx);
-    cv.wait(lock, [] { return ready; }); // 等待条件成立
-    std::cout << "Ready!" << std::endl;
-}
-
-void setReady() {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    {
-        std::lock_guard<std::mutex> lock(mtx);
-        ready = true;
-    }
-    cv.notify_one(); // 通知等待的线程
-}
-
-int main() {
-    std::thread t1(waitForReady);
-    std::thread t2(setReady);
-    t1.join();
-    t2.join();
-    return 0;
-}
-```
-
----
-
-### **4. 死锁与避免**
-死锁是指多个线程互相等待对方释放锁，导致程序无法继续执行。
-
-#### **4.1 死锁示例**
-```cpp
-std::mutex mtx1, mtx2;
-
-void thread1() {
-    mtx1.lock();
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    mtx2.lock(); // 等待 mtx2
-    mtx2.unlock();
-    mtx1.unlock();
-}
-
-void thread2() {
-    mtx2.lock();
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    mtx1.lock(); // 等待 mtx1
-    mtx1.unlock();
-    mtx2.unlock();
-}
-
-int main() {
-    std::thread t1(thread1);
-    std::thread t2(thread2);
-    t1.join();
-    t2.join();
-    return 0;
-}
-```
-
-#### **4.2 避免死锁**
-- 按固定顺序加锁。
-- 使用 `std::lock()` 同时锁定多个互斥锁。
-
-示例：
-```cpp
-void thread1() {
-    std::lock(mtx1, mtx2); // 同时锁定
-    std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
-    std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
-    // 操作共享资源
-}
-
-void thread2() {
-    std::lock(mtx1, mtx2); // 同时锁定
-    std::lock_guard<std::mutex> lock1(mtx1, std::adopt_lock);
-    std::lock_guard<std::mutex> lock2(mtx2, std::adopt_lock);
-    // 操作共享资源
-}
-```
-
----
-
-### **5. 总结**
-- **互斥锁**：`std::mutex`、`std::lock_guard`、`std::unique_lock`。
-- **读写锁**：`std::shared_mutex`。
-- **条件变量**：`std::condition_variable`。
-- **死锁**：通过固定顺序加锁或 `std::lock()` 避免。
-
-合理使用锁可以确保多线程程序的正确性和性能。
 
 
 --------------------------------------------------------------------------------------------------
@@ -1125,704 +1350,6 @@ int main() {
 
 --------------------------------------------------------------------------------------------------
 
-在 C++ 中，**函数** 是程序的基本构建块，用于封装可重用的代码逻辑。函数可以接受输入参数，执行特定任务，并返回结果。以下是关于 C++ 函数的详细说明和示例：
-
----
-
-### **1. 函数的基本语法**
-```cpp
-返回类型 函数名(参数列表) {
-    // 函数体
-    return 返回值; // 如果返回类型不是 void
-}
-```
-
-- **返回类型**：函数返回值的类型（如 `int`、`double`、`void` 等）。
-- **函数名**：函数的名称，用于调用函数。
-- **参数列表**：函数接受的输入参数，用逗号分隔。
-- **函数体**：函数的具体实现代码。
-- **返回值**：函数执行后返回的结果（如果返回类型不是 `void`）。
-
----
-
-### **2. 示例：简单的函数**
-```cpp
-#include <iostream>
-using namespace std;
-
-// 定义一个函数，计算两个整数的和
-int add(int a, int b) {
-    return a + b;
-}
-
-int main() {
-    int result = add(3, 5); // 调用函数
-    cout << "Sum: " << result << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Sum: 8
-```
-
----
-
-### **3. 函数的组成部分**
-#### **3.1 返回类型**
-- 如果函数不需要返回值，返回类型为 `void`。
-- 如果函数需要返回值，返回类型可以是任意数据类型（如 `int`、`double`、`string` 等）。
-
-#### **3.2 参数列表**
-- 参数是函数的输入，可以有零个或多个。
-- 每个参数包括类型和名称，用逗号分隔。
-
-#### **3.3 函数体**
-- 函数体是函数的具体实现代码。
-- 如果返回类型不是 `void`，必须使用 `return` 语句返回一个值。
-
----
-
-### **4. 函数的调用**
-通过函数名和参数列表调用函数。例如：
-```cpp
-int result = add(3, 5); // 调用 add 函数
-```
-
----
-
-### **5. 函数的重载**
-C++ 支持函数重载，即多个函数可以具有相同的名称，但参数列表不同。
-
-```cpp
-#include <iostream>
-using namespace std;
-
-// 重载 add 函数
-int add(int a, int b) {
-    return a + b;
-}
-
-double add(double a, double b) {
-    return a + b;
-}
-
-int main() {
-    cout << "Sum (int): " << add(3, 5) << endl;
-    cout << "Sum (double): " << add(3.5, 5.2) << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Sum (int): 8
-Sum (double): 8.7
-```
-
----
-
-### **6. 默认参数**
-可以为函数的参数指定默认值。调用函数时，如果未提供该参数，则使用默认值。
-
-```cpp
-#include <iostream>
-using namespace std;
-
-// 默认参数
-void printMessage(string message = "Hello, World!") {
-    cout << message << endl;
-}
-
-int main() {
-    printMessage(); // 使用默认参数
-    printMessage("Custom Message"); // 使用自定义参数
-    return 0;
-}
-```
-
-**输出**：
-```
-Hello, World!
-Custom Message
-```
-
----
-
-### **7. 内联函数**
-使用 `inline` 关键字可以将函数声明为内联函数，编译器会尝试将函数调用替换为函数体，以减少函数调用的开销。
-
-```cpp
-#include <iostream>
-using namespace std;
-
-// 内联函数
-inline int square(int x) {
-    return x * x;
-}
-
-int main() {
-    cout << "Square of 5: " << square(5) << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Square of 5: 25
-```
-
----
-
-### **8. 递归函数**
-函数可以调用自身，称为递归函数。
-
-```cpp
-#include <iostream>
-using namespace std;
-
-// 递归函数：计算阶乘
-int factorial(int n) {
-    if (n == 0 || n == 1) {
-        return 1;
-    }
-    return n * factorial(n - 1);
-}
-
-int main() {
-    cout << "Factorial of 5: " << factorial(5) << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Factorial of 5: 120
-```
-
----
-
-### **9. 函数指针**
-函数指针是指向函数的指针变量，可以用于动态调用函数。
-
-```cpp
-#include <iostream>
-using namespace std;
-
-// 函数
-int add(int a, int b) {
-    return a + b;
-}
-
-int main() {
-    // 声明函数指针
-    int (*funcPtr)(int, int) = add;
-
-    // 使用函数指针调用函数
-    int result = funcPtr(3, 5);
-    cout << "Sum: " << result << endl;
-
-    return 0;
-}
-```
-
-**输出**：
-```
-Sum: 8
-```
-
----
-
-### **10. Lambda 表达式**
-C++11 引入了 Lambda 表达式，用于定义匿名函数。
-
-```cpp
-#include <iostream>
-using namespace std;
-
-int main() {
-    // Lambda 表达式
-    auto add = [](int a, int b) -> int {
-        return a + b;
-    };
-
-    cout << "Sum: " << add(3, 5) << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Sum: 8
-```
-
----
-
-### **11. 总结**
-- 函数是 C++ 中封装代码逻辑的基本单元。
-- 函数可以接受参数并返回值。
-- 支持函数重载、默认参数、内联函数、递归函数、函数指针和 Lambda 表达式。
-- 合理使用函数可以提高代码的可读性、可维护性和复用性。
-
-通过掌握这些知识，你可以在 C++ 中编写高效、灵活的代码！
-
---------------------------------------------------------------------------------------------------
-
-在 C++ 中，**指针** 是一个非常重要的概念，它用于直接操作内存地址。指针可以指向变量、数组、函数等，是 C++ 中实现动态内存管理、高效数据操作和复杂数据结构的基础。以下是关于 C++ 指针的详细说明和示例：
-
----
-
-### **1. 指针的基本概念**
-指针是一个变量，其值是另一个变量的内存地址。通过指针，可以直接访问和操作内存中的数据。
-
-#### **1.1 指针的声明**
-```cpp
-数据类型 *指针变量名;
-```
-- `数据类型`：指针指向的变量的类型（如 `int`、`double` 等）。
-- `*`：表示这是一个指针变量。
-- `指针变量名`：指针的名称。
-
-#### **1.2 示例**
-```cpp
-int *ptr; // 声明一个指向 int 类型的指针
-```
-
----
-
-### **2. 指针的基本操作**
-#### **2.1 取地址运算符 `&`**
-`&` 用于获取变量的内存地址。
-
-```cpp
-int num = 10;
-int *ptr = &num; // ptr 指向 num 的地址
-```
-
-#### **2.2 解引用运算符 `*`**
-`*` 用于访问指针指向的内存地址中的值。
-
-```cpp
-int num = 10;
-int *ptr = &num;
-cout << *ptr; // 输出 10
-```
-
-#### **2.3 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-int main() {
-    int num = 42;
-    int *ptr = &num; // ptr 指向 num 的地址
-
-    cout << "Value of num: " << num << endl;
-    cout << "Address of num: " << &num << endl;
-    cout << "Value of ptr: " << ptr << endl;
-    cout << "Value pointed by ptr: " << *ptr << endl;
-
-    return 0;
-}
-```
-
-**输出**：
-```
-Value of num: 42
-Address of num: 0x7ffee4b5c9ac
-Value of ptr: 0x7ffee4b5c9ac
-Value pointed by ptr: 42
-```
-
----
-
-### **3. 指针的初始化**
-指针在使用前必须初始化，否则会指向一个未知的内存地址，可能导致程序崩溃。
-
-```cpp
-int *ptr = nullptr; // 初始化为空指针
-```
-
----
-
-### **4. 指针与数组**
-数组名本身就是一个指针，指向数组的第一个元素。
-
-#### **4.1 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-int main() {
-    int arr[3] = {10, 20, 30};
-    int *ptr = arr; // ptr 指向数组的第一个元素
-
-    for (int i = 0; i < 3; i++) {
-        cout << "Element " << i << ": " << *(ptr + i) << endl;
-    }
-
-    return 0;
-}
-```
-
-**输出**：
-```
-Element 0: 10
-Element 1: 20
-Element 2: 30
-```
-
----
-
-### **5. 指针与函数**
-指针可以作为函数的参数或返回值，用于传递或返回内存地址。
-
-#### **5.1 指针作为函数参数**
-```cpp
-#include <iostream>
-using namespace std;
-
-void increment(int *ptr) {
-    (*ptr)++; // 修改指针指向的值
-}
-
-int main() {
-    int num = 10;
-    increment(&num); // 传递 num 的地址
-    cout << "Incremented value: " << num << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Incremented value: 11
-```
-
-#### **5.2 指针作为函数返回值**
-```cpp
-#include <iostream>
-using namespace std;
-
-int* getMax(int *a, int *b) {
-    return (*a > *b) ? a : b;
-}
-
-int main() {
-    int x = 10, y = 20;
-    int *maxPtr = getMax(&x, &y);
-    cout << "Max value: " << *maxPtr << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Max value: 20
-```
-
----
-
-### **6. 动态内存管理**
-C++ 使用 `new` 和 `delete` 运算符动态分配和释放内存。
-
-#### **6.1 动态分配内存**
-```cpp
-int *ptr = new int; // 动态分配一个 int 类型的内存
-*ptr = 42; // 赋值
-```
-
-#### **6.2 动态分配数组**
-```cpp
-int *arr = new int[5]; // 动态分配一个包含 5 个 int 的数组
-for (int i = 0; i < 5; i++) {
-    arr[i] = i + 1;
-}
-```
-
-#### **6.3 释放内存**
-```cpp
-delete ptr; // 释放单个变量
-delete[] arr; // 释放数组
-```
-
----
-
-### **7. 指针与常量**
-指针可以与 `const` 关键字结合，表示指针指向的值或指针本身不可修改。
-
-#### **7.1 指向常量的指针**
-```cpp
-const int *ptr; // ptr 指向的值不可修改
-```
-
-#### **7.2 常量指针**
-```cpp
-int *const ptr = &num; // ptr 本身不可修改
-```
-
-#### **7.3 指向常量的常量指针**
-```cpp
-const int *const ptr = &num; // ptr 和 ptr 指向的值都不可修改
-```
-
----
-
-### **8. 指针的高级用法**
-#### **8.1 指针的指针**
-指针可以指向另一个指针。
-
-```cpp
-int num = 10;
-int *ptr = &num;
-int **ptr2 = &ptr; // ptr2 指向 ptr
-```
-
-#### **8.2 函数指针**
-指针可以指向函数，用于动态调用函数。
-
-```cpp
-#include <iostream>
-using namespace std;
-
-int add(int a, int b) {
-    return a + b;
-}
-
-int main() {
-    int (*funcPtr)(int, int) = add; // 函数指针
-    cout << "Sum: " << funcPtr(3, 5) << endl;
-    return 0;
-}
-```
-
----
-
-### **9. 总结**
-- 指针是 C++ 中直接操作内存地址的工具。
-- 指针可以指向变量、数组、函数等。
-- 指针与动态内存管理、函数参数传递、复杂数据结构等密切相关。
-- 使用指针时需要小心，避免空指针、野指针和内存泄漏等问题。
-
-通过掌握指针的使用，你可以编写更高效、灵活的 C++ 程序！
-
---------------------------------------------------------------------------------------------------
-
-在 C++ 中，**引用** 是一种别名机制，它为已存在的变量提供了一个新的名称。引用与指针类似，但更安全且易于使用。引用在函数参数传递、返回值优化等场景中非常有用。以下是关于 C++ 引用的详细说明和示例：
-
----
-
-### **1. 引用的基本概念**
-引用是一个变量的别名，它必须在声明时初始化，并且一旦绑定到一个变量后，就不能再绑定到其他变量。
-
-#### **1.1 引用的声明**
-```cpp
-数据类型 &引用名 = 变量名;
-```
-- `数据类型`：引用绑定的变量的类型。
-- `&`：表示这是一个引用。
-- `引用名`：引用的名称。
-- `变量名`：引用绑定的变量。
-
-#### **1.2 示例**
-```cpp
-int num = 10;
-int &ref = num; // ref 是 num 的引用
-```
-
----
-
-### **2. 引用的特性**
-#### **2.1 引用必须初始化**
-引用在声明时必须绑定到一个变量，否则会编译错误。
-
-```cpp
-int num = 10;
-int &ref = num; // 正确
-int &ref2;      // 错误：引用必须初始化
-```
-
-#### **2.2 引用不能重新绑定**
-引用一旦绑定到一个变量后，就不能再绑定到其他变量。
-
-```cpp
-int num1 = 10, num2 = 20;
-int &ref = num1;
-ref = num2; // 这是赋值操作，不是重新绑定
-```
-
-#### **2.3 引用是变量的别名**
-通过引用可以访问和修改原变量的值。
-
-```cpp
-int num = 10;
-int &ref = num;
-ref = 20; // 修改 ref 的值
-cout << num; // 输出 20
-```
-
----
-
-### **3. 引用与指针的区别**
-| 特性               | 引用                          | 指针                          |
-|--------------------|-------------------------------|-------------------------------|
-| 初始化             | 必须初始化                    | 可以不初始化                  |
-| 重新绑定           | 不能重新绑定                  | 可以重新指向其他变量          |
-| 空值               | 不能为空                      | 可以为空（`nullptr`）         |
-| 操作符             | 使用 `.` 访问成员              | 使用 `->` 访问成员            |
-| 语法               | 更简洁                        | 更灵活                        |
-
----
-
-### **4. 引用作为函数参数**
-引用常用于函数参数传递，可以避免拷贝大对象，同时允许函数修改实参的值。
-
-#### **4.1 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-void increment(int &ref) {
-    ref++; // 修改引用的值
-}
-
-int main() {
-    int num = 10;
-    increment(num); // 传递 num 的引用
-    cout << "Incremented value: " << num << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-Incremented value: 11
-```
-
----
-
-### **5. 引用作为函数返回值**
-函数可以返回引用，但必须确保返回的引用指向的变量在函数调用结束后仍然有效。
-
-#### **5.1 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-int &getMax(int &a, int &b) {
-    return (a > b) ? a : b;
-}
-
-int main() {
-    int x = 10, y = 20;
-    int &maxRef = getMax(x, y); // maxRef 是 x 或 y 的引用
-    maxRef = 30; // 修改最大值
-    cout << "x: " << x << ", y: " << y << endl;
-    return 0;
-}
-```
-
-**输出**：
-```
-x: 10, y: 30
-```
-
----
-
-### **6. 常量引用**
-常量引用用于防止函数修改实参的值，同时避免拷贝大对象。
-
-#### **6.1 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-void printValue(const int &ref) {
-    cout << "Value: " << ref << endl;
-    // ref = 10; // 错误：不能修改常量引用
-}
-
-int main() {
-    int num = 42;
-    printValue(num); // 传递 num 的常量引用
-    return 0;
-}
-```
-
-**输出**：
-```
-Value: 42
-```
-
----
-
-### **7. 引用与数组**
-引用可以绑定到数组，但语法较为特殊。
-
-#### **7.1 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-int main() {
-    int arr[3] = {10, 20, 30};
-    int (&ref)[3] = arr; // ref 是数组 arr 的引用
-
-    for (int i = 0; i < 3; i++) {
-        cout << ref[i] << " ";
-    }
-
-    return 0;
-}
-```
-
-**输出**：
-```
-10 20 30
-```
-
----
-
-### **8. 引用与范围 for 循环**
-引用可以用于范围 for 循环，直接修改容器中的元素。
-
-#### **8.1 示例**
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> vec = {1, 2, 3, 4, 5};
-
-    for (int &ref : vec) {
-        ref *= 2; // 修改容器中的元素
-    }
-
-    for (int val : vec) {
-        cout << val << " ";
-    }
-
-    return 0;
-}
-```
-
-**输出**：
-```
-2 4 6 8 10
-```
-
----
-
-### **9. 总结**
-- 引用是变量的别名，必须在声明时初始化。
-- 引用不能重新绑定，也不能为空。
-- 引用常用于函数参数传递和返回值优化。
-- 常量引用可以防止函数修改实参的值。
-- 引用比指针更安全、更简洁，但在某些场景下指针更灵活。
-
-通过掌握引用的使用，你可以编写更高效、更易读的 C++ 代码！
 
 --------------------------------------------------------------------------------------------------
 
@@ -1832,250 +1359,11 @@ int main() {
 --------------------------------------------------------------------------------------------------
 
 
-在 C++ 中，**继承** 是面向对象编程（OOP）的核心特性之一，它允许一个类（派生类）基于另一个类（基类）创建，从而复用基类的成员并扩展其功能。以下是关于 C++ 继承的详细说明和示例：
+--------------------------------------------------------------------------------------------------
 
----
+--------------------------------------------------------------------------------------------------
 
-### **1. 继承的基本概念**
-- **基类（父类）**：被继承的类。
-- **派生类（子类）**：继承基类的类。
-- 派生类可以访问基类的成员（根据访问权限），并可以添加新的成员或重写基类的成员函数。
 
----
-
-### **2. 继承的语法**
-```cpp
-class 派生类名 : 访问修饰符 基类名 {
-    // 派生类的成员
-};
-```
-- **访问修饰符**：可以是 `public`、`protected` 或 `private`，决定基类成员在派生类中的访问权限。
-
----
-
-### **3. 继承的类型**
-#### **3.1 公有继承（`public`）**
-- 基类的 `public` 成员在派生类中仍然是 `public`。
-- 基类的 `protected` 成员在派生类中仍然是 `protected`。
-- 基类的 `private` 成员在派生类中不可访问。
-
-#### **3.2 保护继承（`protected`）**
-- 基类的 `public` 和 `protected` 成员在派生类中都变为 `protected`。
-- 基类的 `private` 成员在派生类中不可访问。
-
-#### **3.3 私有继承（`private`）**
-- 基类的 `public` 和 `protected` 成员在派生类中都变为 `private`。
-- 基类的 `private` 成员在派生类中不可访问。
-
----
-
-### **4. 继承的示例**
-#### **4.1 公有继承**
-```cpp
-#include <iostream>
-using namespace std;
-
-// 基类
-class Animal {
-public:
-    void eat() {
-        cout << "Animal is eating." << endl;
-    }
-};
-
-// 派生类
-class Dog : public Animal {
-public:
-    void bark() {
-        cout << "Dog is barking." << endl;
-    }
-};
-
-int main() {
-    Dog dog;
-    dog.eat();  // 调用基类的成员函数
-    dog.bark(); // 调用派生类的成员函数
-    return 0;
-}
-```
-
-**输出**：
-```
-Animal is eating.
-Dog is barking.
-```
-
-#### **4.2 保护继承**
-```cpp
-#include <iostream>
-using namespace std;
-
-// 基类
-class Animal {
-protected:
-    void eat() {
-        cout << "Animal is eating." << endl;
-    }
-};
-
-// 派生类
-class Dog : protected Animal {
-public:
-    void bark() {
-        eat(); // 可以访问基类的 protected 成员
-        cout << "Dog is barking." << endl;
-    }
-};
-
-int main() {
-    Dog dog;
-    dog.bark(); // 调用派生类的成员函数
-    // dog.eat(); // 错误：eat() 在派生类中是 protected，外部不可访问
-    return 0;
-}
-```
-
-**输出**：
-```
-Animal is eating.
-Dog is barking.
-```
-
-#### **4.3 私有继承**
-```cpp
-#include <iostream>
-using namespace std;
-
-// 基类
-class Animal {
-public:
-    void eat() {
-        cout << "Animal is eating." << endl;
-    }
-};
-
-// 派生类
-class Dog : private Animal {
-public:
-    void bark() {
-        eat(); // 可以访问基类的 public 成员
-        cout << "Dog is barking." << endl;
-    }
-};
-
-int main() {
-    Dog dog;
-    dog.bark(); // 调用派生类的成员函数
-    // dog.eat(); // 错误：eat() 在派生类中是 private，外部不可访问
-    return 0;
-}
-```
-
-**输出**：
-```
-Animal is eating.
-Dog is barking.
-```
-
----
-
-### **5. 多重继承**
-C++ 支持多重继承，即一个派生类可以从多个基类继承。
-
-#### **5.1 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-// 基类 1
-class Animal {
-public:
-    void eat() {
-        cout << "Animal is eating." << endl;
-    }
-};
-
-// 基类 2
-class Mammal {
-public:
-    void breathe() {
-        cout << "Mammal is breathing." << endl;
-    }
-};
-
-// 派生类
-class Dog : public Animal, public Mammal {
-public:
-    void bark() {
-        cout << "Dog is barking." << endl;
-    }
-};
-
-int main() {
-    Dog dog;
-    dog.eat();    // 调用基类 Animal 的成员函数
-    dog.breathe(); // 调用基类 Mammal 的成员函数
-    dog.bark();   // 调用派生类的成员函数
-    return 0;
-}
-```
-
-**输出**：
-```
-Animal is eating.
-Mammal is breathing.
-Dog is barking.
-```
-
----
-
-### **6. 函数重写与多态**
-派生类可以重写基类的成员函数，并通过基类指针或引用实现多态。
-
-#### **6.1 示例**
-```cpp
-#include <iostream>
-using namespace std;
-
-// 基类
-class Animal {
-public:
-    virtual void speak() { // 虚函数
-        cout << "Animal speaks." << endl;
-    }
-};
-
-// 派生类
-class Dog : public Animal {
-public:
-    void speak() override { // 重写基类的虚函数
-        cout << "Dog barks." << endl;
-    }
-};
-
-int main() {
-    Animal *animal = new Dog(); // 基类指针指向派生类对象
-    animal->speak(); // 调用派生类的重写函数
-    delete animal;
-    return 0;
-}
-```
-
-**输出**：
-```
-Dog barks.
-```
-
----
-
-### **7. 总结**
-- 继承是 C++ 中实现代码复用的重要机制。
-- 继承类型包括公有继承、保护继承和私有继承。
-- 派生类可以访问基类的成员（根据访问权限），并可以重写基类的成员函数。
-- 多重继承允许一个派生类从多个基类继承。
-- 虚函数和多态性使得基类指针或引用可以调用派生类的重写函数。
-
-通过掌握继承的使用，你可以设计出更灵活、更高效的面向对象程序！
 
 --------------------------------------------------------------------------------------------------
 
