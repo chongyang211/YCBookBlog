@@ -10,20 +10,27 @@
 - [Qt Quick 示例](https://doc.qt.io/qt-6/qtquick-examples.html)
 - [QML 教程](https://qmlbook.github.io/)
 
+## 书籍资料
+
+- https://github.com/cwc1987/QmlBook-In-Chinese
 
 ## 学习资料
 
 - 比较完整的QT学习资料：https://github.com/lichangke/QT
 
+## 推荐资料
+- QML6(Qt Quick)开发教程（完整版）：https://www.bilibili.com/video/BV1j14y1e7Hf
+- 零基础入门学习qt，项目实战教学：https://www.bilibili.com/video/BV1qhSiYwEdk
+
 ## 视频资料
 
 - 最新QT从入门到实战完整版|传智教育|Qt Widget开发：https://www.bilibili.com/video/BV1g4411H78N
 - C++QT2024年最新版：https://www.bilibili.com/video/BV1GW42197ff/
-- QML6(Qt Quick)开发教程（完整版）：https://www.bilibili.com/video/BV1j14y1e7Hf
+- QML程序设计入门教程：https://www.bilibili.com/video/BV1uJ41147qY
+
 
 ## 一般视频
 
-- QT6-QML编程快速入门：https://www.bilibili.com/video/BV1hC411h71F
 - C++-QT新手入门项目：Qt音乐播放器：https://www.bilibili.com/video/BV1bz9FYREEQ
 - QT快速入门 | 最简单最简洁的QT入门教程 | 嵌入式UI：https://www.bilibili.com/video/BV1N34y1H7x7
 - Qt开发实战项目教程：https://www.bilibili.com/video/BV1ng4y1w7w7
