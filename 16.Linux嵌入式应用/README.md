@@ -2,16 +2,9 @@
 
 
 
-`qt-opensource-mac-x64-5.12.9` 和 `qt-creator-opensource-mac-x86_64-17.0.0` 是两个不同的软件包，分别属于 **Qt 框架** 和 **Qt Creator IDE**。以下是它们的详细说明和区别：
-
----
-
-
----
-
 ### 2. **qt-creator-opensource-mac-x86_64-17.0.0**
 - **是什么**：  
-  这是 **Qt Creator** 的一个版本，具体是 **Qt Creator 17.0.0**，适用于 macOS（x86_64 架构）。Qt Creator 是一个跨平台的集成开发环境（IDE），专门用于开发 Qt 应用程序。
+  这是 **Qt Creator** 的一个版本，具体是 **Qt Creator 17.0.0**，适用于 macOS（x86_64 架构）。
 
 - **包含内容**：
    - 代码编辑器（支持语法高亮、代码补全、代码导航等）。
@@ -20,8 +13,8 @@
    - 项目管理工具（支持 qmake 和 CMake）。
    - 版本控制集成（如 Git）。
 
-- **用途**：  
-  用于编写、调试和构建基于 Qt 的应用程序。Qt Creator 提供了丰富的工具和功能，简化了 Qt 开发流程。
+- 
+  
 
 ---
 
