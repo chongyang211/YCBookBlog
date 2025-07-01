@@ -6,8 +6,10 @@
 
 ## 学习资源
 
-- [Qt 官方文档](https://doc.qt.io/)
-- [Qt 教程](https://qmlbook.github.io/)
+- [Qt 官方文档：Qt Quick](https://doc.qt.io/qt-6/qtquick-index.html)
+- [Qt Quick 示例](https://doc.qt.io/qt-6/qtquick-examples.html)
+- [QML 教程](https://qmlbook.github.io/)
+
 
 ## 学习资料
 
