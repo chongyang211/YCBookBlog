@@ -15,8 +15,10 @@
 
 ## 视频资料
 
-- 最新QT从入门到实战完整版|传智教育：https://www.bilibili.com/video/BV1g4411H78N
+- 最新QT从入门到实战完整版|传智教育|Qt Widget开发：https://www.bilibili.com/video/BV1g4411H78N
 - C++QT2024年最新版：https://www.bilibili.com/video/BV1GW42197ff/
+- QML6(Qt Quick)开发教程（完整版）：https://www.bilibili.com/video/BV1j14y1e7Hf
+
 
 ## 书籍
 
