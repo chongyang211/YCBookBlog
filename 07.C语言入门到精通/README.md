@@ -28,6 +28,13 @@
 - 7.1 
 
 
+## 参考博客
+
+职工系统：https://github.com/zz2summer/StudentManageSystem
+
+五子棋：https://github.com/zz2summer/GoBangByCpp
+
+--------------------------------------------------------------------------------------------------
 
 
 
