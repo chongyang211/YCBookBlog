@@ -165,8 +165,8 @@
 在WorkerManager.h中添加成员函数  `void initEmp();`
 
 ```C++
-	//初始化员工
-	void init_Emp();
+//初始化员工
+void initEmp();
 ```
 
 
