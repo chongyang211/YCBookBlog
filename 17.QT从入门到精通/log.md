@@ -2,6 +2,246 @@
 
 
 
+```qml
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 400
+
+    Page {
+        anchors.fill: parent
+
+        // 标题栏
+        header: Label {
+            text: "我的页面"
+            font.pixelSize: 20
+            horizontalAlignment: Text.AlignHCenter
+            padding: 10
+        }
+
+        // 内容区域
+        Column {
+            anchors.centerIn: parent
+            spacing: 10
+
+            Button {
+                text: "按钮 1"
+                onClicked: console.log("按钮 1 被点击")
+            }
+
+            Button {
+                text: "按钮 2"
+                onClicked: console.log("按钮 2 被点击")
+            }
+        }
+
+        // 页脚
+        footer: Label {
+            text: "页脚信息"
+            font.pixelSize: 12
+            horizontalAlignment: Text.AlignHCenter
+            padding: 10
+        }
+    }
+}
+```
+
+**说明**：
+- `header`：定义页面的标题栏。
+- `footer`：定义页面的页脚。
+- 内容区域可以放置任何 QML 组件（如 `Column`、`Row`、`Button` 等）。
+
+---
+
+### **2. 与 `StackView` 结合使用**
+
+`StackView` 是用于管理多个页面的导航组件。通过 `push` 和 `pop` 方法，可以在页面之间切换。
+
+#### **示例：多页面导航**
+
+```qml
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 400
+
+    StackView {
+        id: stackView
+        initialItem: mainPage
+        anchors.fill: parent
+    }
+
+    // 主页面
+    Component {
+        id: mainPage
+        Page {
+            header: Label {
+                text: "主页面"
+                font.pixelSize: 20
+                horizontalAlignment: Text.AlignHCenter
+                padding: 10
+            }
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 10
+
+                Button {
+                    text: "跳转到页面 2"
+                    onClicked: stackView.push(page2)
+                }
+            }
+        }
+    }
+
+    // 页面 2
+    Component {
+        id: page2
+        Page {
+            header: Label {
+                text: "页面 2"
+                font.pixelSize: 20
+                horizontalAlignment: Text.AlignHCenter
+                padding: 10
+            }
+
+            Column {
+                anchors.centerIn: parent
+                spacing: 10
+
+                Button {
+                    text: "返回主页面"
+                    onClicked: stackView.pop()
+                }
+            }
+        }
+    }
+}
+```
+
+**说明**：
+- `StackView` 用于管理页面导航。
+- `push` 方法用于跳转到新页面。
+- `pop` 方法用于返回上一页面。
+
+---
+
+### **3. 与 `SwipeView` 结合使用**
+
+`SwipeView` 允许用户通过滑动手势在多个页面之间切换。
+
+#### **示例：滑动页面**
+
+```qml
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 400
+
+    SwipeView {
+        id: swipeView
+        anchors.fill: parent
+
+        // 页面 1
+        Page {
+            header: Label {
+                text: "页面 1"
+                font.pixelSize: 20
+                horizontalAlignment: Text.AlignHCenter
+                padding: 10
+            }
+
+            Label {
+                text: "这是页面 1"
+                anchors.centerIn: parent
+            }
+        }
+
+        // 页面 2
+        Page {
+            header: Label {
+                text: "页面 2"
+                font.pixelSize: 20
+                horizontalAlignment: Text.AlignHCenter
+                padding: 10
+            }
+
+            Label {
+                text: "这是页面 2"
+                anchors.centerIn: parent
+            }
+        }
+    }
+
+    // 页面指示器
+    PageIndicator {
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        count: swipeView.count
+        currentIndex: swipeView.currentIndex
+    }
+}
+```
+
+**说明**：
+- `SwipeView` 允许用户通过滑动手势切换页面。
+- `PageIndicator` 用于显示当前页面的位置。
+
+---
+
+### **4. 自定义页面样式**
+
+可以通过 `background` 属性自定义页面的背景。
+
+#### **示例：自定义背景**
+
+```qml
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+ApplicationWindow {
+    visible: true
+    width: 400
+    height: 400
+
+    Page {
+        anchors.fill: parent
+
+        // 自定义背景
+        background: Rectangle {
+            color: "lightblue"
+            border.color: "gray"
+            border.width: 2
+        }
+
+        Label {
+            text: "自定义背景页面"
+            anchors.centerIn: parent
+        }
+    }
+}
+```
+
+---
+
+### **5. 总结**
+
+`Page` 是 QML 中用于构建页面的核心组件，通常与 `StackView` 或 `SwipeView` 结合使用，实现多页面导航。它的主要特点包括：
+- 支持标题栏、内容区域和页脚。
+- 可以与其他导航组件（如 `StackView`、`SwipeView`）无缝集成。
+- 支持自定义样式和布局。
+
+如果有更多问题或需要进一步的示例，请随时告诉我！
+
 
 
 
