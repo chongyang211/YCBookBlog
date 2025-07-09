@@ -2,57 +2,9 @@
 
 
 
-```qml
-import QtQuick 2.15
-import QtQuick.Controls 2.15
 
-ApplicationWindow {
-    visible: true
-    width: 400
-    height: 400
 
-    Page {
-        anchors.fill: parent
 
-        // 标题栏
-        header: Label {
-            text: "我的页面"
-            font.pixelSize: 20
-            horizontalAlignment: Text.AlignHCenter
-            padding: 10
-        }
-
-        // 内容区域
-        Column {
-            anchors.centerIn: parent
-            spacing: 10
-
-            Button {
-                text: "按钮 1"
-                onClicked: console.log("按钮 1 被点击")
-            }
-
-            Button {
-                text: "按钮 2"
-                onClicked: console.log("按钮 2 被点击")
-            }
-        }
-
-        // 页脚
-        footer: Label {
-            text: "页脚信息"
-            font.pixelSize: 12
-            horizontalAlignment: Text.AlignHCenter
-            padding: 10
-        }
-    }
-}
-```
-
-**说明**：
-- `header`：定义页面的标题栏。
-- `footer`：定义页面的页脚。
-- 内容区域可以放置任何 QML 组件（如 `Column`、`Row`、`Button` 等）。
 
 ---
 
