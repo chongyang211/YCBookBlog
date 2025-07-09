@@ -19,14 +19,19 @@
 - 比较完整的QT学习资料：https://github.com/lichangke/QT
 
 ## 推荐资料
+
 - QML6(Qt Quick)开发教程（完整版）：https://www.bilibili.com/video/BV1j14y1e7Hf
-- 零基础入门学习qt，项目实战教学：https://www.bilibili.com/video/BV1qhSiYwEdk
+- Qt5/Qt6/Qml 手把手带你从零基础手搓一个网易云音乐桌面前端界面：https://www.bilibili.com/video/BV1YUcGeQEBq
+- Qt Quick QML项目实战——Cloud Music Player：https://www.bilibili.com/video/BV1SX4y147Ed
+- Qt Quick QML项目实战——Cloud Music Player教程笔记：https://www.hyz.cool/articles/241
+- Qt Quick QML项目实战——Cloud Music Player项目源码：https://github.com/libaroma/course-qt-quick-music-player-demo
 
 ## 视频资料
 
+- 零基础入门学习qt，项目实战教学：https://www.bilibili.com/video/BV1qhSiYwEdk
 - 最新QT从入门到实战完整版|传智教育|Qt Widget开发：https://www.bilibili.com/video/BV1g4411H78N
 - C++QT2024年最新版：https://www.bilibili.com/video/BV1GW42197ff/
-- QML程序设计入门教程：https://www.bilibili.com/video/BV1uJ41147qY
+- Qt6 C++实战1：从零搭建《阿西拜教学管理系统》完整版：https://www.bilibili.com/video/BV1GQfpYCE96
 
 
 ## 一般视频
@@ -34,6 +39,10 @@
 - C++-QT新手入门项目：Qt音乐播放器：https://www.bilibili.com/video/BV1bz9FYREEQ
 - QT快速入门 | 最简单最简洁的QT入门教程 | 嵌入式UI：https://www.bilibili.com/video/BV1N34y1H7x7
 - Qt开发实战项目教程：https://www.bilibili.com/video/BV1ng4y1w7w7
+
+## 优秀项目
+
+- https://github.com/cppqtdev
 
 
 ## 书籍
