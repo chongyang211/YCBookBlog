@@ -40,7 +40,9 @@
 ## 优秀项目
 
 - https://github.com/cppqtdev
-
+- C++和qml小说阅读器项目：https://github.com/RownH/qReader
+- 中文版《QmlBook》，原作地址QmlBook：https://github.com/cwc1987/QmlBook-In-Chinese
+- UI库：https://github.com/zhuzichu520/FluentUI
 
 ## 书籍
 
