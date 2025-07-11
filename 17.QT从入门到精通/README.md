@@ -22,9 +22,6 @@
 
 - QML6(Qt Quick)开发教程（完整版）：https://www.bilibili.com/video/BV1j14y1e7Hf
 - Qt5/Qt6/Qml 手把手带你从零基础手搓一个网易云音乐桌面前端界面：https://www.bilibili.com/video/BV1YUcGeQEBq
-- Qt Quick QML项目实战——Cloud Music Player：https://www.bilibili.com/video/BV1SX4y147Ed
-- Qt Quick QML项目实战——Cloud Music Player教程笔记：https://www.hyz.cool/articles/241
-- Qt Quick QML项目实战——Cloud Music Player项目源码：https://github.com/libaroma/course-qt-quick-music-player-demo
 
 ## 视频资料
 
