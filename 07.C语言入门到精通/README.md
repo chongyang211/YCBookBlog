@@ -56,61 +56,7 @@
 
 
 
-1. 系统功能介绍
 
-
-
-2. 系统main函数，while循环在外，系统程序能够持续运行，switch判断语句进行功能选择与函数切换。
-
-```C
-int main() {
-	while (1)
-	{
-		//打印菜单
-		Menu();
-		//读取一个字符 整数,字符在内存中映射为ASCII码
-		char ch = _getch();
-
-		switch (ch)
-		{
-		case '1'://1.录入学生信息
-			InputStudent();
-			break;
-		case '2'://2.打印学生信息
-			PrintStudent();
-			break;
-		case '3'://3.保存学生信息
-			SaveStudent();
-			break;
-		case '4'://4.读取学生信息
-			ReadStudent();
-			break;
-		case '5'://5.统计所有学生人数
-			CountStudent();
-			break;
-		case '6'://6.查找学生信息
-			FindStudent();
-			break;
-		case '7'://7.修改学生信息
-			ChangeStudent();
-			break;
-		case '8'://8.删除学生信息
-			DeleteStudent();
-			break;
-		case '0'://0.退出系统
-			return 0;
-			break;
-		default:
-			printf("输入有误，没有该功能\n\n");
-			system("pause");  //暂停
-			system("cls");    //清屏
-			break;
-		}
-	}
-
-	return 0;
-}
-```
 
 <h3 id="3">三、菜单</h3>
 
