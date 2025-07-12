@@ -62,48 +62,8 @@
 
 
 
-2. 利用学生结构体，以及链表操作输入学生信息
 
-```C
-//1.录入学生信息
-void InputStudent() {
-	//创建一个人，在堆中分配内存
-	Node* pNewNode = (Node*)malloc(sizeof(Node));
-	//指针下一个指向空
-	pNewNode->pNext = NULL;
 
-	//查找链表的尾结点
-	Node* p = g_pHead;
-	while (g_pHead != NULL && p->pNext != NULL)
-	{
-		p = p->pNext;
-	}
-
-	//把节点插到链表的尾节点
-	if (g_pHead == NULL) {
-		g_pHead = pNewNode;
-	}
-	else {
-		p->pNext = pNewNode;
-	}
-
-	//录入学生信息
-	printf("请输入学生姓名：\n");
-	scanf_s("%s", pNewNode->stu.szName, sizeof(pNewNode->stu.szName));
-	printf("请输入性别：\n");
-	scanf_s("%s", pNewNode->stu.szSex, sizeof(pNewNode->stu.szSex));
-	printf("请输入学生年龄：\n");
-	scanf_s("%d", &pNewNode->stu.nAge);
-	printf("请输入学号：\n");
-	scanf_s("%d", &pNewNode->stu.nStuNo);
-	printf("请输入成绩：\n");
-	scanf_s("%d", &pNewNode->stu.nScore);
-
-	printf("学生信息录入成功。\n\n");
-	system("pause");
-	system("cls");
-}
-```
 
 <h3 id="5">五、打印学生信息</h3>
 
