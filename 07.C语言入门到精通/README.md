@@ -60,20 +60,6 @@
 
 
 
-1. 定义学生结构体、链表节点结构体
-
-```C
-//链表
-//节点
-typedef struct tagNode
-{
-	Student stu;			//学生信息
-	struct tagNode* pNext;	//指向下一个节点
-}Node;
-
-//创建头节点
-Node* g_pHead = NULL;		//指向头节点
-```
 
 
 2. 利用学生结构体，以及链表操作输入学生信息
