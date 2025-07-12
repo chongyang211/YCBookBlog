@@ -65,41 +65,6 @@
 
 
 
-
-
-<h3 id="6">六、保存学生信息</h3>
-
-1. 利用文件对学生信息进行存储
-
-```C
-//3.保存学生信息
-void SaveStudent() {
-	//打开文件
-	FILE* pFile;
-	pFile = fopen(".\\stuinfo.dat", "w");
-	
-	if (pFile == NULL) {
-		printf("打开文件失败。\n");
-		return;
-	}
-
-	//写入数据
-	Node* p = g_pHead;
-	while (p != NULL)
-	{
-		fwrite(&p->stu, sizeof(Node), 1, pFile);
-		p = p->pNext;
-	}
-
-	//关闭文件
-	fclose(pFile);
-
-	printf("数据保存成功。\n");
-	system("pause");
-	system("cls");
-}
-```
-
 2. fopen在vs中会报错，解决方式
 
 （1）按照vs的提示，将fopen换成fopen_s
