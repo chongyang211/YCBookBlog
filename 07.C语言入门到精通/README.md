@@ -59,27 +59,10 @@
 
 
 
-2. 打印菜单
-
-scanf()、getchar()输入后均需要按enter，而getch()不用
-
-
-
-
-<h3 id="4">四、录入学生信息</h3>
 
 1. 定义学生结构体、链表节点结构体
 
 ```C
-//定义一个学生
-typedef struct tagStudent {
-	char szName[20];	//姓名
-	char szSex[4];		//性别
-	int  nAge;			//年龄
-	int  nStuNo;		//学号
-	int  nScore;		//成绩
-}Student;
-
 //链表
 //节点
 typedef struct tagNode
