@@ -63,57 +63,6 @@
 
 
 
-<h3 id="9">九、查找学生信息</h3>
-
-1. 本次查找以学号为示例，改用姓名等信息查询流程基本一致。
-
-   遍历链表，如果有符合信息的学生则打印，反之则继续下一个节点，若系统中无该学生信息，给予用户无结果提示。
-
-```C
-//6.查找学生信息
-void FindStudent() {
-	system("cls");
-	//以学号为查找示例，其他信息查找流程基本相似
-	int stuNum;
-	printf("请输入查找学生学号：");
-	scanf("%d", &stuNum);
-	//遍历链表查找，查找到后进行信息显示
-	Node* p = g_pHead;
-	//对表头进行展示一次
-	bool isShowHead = false;
-	//记录是否有找到该学号的学生信息
-	bool isFindStu = false;
-	while (p != NULL)
-	{
-		if (stuNum == p->stu.nStuNo) {
-			if (!isShowHead) {
-				printf("*********************************************************************************\n");
-				printf("*\t学号\t*\t姓名\t*\t性别\t*\t年龄\t*\t成绩\t*\n");
-				printf("*********************************************************************************\n");
-				isShowHead = true;
-			}
-			printf("*\t%d\t*\t%s\t*\t%s\t*\t%d\t*\t%d\t*\n",
-				p->stu.nStuNo,
-				p->stu.szName,
-				p->stu.szSex,
-				p->stu.nAge,
-				p->stu.nScore
-			);
-			isFindStu = true;
-			printf("*********************************************************************************\n");
-		}
-		p = p->pNext;
-	}
-
-	if (!isFindStu) {
-		printf("学号输入有误，系统中暂无该学生信息。\n\n");
-	}
-
-	system("pause");
-	system("cls");
-}
-```
-
 <h3 id="10">十、修改学生信息</h3>
 
 1. 可参考查找学生信息代码段，在查找后进行修改即可
