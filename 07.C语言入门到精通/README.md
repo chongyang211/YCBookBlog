@@ -63,65 +63,6 @@
 
 
 
-<h3 id="10">十、修改学生信息</h3>
-
-1. 可参考查找学生信息代码段，在查找后进行修改即可
-
-```C
-//7.修改学生信息
-void ChangeStudent() {
-	//以学号为查找示例，其他信息查找流程基本相似
-	int stuNum;
-	printf("请输入欲修改学生的学号：");
-	scanf("%d", &stuNum);
-	//遍历链表查找，查找到后进行信息显示
-	Node* p = g_pHead;
-	//对表头进行展示一次
-	bool isShowHead = false;
-	//记录是否有找到该学号的学生信息
-	bool isFindStu = false;
-	while (p != NULL)
-	{
-		if (stuNum == p->stu.nStuNo) {
-			if (!isShowHead) {
-				printf("*********************************************************************************\n");
-				printf("*\t学号\t*\t姓名\t*\t性别\t*\t年龄\t*\t成绩\t*\n");
-				printf("*********************************************************************************\n");
-				isShowHead = true;
-			}
-			printf("*\t%d\t*\t%s\t*\t%s\t*\t%d\t*\t%d\t*\n",
-				p->stu.nStuNo,
-				p->stu.szName,
-				p->stu.szSex,
-				p->stu.nAge,
-				p->stu.nScore
-			);
-			//修改学生信息
-			printf("请输入学生姓名：\n");
-			scanf_s("%s", p->stu.szName, sizeof(p->stu.szName));
-			printf("请输入性别：\n");
-			scanf_s("%s", p->stu.szSex, sizeof(p->stu.szSex));
-			printf("请输入学生年龄：\n");
-			scanf_s("%d", &p->stu.nAge);
-			printf("请输入学号：\n");
-			scanf_s("%d", &p->stu.nStuNo);
-			printf("请输入成绩：\n");
-			scanf_s("%d", &p->stu.nScore);
-			isFindStu = true;
-			printf("*********************************************************************************\n");
-			printf("学生信息修改成功，请注意及时保存。\n\n");
-		}
-		p = p->pNext;
-	}
-
-	if (!isFindStu) {
-		printf("学号输入有误，系统中暂无该学生信息，无法进行修改。\n\n");
-	}
-
-	system("pause");
-	system("cls");
-}
-```
 
 <h3 id="11">十一、删除学生信息</h3>
 
