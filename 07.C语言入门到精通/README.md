@@ -63,34 +63,6 @@
 
 
 
-
-
-
-
-
-<h3 id="8">八、统计所有学生人数</h3>
-
-1. 设置计数器，遍历链表
-
-```C
-//5.统计所有学生人数
-void CountStudent() {
-	int countStu = 0;
-
-	//遍历链表
-	Node* p = g_pHead;
-	while (p != NULL)
-	{
-		countStu++;
-		p = p->pNext;
-	}
-	printf("学生总人数：%d\n\n", countStu);
-
-	system("pause");
-	system("cls");
-}
-```
-
 <h3 id="9">九、查找学生信息</h3>
 
 1. 本次查找以学号为示例，改用姓名等信息查询流程基本一致。
