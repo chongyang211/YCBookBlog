@@ -5,40 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_ACCOUNTS 100
-#define NAME_LENGTH 50
-#define FILENAME "bank_accounts.txt"
-
-typedef struct {
-    int accountNumber;
-    char name[NAME_LENGTH];
-    double balance;
-} BankAccount;
-
-BankAccount accounts[MAX_ACCOUNTS];
-int account_count = 0;
-
-// 开户
-void openAccount() {
-    if (account_count >= MAX_ACCOUNTS) {
-        printf("账户数量已达到上限，无法继续开户！\n");
-        return;
-    }
-
-    BankAccount newAccount;
-    newAccount.accountNumber = account_count + 1;
-
-    printf("请输入账户姓名: ");
-    scanf("%s", newAccount.name);
-
-    printf("请输入初始余额: ");
-    scanf("%lf", &newAccount.balance);
-
-    accounts[account_count] = newAccount;
-    account_count++;
-
-    printf("账户开户成功！账户号: %d\n", newAccount.accountNumber);
-}
 
 // 存款
 void deposit() {
