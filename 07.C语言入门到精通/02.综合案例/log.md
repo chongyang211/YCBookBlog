@@ -1,32 +1,6 @@
 
 ### 代码实现：
 ```c
-// 存款
-void deposit() {
-    int accountNumber;
-    double amount;
-
-    printf("请输入账户号: ");
-    scanf("%d", &accountNumber);
-
-    for (int i = 0; i < account_count; i++) {
-        if (accounts[i].accountNumber == accountNumber) {
-            printf("请输入存款金额: ");
-            scanf("%lf", &amount);
-
-            if (amount <= 0) {
-                printf("存款金额必须大于0！\n");
-                return;
-            }
-
-            accounts[i].balance += amount;
-            printf("存款成功！当前余额: %.2lf\n", accounts[i].balance);
-            return;
-        }
-    }
-
-    printf("未找到账户号为%d的账户！\n", accountNumber);
-}
 
 // 取款
 void withdraw() {
