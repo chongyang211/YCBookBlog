@@ -37,40 +37,6 @@ void handle_error(ErrorCode code, const char* context) {
 }
 
 
-/*-------------------------------------------
- *  职工工厂系统（150行）
- *------------------------------------------*/
-Employee* create_worker(int id, const char* name, int dept_id) {
-    Worker* w = (Worker*)malloc(sizeof(Worker));
-    if (!w) {
-        handle_error(ERR_MEMORY, "创建普通员工失败");
-        return NULL;
-    }
-    
-    w->base.id = id;
-    strncpy(w->base.name, name, MAX_NAME_LEN-1);
-    w->base.dept_id = dept_id;
-    w->base.show_duties = worker_duties;
-    
-    return (Employee*)w;
-}
-
-Employee* create_manager(int id, const char* name, int dept_id, int team_size) {
-    Manager* m = (Manager*)malloc(sizeof(Manager));
-    if (!m) {
-        handle_error(ERR_MEMORY, "创建经理失败");
-        return NULL;
-    }
-    
-    m->base.id = id;
-    strncpy(m->base.name, name, MAX_NAME_LEN-1);
-    m->base.dept_id = dept_id;
-    m->base.show_duties = manager_duties;
-    m->team_size = team_size;
-    
-    return (Employee*)m;
-}
-
 Employee* create_boss(int id, const char* name, int dept_id, float shares) {
     Boss* b = (Boss*)malloc(sizeof(Boss));
     if (!b) {
