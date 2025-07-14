@@ -59,30 +59,6 @@
 
 ---
 
-### 1. **编译器**
-
-
----
-
-### 2. **集成开发环境 (IDE)**
-IDE 提供了代码编辑、编译、调试等一体化功能，适合大型项目开发。
-- **Visual Studio (Windows)**
-    - 功能强大，支持 C/C++ 开发，适合 Windows 平台。
-    - 下载地址：[Visual Studio](https://visualstudio.microsoft.com/)
-
-- **Code::Blocks**
-    - 跨平台的开源 IDE，支持多种编译器（GCC、Clang 等）。
-    - 下载地址：[Code::Blocks](http://www.codeblocks.org/)
-
-- **Eclipse CDT**
-    - 基于 Eclipse 的 C/C++ 开发工具，适合大型项目。
-    - 下载地址：[Eclipse CDT](https://www.eclipse.org/cdt/)
-
-- **CLion**
-    - JetBrains 推出的跨平台 C/C++ IDE，功能强大，支持智能代码补全和调试。
-    - 下载地址：[CLion](https://www.jetbrains.com/clion/)
-
----
 
 ### 3. **文本编辑器**
 对于小型项目或轻量级开发，可以使用文本编辑器配合编译器。
