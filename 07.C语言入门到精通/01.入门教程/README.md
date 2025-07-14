@@ -55,52 +55,7 @@
 
 
 
-在C语言开发中，选择合适的开发工具和环境可以显著提高编程效率和代码质量。以下是常用的C语言开发工具和环境的介绍：
-
----
-
-
-### 3. **文本编辑器**
-对于小型项目或轻量级开发，可以使用文本编辑器配合编译器。
-- **VS Code (Visual Studio Code)**
-    - 轻量级、跨平台的编辑器，支持 C/C++ 扩展。
-    - 安装 C/C++ 扩展后，可以配置编译和调试任务。
-    - 下载地址：[VS Code](https://code.visualstudio.com/)
-
-- **Sublime Text**
-    - 快速、轻量级的文本编辑器，支持插件扩展。
-    - 下载地址：[Sublime Text](https://www.sublimetext.com/)
-
-- **Vim / Emacs**
-    - 经典的命令行文本编辑器，适合高级用户。
-    - 通过插件可以支持 C/C++ 开发。
-
----
-
-### 4. **调试工具**
-调试工具用于查找和修复代码中的错误。
-- **GDB (GNU Debugger)**
-    - 命令行调试工具，支持多种平台。
-    - 使用方法：`gdb ./program`
-
-- **LLDB**
-    - LLVM 项目的调试工具，与 Clang 配合使用。
-    - 使用方法：`lldb ./program`
-
-- **IDE 内置调试器**
-    - Visual Studio、CLion、Code::Blocks 等 IDE 都集成了调试功能。
-
----
-
 ### 5. **构建工具**
-构建工具用于自动化编译和链接过程。
-- **Make**
-    - 经典的构建工具，通过 `Makefile` 定义编译规则。
-    - 使用方法：`make`
-
-- **CMake**
-    - 跨平台的构建工具，生成 `Makefile` 或其他构建文件。
-    - 使用方法：`cmake . && make`
 
 ---
 
