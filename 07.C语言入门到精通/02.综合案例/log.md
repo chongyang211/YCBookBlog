@@ -274,35 +274,6 @@ void system_modify_employee(int id) {
     printf("错误: 未找到ID为 %d 的职工\n", id);
 }
 
-// 显示所有职工
-void system_display_all() {
-    if (this_system->count == 0) {
-        printf("没有职工记录\n");
-        return;
-    }
-    
-    printf("\n%-10s %-20s %-15s %-10s\n", "职工ID", "姓名", "部门", "职位");
-    printf("================================================\n");
-    
-    for (int i = 0; i < this_system->count; i++) {
-        Employee* emp = this_system->employees[i];
-        char type[20];
-        
-        if (emp->show_duties == worker_duties) {
-            strcpy(type, "普通员工");
-        } else if (emp->show_duties == manager_duties) {
-            strcpy(type, "经理");
-        } else {
-            strcpy(type, "老板");
-        }
-        
-        printf("%-10d %-20s %-15d %-10s\n", 
-               emp->id, emp->name, emp->dept_id, type);
-    }
-    
-    log_event("显示所有职工信息");
-}
-
 // 查找职工
 void system_find_employee() {
     printf("\n查找选项:\n");
