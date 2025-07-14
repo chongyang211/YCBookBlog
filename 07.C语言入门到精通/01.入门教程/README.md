@@ -55,13 +55,117 @@
 
 
 
-C语言的基础语法是学习编程的基石，掌握这些内容可以帮助你编写简单的程序并逐步深入。以下是C语言基础语法的核心内容：
+在C语言开发中，选择合适的开发工具和环境可以显著提高编程效率和代码质量。以下是常用的C语言开发工具和环境的介绍：
 
 ---
 
-### **1. 程序结构**
+### 1. **编译器**
 
 
+---
+
+### 2. **集成开发环境 (IDE)**
+IDE 提供了代码编辑、编译、调试等一体化功能，适合大型项目开发。
+- **Visual Studio (Windows)**
+    - 功能强大，支持 C/C++ 开发，适合 Windows 平台。
+    - 下载地址：[Visual Studio](https://visualstudio.microsoft.com/)
+
+- **Code::Blocks**
+    - 跨平台的开源 IDE，支持多种编译器（GCC、Clang 等）。
+    - 下载地址：[Code::Blocks](http://www.codeblocks.org/)
+
+- **Eclipse CDT**
+    - 基于 Eclipse 的 C/C++ 开发工具，适合大型项目。
+    - 下载地址：[Eclipse CDT](https://www.eclipse.org/cdt/)
+
+- **CLion**
+    - JetBrains 推出的跨平台 C/C++ IDE，功能强大，支持智能代码补全和调试。
+    - 下载地址：[CLion](https://www.jetbrains.com/clion/)
+
+---
+
+### 3. **文本编辑器**
+对于小型项目或轻量级开发，可以使用文本编辑器配合编译器。
+- **VS Code (Visual Studio Code)**
+    - 轻量级、跨平台的编辑器，支持 C/C++ 扩展。
+    - 安装 C/C++ 扩展后，可以配置编译和调试任务。
+    - 下载地址：[VS Code](https://code.visualstudio.com/)
+
+- **Sublime Text**
+    - 快速、轻量级的文本编辑器，支持插件扩展。
+    - 下载地址：[Sublime Text](https://www.sublimetext.com/)
+
+- **Vim / Emacs**
+    - 经典的命令行文本编辑器，适合高级用户。
+    - 通过插件可以支持 C/C++ 开发。
+
+---
+
+### 4. **调试工具**
+调试工具用于查找和修复代码中的错误。
+- **GDB (GNU Debugger)**
+    - 命令行调试工具，支持多种平台。
+    - 使用方法：`gdb ./program`
+
+- **LLDB**
+    - LLVM 项目的调试工具，与 Clang 配合使用。
+    - 使用方法：`lldb ./program`
+
+- **IDE 内置调试器**
+    - Visual Studio、CLion、Code::Blocks 等 IDE 都集成了调试功能。
+
+---
+
+### 5. **构建工具**
+构建工具用于自动化编译和链接过程。
+- **Make**
+    - 经典的构建工具，通过 `Makefile` 定义编译规则。
+    - 使用方法：`make`
+
+- **CMake**
+    - 跨平台的构建工具，生成 `Makefile` 或其他构建文件。
+    - 使用方法：`cmake . && make`
+
+---
+
+### 6. **开发环境配置**
+#### **Linux**
+- 安装 GCC: `sudo apt install gcc`
+- 安装 GDB: `sudo apt install gdb`
+- 使用 VS Code 或命令行工具开发。
+
+#### **Windows**
+- 安装 MinGW 或 MSVC。
+- 使用 Visual Studio 或 VS Code 开发。
+
+#### **macOS**
+- 安装 Xcode 命令行工具: `xcode-select --install`
+- 使用 VS Code 或 CLion 开发。
+
+---
+
+### 7. **学习资源**
+- **书籍**：
+    - 《C程序设计语言》（K&R）
+    - 《C Primer Plus》
+- **在线教程**：
+    - [菜鸟教程 - C语言](https://www.runoob.com/cprogramming/c-tutorial.html)
+    - [Learn-C.org](https://www.learn-c.org/)
+- **练习平台**：
+    - [LeetCode](https://leetcode.com/)
+    - [HackerRank](https://www.hackerrank.com/domains/tutorials/c-tutorial)
+
+---
+
+### 8. **推荐组合**
+- **初学者**：VS Code + GCC + GDB
+- **Windows 开发**：Visual Studio + MSVC
+- **跨平台开发**：CLion + CMake
+- **轻量级开发**：Sublime Text + GCC
+
+---
+
+选择合适的工具和环境，结合自己的需求和习惯，可以让你在C语言开发中事半功倍！
 
 
 
