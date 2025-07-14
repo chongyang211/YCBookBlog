@@ -65,8 +65,6 @@
 
 职工系统：https://github.com/zz2summer/StudentManageSystem
 
-五子棋：https://github.com/zz2summer/GoBangByCpp
-
 ## C语言视频教学
 
 - C语言经典100题（手把手 编程）：https://www.bilibili.com/video/BV1P94y1Z74b
