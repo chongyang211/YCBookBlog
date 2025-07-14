@@ -55,27 +55,7 @@
 
 
 
-### 5. **构建工具**
-
----
-
-### 6. **开发环境配置**
-#### **Linux**
-- 安装 GCC: `sudo apt install gcc`
-- 安装 GDB: `sudo apt install gdb`
-- 使用 VS Code 或命令行工具开发。
-
-#### **Windows**
-- 安装 MinGW 或 MSVC。
-- 使用 Visual Studio 或 VS Code 开发。
-
-#### **macOS**
-- 安装 Xcode 命令行工具: `xcode-select --install`
-- 使用 VS Code 或 CLion 开发。
-
----
-
-### 7. **学习资源**
+## **学习资源**
 - **书籍**：
     - 《C程序设计语言》（K&R）
     - 《C Primer Plus》
@@ -85,22 +65,6 @@
 - **练习平台**：
     - [LeetCode](https://leetcode.com/)
     - [HackerRank](https://www.hackerrank.com/domains/tutorials/c-tutorial)
-
----
-
-### 8. **推荐组合**
-- **初学者**：VS Code + GCC + GDB
-- **Windows 开发**：Visual Studio + MSVC
-- **跨平台开发**：CLion + CMake
-- **轻量级开发**：Sublime Text + GCC
-
----
-
-选择合适的工具和环境，结合自己的需求和习惯，可以让你在C语言开发中事半功倍！
-
-
-
-
 
 
 
