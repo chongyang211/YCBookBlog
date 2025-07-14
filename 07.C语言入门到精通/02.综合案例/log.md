@@ -13,26 +13,6 @@
 #include <stdbool.h>
 #include <time.h>
 
-/*-------------------------------------------
- *  宏定义与全局常量
- *------------------------------------------*/
-#define MAX_NAME_LEN 50
-#define MAX_EMPLOYEES 1000
-#define DATA_FILE "employee_data.dat"
-#define BACKUP_FILE "employee_backup.dat"
-#define LOG_FILE "system_log.txt"
-#define MIN_ID 1000
-#define MAX_ID 9999
-
-/*-------------------------------------------
- *  日志记录系统（100行）
- *------------------------------------------*/
-typedef struct LogEntry {
-    time_t timestamp;
-    char message[256];
-    struct LogEntry* next;
-} LogEntry;
-
 void log_event(const char* message) {
     FILE* log_file = fopen(LOG_FILE, "a");
     if (!log_file) return;
@@ -48,27 +28,6 @@ void log_event(const char* message) {
 /*-------------------------------------------
  *  异常处理系统（150行）
  *------------------------------------------*/
-typedef enum {
-    ERR_NONE = 0,
-    ERR_FILE_OPEN,
-    ERR_MEMORY,
-    ERR_INVALID_INPUT,
-    ERR_ID_EXISTS,
-    ERR_ID_NOT_FOUND,
-    ERR_LIST_FULL,
-    ERR_DATA_CORRUPT
-} ErrorCode;
-
-const char* error_messages[] = {
-    "操作成功",
-    "无法打开文件",
-    "内存分配失败",
-    "无效输入",
-    "职工ID已存在",
-    "未找到该职工",
-    "职工列表已满",
-    "数据文件损坏"
-};
 
 void handle_error(ErrorCode code, const char* context) {
     char log_msg[512];
@@ -77,44 +36,6 @@ void handle_error(ErrorCode code, const char* context) {
     log_event(log_msg);
 }
 
-/*-------------------------------------------
- *  职工类层次结构（200行）
- *------------------------------------------*/
-typedef struct Employee {
-    int id;
-    char name[MAX_NAME_LEN];
-    int dept_id;
-    void (*show_duties)();
-} Employee;
-
-// 普通员工
-typedef struct Worker {
-    Employee base;
-} Worker;
-
-void worker_duties() {
-    printf("职责：完成经理交给的任务\n");
-}
-
-// 经理
-typedef struct Manager {
-    Employee base;
-    int team_size;
-} Manager;
-
-void manager_duties() {
-    printf("职责：完成老板交给的任务\n");
-}
-
-// 老板
-typedef struct Boss {
-    Employee base;
-    float company_shares;
-} Boss;
-
-void boss_duties() {
-    printf("职责：管理公司所有事务\n");
-}
 
 /*-------------------------------------------
  *  职工工厂系统（150行）
