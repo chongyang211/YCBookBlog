@@ -36,23 +36,6 @@ void handle_error(ErrorCode code, const char* context) {
     log_event(log_msg);
 }
 
-
-Employee* create_boss(int id, const char* name, int dept_id, float shares) {
-    Boss* b = (Boss*)malloc(sizeof(Boss));
-    if (!b) {
-        handle_error(ERR_MEMORY, "创建老板失败");
-        return NULL;
-    }
-    
-    b->base.id = id;
-    strncpy(b->base.name, name, MAX_NAME_LEN-1);
-    b->base.dept_id = dept_id;
-    b->base.show_duties = boss_duties;
-    b->company_shares = shares;
-    
-    return (Employee*)b;
-}
-
 /*-------------------------------------------
  *  数据存储系统（400行）
  *------------------------------------------*/
