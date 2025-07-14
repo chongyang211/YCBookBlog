@@ -1,56 +1,5 @@
 
 ```c
-// 转账
-void transfer() {
-    int fromAccount, toAccount;
-    double amount;
-    
-    printf("请输入转出账户号: ");
-    scanf("%d", &fromAccount);
-
-    printf("请输入转入账户号: ");
-    scanf("%d", &toAccount);
-
-    if (fromAccount == toAccount) {
-        printf("转出账户和转入账户不能相同！\n");
-        return;
-    }
-
-    int fromIndex = -1, toIndex = -1;
-    for (int i = 0; i < account_count; i++) {
-        if (accounts[i].accountNumber == fromAccount) {
-            fromIndex = i;
-        }
-        if (accounts[i].accountNumber == toAccount) {
-            toIndex = i;
-        }
-    }
-
-    if (fromIndex == -1 || toIndex == -1) {
-        printf("转出账户或转入账户不存在！\n");
-        return;
-    }
-
-    printf("请输入转账金额: ");
-    scanf("%lf", &amount);
-
-    if (amount <= 0) {
-        printf("转账金额必须大于0！\n");
-        return;
-    }
-
-    if (amount > accounts[fromIndex].balance) {
-        printf("转出账户余额不足，无法转账！\n");
-        return;
-    }
-
-    accounts[fromIndex].balance -= amount;
-    accounts[toIndex].balance += amount;
-    printf("转账成功！\n");
-    printf("转出账户余额: %.2lf, 转入账户余额: %.2lf\n",
-           accounts[fromIndex].balance,
-           accounts[toIndex].balance);
-}
 
 // 保存数据到文件
 void saveToFile() {
