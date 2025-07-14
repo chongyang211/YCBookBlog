@@ -1,31 +1,10 @@
 
-### 代码实现：
 ```c
-// 查询余额
-void checkBalance() {
-    int accountNumber;
-
-    printf("请输入账户号: ");
-    scanf("%d", &accountNumber);
-
-    for (int i = 0; i < account_count; i++) {
-        if (accounts[i].accountNumber == accountNumber) {
-            printf("账户号: %d, 姓名: %s, 当前余额: %.2lf\n",
-                   accounts[i].accountNumber,
-                   accounts[i].name,
-                   accounts[i].balance);
-            return;
-        }
-    }
-
-    printf("未找到账户号为%d的账户！\n", accountNumber);
-}
-
 // 转账
 void transfer() {
     int fromAccount, toAccount;
     double amount;
-
+    
     printf("请输入转出账户号: ");
     scanf("%d", &fromAccount);
 
