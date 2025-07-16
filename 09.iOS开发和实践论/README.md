@@ -71,6 +71,7 @@ wby1830248E@
 收付通app包名： com.wecard.zf
 微卡刷掌app包名：com.wecard.palm
 微卡空中录掌app包名：com.wecard.air
+微信版本空中录掌包名：com.wecard.airapp
 收付通正式包名：com.johannli.WecardSDKDemo
 
 
