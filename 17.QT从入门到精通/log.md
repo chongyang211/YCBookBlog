@@ -1,89 +1,9 @@
 # 专栏笔记总结大全
 
 
-### **3. 使用 `Loader`**
-
-`Loader` 是一种动态加载 QML 组件的机制，可以根据需要加载和卸载组件。
-
-#### **示例：动态加载一个矩形**
-
-```javascript
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-
-ApplicationWindow {
-    visible: true
-    width: 400
-    height: 300
-
-    // 使用 Loader 动态加载组件
-    Loader {
-        id: dynamicLoader
-        sourceComponent: Rectangle {
-            width: 100
-            height: 100
-            color: "blue"
-        }
-        x: 150
-        y: 100
-    }
-
-    Button {
-        text: "切换组件"
-        onClicked: {
-            // 动态切换 Loader 的组件
-            dynamicLoader.sourceComponent = buttonComponent;
-        }
-    }
-
-    // 定义另一个组件模板
-    Component {
-        id: buttonComponent
-        Button {
-            text: "动态按钮"
-            onClicked: console.log("动态按钮被点击了！");
-        }
-    }
-}
-```
-
-- **优点**：适合需要动态切换组件的场景。
-- **缺点**：只能加载一个组件，不能同时加载多个。
-
----
 
 ### **4. 使用 `Repeater`**
 
-`Repeater` 是一种用于动态生成多个相同类型组件的机制，通常与模型（`model`）结合使用。
-
-#### **示例：动态生成多个矩形**
-
-```javascript
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-
-ApplicationWindow {
-    visible: true
-    width: 400
-    height: 300
-
-    // 使用 Repeater 动态生成多个矩形
-    Row {
-        spacing: 10
-        Repeater {
-            model: 5 // 生成 5 个矩形
-            Rectangle {
-                width: 50
-                height: 50
-                color: index % 2 === 0 ? "red" : "blue"
-            }
-        }
-    }
-}
-```
-
-- **优点**：适合生成多个相同类型的组件。
-- **缺点**：组件类型必须相同。
 
 ---
 
