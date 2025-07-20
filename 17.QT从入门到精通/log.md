@@ -1,80 +1,6 @@
 # 专栏笔记总结大全
 
 
-
-### **4. 使用 `Repeater`**
-
-
----
-
-### **5. 使用 `ListView` 或 `GridView`**
-
-`ListView` 和 `GridView` 是用于动态生成列表或网格布局的组件，通常与模型（`model`）结合使用。
-
-#### **示例：动态生成列表**
-
-```javascript
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-
-ApplicationWindow {
-    visible: true
-    width: 400
-    height: 300
-
-    // 使用 ListView 动态生成列表
-    ListView {
-        width: 200
-        height: 300
-        model: ["Item 1", "Item 2", "Item 3"] // 数据模型
-        delegate: Text { text: modelData } // 委托组件
-    }
-}
-```
-
-- **优点**：适合生成列表或网格布局。
-- **缺点**：组件类型必须相同。
-
----
-
-### **6. 使用 JavaScript 动态创建对象**
-
-在 QML 中，可以直接使用 JavaScript 动态创建对象并添加到父对象中。
-
-#### **示例：动态创建多个矩形**
-
-```javascript
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-
-ApplicationWindow {
-    visible: true
-    width: 400
-    height: 300
-
-    Component.onCompleted: {
-        // 使用 JavaScript 动态创建多个矩形
-        for (var i = 0; i < 5; i++) {
-            var rect = Qt.createQmlObject(`
-                import QtQuick 2.15
-                Rectangle {
-                    width: 50
-                    height: 50
-                    color: "green"
-                    x: ${i * 60}
-                    y: 100
-                }
-            `, this, "dynamicRect" + i);
-        }
-    }
-}
-```
-
-- **优点**：灵活，适合复杂场景。
-- **缺点**：性能较差。
-
----
-
 ### **总结**
 
 | 方法                  | 适用场景                           | 优点                     | 缺点                     |
@@ -83,10 +9,7 @@ ApplicationWindow {
 | `Component`           | 需要频繁创建对象的场景             | 性能较好                 | 需要提前定义模板         |
 | `Loader`              | 动态加载和切换组件                 | 适合动态切换组件         | 只能加载一个组件         |
 | `Repeater`            | 生成多个相同类型的组件             | 简单易用                 | 组件类型必须相同         |
-| `ListView`/`GridView` | 生成列表或网格布局                 | 适合列表或网格布局       | 组件类型必须相同         |
-| JavaScript            | 复杂场景下的动态创建               | 灵活                     | 性能较差                 |
 
-根据具体需求选择合适的方法，可以高效地实现 QML 中的动态创建功能。
 
 
 在 **QML** 中，`Qt.createQmlObject` 是一个用于动态创建 QML 对象的函数。它允许在运行时从字符串形式的 QML 代码创建对象，并将其添加到 QML 场景中。以下是关于 `Qt.createQmlObject` 的详细说明、用法和注意事项。
