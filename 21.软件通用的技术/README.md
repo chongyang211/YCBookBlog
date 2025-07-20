@@ -12,30 +12,12 @@
 
 #### **步骤 3：使用私钥登录**
 
-使用私钥登录远程服务器：
-
-```bash
-ssh -i ~/.ssh/id_rsa user@192.168.1.100
-```
 
 ---
 
 ### **3. 文件传输**
 
-#### **使用 `scp` 传输文件**
-
-- 将本地文件复制到远程服务器：
-
-```bash
-scp local_file user@192.168.1.100:/remote/directory
-```
-
-- 将远程文件复制到本地：
-
-```bash
-scp user@192.168.1.100:/remote/file /local/directory
-```
-
+#### 
 #### **使用 `sftp` 传输文件**
 
 启动 SFTP 会话：
