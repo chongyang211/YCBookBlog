@@ -18,26 +18,7 @@
 ### **3. 文件传输**
 
 #### 
-#### **使用 `sftp` 传输文件**
-
-启动 SFTP 会话：
-
-```bash
-sftp user@192.168.1.100
-```
-
-- 上传文件：
-
-```sftp
-put local_file /remote/directory
-```
-
-- 下载文件：
-
-```sftp
-get /remote/file /local/directory
-```
-
+#### 
 ---
 
 ### **4. 远程命令执行**
