@@ -1,77 +1,8 @@
 
 
 
-#### **3.2 核心功能实现**
-- **创建表**：
-  ```c
-  void createTable(Database *db, const char *tableName, Column *columns, int columnCount);
-  ```
-    - 检查表数量是否超过上限。
-    - 初始化表结构，将表添加到数据库中。
-
-- **插入行**：
-  ```c
-  void insertRow(Database *db, const char *tableName, void **data);
-  ```
-    - 根据表名找到目标表。
-    - 检查行数是否超过上限。
-    - 将数据插入到表的行数组中。
-
-- **删除行**：
-  ```c
-  void deleteRow(Database *db, const char *tableName, int rowIndex);
-  ```
-    - 根据表名找到目标表。
-    - 检查行索引是否有效。
-    - 将后续行前移，覆盖被删除的行。
-
-- **更新行**：
-  ```c
-  void updateRow(Database *db, const char *tableName, int rowIndex, void **data);
-  ```
-    - 根据表名找到目标表。
-    - 检查行索引是否有效。
-    - 更新指定行的数据。
-
-- **查询表**：
-  ```c
-  void queryTable(Database *db, const char *tableName);
-  ```
-    - 根据表名找到目标表。
-    - 遍历表的所有行，打印数据。
-
-#### **3.3 文件操作实现**
-- **保存数据库到文件**：
-  ```c
-  void saveDatabase(Database *db, const char *filename);
-  ```
-    - 打开文件，将数据库中的表结构和数据写入文件。
-
-- **从文件加载数据库**：
-  ```c
-  void loadDatabase(Database *db, const char *filename);
-  ```
-    - 打开文件，读取表结构和数据，初始化数据库。
-
-#### **3.4 用户交互实现**
-- **主菜单**：
-  ```c
-  void displayMenu();
-  ```
-    - 显示功能选项，接收用户输入。
-
-- **主函数**：
-  ```c
-  int main();
-  ```
-    - 初始化数据库，调用功能函数。
-
----
 
 ### **4. 扩展性**
-- **支持更多数据类型**：可以扩展 `DataType` 枚举，支持更多数据类型（如日期、布尔值等）。
-- **支持更多操作**：可以添加更多功能（如修改表结构、删除表等）。
-- **支持更多文件格式**：可以扩展文件操作模块，支持 JSON、XML 等文件格式。
 
 ---
 
