@@ -10,13 +10,7 @@
 
 
 #### **6.3 输入验证**
-- 检查用户输入的行索引是否有效：
-  ```c
-  if (rowIndex < 0 || rowIndex >= table->rowCount) {
-      printf("行索引无效！\n");
-      return;
-  }
-  ```
+- 
 
 ---
 
