@@ -1,46 +1,41 @@
 
 
 
-### **变量与数据类型**
-- 基本数据类型：
-  ```objective-c
-  int age = 25;
-  float height = 1.75;
-  double pi = 3.14159;
-  char initial = 'A';
-  BOOL isStudent = YES; // BOOL 是 Objective-C 的布尔类型
-  ```
-- 字符串：
-  ```objective-c
-  NSString *name = @"John";
-  ```
 
-### **控制结构**
-- 条件语句：
-  ```objective-c
-  int score = 85;
-  if (score >= 90) {
-      NSLog(@"优秀");
-  } else if (score >= 60) {
-      NSLog(@"及格");
-  } else {
-      NSLog(@"不及格");
-  }
-  ```
-- 循环语句：
-  ```objective-c
-  for (int i = 0; i < 5; i++) {
-      NSLog(@"i = %d", i);
-  }
 
-  int j = 0;
-  while (j < 5) {
-      NSLog(@"j = %d", j);
-      j++;
-  }
-  ```
 
 ---
+
+
+
+
+
+
+
+
+## **4. 异常处理**
+### **4.1 `@try`、`@catch`、`@finally`**
+用于捕获和处理异常。
+```objc
+@try {
+    NSArray *array = @[@"Apple", @"Banana"];
+    NSLog(@"%@", array[2]); // 越界访问
+}
+@catch (NSException *exception) {
+    NSLog(@"Exception: %@", exception);
+}
+@finally {
+    NSLog(@"Finally block executed");
+}
+```
+
+---
+
+## **5. 其他控制结构**
+
+---
+
+
 
 ## **3. 面向对象编程**
 ### **类与对象**
