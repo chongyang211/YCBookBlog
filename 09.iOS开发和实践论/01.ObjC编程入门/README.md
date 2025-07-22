@@ -41,55 +41,6 @@
 
 
 
-
-### Objective-C 从入门到精通（详细指南）
-
----
-
-#### **一、Objective-C 基础**
-
-**1. 核心概念**
-
-
----
-
-#### **二、语法详解**
-**1. 类与对象**
-```objectivec
-// 声明
-@interface Person : NSObject
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, assign) NSInteger age;
-- (void)introduce; // 实例方法
-+ (void)species;   // 类方法
-@end
-
-// 实现
-@implementation Person
-- (void)introduce {
-    NSLog(@"I'm %@, age %ld", self.name, self.age);
-}
-+ (void)species {
-    NSLog(@"Homo sapiens");
-}
-@end
-
-// 使用
-Person *p = [[Person alloc] init];
-p.name = @"Alice";
-[p introduce];        // 输出：I'm Alice, age 0
-[Person species];      // 输出：Homo sapiens
-```
-
-**2. 消息传递机制**
-```objectivec
-// 消息结构：[receiver selector]
-[p performSelector:@selector(introduce)]; // 动态调用
-
-// 多参数方法
-[p setValue:@"Bob" forKey:@"name"]; // KVC 示例
-```
-
 **3. 内存管理**
 - **MRC**：
   ```objectivec
