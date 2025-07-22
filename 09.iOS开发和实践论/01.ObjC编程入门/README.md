@@ -24,6 +24,7 @@
 - 2.1.1 类规格说明：类规格说明包含了两个部分，声明interface与实现implementation。
 - 2.1.2 类的声明：类声明一般定义在.h头文件中。类声明以关键字@interface作为开始，@end作为结束。
 - 2.1.3 类的实现：以关键字@implementation作为区块起头，@end结尾。类实现包含了公开方法的实现，以及定义私有（private） 变量及方法。
+- 2.1.4 类的实例化：Objective-C创建对象需通过alloc以及init两个消息。alloc的作用是分配内存，init则是初始化对象。
 
 
 ### Objective-C 从入门到精通（详细指南）
