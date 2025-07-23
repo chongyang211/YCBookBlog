@@ -42,68 +42,6 @@
 
 
 
-
-**4. 协议与委托**
-```objectivec
-@protocol DataDelegate <NSObject>
-@required
-- (void)didReceiveData:(NSData *)data;
-@optional
-- (void)didFailWithError:(NSError *)error;
-@end
-
-@interface Downloader : NSObject
-@property (nonatomic, weak) id<DataDelegate> delegate;
-@end
-```
-
-**5. 类别（Category）与扩展（Extension）**
-- **Category**（添加方法）：
-  ```objectivec
-  @interface NSString (Reverse)
-  - (NSString *)reverseString;
-  @end
-  
-  @implementation NSString (Reverse)
-  - (NSString *)reverseString {
-      NSMutableString *reversed = [NSMutableString new];
-      for (NSInteger i = self.length - 1; i >= 0; i--) {
-          [reversed appendFormat:@"%c", [self characterAtIndex:i]];
-      }
-      return reversed;
-  }
-  @end
-  ```
-- **Extension**（私有属性和方法）：
-  ```objectivec
-  @interface Person ()
-  @property (nonatomic, strong) NSString *secretID;
-  - (void)privateMethod;
-  @end
-  ```
-
-**6. Block 语法**
-```objectivec
-typedef void (^CompletionBlock)(NSData *data); // 类型定义
-
-- (void)fetchData:(CompletionBlock)completion {
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSData *data = // 网络请求
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(data); // 回调主线程
-        });
-    });
-}
-
-// 避免循环引用
-__weak typeof(self) weakSelf = self;
-[self fetchData:^(NSData *data) {
-    [weakSelf handleData:data];
-}];
-```
-
----
-
 #### **三、高级编程**
 **1. 运行时（Runtime）**
 - **方法调配（Swizzling）**：
@@ -120,21 +58,9 @@ __weak typeof(self) weakSelf = self;
 
 **2. KVO（键值观察）**
 ```objectivec
-// 添加观察者
-[person addObserver:self
-         forKeyPath:@"age"
-            options:NSKeyValueObservingOptionNew
-            context:nil];
 
-// 回调
-- (void)observeValueForKeyPath:(NSString *)keyPath 
-                      ofObject:(id)object 
-                        change:(NSDictionary *)change 
-                       context:(void *)context {
-    if ([keyPath isEqualToString:@"age"]) {
-        NSLog(@"New age: %@", change[NSKeyValueChangeNewKey]);
-    }
-}
+
+
 ```
 
 **3. 多线程**
