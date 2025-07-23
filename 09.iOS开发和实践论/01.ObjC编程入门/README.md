@@ -41,13 +41,7 @@
 
 
 
-**3. 内存管理**
-- **MRC**：
-  ```objectivec
-  NSObject *obj = [[NSObject alloc] init]; // retainCount=1
-  [obj retain]; // retainCount=2
-  [obj release]; // retainCount=1
-  ```
+
 - **ARC**：编译器自动插入 `retain/release`（默认模式）
 - **属性修饰符**：
   - `strong`：持有对象（默认）
