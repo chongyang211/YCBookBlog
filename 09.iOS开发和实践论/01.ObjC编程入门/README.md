@@ -44,59 +44,8 @@
 
 
 
----
 
-## **5. 线程安全**
-### **5.1 使用 `@synchronized`**
-```objc
-@synchronized(self) {
-    // 线程安全的代码块
-}
-```
 
-### **5.2 使用 `NSLock`**
-```objc
-NSLock *lock = [[NSLock alloc] init];
-[lock lock];
-// 线程安全的代码块
-[lock unlock];
-```
 
-### **5.3 使用 `dispatch_semaphore`**
-```objc
-dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
-dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-// 线程安全的代码块
-dispatch_semaphore_signal(semaphore);
-```
 
----
-
-## **6. 示例代码**
-以下是一个综合示例，展示了如何使用 GCD 执行后台任务并更新 UI：
-```objc
-#import <Foundation/Foundation.h>
-
-int main(int argc, const char * argv[]) {
-    @autoreleasepool {
-        dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        dispatch_queue_t mainQueue = dispatch_get_main_queue();
-
-        dispatch_async(globalQueue, ^{
-            NSLog(@"Background task is running");
-            [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
-            NSLog(@"Background task finished");
-
-            dispatch_async(mainQueue, ^{
-                NSLog(@"Update UI");
-            });
-        });
-    }
-    return 0;
-}
-```
-
----
-
-通过掌握 Objective-C 的线程和多线程编程技术，你可以编写出高效且响应迅速的应用程序。根据具体需求选择合适的线程管理方式，并注意线程安全问题。
 
