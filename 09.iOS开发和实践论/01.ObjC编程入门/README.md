@@ -41,190 +41,203 @@
 
 
 
-
-#### **三、高级编程**
-**1. 运行时（Runtime）**
-- **方法调配（Swizzling）**：
-  ```objectivec
-  Method original = class_getInstanceMethod([self class], @selector(viewDidLoad));
-  Method swizzled = class_getInstanceMethod([self class], @selector(swizzled_viewDidLoad));
-  method_exchangeImplementations(original, swizzled);
-  ```
-- **动态创建类**：
-  ```objectivec
-  Class newClass = objc_allocateClassPair([NSObject class], "NewClass", 0);
-  objc_registerClassPair(newClass);
-  ```
-
-**2. KVO（键值观察）**
-```objectivec
-
-
-
-```
-
-**3. 多线程**
-- **GCD**：
-  ```objectivec
-  dispatch_queue_t queue = dispatch_queue_create("com.example.queue", DISPATCH_QUEUE_CONCURRENT);
-  dispatch_async(queue, ^{ /* 异步任务 */ });
-  ```
-- **NSOperationQueue**：
-  ```objectivec
-  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-  [queue addOperationWithBlock:^{ /* 任务块 */ }];
-  ```
+                        Objective-C 提供了多种方式来实现线程和多线程编程，包括传统的 `NSThread`、`NSOperation` 和 `NSOperationQueue`，以及现代的 `Grand Central Dispatch (GCD)`。以下是 Objective-C 中线程和多线程编程的详细说明：
 
 ---
 
-#### **四、框架整合**
-**1. Foundation 核心类**
-- `NSString`/`NSMutableString`
-- `NSArray`/`NSMutableArray`
-- `NSDictionary`/`NSMutableDictionary`
-- `NSSet`/`NSOrderedSet`
-- `NSData`/`NSMutableData`
+## **1. 线程基本概念**
 
-**2. Cocoa Touch（iOS）**
-- `UIViewController` 生命周期管理
-- `UITableView` 数据源与代理
-- `Auto Layout` 自动布局
 
 ---
 
-#### **五、项目实战技巧**
-1. **内存优化**
-  - 使用 `@autoreleasepool` 减少峰值内存
-  - 懒加载对象：
-    ```objectivec
-    - (NSArray *)items {
-        if (!_items) {
-            _items = @[@"A", @"B", @"C"];
-        }
-        return _items;
-    }
-    ```
+## **2. 使用 `NSThread`**
+`NSThread` 是 Objective-C 中最基础的线程管理类，可以显式创建和管理线程。
 
-2. **性能调优**
-  - 复用 `UITableViewCell`
-  - 缓存图片（`NSCache`）
-  - 避免主线程阻塞（耗时操作放入后台）
-
-3. **安全实践**
-  - 敏感数据用 `Keychain` 存储
-  - 使用 `NSFileProtection` 文件加密
-  - 预防常见漏洞（SQL注入、XSS）
-
----
-
-#### **六、现代化适配**
-1. **与 Swift 混编**
-  - **桥接头文件**：`ProjectName-Bridging-Header.h`
-  - 宏定义标记：
-    ```objectivec
-    #if __has_feature(modules)
-    @import SwiftModule; // Swift 模块导入
-    #endif
-    ```
-
-2. **CocoaPods 集成**
-   ```ruby
-   target 'MyApp' do
-     pod 'AFNetworking', '~> 4.0'
-   end
-   ```
-
----
-
-#### **七、学习资源**
-1. **官方文档**
-  - https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC
-  - https://developer.apple.com/documentation
-
-2. **经典书籍**
-  - 《Effective Objective-C 2.0》 (Matt Galloway)
-  - 《Objective-C 高级编程》 (iOS与OS X多线程和内存管理)
-
-3. **进阶方向**
-  - Core Data 数据库管理
-  - Core Animation 高级动画
-  - Mach-O 与 dyld 底层原理
-
-> **重要提示**：虽然 Swift 是苹果现役首选语言，但 Objective-C 在以下场景仍不可替代：
-> - 维护遗留代码库（如银行/政府系统）
-> - 底层系统开发（越狱工具、逆向工程）
-> - 高性能需求场景（C 级优化）
-
-掌握 Objective-C 的核心在于理解消息传递机制、内存管理模型及动态运行时特性，配合框架实践可快速达到精通水平。
-
-
-
-## **4. 异常处理**
-### **4.1 `@try`、`@catch`、`@finally`**
-用于捕获和处理异常。
+### **2.1 创建线程**
 ```objc
-@try {
-    NSArray *array = @[@"Apple", @"Banana"];
-    NSLog(@"%@", array[2]); // 越界访问
+// 方式 1：使用类方法
+[NSThread detachNewThreadSelector:@selector(threadMethod:) toTarget:self withObject:nil];
+
+// 方式 2：使用实例方法
+NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadMethod:) object:nil];
+[thread start];
+```
+
+### **2.2 线程方法**
+```objc
+- (void)threadMethod:(id)object {
+    NSLog(@"Thread is running");
+    // 执行耗时操作
+    [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
+    NSLog(@"Thread finished");
 }
-@catch (NSException *exception) {
-    NSLog(@"Exception: %@", exception);
-}
-@finally {
-    NSLog(@"Finally block executed");
+```
+
+### **2.3 线程同步**
+使用 `@synchronized` 实现线程同步。
+```objc
+@synchronized(self) {
+    // 线程安全的代码块
 }
 ```
 
 ---
 
+## **3. 使用 `NSOperation` 和 `NSOperationQueue`**
+`NSOperation` 和 `NSOperationQueue` 是基于 GCD 的高级抽象，提供了更强大的任务管理功能。
 
+### **3.1 创建 `NSOperation`**
+```objc
+NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
+    NSLog(@"Operation is running");
+    // 执行耗时操作
+    [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
+    NSLog(@"Operation finished");
+}];
+```
 
-## **4. 内存管理**
-### **自动释放池**
-Objective-C 使用自动引用计数（ARC）管理内存，但仍需了解自动释放池：
-```objective-c
-@autoreleasepool {
-    NSString *str = [NSString stringWithFormat:@"Hello, %@", @"World"];
-    NSLog(@"%@", str);
+### **3.2 创建 `NSOperationQueue`**
+```objc
+NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+queue.maxConcurrentOperationCount = 3; // 设置最大并发数
+[queue addOperation:operation];
+```
+
+### **3.3 依赖关系**
+可以设置 `NSOperation` 之间的依赖关系。
+```objc
+NSBlockOperation *operation1 = [NSBlockOperation blockOperationWithBlock:^{
+    NSLog(@"Operation 1");
+}];
+NSBlockOperation *operation2 = [NSBlockOperation blockOperationWithBlock:^{
+    NSLog(@"Operation 2");
+}];
+[operation2 addDependency:operation1]; // operation2 依赖于 operation1
+NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+[queue addOperation:operation1];
+[queue addOperation:operation2];
+```
+
+---
+
+## **4. 使用 `Grand Central Dispatch (GCD)`**
+GCD 是 Apple 提供的多线程编程解决方案，基于 C 语言 API，性能高效且易于使用。
+
+### **4.1 创建队列**
+- **主队列**：串行队列，用于更新 UI。
+- **全局队列**：并发队列，用于执行后台任务。
+- **自定义队列**：可以是串行或并发队列。
+
+```objc
+// 主队列
+dispatch_queue_t mainQueue = dispatch_get_main_queue();
+
+// 全局队列
+dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+// 自定义队列
+dispatch_queue_t customQueue = dispatch_queue_create("com.example.customQueue", DISPATCH_QUEUE_SERIAL);
+```
+
+### **4.2 执行任务**
+```objc
+// 异步执行
+dispatch_async(globalQueue, ^{
+    NSLog(@"Background task is running");
+    // 执行耗时操作
+    [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
+    NSLog(@"Background task finished");
+
+    // 回到主线程更新 UI
+    dispatch_async(mainQueue, ^{
+        NSLog(@"Update UI");
+    });
+});
+
+// 同步执行（会阻塞当前线程）
+dispatch_sync(customQueue, ^{
+    NSLog(@"Sync task is running");
+});
+```
+
+### **4.3 延迟执行**
+```objc
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    NSLog(@"Delayed task");
+});
+```
+
+### **4.4 任务组**
+使用 `dispatch_group` 管理一组任务。
+```objc
+dispatch_group_t group = dispatch_group_create();
+dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+dispatch_group_async(group, queue, ^{
+    NSLog(@"Task 1");
+});
+dispatch_group_async(group, queue, ^{
+    NSLog(@"Task 2");
+});
+
+dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+    NSLog(@"All tasks finished");
+});
+```
+
+---
+
+## **5. 线程安全**
+### **5.1 使用 `@synchronized`**
+```objc
+@synchronized(self) {
+    // 线程安全的代码块
 }
 ```
 
-### **手动内存管理（非 ARC）**
-- 保留计数：
-  ```objective-c
-  NSObject *obj = [[NSObject alloc] init]; // retainCount = 1
-  [obj retain]; // retainCount = 2
-  [obj release]; // retainCount = 1
-  [obj release]; // retainCount = 0，对象被释放
-  ```
+### **5.2 使用 `NSLock`**
+```objc
+NSLock *lock = [[NSLock alloc] init];
+[lock lock];
+// 线程安全的代码块
+[lock unlock];
+```
+
+### **5.3 使用 `dispatch_semaphore`**
+```objc
+dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+// 线程安全的代码块
+dispatch_semaphore_signal(semaphore);
+```
 
 ---
 
-## **5. 常用框架**
-### **Foundation 框架**
-- 提供基本数据类型、集合、文件操作等功能。
-  ```objective-c
-  NSArray *array = @[@"Apple", @"Banana", @"Orange"];
-  NSDictionary *dict = @{@"name": @"John", @"age": @25};
-  ```
+## **6. 示例代码**
+以下是一个综合示例，展示了如何使用 GCD 执行后台任务并更新 UI：
+```objc
+#import <Foundation/Foundation.h>
 
-### **UIKit 框架（iOS）**
-- 提供用户界面组件。
-  ```objective-c
-  UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 200, 30)];
-  label.text = @"Hello, iOS!";
-  [self.view addSubview:label];
-  ```
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_queue_t mainQueue = dispatch_get_main_queue();
+
+        dispatch_async(globalQueue, ^{
+            NSLog(@"Background task is running");
+            [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
+            NSLog(@"Background task finished");
+
+            dispatch_async(mainQueue, ^{
+                NSLog(@"Update UI");
+            });
+        });
+    }
+    return 0;
+}
+```
 
 ---
 
-## **6. 学习资源**
-- [Apple 官方文档](https://developer.apple.com/documentation/objectivec)
-- [Objective-C 编程指南](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html)
-- [Ray Wenderlich 教程](https://www.raywenderlich.com/ios/paths/learn)
-
----
-
-通过以上内容，你可以快速入门 Objective-C，并开始开发 macOS 或 iOS 应用程序。不断练习和探索，逐步掌握更多高级特性！
-
+通过掌握 Objective-C 的线程和多线程编程技术，你可以编写出高效且响应迅速的应用程序。根据具体需求选择合适的线程管理方式，并注意线程安全问题。
 
