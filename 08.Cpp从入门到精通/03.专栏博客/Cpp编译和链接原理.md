@@ -285,8 +285,16 @@ Account.o + BankUserManager.o --> 链接 --> BankUserManager（可执行文件�
 
 ### 4.7 关键点说明
 
+1. **预处理**：处理 `#include` 和宏定义，生成纯净的 C++ 代码。
+2. **编译**：将 C++ 代码转换为汇编代码。
+3. **汇编**：将汇编代码转换为机器码（目标文件）。
+4. **链接**：将多个目标文件和库文件合并，生成可执行文件。
 
 ### 4.8 为何需要链接
+
+- `BankUserManager.cpp` 依赖于 `Account` 类的实现，而 `Account` 类的实现在 `Account.cpp` 中。
+- 在编译阶段，`BankUserManager.cpp` 只知道 `Account` 类的声明（通过 `Account.h`），但不知道其实现。
+- 在链接阶段，链接器将 `Account.o` 和 `BankUserManager.o` 合并，解析符号引用，生成完整的可执行文件。
 
 
 
