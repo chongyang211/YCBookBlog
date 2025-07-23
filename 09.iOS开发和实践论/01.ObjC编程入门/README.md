@@ -41,55 +41,7 @@
 
 
 
-                        Objective-C 提供了多种方式来实现线程和多线程编程，包括传统的 `NSThread`、`NSOperation` 和 `NSOperationQueue`，以及现代的 `Grand Central Dispatch (GCD)`。以下是 Objective-C 中线程和多线程编程的详细说明：
 
----
-
-## **1. 线程基本概念**
-
-
----
-
-## **2. 使用 `NSThread`**
-
-
-
----
-
-## **3. 使用 `NSOperation` 和 `NSOperationQueue`**
-`NSOperation` 和 `NSOperationQueue` 是基于 GCD 的高级抽象，提供了更强大的任务管理功能。
-
-### **3.1 创建 `NSOperation`**
-```objc
-NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-    NSLog(@"Operation is running");
-    // 执行耗时操作
-    [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
-    NSLog(@"Operation finished");
-}];
-```
-
-### **3.2 创建 `NSOperationQueue`**
-```objc
-NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-queue.maxConcurrentOperationCount = 3; // 设置最大并发数
-[queue addOperation:operation];
-```
-
-### **3.3 依赖关系**
-可以设置 `NSOperation` 之间的依赖关系。
-```objc
-NSBlockOperation *operation1 = [NSBlockOperation blockOperationWithBlock:^{
-    NSLog(@"Operation 1");
-}];
-NSBlockOperation *operation2 = [NSBlockOperation blockOperationWithBlock:^{
-    NSLog(@"Operation 2");
-}];
-[operation2 addDependency:operation1]; // operation2 依赖于 operation1
-NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-[queue addOperation:operation1];
-[queue addOperation:operation2];
-```
 
 ---
 
