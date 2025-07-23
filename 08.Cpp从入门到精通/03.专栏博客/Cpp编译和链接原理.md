@@ -262,6 +262,15 @@ Account.o + BankUserManager.o --> 链接 --> BankUserManager（可执行文件�
 
 ### 4.5 链接（Linking）
 
+**作用**：将多个目标文件和库文件合并，生成最终的可执行文件。
+
+**具体步骤**：
+- 链接器（`ld`）将 `Account.o` 和 `BankUserManager.o` 合并。
+- 解析符号引用（如 `BankUserManager.o` 中对 `Account` 类方法的调用）。
+- 将标准库（如 `libstdc++`）和其他依赖库链接到可执行文件中。
+
+**输出**：生成可执行文件（`BankUserManager`）。
+
 
 ### 4.6 可执行文件
 
