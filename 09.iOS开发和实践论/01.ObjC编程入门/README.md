@@ -42,12 +42,6 @@
 
 
 
-- **ARC**：编译器自动插入 `retain/release`（默认模式）
-- **属性修饰符**：
-  - `strong`：持有对象（默认）
-  - `weak`：弱引用（自动置 nil）
-  - `copy`：复制对象（用于 NSString/NSArray）
-  - `assign`：基本数据类型（非对象）
 
 **4. 协议与委托**
 ```objectivec
