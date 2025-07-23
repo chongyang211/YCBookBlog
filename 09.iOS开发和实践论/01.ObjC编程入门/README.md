@@ -45,17 +45,7 @@
 
 
 
-## **2. 自动释放池（Autorelease Pool）**
 
----
-
-## **3. 自动引用计数（ARC, Automatic Reference Counting）**
-ARC 是 Objective-C 的编译器特性，它自动管理对象的引用计数，开发者无需手动调用 `retain`、`release` 和 `autorelease`。
-
-### **3.1 ARC 的规则**
-- 编译器会自动在适当的位置插入 `retain`、`release` 和 `autorelease`。
-- 开发者不能手动调用 `retain`、`release` 和 `autorelease`。
-- 对象的生命周期由编译器管理。
 
 ### **3.2 ARC 的使用**
 ```objc
