@@ -45,41 +45,7 @@
 
 
 
-#### 示例：
-```objc
-// 创建对象，引用计数为 1
-NSObject *obj = [[NSObject alloc] init];
-
-// 增加引用计数
-[obj retain]; // 引用计数为 2
-
-// 减少引用计数
-[obj release]; // 引用计数为 1
-
-// 将对象添加到自动释放池
-[obj autorelease]; // 引用计数为 1，稍后释放
-
-// 手动释放对象
-[obj release]; // 引用计数为 0，对象被销毁
-```
-
----
-
 ## **2. 自动释放池（Autorelease Pool）**
-自动释放池用于延迟对象的释放。当对象被发送 `autorelease` 消息时，它会被添加到当前的自动释放池中。当自动释放池被释放时，池中的所有对象都会收到 `release` 消息。
-
-### **2.1 使用自动释放池**
-```objc
-@autoreleasepool {
-    // 创建对象并添加到自动释放池
-    NSString *str = [[[NSString alloc] initWithFormat:@"Hello, %@", @"World"] autorelease];
-
-    // 使用对象
-    NSLog(@"%@", str);
-
-    // 自动释放池结束时，str 会被释放
-}
-```
 
 ---
 
