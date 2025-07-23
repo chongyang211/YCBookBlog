@@ -9,11 +9,21 @@
   - 2.2 确保文件路径正确
   - 2.3 Makefile管理编译
   - 2.4 检查编译器架构
-- 03.编译流程原理
+- 03.编译流程解读
   - 3.1 编译指令解读
   - 3.2 命令执行过程
   - 3.3 编译文件思考
   - 3.4 运行命令
+- 04.项目编译原理
+  - 4.1 编译详细流程
+  - 4.2 预处理（Preprocessing）
+  - 4.3 编译（Compilation）
+  - 4.4 汇编（Assembly）
+  - 4.5 链接（Linking）
+  - 4.6 可执行文件
+  - 4.7 关键点说明
+  - 4.8 为何需要链接
+
 
 
 ## 01.先说个问题
@@ -188,11 +198,63 @@ g++ Account.cpp BankUserManager.cpp -o BankUserManager
 
 ### 3.4 运行命令
 
+在终端中进入项目目录，然后运行：
+
+```bash
+g++ Account.cpp BankUserManager.cpp -o BankUserManager
+```
+
+如果编译成功，会生成一个名为 `BankUserManager` 的可执行文件。你可以运行它：
+
+```bash
+./BankUserManager
+```
+
+`g++ Account.cpp BankUserManager.cpp -o BankUserManager` 的作用是：
+
+1. 编译 `Account.cpp` 和 `BankUserManager.cpp`。
+2. 将生成的目标文件链接在一起。
+3. 生成一个名为 `BankUserManager` 的可执行文件。
+
+通过这条命令，你可以将多个 C++ 源文件编译成一个完整的可执行程序。
+
+## 04.项目编译原理
+
+### 4.1 编译详细流程
+
+```
+Account.cpp  --> 预处理 --> 编译 --> 汇编 --> Account.o
+BankUserManager.cpp --> 预处理 --> 编译 --> 汇编 --> BankUserManager.o
+Account.o + BankUserManager.o --> 链接 --> BankUserManager（可执行文件）
+```
+
+### 4.2 预处理（Preprocessing）
+
+**作用**：处理源代码中的预处理指令（如 `#include`、`#define` 等），生成一个“纯净”的 C++ 文件。
+
+**具体步骤**：
+- 将 `#include` 指令替换为对应头文件的内容。例如，`#include "Account.h"` 会被替换为 `Account.h` 文件的内容。
+- 展开宏定义（`#define`）。
+- 处理条件编译指令（如 `#ifdef`、`#ifndef` 等）。
+
+**输出**：生成一个临时文件（通常以 `.i` 或 `.ii` 为扩展名），其中包含所有预处理后的代码。
+
+### 4.3 编译（Compilation）
 
 
+### 4.4 汇编（Assembly）
 
 
+### 4.5 链接（Linking）
 
+
+### 4.6 可执行文件
+
+
+### 4.7 关键点说明
+
+
+### 4.8 为何需要链接
 
 
 
