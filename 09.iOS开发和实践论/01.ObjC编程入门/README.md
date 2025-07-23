@@ -44,6 +44,180 @@
 
 
 
+## **1. 引用计数（Reference Counting）**
+
+### **1.1 引用计数的规则**
+- 当对象被创建时，引用计数为 1。
+- 当对象被其他对象引用时，引用计数加 1。
+- 当对象不再被引用时，引用计数减 1。
+- 当引用计数为 0 时，对象被销毁，内存被释放。
+
+### **1.2 手动管理引用计数的方法**
+- **`retain`**：增加对象的引用计数。
+- **`release`**：减少对象的引用计数。
+- **`autorelease`**：将对象添加到自动释放池，稍后释放。
+- **`dealloc`**：对象被销毁时调用的方法，用于释放资源。
+
+#### 示例：
+```objc
+// 创建对象，引用计数为 1
+NSObject *obj = [[NSObject alloc] init];
+
+// 增加引用计数
+[obj retain]; // 引用计数为 2
+
+// 减少引用计数
+[obj release]; // 引用计数为 1
+
+// 将对象添加到自动释放池
+[obj autorelease]; // 引用计数为 1，稍后释放
+
+// 手动释放对象
+[obj release]; // 引用计数为 0，对象被销毁
+```
+
+---
+
+## **2. 自动释放池（Autorelease Pool）**
+自动释放池用于延迟对象的释放。当对象被发送 `autorelease` 消息时，它会被添加到当前的自动释放池中。当自动释放池被释放时，池中的所有对象都会收到 `release` 消息。
+
+### **2.1 使用自动释放池**
+```objc
+@autoreleasepool {
+    // 创建对象并添加到自动释放池
+    NSString *str = [[[NSString alloc] initWithFormat:@"Hello, %@", @"World"] autorelease];
+
+    // 使用对象
+    NSLog(@"%@", str);
+
+    // 自动释放池结束时，str 会被释放
+}
+```
+
+---
+
+## **3. 自动引用计数（ARC, Automatic Reference Counting）**
+ARC 是 Objective-C 的编译器特性，它自动管理对象的引用计数，开发者无需手动调用 `retain`、`release` 和 `autorelease`。
+
+### **3.1 ARC 的规则**
+- 编译器会自动在适当的位置插入 `retain`、`release` 和 `autorelease`。
+- 开发者不能手动调用 `retain`、`release` 和 `autorelease`。
+- 对象的生命周期由编译器管理。
+
+### **3.2 ARC 的使用**
+```objc
+// 创建对象，ARC 自动管理引用计数
+NSString *str = [[NSString alloc] initWithFormat:@"Hello, %@", @"World"];
+
+// 使用对象
+NSLog(@"%@", str);
+
+// 不需要手动释放，ARC 会自动处理
+```
+
+---
+
+## **4. 内存管理的最佳实践**
+### **4.1 避免循环引用**
+循环引用会导致内存泄漏。使用 `weak` 引用或 `__weak` 修饰符来打破循环引用。
+
+#### 示例：
+```objc
+__weak typeof(self) weakSelf = self;
+self.block = ^{
+    [weakSelf doSomething]; // 使用 weakSelf 避免循环引用
+};
+```
+
+### **4.2 使用 `@autoreleasepool` 管理临时对象**
+在循环中创建大量临时对象时，使用 `@autoreleasepool` 及时释放内存。
+
+#### 示例：
+```objc
+for (int i = 0; i < 1000; i++) {
+    @autoreleasepool {
+        NSString *tempStr = [NSString stringWithFormat:@"Temp %d", i];
+        NSLog(@"%@", tempStr);
+    }
+}
+```
+
+### **4.3 使用 `dealloc` 释放资源**
+在 `dealloc` 方法中释放对象持有的资源。
+
+#### 示例：
+```objc
+- (void)dealloc {
+    // 释放资源
+    [_resource release];
+    [super dealloc];
+}
+```
+
+---
+
+## **5. 手动内存管理与 ARC 的对比**
+| **特性**               | **手动内存管理**                     | **ARC**                              |
+|------------------------|--------------------------------------|--------------------------------------|
+| **引用计数管理**        | 手动调用 `retain`、`release`         | 编译器自动管理                       |
+| **代码复杂度**          | 较高，容易出错                       | 较低，减少内存管理错误               |
+| **性能**               | 需要手动优化                         | 编译器优化，性能较好                 |
+| **适用场景**           | 需要精细控制内存的场合               | 大多数现代 Objective-C 项目          |
+
+---
+
+## **6. 示例代码**
+以下是一个综合示例，展示了手动内存管理和 ARC 的使用：
+
+### **手动内存管理**
+```objc
+#import <Foundation/Foundation.h>
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        // 创建对象
+        NSObject *obj = [[NSObject alloc] init];
+
+        // 增加引用计数
+        [obj retain];
+
+        // 使用对象
+        NSLog(@"Object: %@", obj);
+
+        // 减少引用计数
+        [obj release];
+
+        // 将对象添加到自动释放池
+        [obj autorelease];
+
+        // 手动释放对象
+        [obj release];
+    }
+    return 0;
+}
+```
+
+### **ARC**
+```objc
+#import <Foundation/Foundation.h>
+
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        // 创建对象，ARC 自动管理引用计数
+        NSString *str = [[NSString alloc] initWithFormat:@"Hello, %@", @"World"];
+
+        // 使用对象
+        NSLog(@"%@", str);
+
+        // 不需要手动释放，ARC 会自动处理
+    }
+    return 0;
+}
+```
+
+---
+
+通过掌握 Objective-C 的内存管理机制，你可以编写出高效且稳定的应用程序。如果使用 ARC，可以大大减少内存管理的复杂性，但理解引用计数的原理仍然非常重要。
 
 
 
