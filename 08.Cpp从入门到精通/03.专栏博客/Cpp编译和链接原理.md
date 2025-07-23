@@ -169,7 +169,22 @@ g++ Account.cpp BankUserManager.cpp -o BankUserManager
 
 ### 3.2 命令执行过程
 
+当运行 `g++ Account.cpp BankUserManager.cpp -o BankUserManager` 时，编译器会执行以下步骤：
+
+1. **编译阶段**
+- 编译器将 `Account.cpp` 编译成目标文件（`Account.o`）。
+- 编译器将 `BankUserManager.cpp` 编译成目标文件（`BankUserManager.o`）。
+
+2. **链接阶段**
+- 编译器将 `Account.o` 和 `BankUserManager.o` 链接在一起，生成最终的可执行文件 `BankUserManager`。
+
 ### 3.3 编译文件思考
+
+`BankUserManager.cpp` 依赖于 `Account` 类，而 `Account` 类的实现在 `Account.cpp` 中。
+
+如果只编译 `BankUserManager.cpp`，编译器会报错，因为它找不到 `Account` 类的实现。
+
+通过同时编译 `Account.cpp` 和 `BankUserManager.cpp`，编译器可以找到所有必要的代码，并正确生成可执行文件。
 
 ### 3.4 运行命令
 
