@@ -1,27 +1,121 @@
 # 专栏笔记总结大全
 
 
+### **加载阶段的任务**
 
+1. **查找和加载字节码文件**：
+    - 根据类的全限定名（包名 + 类名，如 `com.example.MyClass`），查找对应的 `.class` 文件。
+    - 查找的位置包括：
+        - 类路径（Classpath）。
+        - JVM 的核心类库（如 `java.lang.*`）。
+        - 扩展类库（如 `JAVA_HOME/lib/ext` 目录）。
+        - 自定义类加载器指定的路径。
 
-#### **5. 卸载（Unloading）**
+2. **将字节码文件加载到内存**：
+    - 通过文件系统、网络或其他方式读取 `.class` 文件的字节码数据。
+    - 将字节码数据存储到内存中。
+
+3. **创建 `Class` 对象**：
+    - 在内存中创建一个 `java.lang.Class` 对象，用于表示该类。
+    - 这个 `Class` 对象是 JVM 中类的运行时表示，包含了类的元数据（如类名、方法、字段等）。
+
+4. **将 `Class` 对象与类加载器关联**：
+    - 将创建的 `Class` 对象与加载它的类加载器（`ClassLoader`）关联起来。
+    - 类加载器负责加载类，并在后续阶段中用于解析类的依赖。
 
 ---
 
-### **完整输出**
+### **加载阶段的详细过程**
 
-运行 `Main` 类时，输出如下：
+以下是一个具体的加载过程示例：
+
+#### **1. 触发加载**
+- 当 JVM 需要加载一个类时（如创建类的实例、访问类的静态成员、使用反射等），会触发加载过程。
+- 例如，在以下代码中，`MyClass` 类会被加载：
+  ```java
+  MyClass obj = new MyClass();
+  ```
+
+#### **2. 查找 `.class` 文件**
+- JVM 根据类的全限定名（如 `com.example.MyClass`）查找 `.class` 文件。
+- 查找顺序遵循类加载器的双亲委派模型：
+    1. **Bootstrap ClassLoader**：查找 JVM 核心类库。
+    2. **Extension ClassLoader**：查找扩展类库。
+    3. **Application ClassLoader**：查找应用程序类路径（Classpath）。
+    4. **自定义 ClassLoader**：查找自定义路径。
+
+#### **3. 读取字节码数据**
+- 找到 `.class` 文件后，JVM 读取文件的字节码数据。
+- 字节码数据通常以二进制形式存储。
+
+#### **4. 创建 `Class` 对象**
+- JVM 在内存中创建一个 `java.lang.Class` 对象，表示该类。
+- 这个对象包含了类的元数据，如：
+    - 类名、父类、接口。
+    - 方法、字段、构造器。
+    - 注解、泛型信息等。
+
+#### **5. 关联类加载器**
+- 将 `Class` 对象与加载它的类加载器关联。
+- 例如，如果 `MyClass` 是由 `Application ClassLoader` 加载的，那么 `MyClass` 的 `Class` 对象会与 `Application ClassLoader` 关联。
+
+---
+
+### **加载阶段的注意事项**
+
+1. **双亲委派模型**：
+    - 类加载器在加载类时，会先委托其父类加载器尝试加载。
+    - 只有当父类加载器无法加载时，才会由当前类加载器加载。
+    - 这种机制确保了类的唯一性和安全性。
+
+2. **自定义类加载器**：
+    - 可以通过继承 `java.lang.ClassLoader` 实现自定义类加载器。
+    - 自定义类加载器可以打破双亲委派模型，实现动态加载类、热部署等功能。
+
+3. **类的唯一性**：
+    - 在 JVM 中，一个类由其全限定名和加载它的类加载器共同标识。
+    - 即使两个类的全限定名相同，如果由不同的类加载器加载，它们也被视为不同的类。
+
+---
+
+### **加载阶段的示例**
+
+以下是一个简单的示例，展示类的加载过程：
+
+```java
+public class MyClass {
+    static {
+        System.out.println("MyClass is loaded!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Main class is running...");
+        MyClass obj = new MyClass();
+    }
+}
+```
+
+**输出**：
 ```
 Main class is running...
-MyClass is loaded and initialized!
-Hello, World!
+MyClass is loaded!
 ```
+
+**加载过程**：
+1. JVM 执行 `Main` 类的 `main` 方法。
+2. 当创建 `MyClass` 的实例时，触发 `MyClass` 的加载。
+3. JVM 查找 `MyClass` 的 `.class` 文件，并将其加载到内存中。
+4. 创建 `MyClass` 的 `Class` 对象，并执行静态代码块，输出 `MyClass is loaded!`。
 
 ---
 
 ### **总结**
 
 
-通过这个案例，可以清晰地理解类的加载流程及其在 JVM 中的运行机制。
+加载阶段为后续的连接和初始化阶段奠定了基础，是类加载流程中不可或缺的一部分。
+
 
 
 
