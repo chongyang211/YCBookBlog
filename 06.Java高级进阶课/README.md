@@ -17,17 +17,6 @@
 ---
 
 #### **4. 使用（Usage）**
-- **过程**：
-    - 在 `Main` 类的 `main` 方法中，创建 `MyClass` 的实例：
-      ```java
-      MyClass myClass = new MyClass();
-      ```
-    - 调用 `MyClass` 的 `sayHello` 方法：
-      ```java
-      myClass.sayHello();
-      ```
-    - `sayHello` 方法输出：`Hello, World!`
-- **结果**：`MyClass` 类的功能被正常使用。
 
 ---
 
