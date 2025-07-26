@@ -2,6 +2,113 @@
 
 
 
+---
+
+### **类加载的步骤**
+
+类加载过程分为以下三个阶段：
+
+1. **加载（Loading）**：
+    - 通过类的全限定名（包名 + 类名）查找类的字节码文件（`.class` 文件）。
+    - 将字节码文件加载到内存中，并创建一个 `java.lang.Class` 对象来表示该类。
+
+2. **链接（Linking）**：
+    - **验证（Verification）**：检查字节码文件的正确性和安全性，确保其符合 JVM 规范。
+    - **准备（Preparation）**：为类的静态变量分配内存，并设置默认初始值（如 `0`、`null` 等）。
+    - **解析（Resolution）**：将类、方法、字段的符号引用转换为直接引用。
+
+3. **初始化（Initialization）**：
+    - 执行类的静态代码块（`static {}`）和静态变量的显式初始化。
+    - 这是类加载的最后一步，只有在类首次被主动使用时才会触发。
+
+---
+
+### **类加载器（ClassLoader）**
+
+类加载器是负责加载类的组件。JVM 中有以下三种内置的类加载器：
+
+1. **Bootstrap ClassLoader（启动类加载器）**：
+    - 负责加载 JVM 核心类库（如 `java.lang.*`、`java.util.*` 等），通常位于 `JAVA_HOME/lib` 目录下。
+    - 由 C/C++ 实现，是 JVM 的一部分。
+
+2. **Extension ClassLoader（扩展类加载器）**：
+    - 负责加载扩展类库（如 `JAVA_HOME/lib/ext` 目录下的类）。
+    - 是 `java.lang.ClassLoader` 的子类。
+
+3. **Application ClassLoader（应用程序类加载器）**：
+    - 负责加载应用程序类路径（Classpath）下的类。
+    - 是 `java.lang.ClassLoader` 的子类。
+
+---
+
+### **类加载机制**
+
+1. **双亲委派模型（Parent Delegation Model）**：
+    - 当一个类加载器需要加载类时，首先会委托其父类加载器尝试加载。
+    - 如果父类加载器无法加载，才会由当前类加载器尝试加载。
+    - 这种机制确保了类的唯一性和安全性，避免了类的重复加载。
+
+2. **自定义类加载器**：
+    - 可以通过继承 `java.lang.ClassLoader` 类实现自定义类加载器。
+    - 常用于动态加载类、热部署、插件化等场景。
+
+---
+
+### **类加载的触发时机**
+
+类加载在以下情况下会被触发：
+1. 创建类的实例（如 `new MyClass()`）。
+2. 访问类的静态变量或静态方法。
+3. 使用反射加载类（如 `Class.forName("com.example.MyClass")`）。
+4. 初始化类的子类时，父类会先被加载。
+5. JVM 启动时加载包含 `main` 方法的类。
+
+---
+
+### **类加载的示例**
+
+```java
+public class MyClass {
+    static {
+        System.out.println("MyClass is loaded!");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}
+```
+
+运行上述代码时，输出如下：
+```
+MyClass is loaded!
+Hello, World!
+```
+
+---
+
+### **常见问题**
+
+1. **ClassNotFoundException**：
+    - 类加载器找不到指定的类时抛出。
+    - 通常是由于类路径配置错误或类文件缺失。
+
+2. **NoClassDefFoundError**：
+    - 类加载器找到了类，但在链接或初始化阶段失败时抛出。
+    - 通常是由于类的依赖缺失或类文件损坏。
+
+3. **如何打破双亲委派模型**：
+    - 自定义类加载器时，可以重写 `loadClass` 方法，直接加载类而不委托父类加载器。
+
+---
+
+### **总结**
+
+类加载是 JVM 运行 Java 程序的核心机制，它通过加载、链接和初始化类，确保程序能够正确执行。理解类加载的原理和机制，对于解决类加载相关的问题（如 `ClassNotFoundException`）以及实现高级功能（如热部署、插件化）非常重要。
+
+
+
+
 
 ## 1.1String深入理解原理
 
