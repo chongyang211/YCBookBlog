@@ -13,13 +13,6 @@
 ---
 
 #### **3. 初始化（Initialization）**
-- **触发时机**：类首次被主动使用时（如创建实例、访问静态变量或静态方法）。
-- **过程**：
-    - 执行 `MyClass` 的静态代码块（`static {}`）。
-    - 执行静态变量的显式初始化（如 `MESSAGE = "Hello, World!"`）。
-- **结果**：
-    - 静态代码块输出：`MyClass is loaded and initialized!`
-    - 静态变量 `MESSAGE` 被赋值为 `"Hello, World!"`。
 
 ---
 
