@@ -30,11 +30,6 @@
 以下是一个具体的加载过程示例：
 
 #### **1. 触发加载**
-- 当 JVM 需要加载一个类时（如创建类的实例、访问类的静态成员、使用反射等），会触发加载过程。
-- 例如，在以下代码中，`MyClass` 类会被加载：
-  ```java
-  MyClass obj = new MyClass();
-  ```
 
 #### **2. 查找 `.class` 文件**
 - JVM 根据类的全限定名（如 `com.example.MyClass`）查找 `.class` 文件。
@@ -108,13 +103,6 @@ MyClass is loaded!
 2. 当创建 `MyClass` 的实例时，触发 `MyClass` 的加载。
 3. JVM 查找 `MyClass` 的 `.class` 文件，并将其加载到内存中。
 4. 创建 `MyClass` 的 `Class` 对象，并执行静态代码块，输出 `MyClass is loaded!`。
-
----
-
-### **总结**
-
-
-加载阶段为后续的连接和初始化阶段奠定了基础，是类加载流程中不可或缺的一部分。
 
 
 
