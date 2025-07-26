@@ -23,21 +23,8 @@
     - 将创建的 `Class` 对象与加载它的类加载器（`ClassLoader`）关联起来。
     - 类加载器负责加载类，并在后续阶段中用于解析类的依赖。
 
----
-
-### **加载阶段的详细过程**
-
-以下是一个具体的加载过程示例：
-
-#### **1. 触发加载**
 
 #### **2. 查找 `.class` 文件**
-- JVM 根据类的全限定名（如 `com.example.MyClass`）查找 `.class` 文件。
-- 查找顺序遵循类加载器的双亲委派模型：
-    1. **Bootstrap ClassLoader**：查找 JVM 核心类库。
-    2. **Extension ClassLoader**：查找扩展类库。
-    3. **Application ClassLoader**：查找应用程序类路径（Classpath）。
-    4. **自定义 ClassLoader**：查找自定义路径。
 
 #### **3. 读取字节码数据**
 - 找到 `.class` 文件后，JVM 读取文件的字节码数据。
