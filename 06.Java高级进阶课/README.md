@@ -1,50 +1,8 @@
 # 专栏笔记总结大全
 
 
-### **类加载机制**
-
-
----
-
-### **类加载触发时机**
-
-
----
-
-### **类加载的示例**
-
-```java
-public class MyClass {
-    static {
-        System.out.println("MyClass is loaded!");
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}
-```
-
-运行上述代码时，输出如下：
-```
-MyClass is loaded!
-Hello, World!
-```
-
----
 
 ### **常见问题**
-
-1. **ClassNotFoundException**：
-    - 类加载器找不到指定的类时抛出。
-    - 通常是由于类路径配置错误或类文件缺失。
-
-2. **NoClassDefFoundError**：
-    - 类加载器找到了类，但在链接或初始化阶段失败时抛出。
-    - 通常是由于类的依赖缺失或类文件损坏。
-
-3. **如何打破双亲委派模型**：
-    - 自定义类加载器时，可以重写 `loadClass` 方法，直接加载类而不委托父类加载器。
 
 ---
 
