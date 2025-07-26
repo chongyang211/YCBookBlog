@@ -2,28 +2,7 @@
 
 
 
----
-
-### **类加载的步骤**
-
-
----
-
 ### **类加载器（ClassLoader）**
-
-类加载器是负责加载类的组件。JVM 中有以下三种内置的类加载器：
-
-1. **Bootstrap ClassLoader（启动类加载器）**：
-    - 负责加载 JVM 核心类库（如 `java.lang.*`、`java.util.*` 等），通常位于 `JAVA_HOME/lib` 目录下。
-    - 由 C/C++ 实现，是 JVM 的一部分。
-
-2. **Extension ClassLoader（扩展类加载器）**：
-    - 负责加载扩展类库（如 `JAVA_HOME/lib/ext` 目录下的类）。
-    - 是 `java.lang.ClassLoader` 的子类。
-
-3. **Application ClassLoader（应用程序类加载器）**：
-    - 负责加载应用程序类路径（Classpath）下的类。
-    - 是 `java.lang.ClassLoader` 的子类。
 
 ---
 
