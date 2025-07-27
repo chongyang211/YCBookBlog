@@ -7,9 +7,7 @@
 
 ### **卸载阶段的任务**
 
-1. **释放类的元数据**：
-    - 卸载类时，JVM 会释放该类在方法区（Metaspace 或永久代）中占用的内存，包括类的元数据（如类名、字段、方法、常量池等）。
-
+1. 
 2. **释放类的静态变量**：
     - 类的静态变量占用的内存也会被释放。
 
@@ -19,63 +17,7 @@
 4. **确保卸载条件**：
     - JVM 会检查类是否满足卸载条件，只有满足条件时才会卸载。
 
-
-### **卸载阶段的示例**
-
-以下是一个简单的示例，展示类的卸载过程：
-
-```java
-class MyClass {
-    static {
-        System.out.println("MyClass is initialized!");
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        System.out.println("MyClass is finalized!");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) throws Exception {
-        // 创建自定义 ClassLoader
-        ClassLoader classLoader = new ClassLoader() {};
-
-        // 加载类
-        Class<?> clazz = classLoader.loadClass("MyClass");
-
-        // 创建实例
-        Object obj = clazz.getDeclaredConstructor().newInstance();
-
-        // 释放引用
-        obj = null;
-        clazz = null;
-        classLoader = null;
-
-        // 触发垃圾回收
-        System.gc();
-
-        // 等待垃圾回收完成
-        Thread.sleep(1000);
-    }
-}
-```
-
-**卸载阶段的过程**：
-1. 使用自定义 `ClassLoader` 加载 `MyClass` 类。
-2. 创建 `MyClass` 的实例。
-3. 释放对 `MyClass` 实例、`Class` 对象和 `ClassLoader` 的引用。
-4. 调用 `System.gc()` 触发垃圾回收。
-5. 如果满足卸载条件，JVM 会卸载 `MyClass` 类，并调用 `finalize()` 方法。
-
-**输出**：
-```
-MyClass is initialized!
-MyClass is finalized!
-```
-
----
-
+    
 ### **卸载阶段的注意事项**
 
 1. **无法强制卸载**：
