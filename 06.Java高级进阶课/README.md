@@ -5,13 +5,7 @@
             
 
 
-3. **调用类静态成员**：
-    - 访问类的静态变量和静态方法。
-    - 例如：
-      ```java
-      int value = MyClass.STATIC_VALUE;
-      MyClass.staticMethod();
-      ```
+3. 
 
 4. **使用类的功能**：
     - 调用类的方法实现具体的业务逻辑。
