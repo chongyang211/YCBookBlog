@@ -1,58 +1,6 @@
 # 专栏笔记总结大全
 
-
-#### **3. 解析（Resolution）**
-
----
-
-### **连接阶段的示例**
-
-以下是一个简单的示例，展示连接阶段的过程：
-
-```java
-public class MyClass {
-    public static final int VALUE = 10;
-    public static String message;
-
-    static {
-        System.out.println("MyClass is initialized!");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Main class is running...");
-        System.out.println(MyClass.VALUE);
-        MyClass.message = "Hello, World!";
-        System.out.println(MyClass.message);
-    }
-}
-```
-
-**连接阶段的过程**：
-1. **验证**：
-    - 检查 `MyClass` 的 `.class` 文件格式、元数据和字节码是否正确。
-2. **准备**：
-    - 为 `MyClass` 的静态变量分配内存：
-        - `VALUE` 被赋值为 `10`（因为它是常量）。
-        - `message` 被赋值为 `null`（默认值）。
-3. **解析**：
-    - 将 `MyClass` 中引用的其他类（如 `System`）的符号引用转换为直接引用。
-
-**输出**：
-```
-Main class is running...
-10
-Hello, World!
-```
-
----
-
-### **总结**
-
-
-连接阶段为类的初始化阶段奠定了基础，确保类在初始化时能够正确运行。
-
+            
 
 
 
