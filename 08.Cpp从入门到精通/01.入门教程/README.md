@@ -1,39 +1,7 @@
 
 
 
-
-
-#### **使用场景**
-- 
-
-
-#### **示例**
-```cpp
-// File: MyClass.h
-class MyClass {
-public:
-    void doSomething();
-};
-
-// File: main.cpp
-#include "MyClass.h"
-#include "MyClass.h" // 重复包含，导致编译错误
-```
-
-#### **结果**
-编译器会报错，提示 `MyClass` 重复定义。
-
----
-
-### **3. 头文件保护的工作原理**
-
-头文件保护通过条件编译指令实现：
-1. `#ifndef MYCLASS_H`：检查 `MYCLASS_H` 是否未定义。
-2. `#define MYCLASS_H`：定义 `MYCLASS_H`，表示头文件已被包含。
-3. `#endif`：结束条件编译块。
-
-当第一次包含头文件时，`MYCLASS_H` 未定义，头文件内容会被编译。  
-当第二次包含头文件时，`MYCLASS_H` 已定义，头文件内容会被跳过。
+### **3. 头文件保护原理**
 
 ---
 
