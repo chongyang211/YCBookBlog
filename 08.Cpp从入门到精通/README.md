@@ -26,83 +26,6 @@
 
 --------------------------------------------------------------------------------------------------
 
-### 8.4 初始化数组
-
-根据职工的数据以及职工数据，初始化workerManager中的Worker ** m_EmpArray 指针
-
-在WorkerManager.h中添加成员函数  `void initEmp();`
-
-```C++
-//初始化员工
-void initEmp();
-```
-
-
-
-在WorkerManager.cpp中实现
-
-```C++
-void WorkerManager::init_Emp()
-{
-	ifstream ifs;
-	ifs.open(FILENAME, ios::in);
-
-	int id;
-	string name;
-	int dId;
-	
-	int index = 0;
-	while (ifs >> id && ifs >> name && ifs >> dId)
-	{
-		Worker * worker = NULL;
-		//根据不同的部门Id创建不同对象
-		if (dId == 1)  // 1普通员工
-		{
-			worker = new Employee(id, name, dId);
-		}
-		else if (dId == 2) //2经理
-		{
-			worker = new Manager(id, name, dId);
-		}
-		else //总裁
-		{
-			worker = new Boss(id, name, dId);
-		}
-		//存放在数组中
-		this->m_EmpArray[index] = worker;
-		index++;
-	}
-}
-```
-
-
-
-在workerManager.cpp构造函数中追加代码
-
-```C++
-	//根据职工数创建数组
-	this->m_EmpArray = new Worker *[this->m_EmpNum];
-	//初始化职工
-	init_Emp();
-
-	//测试代码
-	for (int i = 0; i < m_EmpNum; i++)
-	{
-		cout << "职工号： " << this->m_EmpArray[i]->m_Id
-			<< " 职工姓名： " << this->m_EmpArray[i]->m_Name
-			<< " 部门编号： " << this->m_EmpArray[i]->m_DeptId << endl;
-	}
-```
-
-
-
-运行程序，测试从文件中获取的数据
-
-![1546436938152](assets/1546436938152.png)
-
-至此初始化数据功能完毕，测试代码可以注释或删除掉！
-
-
 
 
 
@@ -114,30 +37,6 @@ void WorkerManager::init_Emp()
 
 
 ### 9.2 显示职工函数实现
-
-在workerManager.cpp中实现成员函数 `void showEmp();`
-
-```C++
-//显示职工
-void WorkerManager::Show_Emp()
-{
-	if (this->m_FileIsEmpty)
-	{
-		cout << "文件不存在或记录为空！" << endl;
-	}
-	else
-	{
-		for (int i = 0; i < m_EmpNum; i++)
-		{
-			//利用多态调用接口
-			this->m_EmpArray[i]->showInfo();
-		}
-	}
-
-	system("pause");
-	system("cls");
-}
-```
 
 
 
