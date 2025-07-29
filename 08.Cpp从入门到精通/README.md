@@ -31,64 +31,15 @@
 
 
 
-
-
-
-
-
-
-
-
-#### 10.3 删除职工函数实现
-
-在workerManager.cpp中实现成员函数 ` void Del_Emp();`
-
-```C++
-//删除职工
-void WorkerManager::Del_Emp()
-{
-	if (this->m_FileIsEmpty)
-	{
-		cout << "文件不存在或记录为空！" << endl;
-	}
-	else
-	{
-		//按职工编号删除
-		cout << "请输入想要删除的职工号：" << endl;
-		int id = 0;
-		cin >> id;
-
-		int index = this->IsExist(id);
-
-		if (index != -1)  //说明index上位置数据需要删除
-		{
-			for (int i = index; i < this->m_EmpNum - 1; i++)
-			{
-				this->m_EmpArray[i] = this->m_EmpArray[i + 1];
-			}
-			this->m_EmpNum--;
-
-			this->save(); //删除后数据同步到文件中
-			cout << "删除成功！" << endl;
-		}
-		else
-		{
-			cout << "删除失败，未找到该职工" << endl;
-		}
-	}
-	
-	system("pause");
-	system("cls");
-}
-```
-
-
-
 #### 10.4 测试删除职工
 
 在main函数分支 3  选项中，调用删除职工接口
 
-![1546502698622](assets/1546502698622.png)
+```cpp
+case 3: //删除职工
+    wm.deleteEmp();
+    break;
+```
 
 测试1 - 删除不存在职工情况
 
