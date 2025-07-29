@@ -39,53 +39,6 @@
 
 
 
-
-## 10.删除职工
-
-
-
-### 10.1 删除职工函数声明
-
-
-
-#### 10.2 职工是否存在
-
-很多功能都需要用到根据职工是否存在来进行操作如：删除职工、修改职工、查找职工
-
-因此添加该公告函数，以便后续调用
-
-在workerManager.h中添加成员函数  `int IsExist(int id);`
-
-```C++
-	//按照职工编号判断职工是否存在,若存在返回职工在数组中位置，不存在返回-1
-	int IsExist(int id);
-```
-
-在workerManager.cpp中实现成员函数 `int IsExist(int id);`
-
-```C++
-int WorkerManager::IsExist(int id)
-{
-	int index = -1;
-
-	for (int i = 0; i < this->m_EmpNum; i++)
-	{
-		if (this->m_EmpArray[i]->m_Id == id)
-		{
-			index = i;
-
-			break;
-		}
-	}
-
-	return index;
-}
-```
-
-
-
-
-
 #### 10.3 删除职工函数实现
 
 在workerManager.cpp中实现成员函数 ` void Del_Emp();`
