@@ -31,15 +31,15 @@
 
 ## 13.职工排序
 
-功能描述：按照职工编号进行排序，排序的顺序由用户指定
+
 
 #### 13.1 排序函数声明
 
-在workerManager.h中添加成员函数  `void Sort_Emp();`
+在workerManager.h中添加成员函数  `void sortEmp();`
 
-```C++
-	//排序职工
-	void Sort_Emp();
+```cpp
+//排序职工
+void sortEmp();
 ```
 
 
