@@ -35,13 +35,6 @@
 
 #### 13.1 排序函数声明
 
-在workerManager.h中添加成员函数  `void sortEmp();`
-
-```cpp
-//排序职工
-void sortEmp();
-```
-
 
 
 #### 13.2 排序函数实现
