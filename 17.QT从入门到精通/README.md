@@ -2,6 +2,12 @@
 
 
 
+kw5845KWF
+aikit build  -p docker -i 3bf4efdb527e -f rebuild -n rv1109-m3
+aikit build  -p docker -i bcb5a901e538 -f rebuild -n rv1109-m3
+
+aikit build  -p docker -i 3bf4efdb527e -f rebuild -n rv1109-m3 -- -d 2>&1 | tee build_log.txt
+
 
 
 ## 学习资源
