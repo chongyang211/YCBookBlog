@@ -26,6 +26,7 @@
 - 2.2.2 导入标准QML模块：例如 `QtQuick` 和 `QtQuick.Controls`。这些模块通常包含常用的 QML 类型和组件。
 - 2.2.3 导入自定义QML文件：
 - 2.2.4 使用别名导入模块：通过 `as` 关键字为模块指定别名，避免命名冲突或简化使用。
+- 2.2.5 导入JavaScript文件：假设有一个名为 `utils.js` 的文件，可以这样导入：`import "utils.js" as Utils`
 
 
 
