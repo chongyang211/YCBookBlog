@@ -15,7 +15,7 @@
 - 9.2.3 信号-槽系统：C++信号触发QML函数执行。在C++中触发，在Qml中监听函数执行。具体用到`Connections`。
 - 9.3.1 将C++注册到QML：本质是**在QML运行环境中暴露C++类的接口**，使这些C++对象能被QML识别、访问和操作。
 - 9.3.2 注册上下文属性：将C++对象实例注册为全局可访问属性，`setContextProperty()`
-- 
+- 9.3.3 注册QML类型：通过 `qmlRegisterType` 或 `qmlRegisterSingletonType`，可以将 C++ 类注册为 QML 类型。
 
 
 
