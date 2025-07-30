@@ -22,6 +22,10 @@
 - 9.4.3 C++到QML通信：1.c++定义温度变化信号槽方法；2.将c++注册到qml；3.在qml中触发c++方法，然后监听信号槽信息。
 - 9.4.4 QML到C++通信：1.c++定义登录处理槽函数，登录结果信号；2.注册；2.在qml触发登陆处理函数，使用`Connections`监听登陆结果信号。
 - 9.4.5 信号参数处理机制：string转化为QString，list转化为QVariantList，var转化为QVariant等等。
+- 9.4.6 高级连接技术：
+- 9.4.7 信号槽优化策略：
+- 9.4.8 信号槽调试：
+- 9.4.9 信号槽最佳实践：C++信号使用camelCase命名（如`dataReceived`）；QML处理器信号名首字母大写加`on`前缀（如`onDataReceived`）
 
 
 
