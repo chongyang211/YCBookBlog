@@ -39,6 +39,10 @@
 - 2.5.1 在QML中用JavaScript：可以在 QML 对象中定义 JavaScript 函数，用于封装逻辑。
 - 2.5.2 导入JavaScript文件：在qml中导入JavaScript文件。使用 `import` 关键字导入外部 JavaScript 文件。
 - 2.5.3 JavaScript与QML交互：JavaScript 可以直接访问 QML 对象的属性和方法，也可以通过信号与 QML 对象交互。
+- 2.5.3.1 访问QML对象属性：
+- 2.5.3.2 调用QML对象方法：
+- 2.5.3.3 信号与JavaScript交互：
+- 2.5.4 JavaScript模块化：通过外部 JavaScript 文件，可以实现模块化开发，将逻辑分离到不同的文件中。
 
 
 
