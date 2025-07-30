@@ -14,6 +14,7 @@
 - 1.6.2 Quick模块：提供了基本的 UI 元素（如 `Rectangle`、`Text`、`Image` 等）和布局功能。
 - 1.6.3 Quick优势：1.声明式语法和丰富的 UI 元素加速开发；2.基于 OpenGL 渲染，适合高性能 UI。
 - 1.6.4 Quick技术：1.QML是用户界面的标记语言；2.javaScript是动态脚本语言；3.QT C++是高度可移植的增强型C++库。
+- 1.7.2 编写QML代码：打开 `main.qml` 文件（位于 `Sources` 目录下）开始写代码。这个是入口！
 
 
 
