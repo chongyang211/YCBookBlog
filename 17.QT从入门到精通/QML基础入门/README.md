@@ -27,6 +27,7 @@
 - 9.4.8 信号槽调试：
 - 9.4.9 信号槽最佳实践：C++信号使用camelCase命名（如`dataReceived`）；QML处理器信号名首字母大写加`on`前缀（如`onDataReceived`）。
 - 9.5.1 **在C++中操作QML**-获取QML对象：通过对象名查找，QObject *button = rootObject->findChild<QObject*>("submitButton");
+- 9.5.2 操作QML属性与方法：1.属性操作，主要是设置属性，读取属性；2.方法调用，主要是调用无参方法，带参方法。
 - 
 
 
