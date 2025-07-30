@@ -38,6 +38,7 @@
 - 2.4.7 状态控制：状态是 QML 对象的特性之一，用于定义对象的不同配置。通过状态，可以轻松切换对象的属性值或行为。
 - 2.5.1 在QML中用JavaScript：可以在 QML 对象中定义 JavaScript 函数，用于封装逻辑。
 - 2.5.2 导入JavaScript文件：在qml中导入JavaScript文件。使用 `import` 关键字导入外部 JavaScript 文件。
+- 2.5.3 JavaScript与QML交互：JavaScript 可以直接访问 QML 对象的属性和方法，也可以通过信号与 QML 对象交互。
 
 
 
