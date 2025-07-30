@@ -26,7 +26,8 @@
 - 9.4.7 信号槽优化策略：
 - 9.4.8 信号槽调试：
 - 9.4.9 信号槽最佳实践：C++信号使用camelCase命名（如`dataReceived`）；QML处理器信号名首字母大写加`on`前缀（如`onDataReceived`）。
-- 9.4.1 **在QML中调用C++**-信号槽机制：C++ 可以发出信号，QML 可以监听并响应。在 C++ 中定义信号和槽，在 QML 中连接信号和调用槽。
+- 9.5.1 **在C++中操作QML**-获取QML对象：通过对象名查找，QObject *button = rootObject->findChild<QObject*>("submitButton");
+- 
 
 
 
