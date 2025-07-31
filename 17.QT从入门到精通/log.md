@@ -2,26 +2,6 @@
 
 
 
-`QObject::connect` 的常用语法如下：
-
-#### **示例 1：按钮点击事件**
-```cpp
-QPushButton *button = new QPushButton("Click me");
-QObject::connect(button, SIGNAL(clicked()), this, SLOT(onButtonClicked()));
-```
-- 当按钮被点击时，`clicked()` 信号发出，`onButtonClicked()` 槽函数被调用。
-
-#### **示例 2：Lambda 表达式**
-```cpp
-QPushButton *button = new QPushButton("Click me");
-QObject::connect(button, &QPushButton::clicked, []() {
-    qDebug() << "Button clicked!";
-});
-```
-- 使用 Lambda 表达式作为槽函数，简化代码。
-
----
-
 ### **3. `QObject::connect` 的高级用法**
 #### **3.1 使用函数指针（Qt5 风格）**
 Qt5 引入了基于函数指针的语法，更加类型安全：
