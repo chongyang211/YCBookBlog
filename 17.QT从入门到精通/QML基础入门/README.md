@@ -44,6 +44,7 @@
 - 2.5.3.3 信号与JavaScript交互：
 - 2.5.4 JavaScript模块化：通过外部 JavaScript 文件，可以实现模块化开发，将逻辑分离到不同的文件中。
 - 2.5.5 JavaScript作用域：1.函数内部定义的变量只能在函数内访问。2.外部 JavaScript 文件中的函数和变量可以被 QML 全局访问。
+- 2.5.6 JavaScript性能优化：
 
 
 
