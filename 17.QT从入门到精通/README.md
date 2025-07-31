@@ -8,7 +8,15 @@ aikit build  -p docker -i 3bf4efdb527e -f rebuild -n rv1109-m3
 
 aikit build  -p docker -i 3bf4efdb527e -f rebuild -n rv1109-m3 -- -d 2>&1 | tee build_log.txt
 
+Android:
+用户：sg.neutron.palmintegration
+空中录掌体验demo：com.tencent.wecard.oversea.airpalm
+空中录掌新包名：com.tencent.youtu.mobilepalm.demo
 
+iOS:
+用户：sg.neutron.palmintegration
+空中录掌体验demo：com.wecard.air
+空中录掌新包名：com.tencent.palm.PalmMa
 
 ## 学习资源
 
