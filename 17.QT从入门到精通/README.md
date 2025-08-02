@@ -406,3 +406,261 @@ iOS:
 15.3.4传感器489
 15.3.5地图491
 15.3.6蓝牙493
+
+
+
+CHONGYYANG-MB1:~ yangchong$ adb push /Users/yangchong/yt-palm /oem/yt-palm/
+/Users/yangchong/yt-palm: 1 file pushe...ed. 2.4 MB/s (8255388 bytes in 3.226s)
+CHONGYYANG-MB1:~ yangchong$ adb shell
+[root@RV1126_RV1109:/]# /oem/yt-palm/run.sh
+LD_LIBRARY_PATH=/oem/yt-palm/libs:
+qt.qpa.wayland: qtvirtualkeyboard currently is not supported at client-side, use QT_IM_MODULE=qtvirtualkeyboard at compositor-side.
+QStandardPaths: wrong permissions on runtime directory /var/run, 7755 instead of 7700
+[I] <MMKV.cpp:172::initialize> version v2.1.0, page size 4096, arch armeabi-v7a/NEON (hard-float)
+[I] <MMKV.cpp:229::initializeMMKV> root dir: /oem/yt-palm/preference
+[I] <MMKV.cpp:259::mmkvWithID> prepare to load mmkv.default (id 731bea0aecca1fdc1986674f2bb78e64) from rootPath /oem/yt-palm/preference
+[I] <MemoryFile.cpp:103::open> open fd[8], flag 0x7, /oem/yt-palm/preference/mmkv.default
+[I] <MemoryFile.cpp:217::mmap> mmap to address [0xa6f8e000], oldPtr [(nil)], [/oem/yt-palm/preference/mmkv.default]
+[I] <MemoryFile.cpp:103::open> open fd[9], flag 0x7, /oem/yt-palm/preference/mmkv.default.crc
+[I] <MemoryFile.cpp:217::mmap> mmap to address [0xa6f8d000], oldPtr [(nil)], [/oem/yt-palm/preference/mmkv.default.crc]
+[I] <MMKV_IO.cpp:244::loadMetaInfoAndCheck> meta file [mmkv.default] has flag [0]
+[I] <MMKV_IO.cpp:84::loadFromFile> loading [mmkv.default] with 2072 actual size, file size 4096, InterProcess 0, meta info version:4
+[I] <MMKV_IO.cpp:89::loadFromFile> loading [mmkv.default] with crc 3262232614 sequence 1 version 4
+[I] <MMKV_IO.cpp:133::loadFromFile> loaded [mmkv.default] with 21 key-values
+[2025-08-01 12:23:45.089] [info] [1225-1225]|[src/main.cpp:69]Application started with log level: 2
+[2025-08-01 12:23:45.106] [info] [1225-1225]|[register/yt_palm_register.cpp:42]switch palm register mode to: StdQRCodeRegister
+[2025-08-01 12:23:45.175] [info] [1225-1225]|[xike/yt_xike_device_hal_impl.cpp:172]GetWifiState wifiState : 4
+[2025-08-01 12:23:45.187] [info] [1225-1225]|[xike/yt_xike_device_hal_impl.cpp:186]IsEthernetConnected isConnected : 0
+[2025-08-01 12:23:45.187] [info] [1225-1225]|[hal/yt_device_hal_manager.cpp:156]RefreshNetworkStatus network connected changed: 1 network connected: 1 network type: 0 wifi state: CONNECTED ethernet connected: 0
+[2025-08-01 12:23:45.187] [info] [1225-1225]|[xike/yt_xike_device_hal_impl.cpp:204]StartObserveNetworkStatus
+[2025-08-01 12:23:45.190] [info] [1225-1225]|[xike/yt_xike_device_hal_impl.cpp:230]Network status monitoring started
+[2025-08-01 12:23:45.190] [info] [1225-1225]|[update/yt_update_manager.cpp:65]Detect Xike device to config OTA mode :1
+[2025-08-01 12:23:45.191] [warning] [1225-1225]|[access/yt_access_manager.cpp:187]YtAccessManager Open door not supported
+[2025-08-01 12:23:45.191] [error] [1225-1225]|[access/yt_access_manager.cpp:21]Failed to initialize strategy
+[2025-08-01 12:23:45.191] [info] [1225-1225]|[access/yt_access_manager.cpp:23]YtAccessManager created
+[2025-08-01 12:23:45.192] [info] [1225-1225]|[audio/yt_audio_manager.cpp:29]AudioManager constructor called
+[2025-08-01 12:23:45.192] [info] [1225-1225]|[audio/yt_audio_manager.cpp:359]Initializing audio priorities
+[2025-08-01 12:23:45.192] [info] [1225-1225]|[audio/yt_audio_manager.cpp:121]Initializing audio resources
+[2025-08-01 12:23:45.192] [info] [1225-1225]|[audio/yt_audio_manager.cpp:122]Audio resources initialized
+[2025-08-01 12:23:45.192] [info] [1225-1225]|[audio/yt_audio_manager.cpp:48]Created new AudioManager instance
+[2025-08-01 12:23:45.192] [info] [1225-1225]|[audio/yt_audio_manager.cpp:69]Initializing audio manager
+[2025-08-01 12:23:45.409] [info] [1225-1225]|[xike/yt_xike_device_hal_impl.cpp:106]GetCurrentVolume volume : 30
+[2025-08-01 12:23:45.410] [info] [1225-1225]|[audio/yt_audio_manager.cpp:88]Synced audio volume with system: 30
+[2025-08-01 12:23:45.410] [info] [1225-1225]|[audio/yt_audio_manager.cpp:95]Audio manager initialized successfully
+[2025-08-01 12:23:45.411] [info] [1225-1225]|[src/main.cpp:171]Detect Xike device to config app:1
+qrc:/qml/main.qml:203: TypeError: Cannot call method 'info' of undefined
+[2025-08-01 12:23:45.716] [warning] [Qt-Warning] qrc:/qml/main.qml:203: TypeError: Cannot call method 'info' of undefined (qrc:/qml/main.qml:203)
+qt.qpa.wayland: No shell integration named "xdg-shell" found
+[2025-08-01 12:23:45.780] [warning] [Qt-Warning] No shell integration named "xdg-shell" found
+qml: LogService singleton initialized
+qml: YTLoggerImpl可用，发送测试日志
+[2025-08-01 12:23:45.828] [info] [QML] LogService初始化成功
+qml: 已发送测试信号
+[2025-08-01 12:23:45.831] [info] [QML] Application started
+[2025-08-01 12:23:45.832] [info] [QML] Log service available: true
+[2025-08-01 12:23:45.833] [info] [QML] Keyboard height configured: 480
+[2025-08-01 12:23:45.838] [info] [QML] WifiStatusIndicator initialized
+[2025-08-01 12:23:45.850] [info] [1225-1225]|[xike/yt_xike_device_hal_impl.cpp:345]StartWatchdog feed_divide : 30 seconds
+[2025-08-01 12:23:45.850] [info] [1225-1225]|[app/yt_app_watchdog_looper.cpp:36]Watchdog interval calculation - system timeout: 30s, feed interval: 10s, actual interval: 20s
+[2025-08-01 12:23:45.850] [info] [1225-1225]|[app/yt_app_watchdog_looper.cpp:36]Watchdog interval calculation - system timeout: 30s, feed interval: 10s, actual interval: 20s
+[2025-08-01 12:23:45.850] [info] [1225-1225]|[app/yt_app_watchdog_looper.cpp:12]WatchdogLooper initialized with interval: 20000ms
+[2025-08-01 12:23:45.850] [info] [1225-1225]|[utils/yt_future_task.cpp:22]Starting future task name WatchdogLooper, interval ms 20000, single_shot 0, auto_stop 1
+[2025-08-01 12:23:45.850] [info] [1236-1225]|[xike/yt_xike_device_hal_impl.cpp:75]GetSerialNumber sn : CK0A3KP02526000185
+[2025-08-01 12:23:45.850] [info] [1225-1225]|[utils/yt_future_task.cpp:83]Stop future task WatchdogLooper
+[2025-08-01 12:23:45.850] [info] [1236-1225]|[xike/yt_xike_device_hal_impl.cpp:79]GetSerialNumber ota version : 110
+[2025-08-01 12:23:45.850] [info] [1236-1225]|[palm/yt_palm_service.cpp:436]InitPalm start app version: v1.2.0.2025080102-9c1ab75, SN : CK0A3KP02526000185
+[2025-08-01 12:23:45.851] [info] [1236-1225]|[palm/yt_palm_service.cpp:976]PalmManager log level set to 2
+[2025-08-01 12:23:45.852] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022225851765|INFO|[src/yt_palm_manager_impl.cpp:68]init palm manager
+[2025-08-01 12:23:45.852] [info] [1253-1225]|[utils/yt_future_task.cpp:55]handleThreadStarted WatchdogLooper in thread 0x84dfb0
+[2025-08-01 12:23:45.855] [info] [1253-1225]|[xike/yt_xike_device_hal_impl.cpp:367]FeedWatchdog ret : 0
+2025-08-01 12:23:47.858 [info]  [ ANG_SDK ] attached
+2025-08-01 12:23:55.732 [info]  [ ANG_SDK ] open camera successful
+2025-08-01 12:23:55.733 [info]  [ ANG_SDK ] start the device listener
+[2025-08-01 12:23:55.733] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235733154|INFO|[src/yt_palm_manager_impl.cpp:90]module connected
+[2025-08-01 12:23:55.734] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235733681|INFO|[src/yt_palm_manager_impl.cpp:112]open camera ret:0
+[2025-08-01 12:23:55.785] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235784775|INFO|[src/yt_palm_manager_impl.cpp:1578]sync time: 2025-08-01 04:23:55 ret:0
+[2025-08-01 12:23:55.789] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235788874|INFO|[src/yt_palm_manager_impl.cpp:635]switch device status:working2 success, cost: 3ms
+[2025-08-01 12:23:55.791] [info] [1256-1225]|[palm/yt_palm_service.cpp:504]HandlePalmDeviceStatusmodule status changed from Unknown to Working2
+[2025-08-01 12:23:55.791] [info] [1237-1225]|[palm/yt_palm_service.cpp:511]_HandlePalmDeviceStatusmodule status changed from Unknown to Working2
+[2025-08-01 12:23:55.855] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235854974|INFO|[src/yt_palm_manager_impl.cpp:410]=== Module SN: YTA8000F20000047
+[2025-08-01 12:23:55.856] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235855247|INFO|[src/yt_palm_manager_impl.cpp:412]=== PalmManager Version: v1.1.13.2025053006-153994ad
+[2025-08-01 12:23:55.856] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235856200|INFO|[src/yt_palm_manager_impl.cpp:414]=== AngstrongSDK Version: v4.9.7.20250516
+[2025-08-01 12:23:55.859] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235859112|INFO|[src/yt_palm_manager_impl.cpp:417]=== Firmware Version: V02.0.6_202506242120V4.9.5.2025061921
+[2025-08-01 12:23:55.872] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235872386|INFO|[src/yt_palm_manager_impl.cpp:420]=== AlgoSDK Version: v1.2.8.2025061912-60e8ea92
+[2025-08-01 12:23:55.877] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022235876800|INFO|[src/yt_palm_manager_impl.cpp:422]=== Algo Version: v1.0
+2025-08-01 12:23:58.172 [error]  [ ANG_SDK ] exec DHCP fail! ret 255
+[2025-08-01 12:23:58.174] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238172807|INFO|[src/yt_palm_manager_impl.cpp:426]=== Module Run DHCP, ret:-1
+2025-08-01 12:23:58.271 [error]  [ ANG_SDK ] Network not working!!!
+[2025-08-01 12:23:58.272] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238271584|INFO|[src/yt_palm_manager_impl.cpp:428]=== verifyNetwork, ret:-1
+[2025-08-01 12:23:58.272] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238271759|INFO|[src/yt_palm_manager_impl.cpp:212]switch mode: 2
+[2025-08-01 12:23:58.272] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238271873|INFO|[src/yt_palm_manager_impl.cpp:321]=== setConfig solution: 3
+[2025-08-01 12:23:58.272] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238271986|INFO|[src/yt_palm_manager_impl.cpp:322]=== setConfig mode: 2
+[2025-08-01 12:23:58.273] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238272085|INFO|[src/yt_palm_manager_impl.cpp:323]=== setConfig register_mode: 3
+[2025-08-01 12:23:58.273] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238272197|INFO|[src/yt_palm_manager_impl.cpp:324]=== setConfig recognize_mode: 4
+[2025-08-01 12:23:58.285] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238284904|INFO|[src/yt_palm_manager_impl.cpp:327]=== setConfig for prefer quality: normal, ret: 0
+[2025-08-01 12:23:58.294] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238294284|INFO|[src/yt_palm_manager_impl.cpp:332]=== setConfig for prefer disable_feature: 0, ret: 0
+[2025-08-01 12:23:58.299] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238298979|INFO|[src/yt_palm_manager_impl.cpp:338]=== setConfig for prefer disable_retrieval: 0, ret: 0
+[2025-08-01 12:23:58.306] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238306188|INFO|[src/yt_palm_manager_impl.cpp:345]=== setConfig for prefer retrieval_level: normal, ret: 0
+[2025-08-01 12:23:58.312] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238312051|INFO|[src/yt_palm_manager_impl.cpp:353]=== setConfig for prefer disable_preferred_image: 0, ret: 0
+[2025-08-01 12:23:58.320] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238320089|INFO|[src/yt_palm_manager_impl.cpp:361]=== setConfig for recognize disable_preferred_image: 0, ret: 0
+[2025-08-01 12:23:58.343] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238343343|INFO|[src/yt_palm_manager_impl.cpp:370]=== setConfig for recognize export_image_after_retrieval_empty: 1, ret: 0
+[2025-08-01 12:23:58.358] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238358273|INFO|[src/yt_palm_manager_impl.cpp:445]=== setConfig for report image: 0, ret: 0
+[2025-08-01 12:23:58.363] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238363134|INFO|[src/yt_palm_manager_impl.cpp:456]=== setConfig for enable session: 1, ret: 0
+[2025-08-01 12:23:58.374] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238374353|INFO|[src/yt_palm_manager_impl.cpp:462]=== setConfig for report threshold: 1, ret: 0
+2025-08-01 12:23:58.384 [info]  [ ANG_SDK ] setEventCallback PREFER
+[2025-08-01 12:23:58.384] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238384335|INFO|[src/yt_palm_manager_impl.cpp:468]=== setConfig for report score: 1, ret: 0
+2025-08-01 12:23:58.386 [info]  [ ANG_SDK ] setEventCallback RECOGNIZEPRO
+[2025-08-01 12:23:58.386] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238384845|INFO|[src/yt_palm_manager_impl.cpp:479]=== setConfig for prefer event callback, ret: 0
+[2025-08-01 12:23:58.387] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238386497|INFO|[src/yt_palm_manager_impl.cpp:490]=== setConfig for recognize event callback, ret: 0
+[2025-08-01 12:23:58.409] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238409553|INFO|[src/yt_palm_manager_impl.cpp:503]=== setConfig for int8 feature: 1
+2025-08-01 12:23:58.410 [debug]  [ ANG_SDK ] go to get psensor value
+[2025-08-01 12:23:58.409] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238409696|INFO|[src/yt_palm_manager_impl.cpp:509]=== setConfig for local metrics: 64
+[2025-08-01 12:23:58.410] [warning] [1254-1225]|[palm/yt_palm_service.cpp:989][Palmmgr]1754022238409975|WARN|[src/yt_local_metric_mgr.cpp:173]LocalMetricMgr::LoadMetrics not exist: /userdata/palm_metrics/v1.2.8.2025061912-60e8ea92/metrics.json
+[2025-08-01 12:23:58.410] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238410265|INFO|[src/yt_palm_manager_impl.cpp:138]Test device status...
+2025-08-01 12:23:58.720 [debug]  [ ANG_SDK ] go to get psensor value finish
+[2025-08-01 12:23:58.783] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238783401|INFO|[src/yt_palm_manager_impl.cpp:1578]sync time: 2025-08-01 04:23:58 ret:0
+[2025-08-01 12:23:58.787] [info] [1256-1225]|[palm/yt_palm_service.cpp:504]HandlePalmDeviceStatusmodule status changed from Working2 to Working1
+[2025-08-01 12:23:58.787] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022238786440|INFO|[src/yt_palm_manager_impl.cpp:635]switch device status:working success, cost: 2ms
+[2025-08-01 12:23:58.787] [info] [1237-1225]|[palm/yt_palm_service.cpp:511]_HandlePalmDeviceStatusmodule status changed from Working2 to Working1
+[2025-08-01 12:23:59.098] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022239097696|INFO|[src/yt_palm_manager_impl.cpp:1984]stop all with reason:1
+[2025-08-01 12:23:59.112] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022239112372|INFO|[src/yt_palm_manager_impl.cpp:2015]stop all success, cost:14ms
+[2025-08-01 12:23:59.113] [warning] [1254-1225]|[palm/yt_palm_service.cpp:989][Palmmgr]1754022239112632|WARN|[src/yt_palm_manager_impl_verify.cpp:36]ignore ret 1100
+[2025-08-01 12:23:59.113] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022239113126|INFO|[src/yt_palm_manager_impl.cpp:140]Test device status finish, ret: 0
+[2025-08-01 12:23:59.113] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022239113520|INFO|[src/yt_palm_manager_impl.cpp:146]init finish, ret: 0 cost: 13260ms open:9880ms
+[2025-08-01 12:23:59.136] [info] [1236-1225]|[palm/yt_palm_service.cpp:472]Init PalmManager ret  0 palmManagerVersion: v1.1.13.2025053006-153994ad, firmwareVersion: V02.0.6_202506242120V4.9.5.2025061921, algoSdkVersion: v1.2.8.2025061912-60e8ea92, algoVersion: v1.0, palmMode: 2
+[2025-08-01 12:23:59.142] [info] [1236-1225]|[palm/yt_palm_service.cpp:496]PalmManager currentPalmCount: 0
+[2025-08-01 12:23:59.143] [info] [1236-1225]|[palm/yt_palm_context.h:529][Success] Module return code: 0
+[2025-08-01 12:23:59.143] [info] [1236-1225]|[palm/yt_palm_context.h:541]NotifyPalmAuthStatusChangedfrom 0 to 1
+[2025-08-01 12:23:59.143] [info] [1225-1225]|[palm/yt_palm_context.h:149]DoOnPalmAuthorizeSucceed
+[2025-08-01 12:23:59.144] [info] [QML] onPalmAuthorizeSucceed
+[2025-08-01 12:23:59.158] [info] [1236-1225]|[http/yt_qt_http_client.cpp:57]SSL supported, version: OpenSSL 1.1.1h  22 Sep 2020
+[2025-08-01 12:23:59.301] [info] [1236-1225]|[storage/yt_database_manager.cpp:29]Initialize
+[2025-08-01 12:23:59.301] [warning] [1236-1225]|[utils/yt_file_util.cpp:34]Directory already exists: /oem/yt-palm/data
+2025-08-01 12:24:01.291: ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+2025-08-01 12:24:01.291: ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+2025-08-01 12:24:01.291: ERROR CORE sqlcipher_codec_ctx_set_error 1
+[2025-08-01 12:24:01.292] [info] [1236-1225]|[storage/yt_database_manager.cpp:101]Database opened with new key directly
+[2025-08-01 12:24:03.286] [info] [1236-1225]|[utils/yt_sqlite_util.cpp:48]CheckIntegrity success
+[2025-08-01 12:24:03.286] [info] [1236-1225]|[storage/yt_database_manager.cpp:129]CheckVersion current :2 config :2
+[2025-08-01 12:24:03.286] [info] [1236-1225]|[storage/yt_database_manager.cpp:29]Initialize
+[2025-08-01 12:24:03.286] [error] [1236-1225]|[storage/yt_database_manager.cpp:33]duplicate init in Initialize
+[2025-08-01 12:24:03.298] [info] [1236-1225]|[devicectl/yt_devicectl_manager.cpp:129]SyncPalmsFromDB begin
+[2025-08-01 12:24:03.298] [info] [1236-1225]|[storage/yt_palm_db_manager.cpp:141]QueryAllPalms page size  1000
+[2025-08-01 12:24:03.299] [info] [1236-1225]|[storage/yt_database_manager.cpp:181]QueryCount count:0 ret:161
+[2025-08-01 12:24:03.299] [error] [1236-1225]|[storage/yt_palm_db_manager.cpp:147]QueryAllPalms QueryCount failed
+[2025-08-01 12:24:03.299] [info] [1236-1225]|[devicectl/yt_devicectl_manager.cpp:148]SyncPalmsFromDB total : 0 done : 0, to sync : 0, invalid count : 0
+[2025-08-01 12:24:03.299] [info] [1236-1225]|[devicectl/yt_devicectl_manager.cpp:160]SyncPalmsFromDB end
+[2025-08-01 12:24:03.299] [info] [1236-1225]|[storage/yt_database_manager.cpp:29]Initialize
+[2025-08-01 12:24:03.300] [warning] [1236-1225]|[utils/yt_file_util.cpp:34]Directory already exists: /oem/yt-palm/data
+2025-08-01 12:24:05.298: ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
+2025-08-01 12:24:05.298: ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
+2025-08-01 12:24:05.298: ERROR CORE sqlcipher_codec_ctx_set_error 1
+[2025-08-01 12:24:05.300] [info] [1236-1225]|[storage/yt_database_manager.cpp:101]Database opened with new key directly
+[2025-08-01 12:24:05.609] [info] [1253-1225]|[xike/yt_xike_device_hal_impl.cpp:367]FeedWatchdog ret : 0
+[2025-08-01 12:24:07.278] [info] [1236-1225]|[utils/yt_sqlite_util.cpp:48]CheckIntegrity success
+[2025-08-01 12:24:07.278] [info] [1236-1225]|[storage/yt_database_manager.cpp:129]CheckVersion current :1 config :1
+[2025-08-01 12:24:07.279] [info] [1236-1225]|[palm/yt_palm_service.cpp:391]Network status changed: 1, has_network: 1
+[2025-08-01 12:24:07.279] [info] [1236-1225]|[palm/yt_palm_service.cpp:396]SyncTime ret: 0
+[2025-08-01 12:24:07.279] [info] [1236-1225]|[card/yt_card_manager.cpp:34]Init CardManager: unsupported vendorType 1
+[2025-08-01 12:24:07.279] [info] [1236-1225]|[card/yt_card_manager.cpp:77]SetCardNoCallback SetCardNoCallback
+[2025-08-01 12:24:07.279] [info] [1236-1225]|[palm/yt_palm_service.cpp:1126]Old App Version: v1.2.1.2025073111-4df4a9c, Solution: 2
+[2025-08-01 12:24:07.279] [info] [1236-1225]|[palm/yt_palm_service.cpp:1139]Updated App Version: v1.2.0.2025080102-9c1ab75, Solution: 2
+[2025-08-01 12:24:07.279] [info] [1236-1225]|[palm/yt_palm_service.cpp:1180]NotifyModuleReadyStatus ready: 1, current: 0
+[2025-08-01 12:24:07.288] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022247288214|INFO|[src/yt_palm_manager_impl_ota.cpp:67]sdk_version:v1.2.8.2025061912-60e8ea92 firm_version:V02.0.6_202506242120V4.9.5.2025061921
+[2025-08-01 12:24:07.288] [info] [1236-1225]|[palm/yt_palm_service.cpp:1197]module ready, ParseOTAVersion ret: 0, firmwareVersion: 02.0.6.202506242120, algo version: v1.2.8, algo build: 2025061912
+[2025-08-01 12:24:07.288] [error] [1236-1225]|[palm/yt_palm_service.cpp:1064]not init in CheckAndUpdateAlgoVersion
+[2025-08-01 12:24:07.288] [info] [1236-1225]|[palm/yt_palm_service.cpp:183]EnablePalmWorking current working 0
+[2025-08-01 12:24:07.288] [error] [1236-1225]|[palm/yt_palm_service.cpp:185]not init in EnablePalmWorking
+[2025-08-01 12:24:07.288] [info] [1236-1225]|[palm/yt_palm_service.cpp:413]PalmService init succeed
+[2025-08-01 12:24:07.289] [info] [1225-1225]|[palm/yt_palm_context.h:125]DoOnServiceInitSucceed
+[2025-08-01 12:24:07.289] [info] [QML] Palm service initialized successfully
+[2025-08-01 12:24:07.290] [info] [QML] Palm service initialized successfully
+[2025-08-01 12:24:07.290] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:115]UnInit react InitSucceedEvent
+[2025-08-01 12:24:07.291] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:144]NeedPalmAuth entryGuard, isPalmAuthorized 1
+[2025-08-01 12:24:07.291] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:146]NeedPalmAuth entryGuard, already authorized, change to next status
+[2025-08-01 12:24:07.291] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:178]NeedIoTAuth enter
+[2025-08-01 12:24:07.291] [info] [1225-1225]|[auth/yt_auth_manager.cpp:66]StartCheckActivated Local key_id: 0f00636f-bb1d-45fe-a438-5000c1526725
+[2025-08-01 12:24:07.292] [info] [1225-1225]|[auth/yt_auth_manager.cpp:69]Device has been activated
+[2025-08-01 12:24:07.292] [info] [1225-1225]|[utils/yt_future_task.cpp:22]Starting future task name ExchangeKeyLooper, interval ms 600000, single_shot 0, auto_stop 1
+[2025-08-01 12:24:07.292] [info] [1225-1225]|[utils/yt_future_task.cpp:83]Stop future task ExchangeKeyLooper
+[2025-08-01 12:24:07.292] [info] [1225-1225]|[auth/yt_auth_manager.cpp:174]NotifyActivationSucceed
+[2025-08-01 12:24:07.292] [info] [1225-1225]|[devicectl/yt_devicectl_manager.cpp:78]AuthManager activation succeed callback
+[2025-08-01 12:24:07.293] [info] [1225-1225]|[palm/yt_palm_context.h:201]DoOnIoTRegistrationSucceed
+[2025-08-01 12:24:07.293] [info] [1345-1225]|[utils/yt_future_task.cpp:55]handleThreadStarted ExchangeKeyLooper in thread 0xa9b780
+[2025-08-01 12:24:07.293] [info] [QML] onIoTRegistrationSucceed
+[2025-08-01 12:24:07.294] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:184]NeedIoTAuth react IoTAuthSucceed
+[2025-08-01 12:24:07.294] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:267]Idle entryGuard, isPalmWorking 0
+[2025-08-01 12:24:07.294] [info] [1225-1225]|[palm/yt_palm_service.cpp:110]CheckAndSetEnable current enable 0
+[2025-08-01 12:24:07.306] [info] [1225-1225]|[palm/yt_palm_service.cpp:1074][Service enable]CheckAndUpdateAlgoVersion current : v1.0, stored :
+[2025-08-01 12:24:07.307] [info] [1225-1225]|[utils/yt_future_task.cpp:22]Starting future task name SyncPalmLooper, interval ms 30000, single_shot 0, auto_stop 1
+[2025-08-01 12:24:07.307] [info] [1225-1225]|[utils/yt_future_task.cpp:83]Stop future task SyncPalmLooper
+[2025-08-01 12:24:07.307] [info] [1225-1225]|[utils/yt_future_task.cpp:22]Starting future task name SyncUserLooper, interval ms 30000, single_shot 0, auto_stop 1
+[2025-08-01 12:24:07.307] [info] [1225-1225]|[utils/yt_future_task.cpp:83]Stop future task SyncUserLooper
+[2025-08-01 12:24:07.308] [info] [1346-1225]|[utils/yt_future_task.cpp:55]handleThreadStarted SyncPalmLooper in thread 0xa71140
+[2025-08-01 12:24:07.308] [info] [1225-1225]|[utils/yt_future_task.cpp:22]Starting future task name StdHeartbeat, interval ms 60000, single_shot 0, auto_stop 1
+[2025-08-01 12:24:07.308] [info] [1225-1225]|[utils/yt_future_task.cpp:83]Stop future task StdHeartbeat
+[2025-08-01 12:24:07.308] [info] [1347-1225]|[utils/yt_future_task.cpp:55]handleThreadStarted SyncUserLooper in thread 0xa9b840
+[2025-08-01 12:24:07.308] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:204]Working enter, set service enable ret 0
+[2025-08-01 12:24:07.309] [info] [1348-1225]|[utils/yt_future_task.cpp:55]handleThreadStarted StdHeartbeat in thread 0xaa0a28
+[2025-08-01 12:24:07.310] [info] [1348-1225]|[pass/yt_pass_config_manager.cpp:516]CheckAndUploadPassRecords No unuploaded pass records
+[2025-08-01 12:24:07.311] [info] [1348-1225]|[heartbeat/yt_heartbeat_manager.cpp:38]Init local heartbeat status from persistence: [{"desired_state": "{\"ocode\":\"1746854527\"}", "state_version": 3, "identifier": "device_bind_ocode_info"}]
+[2025-08-01 12:24:07.311] [info] [QML] guardNavigateHome navigate to home
+[2025-08-01 12:24:07.312] [info] [QML] StackView page changed: null
+[2025-08-01 12:24:07.313] [info] [QML] Page type: null
+qrc:/qml/main.qml:205: TypeError: Cannot read property 'statusBarColor' of null
+[2025-08-01 12:24:07.314] [warning] [Qt-Warning] qrc:/qml/main.qml:205: TypeError: Cannot read property 'statusBarColor' of null (qrc:/qml/main.qml:205)
+[2025-08-01 12:24:07.322] [info] [1349-1225]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/incr-sync-user, traceId: 6e386d6d4d5075436b435443494a7270, reqId: 1754022247309-1
+[2025-08-01 12:24:07.328] [info] [1350-1225]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/heartbeat, traceId: 4851356c5a4b4d33634243666758514e, reqId: 1754022247311-2
+[2025-08-01 12:24:07.334] [info] [1351-1225]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/synchronize_palm_feature, traceId: 7236527a7032355166703952734c5539, reqId: 1754022247308-0
+qml: [VirtualKeyboard] Performance monitoring: enabled
+[2025-08-01 12:24:07.800] [info] [QML] Home page initialized, check host connection state
+[2025-08-01 12:24:07.800] [info] [1225-1225]|[palm/yt_palm_service.cpp:779]GetCurrentPalmMode: recognize
+qml: MainKeyboard onCompleted
+[2025-08-01 12:24:07.810] [info] [1225-1225]|[xike/yt_xike_device_hal_impl.cpp:144]SetScreenOn expect screen : 1, result : 1
+[2025-08-01 12:24:07.814] [info] [QML] HomePage in background
+[2025-08-01 12:24:07.814] [info] [QML] Current active page type: Home
+[2025-08-01 12:24:07.816] [info] [QML] Disabling palm recognition for page: Home
+[2025-08-01 12:24:07.816] [info] [1225-1225]|[palm/yt_palm_service.cpp:201]DisablePalmWorking current working 0
+[2025-08-01 12:24:07.816] [info] [1225-1225]|[palm/yt_palm_service.cpp:207]DisablePalmWorking not working
+[2025-08-01 12:24:07.817] [info] [QML] HomePage in foreground - Enabling palm recognition
+[2025-08-01 12:24:07.817] [info] [QML] Enable Palm work
+[2025-08-01 12:24:07.818] [info] [1225-1225]|[palm/yt_palm_service.cpp:183]EnablePalmWorking current working 0
+[2025-08-01 12:24:07.818] [info] [1225-1225]|[palm/yt_palm_service.cpp:227]CheckAndNotifyPalmWorkingfrom 0 to 1
+[2025-08-01 12:24:07.818] [info] [1225-1225]|[palm/yt_palm_service.cpp:779]GetCurrentPalmMode: recognize
+[2025-08-01 12:24:07.820] [info] [QML] StackView page changed: Unknown
+[2025-08-01 12:24:07.820] [info] [QML] Page type: Object
+[2025-08-01 12:24:07.821] [info] [QML] Status bar color updated to: #FFFFFF
+[2025-08-01 12:24:07.821] [info] [QML] Status bar color reset to default:#FFFFFF
+rga_api version 1.3.0_[11] (RGA is compiling with meson base: $PRODUCT_BASE)
+[2025-08-01 12:24:07.844] [info] [1225-1225]|[palm/yt_palm_context.h:223]DoOnPalmServiceWorkingStatus palm_working_enable: 1
+[2025-08-01 12:24:07.844] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:277]Idle ServiceWorkingStatusEvent,  palm_working_enable 1
+[2025-08-01 12:24:07.844] [info] [1236-1225]|[palm/yt_palm_service.cpp:779]GetCurrentPalmMode: recognize
+[2025-08-01 12:24:07.844] [info] [1236-1225]|[palm/yt_palm_service.cpp:246]_StartProcess palmMode: recognize
+[2025-08-01 12:24:07.844] [info] [1225-1225]|[palm/yt_palm_service.cpp:779]GetCurrentPalmMode: recognize
+[2025-08-01 12:24:07.844] [info] [1236-1225]|[palm/yt_palm_service.cpp:267][PalmMgr]StartRecognize
+[2025-08-01 12:24:07.845] [info] [1225-1225]|[palm/yt_palm_context.h:244]DoOnReceivePalmProcessEvent session:  , event : 1, code : 0, msg : , palm_manager code : 0, msg :
+[2025-08-01 12:24:07.846] [info] [QML] onPalmProcessEvent session_id , event : 1 error : 0, 0
+[2025-08-01 12:24:07.847] [info] [1225-1225]|[palm/yt_palm_service.cpp:779]GetCurrentPalmMode: recognize
+[2025-08-01 12:24:07.848] [info] [1225-1225]|[fsm/yt_palm_state_machine.h:312]Detecting react PalmProcessEvent  1
+[2025-08-01 12:24:08.120] [info] [1318-1225]|[http/yt_qt_http_client.h:46]onResponse req_id 1754022247311-2, tag : /wecardpalm/device/heartbeat
+[2025-08-01 12:24:08.120] [info] [1318-1225]|[heartbeat/yt_heartbeat_manager.cpp:73]StartHeartbeat Response: 0
+[2025-08-01 12:24:08.121] [info] [1318-1225]|[heartbeat/yt_heartbeat_manager.cpp:100]HandleNewDesiredState size = 0
+[2025-08-01 12:24:08.121] [info] [1318-1225]|[devicectl/yt_devicectl_manager.cpp:531]OnHeartbeatSucceed
+[2025-08-01 12:24:08.187] [info] [1318-1225]|[http/yt_qt_http_client.h:46]onResponse req_id 1754022247309-1, tag : /wecardpalm/device/incr-sync-user
+[2025-08-01 12:24:08.188] [info] [1318-1225]|[looper/yt_sync_user_looper.cpp:76]Sync user succeed: 0
+[2025-08-01 12:24:09.143] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022249142454|INFO|[src/yt_palm_manager_impl.cpp:635]switch device status:working2 success, cost: 3ms
+[2025-08-01 12:24:09.143] [info] [1256-1225]|[palm/yt_palm_service.cpp:504]HandlePalmDeviceStatusmodule status changed from Working1 to Working2
+[2025-08-01 12:24:09.145] [info] [1237-1225]|[palm/yt_palm_service.cpp:511]_HandlePalmDeviceStatusmodule status changed from Working1 to Working2
+[2025-08-01 12:24:09.188] [info] [1254-1225]|[palm/yt_palm_service.cpp:993][Palmmgr]1754022249188129|INFO|[src/yt_palm_manager_impl.cpp:1578]sync time: 2025-08-01 04:24:09 ret:0
+[2025-08-01 12:24:10.702] [info] [1318-1225]|[http/yt_qt_http_client.h:46]onResponse req_id 1754022247308-0, tag : /wecardpalm/device/synchronize_palm_feature
+[2025-08-01 12:24:10.726] [info] [1318-1225]|[looper/yt_sync_palm_looper.cpp:174]SyncPalmLooper RequestSyncPalmStandard response: hasMore: 2, query_position: eyJxdWVyeV9jdHhfaW5mb19sc3QiOlt7Im5leHRfdmVyc2lvbiI6MjIsInBhbG1fZGlyZWN0aW9uIjoxLCJsYXN0X3RpbWUiOjE3NTQwMjIyNDh9LHsibmV4dF92ZXJzaW9uIjoyNSwicGFsbV9kaXJlY3Rpb24iOjIsImxhc3RfdGltZSI6MTc1NDAyMjI0OH1dfQ==, datas size: 20
+[2025-08-01 12:24:10.727] [info] [1318-1225]|[devicectl/yt_devicectl_manager.cpp:188]UpdatePalms entities.size: 20
+[2025-08-01 12:24:10.727] [info] [1318-1225]|[storage/yt_palm_db_manager.cpp:205]InsertOrUpdatePalms sql: INSERT OR REPLACE INTO palm_entity_new (user_id, palm_id, rgb_digest, ir_digest, status, direction, date_version, feature_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+[2025-08-01 12:24:10.728] [error] [1318-1225]|[storage/yt_database_manager.h:105]Failed to prepare SQL statement: INSERT OR REPLACE INTO palm_entity_new (user_id, palm_id, rgb_digest, ir_digest, status, direction, date_version, feature_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?); , error: no such table: palm_entity_new
+[2025-08-01 12:24:10.728] [error] [1318-1225]|[storage/yt_palm_db_manager.cpp:227]InsertOrUpdatePalms Failed to insert/update palms, error code: 161
+[2025-08-01 12:24:10.729] [error] [1318-1225]|[devicectl/yt_devicectl_manager.cpp:211]update palms to db ret :161 in UpdatePalms
+[2025-08-01 12:24:10.729] [info] [1318-1225]|[looper/yt_sync_palm_looper.cpp:183]SyncPalmLooper RequestSyncPalmStandard -> RemoteDeviceCtlManager UpdatePalms ret: 161
+
+
+
+
