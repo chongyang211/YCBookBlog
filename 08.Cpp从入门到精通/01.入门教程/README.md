@@ -19,6 +19,7 @@
 - 1.4.0 最简单编译：g++ main.cpp，由于命令行中未指定可执行程序的文件名，编译器采用默认的 a.out。
 - 1.4.1 编译单个文件：g++ program.cpp -o program，
 - 1.4.2 编译多个文件：g++ main.cpp utils.cpp -o program，
+- 1.4.3 指定C++标准：g++ 有些系统默认是使用 C++98，我们可以指定使用 C++11 来编译 main.cpp 文件。
 
 
 
