@@ -2,36 +2,81 @@
 
 
 
+                        C++11 引入了 **固定宽度的整数类型**，这些类型定义在 `<cstdint>` 头文件中。它们提供了明确大小的整数类型，方便跨平台开发时确保数据大小的一致性。以下是 C++ 中固定宽度整数类型的详细说明：
+
 ---
 
-### **3. 示例代码**
+### **1. 固定宽度整数类型列表**
+
+| 数据类型               | 占用空间（字节） | 取值范围（有符号）                     | 取值范围（无符号）           |
+|------------------------|------------------|----------------------------------------|------------------------------|
+| `int8_t`               | 1                | -128 到 127                            | -                            |
+| `uint8_t`              | 1                | -                                      | 0 到 255                     |
+| `int16_t`              | 2                | -32,768 到 32,767                      | -                            |
+| `uint16_t`             | 2                | -                                      | 0 到 65,535                  |
+| `int32_t`              | 4                | -2,147,483,648 到 2,147,483,647        | -                            |
+| `uint32_t`             | 4                | -                                      | 0 到 4,294,967,295           |
+| `int64_t`              | 8                | -9,223,372,036,854,775,808 到 9,223,372,036,854,775,807 | - |
+| `uint64_t`             | 8                | -                                      | 0 到 18,446,744,073,709,551,615 |
+
+---
+
+### **2. 其他相关类型**
+| 数据类型               | 描述                                                                 |
+|------------------------|----------------------------------------------------------------------|
+| `int_least8_t`         | 至少 8 位的有符号整数类型                                            |
+| `uint_least8_t`        | 至少 8 位的无符号整数类型                                            |
+| `int_fast8_t`          | 最快的至少 8 位的有符号整数类型                                      |
+| `uint_fast8_t`         | 最快的至少 8 位的无符号整数类型                                      |
+| `intmax_t`             | 最大宽度的有符号整数类型                                             |
+| `uintmax_t`            | 最大宽度的无符号整数类型                                             |
+
+---
+
+### **3. 固定宽度整数类型的特点**
+1. **明确的大小**：
+    - 固定宽度整数类型的大小是明确的，例如 `int32_t` 始终是 4 字节。
+
+2. **跨平台一致性**：
+    - 使用固定宽度整数类型可以确保代码在不同平台上具有相同的行为。
+
+3. **可选性**：
+    - 如果平台不支持某种固定宽度类型（例如 `int8_t`），则编译器可能不会定义该类型。
+
+4. **性能优化**：
+    - `int_fastX_t` 和 `int_leastX_t` 提供了性能和内存占用的平衡。
+
+---
+
+### **4. 示例代码**
 ```cpp
 #include <iostream>
-#include <climits> // 包含无符号整数类型的极限值常量
+#include <cstdint> // 包含固定宽度整数类型
 using namespace std;
 
 int main() {
-    // 无符号整数类型
-    unsigned char uc = 255;
-    unsigned short us = 65535;
-    unsigned int ui = 4294967295;
-    unsigned long ul = 4294967295UL; // 后缀 UL 表示 unsigned long
-    unsigned long long ull = 18446744073709551615ULL; // 后缀 ULL 表示 unsigned long long
+    // 固定宽度有符号整数类型
+    int8_t i8 = -128;
+    int16_t i16 = -32768;
+    int32_t i32 = -2147483648;
+    int64_t i64 = -9223372036854775807LL;
+
+    // 固定宽度无符号整数类型
+    uint8_t u8 = 255;
+    uint16_t u16 = 65535;
+    uint32_t u32 = 4294967295;
+    uint64_t u64 = 18446744073709551615ULL;
 
     // 输出
-    cout << "unsigned char: " << sizeof(uc) << " bytes, value: " << (int)uc << endl;
-    cout << "unsigned short: " << sizeof(us) << " bytes, value: " << us << endl;
-    cout << "unsigned int: " << sizeof(ui) << " bytes, value: " << ui << endl;
-    cout << "unsigned long: " << sizeof(ul) << " bytes, value: " << ul << endl;
-    cout << "unsigned long long: " << sizeof(ull) << " bytes, value: " << ull << endl;
+    cout << "int8_t: " << sizeof(i8) << " bytes, value: " << (int)i8 << endl;
+    cout << "int16_t: " << sizeof(i16) << " bytes, value: " << i16 << endl;
+    cout << "int32_t: " << sizeof(i32) << " bytes, value: " << i32 << endl;
+    cout << "int64_t: " << sizeof(i64) << " bytes, value: " << i64 << endl;
 
-    // 输出取值范围
-    cout << "\nUnsigned integer type ranges:" << endl;
-    cout << "unsigned char: 0 to " << UCHAR_MAX << endl;
-    cout << "unsigned short: 0 to " << USHRT_MAX << endl;
-    cout << "unsigned int: 0 to " << UINT_MAX << endl;
-    cout << "unsigned long: 0 to " << ULONG_MAX << endl;
-    cout << "unsigned long long: 0 to " << ULLONG_MAX << endl;
+    cout << "uint8_t: " << sizeof(u8) << " bytes, value: " << (int)u8 << endl;
+    cout << "uint16_t: " << sizeof(u16) << " bytes, value: " << u16 << endl;
+    cout << "uint32_t: " << sizeof(u32) << " bytes, value: " << u32 << endl;
+    cout << "uint64_t: " << sizeof(u64) << " bytes, value: " << u64 << endl;
 
     return 0;
 }
@@ -39,51 +84,49 @@ int main() {
 
 ---
 
-### **4. 输出示例**
+### **5. 输出示例**
 ```
-unsigned char: 1 bytes, value: 255
-unsigned short: 2 bytes, value: 65535
-unsigned int: 4 bytes, value: 4294967295
-unsigned long: 8 bytes, value: 4294967295
-unsigned long long: 8 bytes, value: 18446744073709551615
-
-Unsigned integer type ranges:
-unsigned char: 0 to 255
-unsigned short: 0 to 65535
-unsigned int: 0 to 4294967295
-unsigned long: 0 to 18446744073709551615
-unsigned long long: 0 to 18446744073709551615
+int8_t: 1 bytes, value: -128
+int16_t: 2 bytes, value: -32768
+int32_t: 4 bytes, value: -2147483648
+int64_t: 8 bytes, value: -9223372036854775807
+uint8_t: 1 bytes, value: 255
+uint16_t: 2 bytes, value: 65535
+uint32_t: 4 bytes, value: 4294967295
+uint64_t: 8 bytes, value: 18446744073709551615
 ```
 
 ---
 
-### **5. 使用场景**
-1. **表示非负值**：
-    - 例如，数组索引、计数器、大小等。
+### **6. 使用场景**
+1. **跨平台开发**：
+    - 确保整数类型在不同平台上具有相同的大小和行为。
 
-2. **节省内存**：
-    - 如果确定值不会为负数，使用无符号类型可以节省内存并扩大取值范围。
+2. **网络编程**：
+    - 处理网络协议时，通常需要明确的数据大小。
 
-3. **位运算**：
-    - 无符号整数类型更适合进行位运算，因为它们没有符号位。
+3. **文件格式**：
+    - 读写二进制文件时，使用固定宽度类型可以确保数据的一致性。
+
+4. **硬件编程**：
+    - 与硬件寄存器交互时，通常需要明确的数据大小。
 
 ---
 
-### **6. 注意事项**
-1. **避免混合使用有符号和无符号类型**：
-    - 混合使用可能导致意外的行为或错误。
+### **7. 注意事项**
+1. **平台支持**：
+    - 如果平台不支持某种固定宽度类型，编译器可能不会定义该类型。
 
-2. **溢出问题**：
-    - 无符号整数溢出时，结果会从 0 重新开始，可能导致逻辑错误。
+2. **类型转换**：
+    - 在混合使用固定宽度类型和其他类型时，注意类型转换可能导致的精度损失或溢出。
 
-3. **类型转换**：
-    - 将有符号类型赋值给无符号类型时，负数会被解释为很大的正数。
+3. **性能**：
+    - `int_fastX_t` 和 `int_leastX_t` 提供了性能和内存占用的平衡，适合对性能要求较高的场景。
 
 ---
 
 ### **总结**
-无符号整数类型是 C++ 中用于存储非负整数的重要工具。理解它们的特性、取值范围和使用场景，可以帮助编写更高效和可靠的代码。
-
+固定宽度整数类型是 C++11 引入的重要特性，提供了明确大小的整数类型，适合跨平台开发和对数据大小有严格要求的场景。合理使用这些类型可以提高代码的可移植性和可靠性。
 
 
 
@@ -107,6 +150,12 @@ unsigned long long: 0 to 18446744073709551615
 - 1.7.3 头文件保护：使用头文件保护（`#ifndef` / `#define` 或 `#pragma once`）防止重复包含。
 - 1.8.1 访问控制修饰符:访问控制修饰符用于定义类成员的访问权限。public所有均可访问，private类本身访问，protected类和派生类访问。
 
+
+## 02.数据类型
+
+- 3.1.1 基本数据类型：
+- 3.2.1 有符号类型：
+- 3.2.2 无符号类型：可以使用带无符号（仅表示非负数）修饰符进行声明。例如，unsigned int表示无符号整数。
 
 
 
