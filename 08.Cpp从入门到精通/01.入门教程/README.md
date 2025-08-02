@@ -1,13 +1,93 @@
 
 
 
+
+---
+
+### **3. 示例代码**
+```cpp
+#include <iostream>
+#include <climits> // 包含无符号整数类型的极限值常量
+using namespace std;
+
+int main() {
+    // 无符号整数类型
+    unsigned char uc = 255;
+    unsigned short us = 65535;
+    unsigned int ui = 4294967295;
+    unsigned long ul = 4294967295UL; // 后缀 UL 表示 unsigned long
+    unsigned long long ull = 18446744073709551615ULL; // 后缀 ULL 表示 unsigned long long
+
+    // 输出
+    cout << "unsigned char: " << sizeof(uc) << " bytes, value: " << (int)uc << endl;
+    cout << "unsigned short: " << sizeof(us) << " bytes, value: " << us << endl;
+    cout << "unsigned int: " << sizeof(ui) << " bytes, value: " << ui << endl;
+    cout << "unsigned long: " << sizeof(ul) << " bytes, value: " << ul << endl;
+    cout << "unsigned long long: " << sizeof(ull) << " bytes, value: " << ull << endl;
+
+    // 输出取值范围
+    cout << "\nUnsigned integer type ranges:" << endl;
+    cout << "unsigned char: 0 to " << UCHAR_MAX << endl;
+    cout << "unsigned short: 0 to " << USHRT_MAX << endl;
+    cout << "unsigned int: 0 to " << UINT_MAX << endl;
+    cout << "unsigned long: 0 to " << ULONG_MAX << endl;
+    cout << "unsigned long long: 0 to " << ULLONG_MAX << endl;
+
+    return 0;
+}
+```
+
+---
+
+### **4. 输出示例**
+```
+unsigned char: 1 bytes, value: 255
+unsigned short: 2 bytes, value: 65535
+unsigned int: 4 bytes, value: 4294967295
+unsigned long: 8 bytes, value: 4294967295
+unsigned long long: 8 bytes, value: 18446744073709551615
+
+Unsigned integer type ranges:
+unsigned char: 0 to 255
+unsigned short: 0 to 65535
+unsigned int: 0 to 4294967295
+unsigned long: 0 to 18446744073709551615
+unsigned long long: 0 to 18446744073709551615
+```
+
+---
+
+### **5. 使用场景**
+1. **表示非负值**：
+    - 例如，数组索引、计数器、大小等。
+
+2. **节省内存**：
+    - 如果确定值不会为负数，使用无符号类型可以节省内存并扩大取值范围。
+
+3. **位运算**：
+    - 无符号整数类型更适合进行位运算，因为它们没有符号位。
+
+---
+
+### **6. 注意事项**
+1. **避免混合使用有符号和无符号类型**：
+    - 混合使用可能导致意外的行为或错误。
+
+2. **溢出问题**：
+    - 无符号整数溢出时，结果会从 0 重新开始，可能导致逻辑错误。
+
+3. **类型转换**：
+    - 将有符号类型赋值给无符号类型时，负数会被解释为很大的正数。
+
+---
+
 ### **总结**
+无符号整数类型是 C++ 中用于存储非负整数的重要工具。理解它们的特性、取值范围和使用场景，可以帮助编写更高效和可靠的代码。
 
 
 
 
-
-**01.基础语法**
+## 01.基础语法
 
 - 1.1.1 C++语言介绍：是一种静态类型的、编译式的、通用的、大小写敏感的、不规则的编程语言，支持过程化编程、面向对象编程和泛型编程。
 - 1.1.2 C++的特点：包括面向对象开发的四大特性：封装，继承，多台，抽象。
@@ -30,17 +110,6 @@
 
 
 
-- 1.5 helloWorld：main函数是C++程序的入口点，程序从这里开始执行。
-- 1.6 多种注释使用：在代码中加一些说明和解释，方便自己或其他程序员程序员阅读代码。
-- 1.7 命名空间：引入命名空间概念，主要作为附加信息来区分不同库中相同名称的函数，类，变量等。
-- 1.8 头文件名：使用.h扩展名：传统上，C++头文件使用.h作为文件扩展名
-- 1.9 cout输出：std::cout是标准输出流对象，用于将文本输出到控制台。使用<<运算符将数据插入到std::cout中，并将其输出到屏幕上。
-
-**02.修饰符和标识符**
-
-- 2.1 修饰符：是用于修改基本数据类型的关键字。它们可以改变数据类型的行为、范围或存储方式。
-- 2.2 标志符：C++规定给标识符（变量、常量）命名时，有一套自己的规则。
-- 2.3 常见关键字：预先保留的单词（标识符），在定义变量或者常量时候，不要用关键字。
 
 **03.数据和数据类型**
 
