@@ -10,38 +10,6 @@
 ---
 
 ### **7. 浮点数的特殊值**
-浮点数可以表示一些特殊值：
-- **无穷大**：`INFINITY`（正无穷）和 `-INFINITY`（负无穷）。
-- **非数字**：`NaN`（Not a Number），表示无效的浮点数操作结果。
-
-示例：
-```cpp
-#include <iostream>
-#include <cmath> // 包含 INFINITY 和 NaN
-using namespace std;
-
-int main() {
-    double inf = INFINITY;
-    double nan = NAN;
-
-    cout << "Infinity: " << inf << endl;
-    cout << "NaN: " << nan << endl;
-
-    return 0;
-}
-```
-
-输出：
-```
-Infinity: inf
-NaN: nan
-```
-
----
-
-### **总结**
-C++ 提供了 `float`、`double` 和 `long double` 三种浮点类型，分别适用于不同精度和范围的场景。理解浮点数的特性、精度问题和特殊值，可以帮助编写更健壮和高效的代码。
-
 
 
 
