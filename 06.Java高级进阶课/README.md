@@ -5,11 +5,7 @@
 
 
 
-4. **设置对象头**：
-    - JVM 设置对象的对象头（Object Header），包括：
-        - **Mark Word**：存储对象的运行时数据（如哈希码、锁状态等）。
-        - **Klass Pointer**：指向对象的类元数据（`Klass` 对象）。
-
+4. 
 5. **执行 `<init>` 方法**：
     - JVM 调用对象的构造方法（`<init>` 方法），包括：
         - 父类的构造方法（通过 `super()` 调用）。
@@ -19,60 +15,7 @@
 6. **返回对象引用**：
     - 对象创建完成后，JVM 将对象的引用返回给调用者。
 
----
 
-### **Java 对象创建过程的示例**
-
-以下是一个简单的 Java 类及其对象创建过程的示例：
-
-```java
-class Parent {
-    int parentField;
-
-    Parent() {
-        parentField = 10;
-        System.out.println("Parent constructor");
-    }
-}
-
-class Child extends Parent {
-    int childField;
-
-    Child() {
-        childField = 20;
-        System.out.println("Child constructor");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Child obj = new Child();
-    }
-}
-```
-
-**对象创建过程**：
-1. **类加载检查**：
-    - JVM 检查 `Child` 类是否已加载。如果未加载，则触发类加载过程。
-2. **内存分配**：
-    - JVM 在堆内存中为 `Child` 对象分配空间。
-3. **初始化零值**：
-    - JVM 将 `parentField` 和 `childField` 初始化为 `0`。
-4. **设置对象头**：
-    - JVM 设置 `Child` 对象的对象头，包括 Mark Word 和 Klass Pointer。
-5. **执行 `<init>` 方法**：
-    - 调用 `Parent` 类的构造方法，初始化 `parentField` 并输出 `Parent constructor`。
-    - 调用 `Child` 类的构造方法，初始化 `childField` 并输出 `Child constructor`。
-6. **返回对象引用**：
-    - JVM 将 `Child` 对象的引用返回给 `obj`。
-
-**输出**：
-```
-Parent constructor
-Child constructor
-```
-
----
 
 ### **Java 对象创建过程的细节**
 
