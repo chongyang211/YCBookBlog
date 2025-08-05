@@ -18,6 +18,7 @@
 - 1.7.2 编写QML代码：打开 `main.qml` 文件（位于 `Sources` 目录下）开始写代码。这个是入口！
 - 1.7.3 QGuiApplication：管理GUI应用程序的控制流和主要设置。它处理事件循环，是整个应用程序的核心。
 - 1.7.4 QQmlApplicationEngine：它是 QML 引擎的封装，提供了简单易用的接口来加载 QML 文件并管理应用程序的生命周期。
+- 1.7.5 QQmlContext：是 Qt QML 框架中的一个核心类，用于管理 QML 对象的上下文环境。
 - 1.7.5 CMakeList：`CMakeLists.txt` 通过这个文件，CMake 可以正确配置和构建你的 Qt Quick 应用程序。
 
 ## 02.Qml基础语法
