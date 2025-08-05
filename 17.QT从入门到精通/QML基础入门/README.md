@@ -16,7 +16,7 @@
 - 1.6.3 Quick优势：1.声明式语法和丰富的 UI 元素加速开发；2.基于 OpenGL 渲染，适合高性能 UI。
 - 1.6.4 Quick技术：1.QML是用户界面的标记语言；2.javaScript是动态脚本语言；3.QT C++是高度可移植的增强型C++库。
 - 1.7.2 编写QML代码：打开 `main.qml` 文件（位于 `Sources` 目录下）开始写代码。这个是入口！
-- 1.7.3 编写Qt代码：
+- 1.7.3 QGuiApplication：管理GUI应用程序的控制流和主要设置。它处理事件循环，是整个应用程序的核心。
 - 1.7.5 CMakeList：`CMakeLists.txt` 通过这个文件，CMake 可以正确配置和构建你的 Qt Quick 应用程序。
 
 ## 02.Qml基础语法
