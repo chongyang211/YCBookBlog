@@ -5,24 +5,6 @@
 
 
 
----
-
-### **4. `QGuiApplication` 的主要功能**
-#### **(1) 事件处理**
-- `QGuiApplication` 提供了事件过滤器（Event Filter）和事件处理器（Event Handler）机制，允许开发者拦截和处理特定事件。
-- 例如，可以重写 `QGuiApplication::event()` 方法来处理自定义事件。
-
-#### **(2) 多屏幕支持**
-- `QGuiApplication` 提供了对多屏幕的支持，可以通过 `screens()` 方法获取所有屏幕的信息。
-- 它还处理屏幕的动态变化（如屏幕分辨率调整、屏幕添加或移除）。
-
-#### **(3) 样式与主题**
-- `QGuiApplication` 管理应用程序的样式和主题，可以通过 `setStyle()` 方法设置应用程序的样式（如 Fusion、Windows 等）。
-- 它还支持自定义样式和主题。
-
-#### **(4) 国际化**
-- `QGuiApplication` 支持国际化（i18n），可以通过 `installTranslator()` 方法加载翻译文件。
-- 它还提供了与语言和区域设置相关的功能。
 
 ---
 
