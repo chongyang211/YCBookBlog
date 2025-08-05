@@ -6,12 +6,6 @@
 
 
 
----
-
-### **5. `QGuiApplication` 与 `QApplication` 的区别**
-- `QGuiApplication` 是 `QApplication` 的轻量级版本，专门用于不需要完整 Widget 支持的 GUI 应用程序（如基于 QML 的应用程序）。
-- `QApplication` 提供了更多的功能，如完整的 Widget 支持、菜单、工具栏等，适用于传统的桌面应用程序。
-- 如果应用程序仅使用 QML 而不使用 Widget，建议使用 `QGuiApplication`，以减少内存占用和启动时间。
 
 ---
 
