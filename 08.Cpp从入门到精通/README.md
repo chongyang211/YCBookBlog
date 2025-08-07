@@ -54,21 +54,7 @@
 
 ---
 
-### **5. 异步操作与结果获取**
 
-
----
-
-### **6. 线程局部存储 (Thread-Local)**
-```cpp
-thread_local int counter = 0; // 每个线程有独立副本
-
-void increment() {
-    counter++; // 不影响其他线程
-}
-```
-
----
 
 ### **7. 高级功能**
 - **原子操作**：`<atomic>` 提供无锁操作（如 `std::atomic<int>`）
@@ -88,38 +74,7 @@ void increment() {
 ---
 
 ### **示例：生产者-消费者模型**
-```cpp
-#include <queue>
-#include <mutex>
-#include <condition_variable>
 
-std::queue<int> data_queue;
-std::mutex mtx;
-std::condition_variable cv;
-
-void producer() {
-    for (int i = 0; i < 10; ++i) {
-        {
-            std::lock_guard lock(mtx);
-            data_queue.push(i);
-        }
-        cv.notify_one(); // 通知消费者
-    }
-}
-
-void consumer() {
-    while (true) {
-        std::unique_lock lock(mtx);
-        cv.wait(lock, []{ return !data_queue.empty(); }); // 等待数据
-        int val = data_queue.front();
-        data_queue.pop();
-        lock.unlock();
-        // 处理数据...
-    }
-}
-```
-
-> **提示**：使用 C++20 `<semaphore>` 或 `<latch>`/`<barrier>` 简化同步逻辑。
 > 
 --------------------------------------------------------------------------------------------------
 
