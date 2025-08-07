@@ -53,6 +53,58 @@
 
 
 
+
+---
+
+### **`detach()` 的用法**
+以下是一个简单的示例，展示如何使用 `detach()` 分离线程：
+
+```cpp
+#include <iostream>
+#include <thread>
+#include <chrono>
+
+// 线程执行的函数
+void printMessage(const std::string& message) {
+    std::this_thread::sleep_for(std::chrono::seconds(2)); // 模拟耗时操作
+    std::cout << "Message: " << message << std::endl;
+}
+
+int main() {
+    // 创建线程
+    std::thread t(printMessage, "Hello, World!");
+
+    std::cout << "Main thread is detaching the worker thread..." << std::endl;
+
+    // 分离线程
+    t.detach();
+
+    std::cout << "Worker thread has been detached. Main thread continues execution." << std::endl;
+
+    // 主线程继续执行
+    std::this_thread::sleep_for(std::chrono::seconds(3)); // 等待足够时间以确保分离线程完成
+
+    return 0;
+}
+```
+
+---
+
+### **输出结果**
+```
+Main thread is detaching the worker thread...
+Worker thread has been detached. Main thread continues execution.
+Message: Hello, World!
+```
+
+---
+
+### **关键点**
+1. **分离后无法控制线程**：分离线程后，你无法再通过 `std::thread` 对象与线程交互（例如调用 `join()`）。
+2. **线程生命周期**：分离线程后，线程会在其执行完毕后由操作系统自动回收资源。
+3. **主线程继续执行**：分离线程后，主线程不会等待分离线程完成，而是继续执行。
+
+
 --------------------------------------------------------------------------------------------------
 
 在 C++ 中，**`std::mutex`** 是标准库提供的一种互斥锁（Mutex），用于保护共享资源，避免多个线程同时访问导致的数据竞争问题。`std::mutex` 是 C++11 引入的，是多线程编程中最基本的同步工具之一。
