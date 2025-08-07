@@ -49,60 +49,13 @@
 
 --------------------------------------------------------------------------------------------------
 
----
 
-### **3. 线程管理**
 
----
-
-### **4. 同步机制（避免竞态条件）**
-#### **互斥锁 (Mutex)**
-```cpp
-#include <mutex>
-
-std::mutex mtx;
-int shared_data = 0;
-
-void safe_increment() {
-    std::lock_guard<std::mutex> lock(mtx); // 自动加锁/解锁
-    // 或手动管理: mtx.lock(); ... mtx.unlock();
-    shared_data++;
-}
-```
-
-#### **条件变量 (Condition Variable)**
-```cpp
-std::condition_variable cv;
-std::mutex mtx;
-bool ready = false;
-
-// 等待线程
-std::unique_lock<std::mutex> lock(mtx);
-cv.wait(lock, []{ return ready; }); // 阻塞直到 ready=true
-
-// 通知线程
-{
-    std::lock_guard<std::mutex> lock(mtx);
-    ready = true;
-}
-cv.notify_one(); // 唤醒一个等待线程
-```
 
 ---
 
 ### **5. 异步操作与结果获取**
-使用 `std::async` 和 `std::future`：
-```cpp
-#include <future>
 
-int compute() { return 100; }
-
-int main() {
-    std::future<int> fut = std::async(std::launch::async, compute);
-    int result = fut.get(); // 阻塞等待结果
-    std::cout << "Result: " << result;
-}
-```
 
 ---
 
