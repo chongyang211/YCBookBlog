@@ -24,6 +24,188 @@
 
 
 
+### **C++ 中的线程锁**
+C++ 标准库提供了多种线程锁机制，最常用的是 `std::mutex`（互斥锁）。以下是线程锁的核心概念和用法：
+
+#### **1. `std::mutex`（互斥锁）**
+`std::mutex` 是最基本的线程锁，用于保护共享资源。它提供了两个主要方法：
+- `lock()`：锁定互斥锁。如果锁已被其他线程持有，则当前线程会阻塞，直到锁被释放。
+- `unlock()`：释放互斥锁，允许其他线程获取锁。
+
+**示例：**
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx; // 全局互斥锁
+int sharedData = 0; // 共享资源
+
+void increment() {
+    for (int i = 0; i < 10000; ++i) {
+        mtx.lock(); // 加锁
+        ++sharedData; // 修改共享资源
+        mtx.unlock(); // 解锁
+    }
+}
+
+int main() {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Final value of sharedData: " << sharedData << std::endl;
+    return 0;
+}
+```
+
+**输出：**
+```
+Final value of sharedData: 20000
+```
+
+**说明：**
+- 如果没有锁，`sharedData` 的最终值可能小于 20000，因为两个线程可能同时修改它。
+- 使用 `std::mutex` 确保了对 `sharedData` 的原子操作。
+
+---
+
+#### **2. `std::lock_guard`（自动管理锁）**
+`std::lock_guard` 是一个 RAII（资源获取即初始化）风格的锁管理类，它在构造时自动加锁，在析构时自动解锁，避免了手动调用 `lock()` 和 `unlock()`。
+
+**示例：**
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;
+int sharedData = 0;
+
+void increment() {
+    for (int i = 0; i < 10000; ++i) {
+        std::lock_guard<std::mutex> lock(mtx); // 自动加锁和解锁
+        ++sharedData;
+    }
+}
+
+int main() {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Final value of sharedData: " << sharedData << std::endl;
+    return 0;
+}
+```
+
+**输出：**
+```
+Final value of sharedData: 20000
+```
+
+**说明：**
+- `std::lock_guard` 简化了锁的管理，避免了忘记解锁的问题。
+
+---
+
+#### **3. `std::unique_lock`（更灵活的锁管理）**
+`std::unique_lock` 是比 `std::lock_guard` 更灵活的锁管理类，支持手动加锁和解锁，还可以与条件变量一起使用。
+
+**示例：**
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;
+int sharedData = 0;
+
+void increment() {
+    for (int i = 0; i < 10000; ++i) {
+        std::unique_lock<std::mutex> lock(mtx); // 自动加锁
+        ++sharedData;
+        lock.unlock(); // 手动解锁
+    }
+}
+
+int main() {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Final value of sharedData: " << sharedData << std::endl;
+    return 0;
+}
+```
+
+**输出：**
+```
+Final value of sharedData: 20000
+```
+
+**说明：**
+- `std::unique_lock` 提供了更大的灵活性，但通常比 `std::lock_guard` 更重。
+
+---
+
+#### **4. `std::recursive_mutex`（递归锁）**
+`std::recursive_mutex` 允许同一线程多次加锁，适用于递归调用或嵌套锁的场景。
+
+**示例：**
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::recursive_mutex mtx;
+
+void recursiveFunction(int n) {
+    if (n <= 0) return;
+    std::lock_guard<std::recursive_mutex> lock(mtx); // 递归加锁
+    std::cout << "Thread ID: " << std::this_thread::get_id() << ", n = " << n << std::endl;
+    recursiveFunction(n - 1);
+}
+
+int main() {
+    std::thread t1(recursiveFunction, 3);
+    std::thread t2(recursiveFunction, 3);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+```
+
+**输出：**
+```
+Thread ID: 140735680722688, n = 3
+Thread ID: 140735680722688, n = 2
+Thread ID: 140735680722688, n = 1
+Thread ID: 140735672329984, n = 3
+Thread ID: 140735672329984, n = 2
+Thread ID: 140735672329984, n = 1
+```
+
+**说明：**
+- 同一线程可以多次加锁，而不会导致死锁。
+
+---
+
+### **总结**
+- **线程锁**用于保护共享资源，避免数据竞争和竞态条件。
+- **`std::mutex`** 是最基本的锁，需要手动加锁和解锁。
+- **`std::lock_guard`** 和 **`std::unique_lock`** 是 RAII 风格的锁管理类，自动管理锁的生命周期。
+- **`std::recursive_mutex`** 支持同一线程多次加锁。
+
+根据具体需求选择合适的锁机制，可以提高代码的安全性和可维护性。如果还有其他问题，请随时提问！
 --------------------------------------------------------------------------------------------------
 
 
@@ -269,185 +451,6 @@ int main() {
 合理使用 `std::mutex` 可以确保多线程程序的正确性和性能。
 
 --------------------------------------------------------------------------------------------------
-
-
-
-### **3. 线程同步**
-多线程访问共享资源时，需要使用同步机制（如互斥锁、条件变量）避免数据竞争。
-
-#### **3.1 使用 `std::mutex` 保护共享资源**
-```cpp
-#include <iostream>
-#include <thread>
-#include <mutex>
-
-std::mutex mtx;
-int sharedData = 0;
-
-void increment() {
-    for (int i = 0; i < 1000; ++i) {
-        std::lock_guard<std::mutex> lock(mtx); // 自动加锁和解锁
-        ++sharedData;
-    }
-}
-
-int main() {
-    std::thread t1(increment);
-    std::thread t2(increment);
-    t1.join();
-    t2.join();
-    std::cout << "Shared Data: " << sharedData << std::endl; // 输出: Shared Data: 2000
-    return 0;
-}
-```
-
-#### **3.2 使用 `std::condition_variable` 实现线程间通信**
-```cpp
-#include <iostream>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-
-std::mutex mtx;
-std::condition_variable cv;
-bool ready = false;
-
-void waitForReady() {
-    std::unique_lock<std::mutex> lock(mtx);
-    cv.wait(lock, [] { return ready; }); // 等待条件成立
-    std::cout << "Ready!" << std::endl;
-}
-
-void setReady() {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    {
-        std::lock_guard<std::mutex> lock(mtx);
-        ready = true;
-    }
-    cv.notify_one(); // 通知等待的线程
-}
-
-int main() {
-    std::thread t1(waitForReady);
-    std::thread t2(setReady);
-    t1.join();
-    t2.join();
-    return 0;
-}
-```
-
----
-
-### **4. 线程局部存储**
-使用 `thread_local` 关键字声明线程局部变量，每个线程拥有独立的变量副本。
-
-#### **4.1 使用 `thread_local`**
-```cpp
-#include <iostream>
-#include <thread>
-
-thread_local int threadLocalData = 0;
-
-void threadFunction(int id) {
-    threadLocalData = id;
-    std::cout << "Thread " << id << " has data: " << threadLocalData << std::endl;
-}
-
-int main() {
-    std::thread t1(threadFunction, 1);
-    std::thread t2(threadFunction, 2);
-    t1.join();
-    t2.join();
-    return 0;
-}
-```
-
----
-
-### **5. 线程池**
-C++ 标准库没有直接提供线程池，但可以使用第三方库（如 [ThreadPool](https://github.com/progschj/ThreadPool)）或手动实现。
-
-#### **5.1 简单线程池实现**
-```cpp
-#include <iostream>
-#include <thread>
-#include <vector>
-#include <queue>
-#include <functional>
-#include <mutex>
-#include <condition_variable>
-
-class ThreadPool {
-public:
-    ThreadPool(size_t numThreads) {
-        for (size_t i = 0; i < numThreads; ++i) {
-            workers.emplace_back([this] {
-                while (true) {
-                    std::function<void()> task;
-                    {
-                        std::unique_lock<std::mutex> lock(queueMutex);
-                        condition.wait(lock, [this] { return !tasks.empty() || stop; });
-                        if (stop && tasks.empty()) return;
-                        task = std::move(tasks.front());
-                        tasks.pop();
-                    }
-                    task();
-                }
-            });
-        }
-    }
-
-    template <class F>
-    void enqueue(F&& f) {
-        {
-            std::unique_lock<std::mutex> lock(queueMutex);
-            tasks.emplace(std::forward<F>(f));
-        }
-        condition.notify_one();
-    }
-
-    ~ThreadPool() {
-        {
-            std::unique_lock<std::mutex> lock(queueMutex);
-            stop = true;
-        }
-        condition.notify_all();
-        for (std::thread& worker : workers) {
-            worker.join();
-        }
-    }
-
-private:
-    std::vector<std::thread> workers;
-    std::queue<std::function<void()>> tasks;
-    std::mutex queueMutex;
-    std::condition_variable condition;
-    bool stop = false;
-};
-
-int main() {
-    ThreadPool pool(4);
-
-    for (int i = 0; i < 8; ++i) {
-        pool.enqueue([i] {
-            std::cout << "Task " << i << " is running on thread " << std::this_thread::get_id() << std::endl;
-        });
-    }
-
-    return 0;
-}
-```
-
----
-
-### **6. 总结**
-- 使用 `std::thread` 创建和管理线程。
-- 使用 `join()` 或 `detach()` 控制线程的生命周期。
-- 使用 `std::mutex` 和 `std::condition_variable` 实现线程同步。
-- 使用 `thread_local` 声明线程局部变量。
-- 线程池可以提高多线程任务的效率。
-
-通过合理使用线程，可以编写出高效、并发的 C++ 程序。
 
 
 --------------------------------------------------------------------------------------------------
