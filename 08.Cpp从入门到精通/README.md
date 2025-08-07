@@ -49,7 +49,132 @@
 
 --------------------------------------------------------------------------------------------------
 
+---
 
+### **3. 线程管理**
+| **方法**       | **作用**                                                                 |
+|----------------|--------------------------------------------------------------------------|
+| `join()`       | 阻塞当前线程，直到目标线程完成                                          |
+| `detach()`     | 分离线程（资源由系统自动回收），**分离后不可再 `join`**                 |
+| `joinable()`   | 检查线程是否可 `join`（未执行 `join` 或 `detach` 时返回 `true`）          |
+| `get_id()`     | 获取线程唯一标识符                                                      |
+| `std::thread::hardware_concurrency()` | 返回系统支持的并发线程数（逻辑CPU核心数） |
+
+---
+
+### **4. 同步机制（避免竞态条件）**
+#### **互斥锁 (Mutex)**
+```cpp
+#include <mutex>
+
+std::mutex mtx;
+int shared_data = 0;
+
+void safe_increment() {
+    std::lock_guard<std::mutex> lock(mtx); // 自动加锁/解锁
+    // 或手动管理: mtx.lock(); ... mtx.unlock();
+    shared_data++;
+}
+```
+
+#### **条件变量 (Condition Variable)**
+```cpp
+std::condition_variable cv;
+std::mutex mtx;
+bool ready = false;
+
+// 等待线程
+std::unique_lock<std::mutex> lock(mtx);
+cv.wait(lock, []{ return ready; }); // 阻塞直到 ready=true
+
+// 通知线程
+{
+    std::lock_guard<std::mutex> lock(mtx);
+    ready = true;
+}
+cv.notify_one(); // 唤醒一个等待线程
+```
+
+---
+
+### **5. 异步操作与结果获取**
+使用 `std::async` 和 `std::future`：
+```cpp
+#include <future>
+
+int compute() { return 100; }
+
+int main() {
+    std::future<int> fut = std::async(std::launch::async, compute);
+    int result = fut.get(); // 阻塞等待结果
+    std::cout << "Result: " << result;
+}
+```
+
+---
+
+### **6. 线程局部存储 (Thread-Local)**
+```cpp
+thread_local int counter = 0; // 每个线程有独立副本
+
+void increment() {
+    counter++; // 不影响其他线程
+}
+```
+
+---
+
+### **7. 高级功能**
+- **原子操作**：`<atomic>` 提供无锁操作（如 `std::atomic<int>`）
+- **读写锁**：C++17 的 `std::shared_mutex`
+- **屏障 (Barrier)**：C++20 的 `std::barrier`
+- **协程**：C++20 原生支持（需要编译器支持）
+
+---
+
+### **注意事项**
+1. **避免数据竞争**：使用互斥锁或原子操作保护共享数据。
+2. **死锁预防**：确保锁的获取顺序一致，或用 `std::lock()` 一次锁多个。
+3. **异常安全**：在可能抛异常的代码中，使用 RAII 锁（如 `lock_guard`）。
+4. **线程生命周期**：确保线程访问的资源在其运行期间有效（尤其避免悬垂引用）。
+5. **系统限制**：线程数过多可能导致性能下降（上下文切换开销）。
+
+---
+
+### **示例：生产者-消费者模型**
+```cpp
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+
+std::queue<int> data_queue;
+std::mutex mtx;
+std::condition_variable cv;
+
+void producer() {
+    for (int i = 0; i < 10; ++i) {
+        {
+            std::lock_guard lock(mtx);
+            data_queue.push(i);
+        }
+        cv.notify_one(); // 通知消费者
+    }
+}
+
+void consumer() {
+    while (true) {
+        std::unique_lock lock(mtx);
+        cv.wait(lock, []{ return !data_queue.empty(); }); // 等待数据
+        int val = data_queue.front();
+        data_queue.pop();
+        lock.unlock();
+        // 处理数据...
+    }
+}
+```
+
+> **提示**：使用 C++20 `<semaphore>` 或 `<latch>`/`<barrier>` 简化同步逻辑。
+> 
 --------------------------------------------------------------------------------------------------
 
 在 C++ 中，**`std::mutex`** 是标准库提供的一种互斥锁（Mutex），用于保护共享资源，避免多个线程同时访问导致的数据竞争问题。`std::mutex` 是 C++11 引入的，是多线程编程中最基本的同步工具之一。
