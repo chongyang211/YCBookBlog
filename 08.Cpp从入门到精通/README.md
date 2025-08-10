@@ -53,7 +53,91 @@
 
 
 --------------------------------------------------------------------------------------------------
+`std::lock_guard` 是 C++ 标准库中的一个 RAII（Resource Acquisition Is Initialization）工具，用于管理互斥锁（`std::mutex`）的自动加锁和解锁。它的设计思想、作用和工作原理如下：
 
+---
+
+### **作用**
+`std::lock_guard` 的主要作用是：
+
+---
+
+### **设计思想**
+`std::lock_guard` 的设计基于 **RAII 原则**：
+- **RAII（Resource Acquisition Is Initialization）**：将资源的生命周期与对象的生命周期绑定。资源在对象构造时获取，在对象析构时释放。
+- **简化资源管理**：通过自动管理资源的获取和释放，减少手动管理资源的错误（如忘记解锁或异常导致未解锁）。
+
+---
+
+### **原理**
+`std::lock_guard` 的实现原理如下：
+1. **构造函数**：
+  - 在构造时，`std::lock_guard` 会调用 `std::mutex` 的 `lock()` 方法，锁定互斥锁。
+  - 如果互斥锁已被其他线程锁定，当前线程会阻塞，直到锁可用。
+
+2. **析构函数**：
+  - 在析构时，`std::lock_guard` 会调用 `std::mutex` 的 `unlock()` 方法，释放互斥锁。
+  - 即使发生异常，析构函数也会被调用，确保锁一定会被释放。
+
+3. **不可复制**：
+  - `std::lock_guard` 是不可复制的，因为复制会导致多个对象管理同一个锁，从而引发未定义行为。
+
+---
+
+### **使用示例**
+以下是一个简单的 `std::lock_guard` 使用示例：
+
+```cpp
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+std::mutex mtx; // 全局互斥锁
+int shared_data = 0; // 共享数据
+
+void increment() {
+    std::lock_guard<std::mutex> lock(mtx); // 自动加锁
+    ++shared_data; // 操作共享数据
+    // 离开作用域时自动解锁
+}
+
+int main() {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Shared data: " << shared_data << std::endl; // 输出 2
+    return 0;
+}
+```
+
+---
+
+### **优点**
+1. **简洁**：无需手动调用 `lock()` 和 `unlock()`，代码更简洁。
+2. **安全**：确保锁一定会被释放，避免死锁。
+3. **异常安全**：即使发生异常，锁也会被正确释放。
+
+---
+
+### **局限性**
+1. **作用域限制**：`std::lock_guard` 的生命周期受限于作用域，无法手动控制锁的释放。
+2. **不可移动**：`std::lock_guard` 是不可移动的，无法转移锁的所有权。
+
+---
+
+### **与 `std::unique_lock` 的区别**
+`std::unique_lock` 是 `std::lock_guard` 的增强版，提供了更多的灵活性：
+- 可以手动加锁和解锁。
+- 支持延迟加锁（`defer_lock`）。
+- 可以移动所有权。
+
+---
+
+### **总结**
+`std::lock_guard` 是一个简单而强大的工具，用于管理互斥锁的自动加锁和解锁。它的设计基于 RAII 原则，确保资源的安全管理，避免手动管理锁的复杂性。在大多数简单场景中，`std::lock_guard` 是首选工具；如果需要更灵活的控制，可以使用 `std::unique_lock`。
 
 --------------------------------------------------------------------------------------------------
 
