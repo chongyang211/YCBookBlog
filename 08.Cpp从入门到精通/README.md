@@ -55,26 +55,112 @@
 --------------------------------------------------------------------------------------------------
 
 
+---
+
+### **设计思想**
+`std::unique_lock` 的设计基于以下思想：
+1. **RAII（Resource Acquisition Is Initialization）**：
+  - 将资源的生命周期与对象的生命周期绑定，确保资源在对象构造时获取，在对象析构时释放。
+2. **灵活性**：
+  - 提供多种加锁策略（如立即加锁、延迟加锁、尝试加锁等），适应不同的使用场景。
+3. **所有权管理**：
+  - 通过移动语义支持锁的所有权转移，允许锁的管理权在对象之间传递。
+
+---
+
+### **原理**
+`std::unique_lock` 的实现原理如下：
+1. **构造函数**：
+  - 支持多种构造函数，可以选择立即加锁、延迟加锁或尝试加锁。
+  - 例如：
+    ```cpp
+    std::unique_lock<std::mutex> lock(mtx); // 立即加锁
+    std::unique_lock<std::mutex> lock(mtx, std::defer_lock); // 延迟加锁
+    ```
+
+2. **析构函数**：
+  - 在析构时，如果锁被持有，则自动调用 `unlock()` 释放锁。
+  - 确保锁一定会被释放，即使发生异常。
+
+3. **手动控制**：
+  - 提供 `lock()` 和 `unlock()` 方法，允许手动控制锁的状态。
+  - 例如：
+    ```cpp
+    std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+    lock.lock(); // 手动加锁
+    lock.unlock(); // 手动解锁
+    ```
+
+4. **移动语义**：
+  - 支持移动构造函数和移动赋值运算符，允许锁的所有权转移。
+  - 例如：
+    ```cpp
+    std::unique_lock<std::mutex> lock1(mtx);
+    std::unique_lock<std::mutex> lock2 = std::move(lock1); // 所有权转移
+    ```
+
+5. **条件变量支持**：
+  - 可以与 `std::condition_variable` 配合使用，支持等待操作。
+  - 例如：
+    ```cpp
+    std::unique_lock<std::mutex> lock(mtx);
+    cv.wait(lock, []{ return ready; }); // 等待条件变量
+    ```
+
+---
+
+### **使用示例**
+以下是一个简单的 `std::unique_lock` 使用示例：
+
+```cpp
+#include <iostream>
+#include <mutex>
+#include <thread>
+
+std::mutex mtx; // 全局互斥锁
+int shared_data = 0; // 共享数据
+
+void increment() {
+    std::unique_lock<std::mutex> lock(mtx); // 自动加锁
+    ++shared_data; // 操作共享数据
+    // 离开作用域时自动解锁
+}
+
+int main() {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Shared data: " << shared_data << std::endl; // 输出 2
+    return 0;
+}
+```
+
+---
+
 ### **优点**
-1. **简洁**：无需手动调用 `lock()` 和 `unlock()`，代码更简洁。
-2. **安全**：确保锁一定会被释放，避免死锁。
-3. **异常安全**：即使发生异常，锁也会被正确释放。
+1. **灵活性**：支持多种加锁策略和手动控制。
+2. **异常安全**：确保锁一定会被释放，即使发生异常。
+3. **所有权转移**：支持移动语义，允许锁的管理权在对象之间传递。
+4. **条件变量支持**：与 `std::condition_variable` 配合使用，支持复杂的同步操作。
 
 ---
 
-
----
-
-### **与 `std::unique_lock` 的区别**
-`std::unique_lock` 是 `std::lock_guard` 的增强版，提供了更多的灵活性：
-- 可以手动加锁和解锁。
-- 支持延迟加锁（`defer_lock`）。
-- 可以移动所有权。
+### **与 `std::lock_guard` 的区别**
+| 特性                | `std::lock_guard`                  | `std::unique_lock`                  |
+|---------------------|------------------------------------|-------------------------------------|
+| **加锁策略**        | 立即加锁                          | 支持立即加锁、延迟加锁、尝试加锁    |
+| **手动控制**        | 不支持                            | 支持手动加锁和解锁                  |
+| **所有权转移**      | 不支持                            | 支持移动语义，允许所有权转移        |
+| **条件变量支持**    | 不支持                            | 支持与 `std::condition_variable` 配合 |
+| **性能**            | 更轻量，性能更高                  | 更灵活，但性能稍低                  |
 
 ---
 
 ### **总结**
-`std::lock_guard` 是一个简单而强大的工具，用于管理互斥锁的自动加锁和解锁。它的设计基于 RAII 原则，确保资源的安全管理，避免手动管理锁的复杂性。在大多数简单场景中，`std::lock_guard` 是首选工具；如果需要更灵活的控制，可以使用 `std::unique_lock`。
+`std::unique_lock` 是一个功能强大的工具，提供了比 `std::lock_guard` 更多的灵活性和控制选项。它适用于需要手动控制锁、延迟加锁、锁的所有权转移或与条件变量配合使用的场景。在简单场景中，`std::lock_guard` 是更轻量级的选择；而在复杂场景中，`std::unique_lock` 是更合适的选择。
 
 --------------------------------------------------------------------------------------------------
 
