@@ -21,8 +21,445 @@
 
 
 --------------------------------------------------------------------------------------------------
+C++ 中，延迟执行任务可以通过以下方式实现：
 
+---
 
+### **方法 1：使用 `std::this_thread::sleep_for`**
+
+---
+
+### **方法 2：使用 `std::async` 和 `std::future`**
+
+如果需要延迟执行任务而不阻塞当前线程，可以使用 `std::async` 和 `std::future`。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <future>  // 包含异步任务库
+
+void delayedTask() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    std::cout << "Task executed after 300ms." << std::endl;
+}
+
+int main() {
+    std::cout << "Task scheduled." << std::endl;
+
+    // 使用 std::async 异步执行任务
+    auto future = std::async(std::launch::async, delayedTask);
+
+    // 主线程继续执行其他任务
+    std::cout << "Main thread is doing other work..." << std::endl;
+
+    // 等待异步任务完成
+    future.wait();
+
+    std::cout << "Main thread finished." << std::endl;
+
+    return 0;
+}
+```
+
+#### **代码说明**
+- `std::async` 启动一个异步任务。
+- `std::launch::async` 确保任务在新线程中执行。
+- `future.wait()` 等待异步任务完成。
+
+---
+
+### **方法 3：使用定时器（需要外部库）**
+
+如果需要更复杂的定时任务调度，可以使用第三方库，如 Boost.Asio 或 Qt 的定时器。
+
+#### **示例代码（使用 Boost.Asio）**
+
+```cpp
+#include <iostream>
+#include <boost/asio.hpp>
+#include <boost/asio/steady_timer.hpp>
+#include <chrono>
+
+void delayedTask(const boost::system::error_code& /*e*/) {
+    std::cout << "Task executed after 300ms." << std::endl;
+}
+
+int main() {
+    std::cout << "Task scheduled." << std::endl;
+
+    boost::asio::io_context io;
+
+    // 创建一个定时器，延迟 300 毫秒
+    boost::asio::steady_timer timer(io, std::chrono::milliseconds(300));
+
+    // 绑定回调函数
+    timer.async_wait(&delayedTask);
+
+    // 运行事件循环
+    io.run();
+
+    std::cout << "Main thread finished." << std::endl;
+
+    return 0;
+}
+```
+
+#### **代码说明**
+- `boost::asio::steady_timer` 用于创建定时器。
+- `async_wait` 绑定回调函数，在定时器到期时执行。
+- `io.run()` 运行事件循环，等待定时器触发。
+
+---
+
+### **方法 4：使用 `std::thread` 和 `std::this_thread::sleep_for`**
+
+如果需要手动控制线程，可以使用 `std::thread` 和 `std::this_thread::sleep_for`。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+void delayedTask() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    std::cout << "Task executed after 300ms." << std::endl;
+}
+
+int main() {
+    std::cout << "Task scheduled." << std::endl;
+
+    // 创建线程执行任务
+    std::thread t(delayedTask);
+
+    // 主线程继续执行其他任务
+    std::cout << "Main thread is doing other work..." << std::endl;
+
+    // 等待线程完成
+    t.join();
+
+    std::cout << "Main thread finished." << std::endl;
+
+    return 0;
+}
+```
+
+#### **代码说明**
+- `std::thread` 创建一个新线程执行任务。
+- `t.join()` 等待线程完成。
+
+---
+
+### **总结**
+
+| 方法                          | 特点                                                                 |
+|-------------------------------|----------------------------------------------------------------------|
+| `std::this_thread::sleep_for`  | 简单易用，但会阻塞当前线程。                                         |
+| `std::async` 和 `std::future`  | 异步执行任务，不阻塞当前线程。                                       |
+| Boost.Asio 定时器              | 适合复杂定时任务，需要外部库支持。                                   |
+| `std::thread`                  | 手动控制线程， C++ 中，延迟执行任务可以通过以下方式实现：
+
+---
+
+### **方法 1：使用 `std::this_thread::sleep_for`**
+
+`std::this_thread::sleep_for` 是 C++11 引入的标准库函数，用于让当前线程休眠指定的时间。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    // 延迟 300 毫秒
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    // 执行任务
+    delayedTask();
+
+    return 0;
+}
+```
+
+---
+
+### **方法 2：使用 `std::async` 和 `std::future`**
+
+如果需要异步延迟执行任务，可以使用 `std::async` 和 `std::future`。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <future>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    // 异步延迟执行任务
+    auto future = std::async(std::launch::async, []() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        delayedTask();
+    });
+
+    // 等待任务完成
+    future.wait();
+
+    std::cout << "Task completed." << std::endl;
+
+    return 0;
+}
+```
+
+---
+
+### **方法 3：使用定时器（需要外部库，如 Boost.Asio）**
+
+如果需要更复杂的定时任务，可以使用 Boost.Asio 库中的定时器。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <boost/asio.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    boost::asio::io_context io;
+
+    // 创建定时器
+    boost::asio::steady_timer timer(io, boost::asio::chrono::milliseconds(300));
+
+    // 设置定时器回调
+    timer.async_wait([](const boost::system::error_code&) {
+        delayedTask();
+    });
+
+    // 运行事件循环
+    io.run();
+
+    std::cout << "Task completed." << std::endl;
+
+    return 0;
+}
+```
+
+---
+
+### **方法 4：使用 `std::thread` 和 `std::this_thread::sleep_for`**
+
+如果需要在一个单独的线程中延迟执行任务，可以使用 `std::thread`。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    // 创建线程并延迟执行任务
+    std::thread t([]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        delayedTask();
+    });
+
+    // 等待线程完成
+    t.join();
+
+    std::cout << "Task completed." << std::endl;
+
+    return 0;
+}
+```
+
+---
+
+### **总结**
+
+- 如果只是简单的延迟任务，推荐使用 `std::this_thread::sleep_for`。
+- 如果需要异步执行任务，可以使用 `std::async` 和 `std::future`。
+- 如果需要更复杂的定时任务，可以使用 Boost.Asio 库。
+- 如果需要在单独的线程中执行任务，可以使用 `std::thread`。 C++ 中，延迟执行任务可以通过以下方式实现：
+
+---
+
+### **方法 1：使用 `std::this_thread::sleep_for`**
+
+`std::this_thread::sleep_for` 是 C++11 引入的标准库函数，用于让当前线程休眠指定的时间。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    // 延迟 300 毫秒
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    // 执行任务
+    delayedTask();
+
+    return 0;
+}
+```
+
+---
+
+### **方法 2：使用 `std::async` 和 `std::future`**
+
+如果需要异步延迟执行任务，可以使用 `std::async` 和 `std::future`。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <future>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    // 异步延迟执行任务
+    auto future = std::async(std::launch::async, []() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        delayedTask();
+    });
+
+    // 等待任务完成
+    future.wait();
+
+    std::cout << "Task completed." << std::endl;
+
+    return 0;
+}
+```
+
+---
+
+### **方法 3：使用定时器（需要外部库，如 Boost.Asio）**
+
+如果需要更复杂的定时任务，可以使用 Boost.Asio 库中的定时器。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <boost/asio.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    boost::asio::io_context io;
+
+    // 创建定时器
+    boost::asio::steady_timer timer(io, boost::asio::chrono::milliseconds(300));
+
+    // 设置定时器回调
+    timer.async_wait([](const boost::system::error_code&) {
+        delayedTask();
+    });
+
+    // 运行事件循环
+    io.run();
+
+    std::cout << "Task completed." << std::endl;
+
+    return 0;
+}
+```
+
+---
+
+### **方法 4：使用 `std::thread` 和 `std::this_thread::sleep_for`**
+
+如果需要在一个单独的线程中延迟执行任务，可以使用 `std::thread`。
+
+#### **示例代码**
+
+```cpp
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+void delayedTask() {
+    std::cout << "Task executed after 300ms delay." << std::endl;
+}
+
+int main() {
+    std::cout << "Starting task with 300ms delay..." << std::endl;
+
+    // 创建线程并延迟执行任务
+    std::thread t([]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        delayedTask();
+    });
+
+    // 等待线程完成
+    t.join();
+
+    std::cout << "Task completed." << std::endl;
+
+    return 0;
+}
+```
+
+---
+
+### **总结**
+
+- 如果只是简单的延迟任务，推荐使用 `std::this_thread::sleep_for`。
+- 如果需要异步执行任务，可以使用 `std::async` 和 `std::future`。
+- 如果需要更复杂的定时任务，可以使用 Boost.Asio 库。
+- 如果需要在单独的线程中执行任务，可以使用 `std::thread`。Error Occur! Exception: [peer closed connection without sending complete message body (incomplete chunked read)]
 
 --------------------------------------------------------------------------------------------------
 
