@@ -23,65 +23,12 @@
 --------------------------------------------------------------------------------------------------
 
 
-# C++ 锁机制详解
-
-在 C++ 中，锁是并发编程的核心概念，用于解决多线程环境下的**数据竞争**和**竞态条件**问题。下面是 C++ 锁机制的全面解析：
-
-## 一、锁的核心类型
-
-### 1. `std::mutex` (互斥锁)
-- **功能**：提供基本互斥操作
-- **特点**：非递归、不可复制、不可移动
-- **API**：
-  ```cpp
-  lock();    // 阻塞获取锁
-  try_lock();// 非阻塞尝试获取锁
-  unlock();  // 释放锁
-  ```
-
-### 2. `std::recursive_mutex` (递归互斥锁)
-- **功能**：允许同一线程多次加锁
-- **适用场景**：递归函数或嵌套调用的线程安全操作
-- **示例**：
-  ```cpp
-  void recursive_function(int n) {
-      std::lock_guard<std::recursive_mutex> lock(rec_mutex);
-      if(n > 0) recursive_function(n - 1);
-  }
-  ```
-
-### 3. `std::timed_mutex` (带超时互斥锁)
-- **功能**：在 `mutex` 基础上增加超时机制
-- **API扩展**：
-  ```cpp
-  bool try_lock_for(const std::chrono::duration&);
-  bool try_lock_until(const std::chrono::time_point&);
-  ```
-
-### 4. `std::shared_mutex` (C++17)
-- **功能**：实现读写锁（读共享，写排他）
-- **特点**：
-  - 读锁：多个线程可同时持有
-  - 写锁：排他锁
-- **使用**：
-  ```cpp
-  std::shared_lock read_lock;  // 共享读锁
-  std::unique_lock write_lock; // 排他写锁
-  ```
-
 ## 二、锁管理器（自动管理锁的生命周期）
 
 ### 1. `std::lock_guard` (RAII锁)
 - **特点**：简单、自动释放
 - **使用场景**：明确作用域的锁管理
-- **示例**：
-  ```cpp
-  std::mutex mtx;
-  {
-      std::lock_guard<std::mutex> lock(mtx); // 构造时加锁
-      // 临界区操作
-  } // 析构时自动解锁
-  ```
+
 
 ### 2. `std::unique_lock` (灵活锁管理)
 - **特性**：
