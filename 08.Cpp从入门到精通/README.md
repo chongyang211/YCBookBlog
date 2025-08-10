@@ -63,43 +63,6 @@
 ---
 
 ### **原理**
-`std::unique_lock` 的实现原理如下：
-1. **构造函数**：
-  - 支持多种构造函数，可以选择立即加锁、延迟加锁或尝试加锁。
-  - 例如：
-    ```cpp
-    std::unique_lock<std::mutex> lock(mtx); // 立即加锁
-    std::unique_lock<std::mutex> lock(mtx, std::defer_lock); // 延迟加锁
-    ```
-
-2. **析构函数**：
-  - 在析构时，如果锁被持有，则自动调用 `unlock()` 释放锁。
-  - 确保锁一定会被释放，即使发生异常。
-
-3. **手动控制**：
-  - 提供 `lock()` 和 `unlock()` 方法，允许手动控制锁的状态。
-  - 例如：
-    ```cpp
-    std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
-    lock.lock(); // 手动加锁
-    lock.unlock(); // 手动解锁
-    ```
-
-4. **移动语义**：
-  - 支持移动构造函数和移动赋值运算符，允许锁的所有权转移。
-  - 例如：
-    ```cpp
-    std::unique_lock<std::mutex> lock1(mtx);
-    std::unique_lock<std::mutex> lock2 = std::move(lock1); // 所有权转移
-    ```
-
-5. **条件变量支持**：
-  - 可以与 `std::condition_variable` 配合使用，支持等待操作。
-  - 例如：
-    ```cpp
-    std::unique_lock<std::mutex> lock(mtx);
-    cv.wait(lock, []{ return ready; }); // 等待条件变量
-    ```
 
 ---
 
