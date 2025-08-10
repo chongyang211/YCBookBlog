@@ -37,14 +37,7 @@
   - 可转移所有权
   - 支持条件变量
 - **示例**：
-  ```cpp
-  std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
-  
-  if(lock.try_lock()) {
-      // 操作...
-      lock.unlock(); // 手动解锁
-  }
-  ```
+
 
 ### 3. `std::scoped_lock` (C++17)
 - **功能**：同时锁定多个互斥量，避免死锁
