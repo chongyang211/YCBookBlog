@@ -54,43 +54,6 @@
 
 --------------------------------------------------------------------------------------------------
 
----
-
-### **原理**
-`std::lock_guard` 的实现原理如下：
-
----
-
-### **使用示例**
-以下是一个简单的 `std::lock_guard` 使用示例：
-
-```cpp
-#include <iostream>
-#include <mutex>
-#include <thread>
-
-std::mutex mtx; // 全局互斥锁
-int shared_data = 0; // 共享数据
-
-void increment() {
-    std::lock_guard<std::mutex> lock(mtx); // 自动加锁
-    ++shared_data; // 操作共享数据
-    // 离开作用域时自动解锁
-}
-
-int main() {
-    std::thread t1(increment);
-    std::thread t2(increment);
-
-    t1.join();
-    t2.join();
-
-    std::cout << "Shared data: " << shared_data << std::endl; // 输出 2
-    return 0;
-}
-```
-
----
 
 ### **优点**
 1. **简洁**：无需手动调用 `lock()` 和 `unlock()`，代码更简洁。
@@ -99,9 +62,6 @@ int main() {
 
 ---
 
-### **局限性**
-1. **作用域限制**：`std::lock_guard` 的生命周期受限于作用域，无法手动控制锁的释放。
-2. **不可移动**：`std::lock_guard` 是不可移动的，无法转移锁的所有权。
 
 ---
 
