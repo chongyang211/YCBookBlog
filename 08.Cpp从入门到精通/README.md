@@ -21,53 +21,7 @@
 
 
 --------------------------------------------------------------------------------------------------
-C++ 中，延迟执行任务可以通过以下方式实现：
 
----
-
-### **方法 1：使用 `std::this_thread::sleep_for`**
-
----
-
-### **方法 2：使用 `std::async` 和 `std::future`**
-
-如果需要延迟执行任务而不阻塞当前线程，可以使用 `std::async` 和 `std::future`。
-
-#### **示例代码**
-
-```cpp
-#include <iostream>
-#include <chrono>
-#include <thread>
-#include <future>  // 包含异步任务库
-
-void delayedTask() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(300));
-    std::cout << "Task executed after 300ms." << std::endl;
-}
-
-int main() {
-    std::cout << "Task scheduled." << std::endl;
-
-    // 使用 std::async 异步执行任务
-    auto future = std::async(std::launch::async, delayedTask);
-
-    // 主线程继续执行其他任务
-    std::cout << "Main thread is doing other work..." << std::endl;
-
-    // 等待异步任务完成
-    future.wait();
-
-    std::cout << "Main thread finished." << std::endl;
-
-    return 0;
-}
-```
-
-#### **代码说明**
-- `std::async` 启动一个异步任务。
-- `std::launch::async` 确保任务在新线程中执行。
-- `future.wait()` 等待异步任务完成。
 
 ---
 
