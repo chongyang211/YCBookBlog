@@ -57,57 +57,9 @@
 
 --------------------------------------------------------------------------------------------------
 
-            以下是它的作用、设计思想和原理：
-
-
-
-### **设计思想**
-
----
-
-### **原理**
-
-
----
 
 ### **使用示例**
-以下是一个简单的 `std::recursive_mutex` 使用示例：
 
-```cpp
-#include <iostream>
-#include <thread>
-#include <mutex>
-
-std::recursive_mutex mtx; // 递归互斥锁
-
-void recursive_function(int n) {
-    std::lock_guard<std::recursive_mutex> lock(mtx); // 加锁
-    if (n > 0) {
-        std::cout << "Thread " << std::this_thread::get_id() << ": n = " << n << std::endl;
-        recursive_function(n - 1); // 递归调用
-    }
-    // 离开作用域时自动解锁
-}
-
-int main() {
-    std::thread t1(recursive_function, 3);
-    std::thread t2(recursive_function, 2);
-
-    t1.join();
-    t2.join();
-
-    return 0;
-}
-```
-
-#### **输出示例**：
-```
-Thread 140735680944896: n = 3
-Thread 140735680944896: n = 2
-Thread 140735680944896: n = 1
-Thread 140735672552192: n = 2
-Thread 140735672552192: n = 1
-```
 
 ---
 
