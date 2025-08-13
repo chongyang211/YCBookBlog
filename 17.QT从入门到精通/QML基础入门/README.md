@@ -78,6 +78,7 @@
 - 3.7.5 页面销毁：当页面被销毁或从内存中移除时。`Component.onDestruction`：在组件即将销毁时触发。
 - 3.7.6 动态加载和卸载：当使用 `Loader` 动态加载或卸载组件时。`Loader.onLoaded`：当组件加载完成时触发。`Loader.onItemRemoved`：当组件被移除时触发。
 - 3.7.7 窗口生命周期：当窗口被创建、显示、隐藏或关闭时。`Window.onVisibleChanged`：当窗口的可见性发生变化时触发。
+- 3.7.8 状态管理：当组件的状态发生变化时。`State.onCompleted`：当状态完全应用时触发。
 
 
 
