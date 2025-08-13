@@ -77,6 +77,7 @@
 - 3.7.4 页面激活：当页面成为当前活动页面时（例如在 `StackView` 或 `TabView` 中切换页面）。`Page.onActivated`：当页面被激活时触发。`Page.onDeactivated`：当页面被停用时触发。
 - 3.7.5 页面销毁：当页面被销毁或从内存中移除时。`Component.onDestruction`：在组件即将销毁时触发。
 - 3.7.6 动态加载和卸载：当使用 `Loader` 动态加载或卸载组件时。`Loader.onLoaded`：当组件加载完成时触发。`Loader.onItemRemoved`：当组件被移除时触发。
+- 3.7.7 窗口生命周期：当窗口被创建、显示、隐藏或关闭时。`Window.onVisibleChanged`：当窗口的可见性发生变化时触发。
 
 
 
