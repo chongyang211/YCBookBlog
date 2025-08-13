@@ -74,6 +74,7 @@
 - 3.7.1 组件创建和销毁：`Component.onCompleted`在组件完全初始化并准备好后触发。`onDestruction`：在组件即将被销毁时触发。
 - 3.7.2 页面加载：当页面被加载到视图或窗口时，`Page.onStatusChanged`，表示当页面的状态发生变化时触发（如加载、显示、隐藏等）。
 - 3.7.3 页面显示：`Item.visibleChanged`：当 `visible` 属性发生变化时触发。
+- 3.7.4 页面激活：当页面成为当前活动页面时（例如在 `StackView` 或 `TabView` 中切换页面）。`Page.onActivated`：当页面被激活时触发。`Page.onDeactivated`：当页面被停用时触发。
 
 
 
