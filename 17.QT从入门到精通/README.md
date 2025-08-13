@@ -1,6 +1,8 @@
 # 专栏笔记总结大全
 
+updateEngine --image_url=/data/system_ota/update.img --misc=update --savepath=/data/system_ota/update.img --version_url=/data/system_ota/version
 
+updateEngine --image_url=/userdata/system_ota/update.img --misc=update --savepath=/userdata/system_ota/update.img --reboot &
 
 kw5845KWF
 
