@@ -75,7 +75,7 @@
 - 3.7.2 页面加载：当页面被加载到视图或窗口时，`Page.onStatusChanged`，表示当页面的状态发生变化时触发（如加载、显示、隐藏等）。
 - 3.7.3 页面显示：`Item.visibleChanged`：当 `visible` 属性发生变化时触发。
 - 3.7.4 页面激活：当页面成为当前活动页面时（例如在 `StackView` 或 `TabView` 中切换页面）。`Page.onActivated`：当页面被激活时触发。`Page.onDeactivated`：当页面被停用时触发。
-
+- 3.7.5 页面销毁：当页面被销毁或从内存中移除时。`Component.onDestruction`：在组件即将销毁时触发。
 
 
 ## 09.QML和C++
