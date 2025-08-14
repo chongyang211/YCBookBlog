@@ -4,6 +4,8 @@ python decrypt_log.py /Users/yangchong/Downloads/standardlog 0102030405060708090
 
 python decrypt_log.py /Users/yangchong/Downloads/standardlog/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
 
+python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-14T09_31_37_253Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
+
 
 updateEngine --image_url=/data/system_ota/update.img --misc=update --savepath=/data/system_ota/update.img --version_url=/data/system_ota/version
 
