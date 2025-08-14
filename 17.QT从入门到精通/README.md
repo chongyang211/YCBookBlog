@@ -1,5 +1,10 @@
 # 专栏笔记总结大全
 
+python decrypt_log.py /Users/yangchong/Downloads/standardlog 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
+
+python decrypt_log.py /Users/yangchong/Downloads/standardlog/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
+
+
 updateEngine --image_url=/data/system_ota/update.img --misc=update --savepath=/data/system_ota/update.img --version_url=/data/system_ota/version
 
 updateEngine --image_url=/userdata/system_ota/update.img --misc=update --savepath=/userdata/system_ota/update.img --reboot &
