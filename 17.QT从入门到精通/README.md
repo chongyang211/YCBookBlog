@@ -7,6 +7,19 @@ python decrypt_log.py /Users/yangchong/Downloads/standardlog/yt_palm.log 0102030
 python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-14T09_31_37_253Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
 
 
+python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-15T02_30_23_165Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
+python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-15T02_30_23_165Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
+
+git tag v1.2.0-std-2025081517-m3
+
+git tag -d v1.2.0-std-20250815-m3
+git push origin --delete v1.2.0-std-20250815-m3
+git tag -d v1.2.0-std-2025081516-m3
+git push origin --delete v1.2.0-std-2025081516-m3
+
+git tag -l "v1.2.0-std*"
+
+
 updateEngine --image_url=/data/system_ota/update.img --misc=update --savepath=/data/system_ota/update.img --version_url=/data/system_ota/version
 
 updateEngine --image_url=/userdata/system_ota/update.img --misc=update --savepath=/userdata/system_ota/update.img --reboot &
