@@ -1,81 +1,10 @@
 # 多线程票务系统技术栈与设计原理详解
 
-## 一、技术栈分析
 
-### 1. C++标准库核心组件
-- **并发编程**：
-   - `std::thread`：用于创建和管理线程
-   - `std::mutex`：互斥锁，保护共享资源
-   - `std::condition_variable`：条件变量，实现线程间同步
-   - `std::atomic`：原子操作，保证操作的原子性
-- **容器与算法**：
-   - `std::vector`：动态数组，存储售票窗口和顾客
-   - `std::unordered_map`：哈希表，存储配置信息
-   - `std::unique_ptr`：智能指针，管理对象生命周期
-- **输入输出**：
-   - `std::ofstream`/`std::ifstream`：文件流操作
-   - `std::stringstream`：字符串流处理
-- **随机数生成**：
-   - `std::random_device`：真随机数生成器
-   - `std::mt19937`：梅森旋转算法
-   - `std::uniform_int_distribution`：均匀分布
-
-### 2. 时间处理
-- `std::chrono`：高精度时间库
-   - `steady_clock`：稳定时钟
-   - `duration_cast`：时间单位转换
-   - `sleep_for`：线程休眠
-
-### 3. 系统设计模式
-- **面向对象设计**：
-   - 封装：每个类封装特定功能
-   - 单一职责原则：每个类只负责一个功能
-- **生产者-消费者模式**：
-   - 售票窗口作为生产者
-   - 顾客作为消费者
-- **观察者模式**：
-   - 票务系统状态变化通知所有窗口
-
-### 4. 高级特性
-- Lambda表达式：简化线程函数定义
-- 移动语义：`std::move`优化资源转移
-- RAII原则：资源获取即初始化
-
-## 二、设计原理详解
-
-#### (3) 售票窗口 (TicketWindow)
-
-- **关键技术**：
-  ```cpp
-  void start() {
-      workerThread = std::thread( {
-          while (running) {
-              int numTickets = randomNum();
-              if (ticketSystem.sellTicket(numTickets, name)) {
-                  // 成功售票
-              }
-          }
-      });
-  }
-  ```
 
 #### (4) 顾客系统 (Customer)
-- **设计原理**：
-   - 异步购票：每个顾客在独立线程购票
-   - 随机需求：模拟不同顾客的购票需求
-   - 超时处理：购票失败处理机制
-- **关键技术**：
-  ```cpp
-  void buyTickets(int num) {
-      purchaseThread = std::thread( {
-          if (ticketSystem.sellTicket(num, name)) {
-              // 购票成功
-          } else {
-              // 购票失败
-          }
-      });
-  }
-  ```
+
+
 
 ### 3. 并发控制设计
 
