@@ -43,45 +43,6 @@
 
 ## 二、设计原理详解
 
-### 1. 系统架构设计
-
-```
-+---------------------+
-|      ConfigManager   | <--- 配置文件
-+----------+----------+
-           |
-+----------v----------+
-|       Logger        | <--- 日志记录
-+----------+----------+
-           |
-+----------v----------+
-|    TicketSystem      | <--- 核心票务管理
-+----------+----------+
-           |
-+----------v----------+       +---------------------+
-|    TicketWindow     | <---> |      Customer       |
-+---------------------+       +---------------------+
-```
-
-### 2. 核心组件设计原理
-
-#### (2) 票务系统核心 (TicketSystem)
-
-- **关键技术**：
-  ```cpp
-  bool sellTicket(int num, const std::string& windowName) {
-      std::unique_lock<std::mutex> lock(ticketMutex);
-      // 等待直到有足够票数
-      cv.wait(lock, [this, num] { 
-          return remainingTickets >= num; 
-      });
-      
-      // 售票操作
-      remainingTickets -= num;
-      cv.notify_all(); // 通知其他等待线程
-  }
-  ```
-
 #### (3) 售票窗口 (TicketWindow)
 - **设计原理**：
    - 独立线程：每个窗口运行在独立线程
