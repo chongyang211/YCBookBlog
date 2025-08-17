@@ -66,10 +66,7 @@
 ### 2. 核心组件设计原理
 
 #### (2) 票务系统核心 (TicketSystem)
-- **设计原理**：
-   - 线程安全售票：使用互斥锁和条件变量
-   - 票数管理：原子操作保证剩余票数一致性
-   - 通知机制：条件变量通知等待线程
+
 - **关键技术**：
   ```cpp
   bool sellTicket(int num, const std::string& windowName) {
