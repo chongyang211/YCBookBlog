@@ -6,6 +6,7 @@
 
 1. [01.核心功能基础]()
 2. [02.并发与多线程]()
+3. [03.文件与IO系统]()
 
 
 ## 01.核心功能基础
@@ -40,7 +41,11 @@
 - 2.4.2 并行映射：
 - 2.5.1 互斥锁QMutex：`QMutex` 用于保护共享资源，防止多个线程同时访问。
 - 2.5.2 QReadWriteLock：`QReadWriteLock` 允许多个线程同时读取共享资源，但写操作是独占的。
+- 2.5.3 QSemaphore：`QSemaphore` 用于控制对共享资源的访问数量。
+- 2.5.4 QWaitCondition：`QWaitCondition` 用于线程间的条件等待和唤醒。
+- 2.5.5 QAtomic：
 
+## 03.文件与IO系统
 
 
 
