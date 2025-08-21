@@ -56,6 +56,220 @@
 
 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
+
+
+
+
+以下是它们的详细使用方法：
+
+---
+
+### **1. QProcess：启动和控制外部进程**
+`QProcess` 用于启动外部进程，并与进程进行交互（如读取输出、发送输入、等待进程结束等）。
+
+#### **（1）启动进程**
+```cpp
+#include <QProcess>
+#include <QDebug>
+
+int main()
+{
+    QProcess process;
+    process.start("ls", QStringList() << "-l" << "/"); // 启动 ls -l / 命令
+
+    if (process.waitForStarted()) {
+        qDebug() << "Process started.";
+    } else {
+        qDebug() << "Failed to start process:" << process.errorString();
+        return 1;
+    }
+
+    // 等待进程结束
+    if (process.waitForFinished()) {
+        qDebug() << "Process finished.";
+        QByteArray output = process.readAllStandardOutput(); // 读取标准输出
+        qDebug() << "Output:" << output;
+    } else {
+        qDebug() << "Process failed:" << process.errorString();
+    }
+
+    return 0;
+}
+```
+
+#### **（2）异步读取输出**
+```cpp
+#include <QProcess>
+#include <QDebug>
+
+int main()
+{
+    QProcess process;
+    QObject::connect(&process, &QProcess::readyReadStandardOutput, [&]() {
+        QByteArray output = process.readAllStandardOutput();
+        qDebug() << "Output:" << output;
+    });
+
+    process.start("ping", QStringList() << "google.com");
+
+    if (process.waitForStarted()) {
+        qDebug() << "Process started.";
+    } else {
+        qDebug() << "Failed to start process:" << process.errorString();
+        return 1;
+    }
+
+    // 等待进程结束
+    process.waitForFinished();
+    qDebug() << "Process finished.";
+
+    return 0;
+}
+```
+
+#### **（3）发送输入到进程**
+```cpp
+#include <QProcess>
+#include <QDebug>
+
+int main()
+{
+    QProcess process;
+    process.start("grep", QStringList() << "hello");
+
+    if (process.waitForStarted()) {
+        qDebug() << "Process started.";
+        process.write("hello world\n"); // 发送输入
+        process.closeWriteChannel(); // 关闭输入通道
+    } else {
+        qDebug() << "Failed to start process:" << process.errorString();
+        return 1;
+    }
+
+    // 等待进程结束
+    if (process.waitForFinished()) {
+        qDebug() << "Process finished.";
+        QByteArray output = process.readAllStandardOutput();
+        qDebug() << "Output:" << output;
+    } else {
+        qDebug() << "Process failed:" << process.errorString();
+    }
+
+    return 0;
+}
+```
+
+#### **（4）获取进程状态**
+```cpp
+#include <QProcess>
+#include <QDebug>
+
+int main()
+{
+    QProcess process;
+    process.start("sleep", QStringList() << "5");
+
+    while (process.state() == QProcess::Running) {
+        qDebug() << "Process is running...";
+        QThread::sleep(1);
+    }
+
+    qDebug() << "Process finished with exit code:" << process.exitCode();
+
+    return 0;
+}
+```
+
+---
+
+### **2. QProcessEnvironment：进程环境变量**
+`QProcessEnvironment` 用于管理进程的环境变量。
+
+#### **（1）设置环境变量**
+```cpp
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QDebug>
+
+int main()
+{
+    QProcess process;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    // 添加或修改环境变量
+    env.insert("MY_VAR", "Hello, Qt!");
+
+    // 设置进程的环境变量
+    process.setProcessEnvironment(env);
+
+    // 启动进程
+    process.start("printenv", QStringList() << "MY_VAR");
+
+    if (process.waitForFinished()) {
+        QByteArray output = process.readAllStandardOutput();
+        qDebug() << "Output:" << output;
+    } else {
+        qDebug() << "Process failed:" << process.errorString();
+    }
+
+    return 0;
+}
+```
+
+#### **（2）获取系统环境变量**
+```cpp
+#include <QProcessEnvironment>
+#include <QDebug>
+
+int main()
+{
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    // 获取 PATH 环境变量
+    QString path = env.value("PATH");
+    qDebug() << "PATH:" << path;
+
+    return 0;
+}
+```
+
+#### **（3）清空环境变量**
+```cpp
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QDebug>
+
+int main()
+{
+    QProcess process;
+    QProcessEnvironment env;
+
+    // 设置空的环境变量
+    process.setProcessEnvironment(env);
+
+    // 启动进程
+    process.start("printenv");
+
+    if (process.waitForFinished()) {
+        QByteArray output = process.readAllStandardOutput();
+        qDebug() << "Output:" << output;
+    } else {
+        qDebug() << "Process failed:" << process.errorString();
+    }
+
+    return 0;
+}
+```
+
+---
+
+### **总结**
+- **`QProcess`**：用于启动和控制外部进程，支持同步和异步操作。
+- **`QProcessEnvironment`**：用于管理进程的环境变量，支持添加、修改和删除环境变量。
+
+这些工具可以方便地与外部进程交互，并控制进程的运行环境。如果还有其他问题，请随时告诉我！
+
+
 `QProcess` 是 Qt 中用于启动和控制外部进程的类。它允许你运行系统命令、与其他程序交互，并获取其输出和错误信息。`QProcess` 是跨平台的，适用于 Windows、macOS 和 Linux 等操作系统。以下是 `QProcess` 的详细介绍和用法：
 
 ---
