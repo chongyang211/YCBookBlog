@@ -64,13 +64,8 @@
 
 
 
-#### **（4）获取进程状态**
-
-
----
-
 ### **2. QProcessEnvironment：进程环境变量**
-`QProcessEnvironment` 用于管理进程的环境变量。
+
 
 #### **（1）设置环境变量**
 ```cpp
