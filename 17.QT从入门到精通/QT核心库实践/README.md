@@ -65,25 +65,7 @@
 
 
 #### **（4）获取进程状态**
-```cpp
-#include <QProcess>
-#include <QDebug>
 
-int main()
-{
-    QProcess process;
-    process.start("sleep", QStringList() << "5");
-
-    while (process.state() == QProcess::Running) {
-        qDebug() << "Process is running...";
-        QThread::sleep(1);
-    }
-
-    qDebug() << "Process finished with exit code:" << process.exitCode();
-
-    return 0;
-}
-```
 
 ---
 
