@@ -62,37 +62,7 @@
 
 
 
-#### **（3）发送输入到进程**
-```cpp
-#include <QProcess>
-#include <QDebug>
 
-int main()
-{
-    QProcess process;
-    process.start("grep", QStringList() << "hello");
-
-    if (process.waitForStarted()) {
-        qDebug() << "Process started.";
-        process.write("hello world\n"); // 发送输入
-        process.closeWriteChannel(); // 关闭输入通道
-    } else {
-        qDebug() << "Failed to start process:" << process.errorString();
-        return 1;
-    }
-
-    // 等待进程结束
-    if (process.waitForFinished()) {
-        qDebug() << "Process finished.";
-        QByteArray output = process.readAllStandardOutput();
-        qDebug() << "Output:" << output;
-    } else {
-        qDebug() << "Process failed:" << process.errorString();
-    }
-
-    return 0;
-}
-```
 
 #### **（4）获取进程状态**
 ```cpp
