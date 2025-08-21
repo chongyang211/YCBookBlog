@@ -69,32 +69,7 @@
 #### **（2）获取系统环境变量**
 
 #### **（3）清空环境变量**
-```cpp
-#include <QProcess>
-#include <QProcessEnvironment>
-#include <QDebug>
 
-int main()
-{
-    QProcess process;
-    QProcessEnvironment env;
-
-    // 设置空的环境变量
-    process.setProcessEnvironment(env);
-
-    // 启动进程
-    process.start("printenv");
-
-    if (process.waitForFinished()) {
-        QByteArray output = process.readAllStandardOutput();
-        qDebug() << "Output:" << output;
-    } else {
-        qDebug() << "Process failed:" << process.errorString();
-    }
-
-    return 0;
-}
-```
 
 ---
 
