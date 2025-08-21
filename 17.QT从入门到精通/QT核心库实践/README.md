@@ -64,39 +64,7 @@
 
 
 
-### **2. QProcessEnvironment：进程环境变量**
 
-
-#### **（1）设置环境变量**
-```cpp
-#include <QProcess>
-#include <QProcessEnvironment>
-#include <QDebug>
-
-int main()
-{
-    QProcess process;
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-
-    // 添加或修改环境变量
-    env.insert("MY_VAR", "Hello, Qt!");
-
-    // 设置进程的环境变量
-    process.setProcessEnvironment(env);
-
-    // 启动进程
-    process.start("printenv", QStringList() << "MY_VAR");
-
-    if (process.waitForFinished()) {
-        QByteArray output = process.readAllStandardOutput();
-        qDebug() << "Output:" << output;
-    } else {
-        qDebug() << "Process failed:" << process.errorString();
-    }
-
-    return 0;
-}
-```
 
 #### **（2）获取系统环境变量**
 ```cpp
