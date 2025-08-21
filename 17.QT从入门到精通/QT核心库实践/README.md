@@ -60,42 +60,8 @@
 
 
 
-以下是它们的详细使用方法：
 
----
 
-### **1. QProcess：启动和控制外部进程**
-`QProcess` 用于启动外部进程，并与进程进行交互（如读取输出、发送输入、等待进程结束等）。
-
-#### **（1）启动进程**
-```cpp
-#include <QProcess>
-#include <QDebug>
-
-int main()
-{
-    QProcess process;
-    process.start("ls", QStringList() << "-l" << "/"); // 启动 ls -l / 命令
-
-    if (process.waitForStarted()) {
-        qDebug() << "Process started.";
-    } else {
-        qDebug() << "Failed to start process:" << process.errorString();
-        return 1;
-    }
-
-    // 等待进程结束
-    if (process.waitForFinished()) {
-        qDebug() << "Process finished.";
-        QByteArray output = process.readAllStandardOutput(); // 读取标准输出
-        qDebug() << "Output:" << output;
-    } else {
-        qDebug() << "Process failed:" << process.errorString();
-    }
-
-    return 0;
-}
-```
 
 #### **（2）异步读取输出**
 ```cpp
