@@ -62,37 +62,6 @@
 
 
 
-
-#### **（2）异步读取输出**
-```cpp
-#include <QProcess>
-#include <QDebug>
-
-int main()
-{
-    QProcess process;
-    QObject::connect(&process, &QProcess::readyReadStandardOutput, [&]() {
-        QByteArray output = process.readAllStandardOutput();
-        qDebug() << "Output:" << output;
-    });
-
-    process.start("ping", QStringList() << "google.com");
-
-    if (process.waitForStarted()) {
-        qDebug() << "Process started.";
-    } else {
-        qDebug() << "Failed to start process:" << process.errorString();
-        return 1;
-    }
-
-    // 等待进程结束
-    process.waitForFinished();
-    qDebug() << "Process finished.";
-
-    return 0;
-}
-```
-
 #### **（3）发送输入到进程**
 ```cpp
 #include <QProcess>
