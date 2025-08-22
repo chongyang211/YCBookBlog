@@ -63,87 +63,10 @@
 
 
 
-
-### **3. 异步处理**
-
-#### **3.1 使用信号与槽**
-
-
-```cpp
-#include <QCoreApplication>
-#include <QProcess>
-#include <QDebug>
-
-class ProcessHandler : public QObject
-{
-    Q_OBJECT
-
-public:
-    ProcessHandler() {
-        connect(&process, &QProcess::readyReadStandardOutput, this, &ProcessHandler::readOutput);
-        connect(&process, QOverload<QProcess::ProcessError>::of(&QProcess::errorOccurred), this, &ProcessHandler::handleError);
-        process.start("ping", QStringList() << "google.com");
-    }
-
-private slots:
-    void readOutput() {
-        qDebug() << "Output:" << process.readAllStandardOutput();
-    }
-
-    void handleError(QProcess::ProcessError error) {
-        qDebug() << "Error occurred:" << error;
-    }
-
-private:
-    QProcess process;
-};
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication app(argc, argv);
-
-    ProcessHandler handler;
-
-    return app.exec();
-}
-```
-
-#### **3.2 常用信号**
-
----
-
-### **4. 进程控制**
-
-#### **4.1 终止进程**
-使用 `kill()` 或 `terminate()` 终止进程。
-
-```cpp
-QProcess process;
-process.start("sleep", QStringList() << "10");
-process.waitForStarted();
-
-process.kill(); // 强制终止
-// process.terminate(); // 尝试优雅终止
-```
-
-#### **4.2 检查进程状态**
-使用 `state()` 检查进程的当前状态。
-
-```cpp
-QProcess process;
-process.start("sleep", QStringList() << "5");
-
-if (process.state() == QProcess::Running) {
-    qDebug() << "Process is running";
-}
-```
-
----
-
 ### **5. 环境变量**
 
 #### **5.1 设置环境变量**
-使用 `setProcessEnvironment()` 设置进程的环境变量。
+
 
 ```cpp
 QProcess process;
