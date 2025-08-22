@@ -63,57 +63,9 @@
 
 
 
-### **5. 环境变量**
-
-#### **5.1 设置环境变量**
-
-
-```cpp
-QProcess process;
-QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-env.insert("MY_VAR", "Hello, Qt!");
-process.setProcessEnvironment(env);
-
-process.start("printenv", QStringList() << "MY_VAR");
-process.waitForFinished();
-qDebug() << "Output:" << process.readAllStandardOutput();
-```
-
----
-
-### **6. 输入输出重定向**
-
-#### **6.1 重定向输入**
-使用 `write()` 向进程的标准输入写入数据。
-
-```cpp
-QProcess process;
-process.start("grep", QStringList() << "Qt");
-process.write("Hello, Qt!\nThis is a test.\n");
-process.closeWriteChannel(); // 关闭输入通道
-process.waitForFinished();
-qDebug() << "Output:" << process.readAllStandardOutput();
-```
-
-#### **6.2 重定向输出**
-可以将输出重定向到文件。
-
-```cpp
-QProcess process;
-process.setStandardOutputFile("output.txt");
-process.start("ls", QStringList() << "-l");
-process.waitForFinished();
-```
-
 ---
 
 ### **7. 总结**
-- **启动进程**：使用 `start()` 启动外部进程。
-- **获取输出**：使用 `readAllStandardOutput()` 和 `readAllStandardError()` 获取进程输出。
-- **异步处理**：通过信号与槽机制处理进程的输出和状态。
-- **进程控制**：使用 `kill()` 或 `terminate()` 终止进程。
-- **环境变量**：使用 `setProcessEnvironment()` 设置环境变量。
-- **输入输出重定向**：使用 `write()` 和 `setStandardOutputFile()` 重定向输入输出。
 
 `QProcess` 是 Qt 中处理外部进程的强大工具，适用于各种系统命令和程序交互场景。如果还有其他问题，请随时提问！
 
