@@ -66,42 +66,6 @@
 
 
 
-#### **1.1 启动外部进程**
-
-
-```cpp
-#include <QCoreApplication>
-#include <QProcess>
-#include <QDebug>
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication app(argc, argv);
-
-    QProcess process;
-    process.start("ls", QStringList() << "-l" << "/"); // 在 Linux/macOS 下列出根目录
-
-    if (!process.waitForStarted()) {
-        qDebug() << "Failed to start process!";
-        return 1;
-    }
-
-    process.waitForFinished(); // 等待进程结束
-    qDebug() << "Output:" << process.readAllStandardOutput();
-
-    return app.exec();
-}
-```
-
-#### **1.2 启动带参数的命令**
-可以通过 `QStringList` 传递命令行参数。
-
-```cpp
-QProcess process;
-process.start("echo", QStringList() << "Hello, Qt!");
-process.waitForFinished();
-qDebug() << "Output:" << process.readAllStandardOutput();
-```
 
 ---
 
