@@ -72,7 +72,7 @@
 ### **2. 获取进程输出**
 
 #### **2.1 标准输出**
-使用 `readAllStandardOutput()` 读取进程的标准输出。
+
 
 ```cpp
 QProcess process;
@@ -83,15 +83,7 @@ qDebug() << "Output:" << output;
 ```
 
 #### **2.2 标准错误**
-使用 `readAllStandardError()` 读取进程的标准错误。
 
-```cpp
-QProcess process;
-process.start("invalid_command");
-process.waitForFinished();
-QString error = process.readAllStandardError();
-qDebug() << "Error:" << error;
-```
 
 ---
 
