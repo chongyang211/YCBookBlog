@@ -64,33 +64,10 @@
 
 
 
-
-
-
----
-
-### **2. 获取进程输出**
-
-#### **2.1 标准输出**
-
-
-```cpp
-QProcess process;
-process.start("ls", QStringList() << "-l");
-process.waitForFinished();
-QString output = process.readAllStandardOutput();
-qDebug() << "Output:" << output;
-```
-
-#### **2.2 标准错误**
-
-
----
-
 ### **3. 异步处理**
 
 #### **3.1 使用信号与槽**
-`QProcess` 提供了多个信号，可以用于异步处理进程的输出和状态。
+
 
 ```cpp
 #include <QCoreApplication>
@@ -132,10 +109,6 @@ int main(int argc, char *argv[])
 ```
 
 #### **3.2 常用信号**
-- **`readyReadStandardOutput()`**：当有标准输出时触发。
-- **`readyReadStandardError()`**：当有标准错误时触发。
-- **`finished(int exitCode, QProcess::ExitStatus status)`**：当进程结束时触发。
-- **`errorOccurred(QProcess::ProcessError error)`**：当进程发生错误时触发。
 
 ---
 
