@@ -62,13 +62,6 @@
 
 
 
-
----
-
-### **7. 总结**
-
-`QProcess` 是 Qt 中处理外部进程的强大工具，适用于各种系统命令和程序交互场景。如果还有其他问题，请随时提问！
-
 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
@@ -80,124 +73,13 @@
 
 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
----
-
-
----
-
-
----
-
-### **6. 容器类（Containers）**
-- **功能**：提供高效的数据结构。
-- **核心类**：
-   - `QList`、`QVector`：动态数组。
-   - `QMap`、`QHash`：键值对容器。
-   - `QSet`：集合。
-   - `QStack`、`QQueue`：栈和队列。
-
----
-
-
----
-
-### **8. 字符串处理（String Handling）**
-- **功能**：提供高效的字符串操作。
-- **核心类**：
-   - `QString`：Unicode 字符串。
-   - `QStringList`：字符串列表。
-   - `QRegularExpression`：正则表达式。
-
----
-
-### **9. 日期与时间（Date & Time）**
-- **功能**：处理日期、时间、定时器。
-- **核心类**：
-   - `QDate`、`QTime`、`QDateTime`：日期和时间。
-   - `QTimer`：定时器。
-
----
-
-### **10. 资源管理（Resource Management）**
-- **功能**：将资源（如图片、文件）嵌入到应用程序中。
-- **核心类**：
-   - `QResource`：访问嵌入资源。
-   - `qrc` 文件：定义资源文件。
-
----
-
-### **11. 插件系统（Plugin System）**
-- **功能**：支持动态加载插件。
-- **核心类**：
-   - `QPluginLoader`：加载插件。
-   - `QGenericPlugin`、`QGenericPluginFactory`：插件基类。
-
----
-
-### **12. 国际化（Internationalization）**
-- **功能**：支持多语言翻译。
-- **核心类**：
-   - `QTranslator`：加载翻译文件。
-   - `QCoreApplication::translate()`：翻译字符串。
-
----
-
-### **13. 日志与调试（Logging & Debugging）**
-- **功能**：提供日志输出和调试工具。
-- **核心类**：
-   - `qDebug()`、`qInfo()`、`qWarning()`、`qCritical()`：日志输出。
-   - `QDebug`：自定义调试输出。
-
----
-
-### **14. 工具类（Utility Classes）**
-- **功能**：提供常用的工具函数和类。
-- **核心类**：
-   - `QPoint`、`QSize`、`QRect`：几何类。
-   - `QVariant`：通用数据类型。
-   - `QSettings`：应用程序配置管理。
-
----
-
-### **15. 网络支持（Network Support）**
-- **功能**：提供基本的网络功能。
-- **核心类**：
-   - `QUrl`：URL 处理。
-   - `QHostAddress`：IP 地址处理。
-   - `QNetworkRequest`、`QNetworkReply`：网络请求和响应。
-
----
-
-### **总结**
-Qt Core 是 Qt 框架的核心模块，提供了丰富的功能和技术栈，涵盖了对象模型、事件处理、线程、容器、文件 I/O、字符串处理、国际化等多个方面。它是构建 Qt 应用程序的基础，几乎所有 Qt 模块都依赖于 Qt Core。如果你有更多关于 Qt Core 或其他 Qt 模块的问题，欢迎随时提问！
-
 
 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
-`QMetaObject::invokeMethod` 是 Qt 框架中的一个方法，用于在运行时动态调用对象的成员函数。它通常用于跨线程调用、延迟执行或调用信号和槽。以下是关于 `QMetaObject::invokeMethod` 的详细说明和用法。
 
----
+以下是关于 `QMetaObject::invokeMethod` 的详细说明和用法。
 
-### **函数原型**
-```cpp
-static bool QMetaObject::invokeMethod(
-    QObject *object,                // 目标对象
-    const char *method,             // 方法名
-    Qt::ConnectionType type,        // 连接类型
-    QGenericReturnArgument ret,     // 返回值
-    QGenericArgument val0 = QGenericArgument(), // 参数 1
-    QGenericArgument val1 = QGenericArgument(), // 参数 2
-    QGenericArgument val2 = QGenericArgument(), // 参数 3
-    QGenericArgument val3 = QGenericArgument(), // 参数 4
-    QGenericArgument val4 = QGenericArgument(), // 参数 5
-    QGenericArgument val5 = QGenericArgument(), // 参数 6
-    QGenericArgument val6 = QGenericArgument(), // 参数 7
-    QGenericArgument val7 = QGenericArgument(), // 参数 8
-    QGenericArgument val8 = QGenericArgument(), // 参数 9
-    QGenericArgument val9 = QGenericArgument()  // 参数 10
-);
-```
 
 ---
 
