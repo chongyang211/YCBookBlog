@@ -229,3 +229,182 @@
 
 
 
+---
+
+### **1. 基本语法**
+以下是条件编译的基本语法：
+
+```cpp
+#if condition
+    // 如果 condition 为真，编译此部分代码
+#elif another_condition
+    // 如果 another_condition 为真，编译此部分代码
+#else
+    // 如果前面的条件都不为真，编译此部分代码
+#endif
+```
+
+---
+
+### **2. 常用指令**
+| 指令          | 描述                                                                 |
+|---------------|----------------------------------------------------------------------|
+| `#if`         | 如果条件为真，编译后续代码。                                         |
+| `#ifdef`      | 如果宏已定义，编译后续代码。                                         |
+| `#ifndef`     | 如果宏未定义，编译后续代码。                                         |
+| `#else`       | 如果前面的条件为假，编译后续代码。                                   |
+| `#elif`       | 如果前面的条件为假且当前条件为真，编译后续代码。                     |
+| `#endif`      | 结束条件编译块。                                                     |
+| `#define`     | 定义宏。                                                             |
+| `#undef`      | 取消定义宏。                                                         |
+
+---
+
+### **3. 示例代码**
+
+#### **示例 1：根据平台选择代码**
+```cpp
+#include <iostream>
+
+int main() {
+#ifdef _WIN32
+    std::cout << "Running on Windows" << std::endl;
+#elif __linux__
+    std::cout << "Running on Linux" << std::endl;
+#elif __APPLE__
+    std::cout << "Running on macOS" << std::endl;
+#else
+    std::cout << "Unknown platform" << std::endl;
+#endif
+
+    return 0;
+}
+```
+
+#### **示例 2：启用或禁用调试信息**
+```cpp
+#include <iostream>
+#define DEBUG
+
+int main() {
+#ifdef DEBUG
+    std::cout << "Debug mode is enabled" << std::endl;
+#else
+    std::cout << "Debug mode is disabled" << std::endl;
+#endif
+
+    return 0;
+}
+```
+
+#### **示例 3：根据 C++ 版本选择代码**
+```cpp
+#include <iostream>
+
+int main() {
+#if __cplusplus >= 201703L
+    std::cout << "Using C++17 or later" << std::endl;
+#elif __cplusplus >= 201402L
+    std::cout << "Using C++14" << std::endl;
+#elif __cplusplus >= 201103L
+    std::cout << "Using C++11" << std::endl;
+#else
+    std::cout << "Using pre-C++11" << std::endl;
+#endif
+
+    return 0;
+}
+```
+
+#### **示例 4：检查宏是否定义**
+```cpp
+#include <iostream>
+#define FEATURE_X
+
+int main() {
+#ifdef FEATURE_X
+    std::cout << "Feature X is enabled" << std::endl;
+#else
+    std::cout << "Feature X is disabled" << std::endl;
+#endif
+
+    return 0;
+}
+```
+
+#### **示例 5：取消定义宏**
+```cpp
+#include <iostream>
+#define FEATURE_Y
+
+int main() {
+#ifdef FEATURE_Y
+    std::cout << "Feature Y is enabled" << std::endl;
+#else
+    std::cout << "Feature Y is disabled" << std::endl;
+#endif
+
+#undef FEATURE_Y
+
+#ifdef FEATURE_Y
+    std::cout << "Feature Y is still enabled" << std::endl;
+#else
+    std::cout << "Feature Y is now disabled" << std::endl;
+#endif
+
+    return 0;
+}
+```
+
+---
+
+### **4. 条件编译的常见用途**
+1. **跨平台开发**：
+    - 根据不同的操作系统（如 Windows、Linux、macOS）选择不同的代码路径。
+   ```cpp
+   #ifdef _WIN32
+       // Windows-specific code
+   #elif __linux__
+       // Linux-specific code
+   #endif
+   ```
+
+2. **调试与发布模式**：
+    - 在调试模式下启用额外的日志或断言，在发布模式下禁用。
+   ```cpp
+   #ifdef DEBUG
+       std::cout << "Debug info: " << some_value << std::endl;
+   #endif
+   ```
+
+3. **功能开关**：
+    - 根据宏定义启用或禁用某些功能。
+   ```cpp
+   #ifdef FEATURE_X
+       enableFeatureX();
+   #endif
+   ```
+
+4. **兼容性处理**：
+    - 根据编译器或 C++ 版本选择不同的实现。
+   ```cpp
+   #if __cplusplus >= 201703L
+       // C++17 or later code
+   #else
+       // Pre-C++17 code
+   #endif
+   ```
+
+---
+
+### **5. 注意事项**
+1. **宏的作用域**：
+    - 宏的作用域从定义处开始，直到被 `#undef` 取消定义或文件结束。
+2. **条件编译的嵌套**：
+    - 条件编译可以嵌套使用，但需要确保每个 `#if` 都有对应的 `#endif`。
+3. **避免滥用**：
+    - 过度使用条件编译可能导致代码难以维护。尽量将平台相关代码封装到独立的模块中。
+
+---
+
+通过合理使用条件编译，可以编写更加灵活和可移植的 C++ 代码。
