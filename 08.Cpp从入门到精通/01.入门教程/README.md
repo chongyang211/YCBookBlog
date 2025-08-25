@@ -230,68 +230,7 @@
 
 
 
----
 
-
-
----
-
-### **2. 警告指令 `#warning`**
-`#warning` 指令用于在编译时生成一个警告消息，但不会终止编译过程。通常用于提醒开发者注意某些问题或潜在风险。
-
-#### **语法**
-```cpp
-#warning "警告消息"
-```
-
-#### **示例**
-```cpp
-#ifdef DEBUG
-#warning "Debug mode is enabled. Performance may be affected."
-#endif
-```
-
-- 如果 `DEBUG` 宏已定义，编译时会输出警告消息：
-  ```
-  warning: Debug mode is enabled. Performance may be affected.
-  ```
-
----
-
-### **3. 使用场景**
-
-#### **场景 1：检查编译器版本**
-```cpp
-#if __cplusplus < 201703L
-#error "This code requires C++17 or later."
-#endif
-```
-
-#### **场景 2：检查平台支持**
-```cpp
-#ifndef _WIN32
-#error "This code is only supported on Windows."
-#endif
-```
-
-#### **场景 3：提醒未完成的功能**
-```cpp
-#warning "This feature is under development and may not work as expected."
-```
-
-#### **场景 4：检查宏定义**
-```cpp
-#ifndef MY_CUSTOM_MACRO
-#error "MY_CUSTOM_MACRO must be defined."
-#endif
-```
-
-#### **场景 5：提醒弃用的 API**
-```cpp
-#warning "This API is deprecated. Use the new API instead."
-```
-
----
 
 ### **4. 注意事项**
 1. **`#error` 和 `#warning` 的区别**：
