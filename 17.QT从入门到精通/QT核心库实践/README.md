@@ -64,96 +64,37 @@
 
 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-
-
-————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-
-
-————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-
-
----
-
-
----
-
-### **示例代码**
-以下是一个完整的示例，展示如何使用 `QMetaObject::invokeMethod`。
-
 ```cpp
-#include <QCoreApplication>
-#include <QObject>
-#include <QDebug>
-#include <QThread>
-
-class Worker : public QObject {
-    Q_OBJECT
-public slots:
-    void doWork(int value) {
-        qDebug() << "Working with value:" << value;
-    }
-
-    int calculate(int a, int b) {
-        return a + b;
-    }
+在qml的function函数中，如何引用下面qt代码中的SoundType枚举
+class AudioManager : public QObject {
+ public:
+  enum SoundType {
+    TTS1010,           //1010对应的tts，后期即使换内容，这个枚举不变
+    TTS1011,            //1011对应的tts，Palm closer
+    TTS1012,            //1012对应的tts，Palm further
+    TTS1013,            //1013对应的tts，Align palm 
+    TTS1014,            //1014对应的tts，Align palm with camera center
+    TTS1200,            //1200对应的tts，Show palm 
+    TTS1201,            //1201对应的tts，Face palm towards camera
+    TTS1206,            //1206对应的tts，Keep palm still
+    TTS1215,            //1215对应的tts，Please clean lens
+    TTS1216,            //1216对应的tts，Ensure palm is clean 
+    Failure            // 通用失败音效
+  };
+  Q_ENUM(SoundType)
 };
-
-int main(int argc, char *argv[]) {
-    QCoreApplication app(argc, argv);
-
-    Worker worker;
-    QThread thread;
-    worker.moveToThread(&thread);
-    thread.start();
-
-    // 异步调用 doWork
-    QMetaObject::invokeMethod(
-        &worker,
-        "doWork",
-        Qt::QueuedConnection,
-        Q_ARG(int, 42)
-    );
-
-    // 同步调用 calculate
-    int result;
-    QMetaObject::invokeMethod(
-        &worker,
-        "calculate",
-        Qt::DirectConnection,
-        Q_RETURN_ARG(int, result),
-        Q_ARG(int, 10),
-        Q_ARG(int, 20)
-    );
-    qDebug() << "Calculate result:" << result;
-
-    thread.quit();
-    thread.wait();
-    return app.exec();
-}
-
-#include "main.moc"
 ```
 
----
 
-### **注意事项**
-1. **方法名必须匹配**：`method` 参数必须与目标对象的方法名完全一致，包括大小写。
-2. **参数类型必须匹配**：使用 `Q_ARG` 传递参数时，参数类型必须与方法签名一致。
-3. **线程安全**：跨线程调用时，确保目标对象是线程安全的。
-4. **返回值**：如果方法有返回值，必须使用 `Q_RETURN_ARG` 宏。
+————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
----
 
-### **总结**
-`QMetaObject::invokeMethod` 是 Qt 中非常强大的工具，适用于跨线程调用、延迟执行和动态调用方法。通过合理使用，可以简化代码并提高程序的灵活性和可维护性。如果有更多问题，欢迎随时提问！
 
+
+————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
