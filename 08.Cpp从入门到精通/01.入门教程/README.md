@@ -225,3 +225,116 @@
 - 
 
 
+            以下是一些常见的 C++ 预定义宏及其用途：
+
+---
+
+### **1. 标准预定义宏**
+这些宏由 C++ 标准定义，所有符合标准的编译器都支持。
+
+| 宏名                  | 描述                                                                 |
+|-----------------------|----------------------------------------------------------------------|
+| `__cplusplus`         | 表示 C++ 标准的版本。例如，C++11 为 `201103L`，C++14 为 `201402L`，C++17 为 `201703L`，C++20 为 `202002L`。 |
+| `__DATE__`            | 当前源文件的编译日期，格式为 `"Mmm dd yyyy"`（例如 `"Oct 15 2023"`）。 |
+| `__TIME__`            | 当前源文件的编译时间，格式为 `"hh:mm:ss"`（例如 `"14:30:45"`）。      |
+| `__FILE__`            | 当前源文件的文件名（包括路径）。                                      |
+| `__LINE__`            | 当前代码行的行号。                                                   |
+| `__func__`            | 当前函数的名称（C++11 引入）。                                       |
+| `__STDC__`            | 如果编译器符合 C 标准，则定义为 `1`，否则未定义。                    |
+| `__STDC_HOSTED__`     | 如果编译器是托管环境（支持完整的标准库），则定义为 `1`，否则为 `0`。  |
+| `__STDC_VERSION__`    | 表示 C 标准的版本（仅适用于 C 代码）。                               |
+
+---
+
+### **2. 编译器相关宏**
+这些宏由特定的编译器定义，用于标识编译器及其版本。
+
+| 宏名                  | 描述                                                                 |
+|-----------------------|----------------------------------------------------------------------|
+| `__GNUC__`            | GCC 编译器的主版本号。                                               |
+| `__GNUC_MINOR__`      | GCC 编译器的次版本号。                                               |
+| `__GNUC_PATCHLEVEL__` | GCC 编译器的补丁版本号。                                             |
+| `__clang__`           | 如果使用 Clang 编译器，则定义为 `1`。                                |
+| `__clang_major__`     | Clang 编译器的主版本号。                                             |
+| `__clang_minor__`     | Clang 编译器的次版本号。                                             |
+| `__clang_patchlevel__`| Clang 编译器的补丁版本号。                                           |
+| `_MSC_VER`            | Microsoft Visual C++ 编译器的版本号。例如，MSVC 2019 为 `1920`。     |
+| `_MSC_FULL_VER`       | Microsoft Visual C++ 编译器的完整版本号。                            |
+| `__INTEL_COMPILER`    | Intel 编译器的版本号。                                               |
+
+---
+
+### **3. 操作系统相关宏**
+这些宏用于标识目标操作系统。
+
+| 宏名                  | 描述                                                                 |
+|-----------------------|----------------------------------------------------------------------|
+| `_WIN32`              | 如果目标系统是 Windows（32 位或 64 位），则定义为 `1`。              |
+| `_WIN64`              | 如果目标系统是 64 位 Windows，则定义为 `1`。                        |
+| `__linux__`           | 如果目标系统是 Linux，则定义为 `1`。                                |
+| `__APPLE__`           | 如果目标系统是 macOS 或 iOS，则定义为 `1`。                         |
+| `__unix__`            | 如果目标系统是 Unix 或类 Unix 系统，则定义为 `1`。                  |
+| `__ANDROID__`         | 如果目标系统是 Android，则定义为 `1`。                              |
+| `__CYGWIN__`          | 如果目标系统是 Cygwin（Windows 上的 Unix 环境），则定义为 `1`。     |
+
+---
+
+### **4. 标准库相关宏**
+这些宏用于标识使用的标准库及其版本。
+
+| 宏名                  | 描述                                                                 |
+|-----------------------|----------------------------------------------------------------------|
+| `__GLIBC__`           | GNU C 库（glibc）的主版本号。                                        |
+| `__GLIBC_MINOR__`     | GNU C 库（glibc）的次版本号。                                        |
+| `_LIBCPP_VERSION`     | LLVM 的 libc++ 标准库版本号。                                        |
+| `_MSVC_STL_VERSION`   | Microsoft Visual C++ 标准库版本号。                                  |
+
+---
+
+### **5. 其他常用宏**
+| 宏名                  | 描述                                                                 |
+|-----------------------|----------------------------------------------------------------------|
+| `NDEBUG`              | 如果定义了 `NDEBUG`，则禁用 `assert` 宏。通常用于发布模式。          |
+| `__has_include`       | 检查是否包含某个头文件（C++17 引入）。                              |
+| `__has_cpp_attribute` | 检查是否支持某个 C++ 属性（C++20 引入）。                           |
+
+---
+
+### **6. 示例代码**
+以下是一个使用预定义宏的示例：
+
+```cpp
+#include <iostream>
+
+int main() {
+    std::cout << "C++ version: " << __cplusplus << std::endl;
+    std::cout << "Compilation date: " << __DATE__ << std::endl;
+    std::cout << "Compilation time: " << __TIME__ << std::endl;
+    std::cout << "Current file: " << __FILE__ << std::endl;
+    std::cout << "Current line: " << __LINE__ << std::endl;
+    std::cout << "Current function: " << __func__ << std::endl;
+
+#ifdef __GNUC__
+    std::cout << "GCC version: " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
+#endif
+
+#ifdef _MSC_VER
+    std::cout << "MSVC version: " << _MSC_VER << std::endl;
+#endif
+
+#ifdef __linux__
+    std::cout << "Running on Linux" << std::endl;
+#elif _WIN32
+    std::cout << "Running on Windows" << std::endl;
+#elif __APPLE__
+    std::cout << "Running on macOS" << std::endl;
+#endif
+
+    return 0;
+}
+```
+
+---
+
+### **7. 总结**
+预定义宏是 C++ 中非常有用的工具，可以帮助开发者编写跨平台代码、调试程序或根据编译环境调整行为。通过合理使用这些宏，可以提高代码的可移植性和健壮性。
