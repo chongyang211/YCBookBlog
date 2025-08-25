@@ -144,6 +144,7 @@
 - 19.3.1 理解头文件保护：`#ifndef`, `#define`, 和 `#endif` 是 C++ 中的预处理指令，用于防止头文件被多次包含。
 - 19.3.2 头文件保护作用：多个源文件都包含了同一个头文件，可能导致重复定义错误，头文件保护主要作用是避免这种情况。
 - 19.3.4 不用头文件保护：1.重复定义错误；2.头文件被编译多次会增加编译时间；3.重复定义错误可能导致难以调试。
+- 19.4 预定义宏：
 
 
 
@@ -227,52 +228,3 @@
 
 
 
-
----
-
-### **4. 标准库相关宏**
-
----
-
-### **5. 其他常用宏**
-
----
-
-### **6. 示例代码**
-以下是一个使用预定义宏的示例：
-
-```cpp
-#include <iostream>
-
-int main() {
-    std::cout << "C++ version: " << __cplusplus << std::endl;
-    std::cout << "Compilation date: " << __DATE__ << std::endl;
-    std::cout << "Compilation time: " << __TIME__ << std::endl;
-    std::cout << "Current file: " << __FILE__ << std::endl;
-    std::cout << "Current line: " << __LINE__ << std::endl;
-    std::cout << "Current function: " << __func__ << std::endl;
-
-#ifdef __GNUC__
-    std::cout << "GCC version: " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
-#endif
-
-#ifdef _MSC_VER
-    std::cout << "MSVC version: " << _MSC_VER << std::endl;
-#endif
-
-#ifdef __linux__
-    std::cout << "Running on Linux" << std::endl;
-#elif _WIN32
-    std::cout << "Running on Windows" << std::endl;
-#elif __APPLE__
-    std::cout << "Running on macOS" << std::endl;
-#endif
-
-    return 0;
-}
-```
-
----
-
-### **7. 总结**
-预定义宏是 C++ 中非常有用的工具，可以帮助开发者编写跨平台代码、调试程序或根据编译环境调整行为。通过合理使用这些宏，可以提高代码的可移植性和健壮性。
