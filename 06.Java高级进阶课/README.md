@@ -38,6 +38,7 @@
 - 2.1 什么是装箱：自动将基本数据类型转化为包装类，比如`Integer yc = 5`；
 - 2.2 什么是拆箱：自动将包装类转化为基本数据类型，比如`Integer i = new Integer(100);`然后`int j=i`，相当于将i这个包装类转化为int类型
 - 2.3 装箱和拆箱实现：反编译之后可以看到装箱是调用`valueOf(int)`实现，而拆箱是通过自动调用的是Integer的`intValue`方法实现。
+- 2.4 
 
 
 
@@ -99,7 +100,127 @@
 
 
 
+                        Java 中的 **装箱（Boxing）** 和 **拆箱（Unboxing）** 是基本数据类型（如 `int`、`double` 等）与其对应的包装类（如 `Integer`、`Double` 等）之间的转换机制。这是 Java 面试中常见的考点，以下是相关知识点和常见问题：
 
+---
+
+### **1. 基本概念**
+#### **(1) 装箱（Boxing）**
+将基本数据类型转换为对应的包装类对象。
+
+
+#### **(2) 拆箱（Unboxing）**
+将包装类对象转换为对应的基本数据类型。
+```java
+Integer d = 20;
+int e = d.intValue(); // 显式拆箱
+int f = d;            // 自动拆箱（Java 5+）
+```
+
+---
+
+### **2. 常见考点**
+#### **(1) 自动装箱和拆箱的原理**
+- 自动装箱：编译器调用 `valueOf()` 方法。
+- 自动拆箱：编译器调用 `xxxValue()` 方法（如 `intValue()`、`doubleValue()` 等）。
+
+#### **(2) 包装类的缓存机制**
+Java 对部分包装类（如 `Integer`、`Long` 等）在特定范围内（通常是 `-128` 到 `127`）进行了缓存，以提高性能。
+```java
+Integer a = 127;
+Integer b = 127;
+System.out.println(a == b); // true，因为使用了缓存
+
+Integer c = 128;
+Integer d = 128;
+System.out.println(c == d); // false，超出缓存范围
+```
+
+#### **(3) `==` 和 `equals()` 的区别**
+- `==`：比较对象的引用（地址）是否相同。
+- `equals()`：比较对象的值是否相同。
+```java
+Integer a = 100;
+Integer b = 100;
+System.out.println(a == b);       // true，缓存机制
+System.out.println(a.equals(b));  // true，值相同
+
+Integer c = 200;
+Integer d = 200;
+System.out.println(c == d);       // false，超出缓存范围
+System.out.println(c.equals(d));  // true，值相同
+```
+
+#### **(4) 空指针异常（NullPointerException）**
+在拆箱时，如果包装类对象为 `null`，会抛出 `NullPointerException`。
+```java
+Integer a = null;
+int b = a; // 抛出 NullPointerException
+```
+
+#### **(5) 性能问题**
+频繁的装箱和拆箱操作会影响性能，尤其是在循环中。
+```java
+// 性能较差
+Integer sum = 0;
+for (int i = 0; i < 10000; i++) {
+    sum += i; // 频繁拆箱和装箱
+}
+
+// 性能较好
+int sum = 0;
+for (int i = 0; i < 10000; i++) {
+    sum += i; // 直接操作基本数据类型
+}
+```
+
+#### **(6) 包装类的不可变性**
+包装类是不可变的，一旦创建，其值不能被修改。
+```java
+Integer a = 10;
+a = 20; // 实际上是创建了一个新的 Integer 对象，而不是修改原来的对象
+```
+
+---
+
+### **3. 常见面试题**
+#### **(1) 以下代码的输出是什么？**
+```java
+Integer a = 100;
+Integer b = 100;
+Integer c = 200;
+Integer d = 200;
+System.out.println(a == b); // true
+System.out.println(c == d); // false
+```
+
+#### **(2) 以下代码会抛出什么异常？**
+```java
+Integer a = null;
+int b = a; // NullPointerException
+```
+
+#### **(3) 如何避免频繁装箱和拆箱的性能问题？**
+- 尽量使用基本数据类型。
+- 在集合类中，使用专门的基本数据类型集合（如 `IntStream`、`LongStream` 等）。
+
+#### **(4) `Integer.valueOf()` 和 `new Integer()` 的区别？**
+- `Integer.valueOf()`：会使用缓存机制，返回缓存对象（如果存在）。
+- `new Integer()`：每次都会创建一个新的对象。
+```java
+Integer a = Integer.valueOf(100); // 可能返回缓存对象
+Integer b = new Integer(100);     // 每次创建新对象
+```
+
+---
+
+### **4. 总结**
+- 装箱和拆箱是基本数据类型与包装类之间的转换机制。
+- 自动装箱和拆箱是 Java 5 引入的语法糖。
+- 注意缓存机制、`==` 和 `equals()` 的区别、空指针异常等问题。
+- 在性能敏感的场景中，尽量避免频繁的装箱和拆箱操作。
+
+掌握这些知识点，可以轻松应对 Java 面试中的装箱和拆箱问题！如果有其他问题，请随时提问。
 
 
 
