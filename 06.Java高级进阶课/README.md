@@ -38,7 +38,7 @@
 - 2.1 什么是装箱：自动将基本数据类型转化为包装类，比如`Integer yc = 5`；
 - 2.2 什么是拆箱：自动将包装类转化为基本数据类型，比如`Integer i = new Integer(100);`然后`int j=i`，相当于将i这个包装类转化为int类型
 - 2.3 装箱和拆箱实现：反编译之后可以看到装箱是调用`valueOf(int)`实现，而拆箱是通过自动调用的是Integer的`intValue`方法实现。
-- 2.4 
+- 2.4 编程注意点：频繁的装箱和拆箱操作会影响性能，尤其是在循环中。
 
 
 
@@ -97,49 +97,6 @@
 
 
 
-
-
-
----
-
-### **3. 常见面试题**
-#### **(1) 以下代码的输出是什么？**
-```java
-Integer a = 100;
-Integer b = 100;
-Integer c = 200;
-Integer d = 200;
-System.out.println(a == b); // true
-System.out.println(c == d); // false
-```
-
-#### **(2) 以下代码会抛出什么异常？**
-```java
-Integer a = null;
-int b = a; // NullPointerException
-```
-
-#### **(3) 如何避免频繁装箱和拆箱的性能问题？**
-- 尽量使用基本数据类型。
-- 在集合类中，使用专门的基本数据类型集合（如 `IntStream`、`LongStream` 等）。
-
-#### **(4) `Integer.valueOf()` 和 `new Integer()` 的区别？**
-- `Integer.valueOf()`：会使用缓存机制，返回缓存对象（如果存在）。
-- `new Integer()`：每次都会创建一个新的对象。
-```java
-Integer a = Integer.valueOf(100); // 可能返回缓存对象
-Integer b = new Integer(100);     // 每次创建新对象
-```
-
----
-
-### **4. 总结**
-- 装箱和拆箱是基本数据类型与包装类之间的转换机制。
-- 自动装箱和拆箱是 Java 5 引入的语法糖。
-- 注意缓存机制、`==` 和 `equals()` 的区别、空指针异常等问题。
-- 在性能敏感的场景中，尽量避免频繁的装箱和拆箱操作。
-
-掌握这些知识点，可以轻松应对 Java 面试中的装箱和拆箱问题！如果有其他问题，请随时提问。
 
 
 
