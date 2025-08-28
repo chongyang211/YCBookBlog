@@ -111,11 +111,6 @@
 
 #### **(2) 拆箱（Unboxing）**
 将包装类对象转换为对应的基本数据类型。
-```java
-Integer d = 20;
-int e = d.intValue(); // 显式拆箱
-int f = d;            // 自动拆箱（Java 5+）
-```
 
 ---
 
