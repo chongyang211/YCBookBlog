@@ -1,6 +1,73 @@
 # 专栏笔记总结大全
 
 
+## PropertyAnimation 的高级用法
+
+### 1. 自定义缓动函数
+
+```qml
+PropertyAnimation {
+    // ...
+    easing.type: Easing.Bezier
+    easing.bezierCurve: [0.42, 0, 0.58, 1] // 使用贝塞尔曲线
+}
+```
+
+### 2. 链式动画
+
+```qml
+SequentialAnimation {
+    PropertyAnimation { ... }
+    ParallelAnimation {
+        PropertyAnimation { ... }
+        PropertyAnimation { ... }
+    }
+    PauseAnimation { duration: 300 }
+    ScriptAction { script: console.log("动画完成") }
+}
+```
+
+### 3. 状态驱动动画
+
+```qml
+Item {
+    states: [
+        State {
+            name: "active"
+            PropertyChanges { target: page; x: 0 }
+        },
+        State {
+            name: "inactive"
+            PropertyChanges { target: page; x: width }
+        }
+    ]
+    
+    transitions: [
+        Transition {
+            from: "*"
+            to: "active"
+            PropertyAnimation { properties: "x"; duration: 300 }
+        }
+    ]
+}
+```
+
+### 4. 物理动画效果
+
+```qml
+// 添加物理弹跳效果
+SpringAnimation {
+    id: bounceAnimation
+    target: page
+    property: "scale"
+    spring: 0.2
+    damping: 0.04
+    epsilon: 0.25
+    velocity: 100
+    to: 1.0
+}
+```
+
 
 
 ## 01.Qml基础概念
@@ -82,6 +149,8 @@
 - 3.8 异步编程技巧：异步编程是处理耗时操作（如网络请求、文件 I/O、复杂计算等）的关键技术，以避免阻塞 UI 线程，保持界面的流畅性。
 - 3.8.1 WorkerScript：
 - 3.8.2 Timer定时器：是一种用于执行周期性任务或延迟任务的组件。它可以在指定的时间间隔内触发事件，非常适合用于动画、轮播、数据刷新等场景。
+
+## 08.多媒体应用
 
 
 
