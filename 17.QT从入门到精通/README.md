@@ -8,7 +8,7 @@ python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-14T09_31_37_2
 
 
 python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-15T02_30_23_165Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
-python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-25T09_35_23_938Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
+python decrypt_log.py /Users/yangchong/Downloads/log/yt_palm.4.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
 
 git tag v1.2.0-std-2025081517-m3
 
@@ -17,10 +17,16 @@ git push origin --delete v1.2.0-std-20250815-m3
 git tag -d v1.2.0-std-2025081516-m3
 git push origin --delete v1.2.0-std-2025081516-m3
 
+git tag v1.2.3-std-2025090320-m3
+git tag v1.2.2-std-2025090322-m3
+
+git tag -d v1.2.3-std-2025090320-m3
+
 git tag -l "v1.2.0-std*"
 
 git tag v1.2.3-std-2025090111-m4
 git tag v1.2.3-std-2025090212-m4
+git tag v1.2.3-std-2025090311-m4
 
 updateEngine --image_url=/data/system_ota/update.img --misc=update --savepath=/data/system_ota/update.img --version_url=/data/system_ota/version
 
