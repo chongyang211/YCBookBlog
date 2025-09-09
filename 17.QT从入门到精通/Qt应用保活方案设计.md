@@ -9,7 +9,8 @@
   - 2.2 如何重启应用
   - 2.3 崩溃重启方案
   - 2.4 监控UI卡顿
-  - 2.5 方案讨论结论
+  - 2.5 M3盛思达方案
+  - 2.6 方案讨论结论
 - 03.保活监听重启方案
   - 3.1 整体架构设计
   - 3.2 守护进程设计
@@ -27,7 +28,9 @@
   - 4.6 卡顿诊断判断
   - 4.7 可视化界面
   - 4.8 设计卡顿阀值重启
-
+- 05.自测模拟操作
+  - 5.1 如何模拟崩溃
+  - 5.2 如何模拟卡顿
 
 
 ## 01.应用调研背景
@@ -49,6 +52,7 @@
 3. 关于应用崩溃监听重启，厂商这边是做成了一个系统应用还是如何实现，是否需要一些系统级别权限？
 4. UI卡顿，并不是崩溃，这种情况如何监控。注意卡顿中要去除掉帧卡，比如1s绘制60帧，这个一直卡顿如何监控？
 5. 你们做守护进程（后台进程，类似Android中Service服务）拉起应用，这个如果是一个独立应用，该放在那里，如何保证两个进程都在运行状态？
+6. M4 上对应用的保活是怎么实现的。Linux 自带的 watchdog，M3 上有什么不会重启系统，这里是重启应用，还是重启系统？
 
 ## 02.方案探索和思考
 
@@ -154,10 +158,138 @@ Linux中什么是Ui卡顿
 
 针对 Qt 应用 UI 卡顿甚至无响应的问题
 
-1. 方案1：提供一个完整的“监控与重启”解决方案。这个方案的核心思想是 “进程分离” 和 “心跳检测”。需要开发一个监控应用。
-2. 方案2：在原进程应用中，记录每个事件的处理时间，如果是持续卡顿超过阀值【比如卡顿20分钟】，则调用重启应用。
+在原进程应用中，记录每个事件的处理时间，如果是持续卡顿超过阀值【比如卡顿20分钟】，则调用重启应用。
 
-### 2.5 方案讨论结论
+### 2.5 M3盛思达方案
+
+M3盛思达方案：首先实现app启动+保活
+
+1. 第一步：将本文件放到项目中；
+2. 第二步：开机运行脚本启动app。在刷掌应用启动`main`的时候，调用`writeWatchdogScript`这个函数即可
+3. 第三步：如果推出刷掌应用。然后`QCoreApplication::exit(0)`;
+4. 注意事项：有哪些？保证脚本写入OK
+
+盛思达提供的脚本文件，代码如下所示：
+
+```cpp
+#include <QString>
+#include <QFile>
+#include <QProcess>
+#include <QCryptographicHash>
+#include <QTextStream>
+#include <QDebug>
+#include <QFileInfo>
+#include <QDir>
+
+//app看门狗
+#define WATCHDOG_PALMAPP_SH     "/data/palmApp/watchdog_palmapp.sh"
+
+class ScriptUtils {
+public:
+    static bool writeWatchdogScript(bool overrideWrite) {
+        QFileInfo fi(WATCHDOG_PALMAPP_SH);
+        if (!overrideWrite && (fi.exists() && fi.isFile())) {
+            LOG_WARN("Watchdog script already exists: " + QString::fromStdString(WATCHDOG_PALMAPP_SH) + ", Skip.");
+            return true;
+        }
+
+        QFile scriptFile(WATCHDOG_PALMAPP_SH);
+        QFileInfo fileInfo(scriptFile);
+        QDir dir(fileInfo.absolutePath());
+        if (!dir.exists()) {
+            if (!dir.mkpath(".")) {
+                LOG_ERROR("Failed to create directory: " + dir.absolutePath());
+                return false;
+            }
+        }
+
+        if (!scriptFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            LOG_ERROR("Failed to create watchdog script: " + QString::fromStdString(WATCHDOG_PALMAPP_SH));
+            return false;
+        }
+
+        QTextStream out(&scriptFile);
+
+        out << "#!/bin/sh\n";
+        out << "LOGFILE=/data/palmLog/palmapp_watchdog.log\n";
+        out << "RESTART_DELAY=5\n";
+        out << "echo $$ > /tmp/palmapp_watchdog.pid\n";
+
+        out << "# 清理日志，保留最近7天的记录\n";
+        out << "mkdir -p /data/palmLog\n";
+        out << "if [ -f \"$LOGFILE\" ]; then\n";
+        out << "    TMPLOG=\"/tmp/tmp_watchdog_log\"\n";
+        out << "    TODAY=$(date +%s)\n";
+        out << "    SEVEN_DAYS_AGO=$((TODAY - 7 * 24 * 60 * 60))\n";
+        out << "    echo \"$(date) [watchdog] Filter log older than: $(date -d @$SEVEN_DAYS_AGO)\"\n";
+        out << "    awk -v limit=$SEVEN_DAYS_AGO '\n";
+        out << "    {\n";
+        out << "        timestamp = $1 \" \" $2 \" \" $3 \" \" $4 \" \" $6;\n";
+        out << "        cmd = \"date -d \\\"\" timestamp \"\\\" +%s\";\n";
+        out << "        cmd | getline t;\n";
+        out << "        close(cmd);\n";
+        out << "        if (t >= limit) print $0;\n";
+        out << "    }' \"$LOGFILE\" > \"$TMPLOG\" && mv \"$TMPLOG\" \"$LOGFILE\";\n";
+        out << "fi\n";
+
+        out << "while true; do\n";
+        out << "    # 60S连续启动3次，判定为异常\n";
+        out << "    NOW=$(date +%s)\n";
+        out << "    echo $NOW >> /tmp/palmapp_restart_times.log\n";
+        out << "    tail -n 3 /tmp/palmapp_restart_times.log > /tmp/tmp_restart.log\n";
+        out << "    mv /tmp/tmp_restart.log /tmp/palmapp_restart_times.log\n";
+        out << "    FIRST=$(head -n 1 /tmp/palmapp_restart_times.log)\n";
+        out << "    [ -z \"$FIRST\" ] && FIRST=$NOW\n";
+        out << "    DIFF=$((NOW - FIRST))\n";
+
+        out << "    if [ $(wc -l < /tmp/palmapp_restart_times.log) -ge 3 ] && [ $DIFF -lt 60 ]; then\n";
+        out << "        echo \"$(date) [watchdog] Rebooted 3 times within 60 seconds. Abnormal restart detected.\" >> \"$LOGFILE\"\n";
+        out << "    fi\n";
+
+        out << "    echo \"$(date) [watchdog] Launching palmapp...\" >> \"$LOGFILE\"\n";
+        out << "    if [ -x /data/palmApp/bin/palmapp ]; then\n";
+        out << "        export LD_LIBRARY_PATH=/data/palmApp/lib/angstrong\n";
+        out << "        /data/palmApp/bin/palmapp -platform linuxfb\n";
+        out << "    elif [ -x /usr/bin/palmapp ]; then\n";
+        out << "        export LD_LIBRARY_PATH=/usr/lib/angstrong\n";
+        out << "        /usr/bin/palmapp -platform linuxfb\n";
+        out << "    else\n";
+        out << "        echo \"$(date) [watchdog] palmapp not found\" >> \"$LOGFILE\"\n";
+        out << "    fi\n";
+
+        out << "    EXIT_CODE=$?\n";
+        out << "    echo \"$(date) [watchdog] palmapp exited with code $EXIT_CODE\" >> \"$LOGFILE\"\n";
+
+        out << "    if [ \"$EXIT_CODE\" -eq 0 ]; then\n";
+        out << "        echo \"$(date) [watchdog] Normal exit detected, stopping watchdog.\" >> \"$LOGFILE\"\n";
+        out << "        break\n";
+        out << "    fi\n";
+
+        out << "    echo \"$(date) [watchdog] Abnormal exit detected, restarting in $RESTART_DELAY seconds...\" >> \"$LOGFILE\"\n";
+        out << "    sleep $RESTART_DELAY\n";
+        out << "done\n";
+
+        out << "rm -f /tmp/palmapp_watchdog.pid\n";
+        out << "rm -f /tmp/palmapp_restart_times.log\n";
+
+        scriptFile.close();
+
+        //设置脚本可执行
+        if (QProcess::execute("chmod +x " + QString::fromStdString(WATCHDOG_PALMAPP_SH)) != 0) {
+            LOG_ERROR("Failed to set executable permission on watchdog script");
+            return false;
+        }
+
+        LOG_INFO("Watchdog script created successfully");
+        return true;
+    }
+```
+
+这段代码通过生成一个看门狗脚本，实现了对 palmapp 应用程序的监控和管理。它的核心功能包括应用程序的自动重启、日志记录和异常检测，能够有效提高系统的稳定性和可靠性。通过 QFile 和 QTextStream，代码实现了脚本内容的动态生成和写入，并通过 QProcess 设置脚本的可执行权限。
+
+
+
+### 2.6 方案讨论结论
 
 
 ## 03.保活监听重启方案
@@ -293,5 +425,64 @@ Linux中什么是Ui卡顿
 
 
 ### 4.8 设计卡顿阀值重启
+
+
+## 05.自测模拟操作
+### 5.1 如何模拟崩溃
+
+1. 方法 1：调用 Qt.quit() 或 Qt.exit()。通过调用 Qt.quit() 或 Qt.exit() 可以强制退出应用程序，模拟崩溃的效果。**测试结果：**
+
+```qml
+Button {
+    onClicked: {
+        console.log("Simulating crash...");
+        Qt.quit(); // 或者使用 Qt.exit(1);
+    }
+}
+```
+
+2. 触发未捕获的异常。在 QML 中触发未捕获的异常，可以模拟应用程序崩溃的效果。**测试结果：**
+
+```qml
+Button {
+    onClicked: {
+        var obj = null;
+        obj.invalidMethod(); // 触发未捕获的异常
+    }
+}
+```
+
+3. 方法 3：调用 C++ 代码触发崩溃。在 QML 中调用 C++ 代码，通过 C++ 触发崩溃（如访问空指针、除以零等）。**测试结果：**
+
+```cpp
+Q_INVOKABLE void simulateCrash() {
+    qDebug() << "Simulating crash in C++...";
+    int* ptr = nullptr;
+    *ptr = 42; // 访问空指针，触发崩溃
+}
+```
+
+4. 方法 4：调用系统函数触发崩溃。在 QML 中调用 C++ 代码，通过系统函数（如 abort() 或 exit()）触发崩溃。**测试结果：**
+
+```cpp
+Q_INVOKABLE void simulateCrash() {
+    qDebug() << "Simulating crash in C++...";
+    std::abort(); // 或者使用 std::exit(1);
+}
+```
+
+5. 方法 5：模拟内存泄漏。通过不断分配内存而不释放，模拟内存泄漏导致应用程序崩溃。
+
+```cpp
+Q_INVOKABLE void simulateCrash() {
+    std::vector<int*> ptrs;
+    while (true) {
+        ptrs.push_back(new int[1000000]); // 不断分配内存
+    }
+}
+```
+
+
+### 5.2 如何模拟卡顿
 
 
