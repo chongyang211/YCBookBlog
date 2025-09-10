@@ -311,12 +311,6 @@ Configuring serial port
 1. 
 2. 
 3. **资源清理**
-   ```cpp
-   void clearTasks();
-   void clearPreTasks();
-   void clearAllTasks();
-   ```
-   提供任务队列清理机制，防止无效任务堆积
 
 ## 四、设计模式应用
 
