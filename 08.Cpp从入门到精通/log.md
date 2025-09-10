@@ -288,22 +288,7 @@ Configuring serial port
 ### 1. 生产者-消费者模式
 
 ### 2. RAII资源管理
-- **构造函数**：创建线程资源
-- **析构函数**：自动释放资源（通知停止+等待线程结束）
-- **异常安全**：确保异常情况下资源正确释放
 
-```cpp
-ThreadPool::~ThreadPool() {
-    {
-        std::unique_lock<std::mutex> lock(mQueueMutex);
-        mStop = true;
-    }
-    mCv.notify_all();
-    for (auto &thread : mThreads) {
-        if (thread.joinable()) thread.join();
-    }
-}
-```
 
 ### 3. 双队列优先级设计
 - **普通任务队列(mTasks)**：先进先出(FIFO)
