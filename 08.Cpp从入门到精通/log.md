@@ -282,3 +282,157 @@ Configuring serial port
 [2025-08-27 16:22:51.624] [info] [2672-2614]|[shengsida/yt_ssd_device_hal_impl.cpp:587]feed watchdog succeed 1
 [2025-08-27 16:23:07.625] [info] [2672-2614]|[shengsida/yt_ssd_device_hal_impl.cpp:587]feed watchdog succeed 1
 
+
+## 二、核心设计思想
+
+### 1. 生产者-消费者模式
+
+### 2. RAII资源管理
+- **构造函数**：创建线程资源
+- **析构函数**：自动释放资源（通知停止+等待线程结束）
+- **异常安全**：确保异常情况下资源正确释放
+
+```cpp
+ThreadPool::~ThreadPool() {
+    {
+        std::unique_lock<std::mutex> lock(mQueueMutex);
+        mStop = true;
+    }
+    mCv.notify_all();
+    for (auto &thread : mThreads) {
+        if (thread.joinable()) thread.join();
+    }
+}
+```
+
+### 3. 双队列优先级设计
+- **普通任务队列(mTasks)**：先进先出(FIFO)
+- **优先任务队列(mPrepTasks)**：高优先级任务
+- **调度策略**：
+  ```cpp
+  if (!mPrepTasks.empty()) { // 优先处理优先任务
+      preTask = std::move(mPrepTasks.front());
+      mPrepTasks.pop();
+  }
+  if (!mTasks.empty()) { // 再处理普通任务
+      task = std::move(mTasks.front());
+      mTasks.pop();
+  }
+  ```
+
+这种设计实现了：
+- 紧急任务优先处理
+- 普通任务公平调度
+- 避免优先级反转问题
+
+### 4. 基于future/promise的任务结果处理
+```cpp
+template<class F, class... Args>
+auto submit(F&& f, Args&&... args) 
+    -> std::future<typename std::result_of<F(Args...)>::type> 
+{
+    // 封装任务为packaged_task
+    auto task = std::make_shared<std::packaged_task<return_type()>>(
+        std::bind(std::forward<F>(f), std::forward<Args>(args)...)
+    );
+    
+    // 获取future用于获取结果
+    std::future<return_type> res = task->get_future();
+    
+    // 任务加入队列
+    mTasks.emplace({ (*task)(); });
+    
+    return res;
+}
+```
+这种设计实现了：
+- 异步任务结果获取
+- 任务执行状态跟踪
+- 异常传播机制
+
+### 5. 线程生命周期管理
+- **线程创建**：构造函数中创建固定数量线程
+- **线程回收**：析构函数中安全停止并回收
+- **线程状态回调**：
+  ```cpp
+  void onThreadAttached() { /* 线程启动时调用 */ }
+  void onThreadDetached() { /* 线程退出时调用 */ }
+  ```
+提供扩展点用于线程本地存储(TLS)初始化等操作
+
+### 6. 锁粒度优化
+- **细粒度锁**：只在访问共享数据时加锁
+- **锁外执行**：任务执行在锁范围外进行
+```cpp
+{
+    std::unique_lock<std::mutex> lock(mQueueMutex);
+    // 访问共享数据
+} // 锁自动释放
+
+// 在锁外执行任务
+if (task) task(); 
+```
+这种设计：
+- 减少锁竞争
+- 提高并发性能
+- 避免任务执行阻塞其他线程
+
+### 7. 可扩展性设计
+- **模板化任务提交**：支持任意类型任务
+- **生命周期回调**：提供扩展点
+- **状态查询接口**：便于监控
+  ```cpp
+  size_t getTaskCount() const;
+  size_t getPriorityTaskCount() const;
+  size_t getThreadCount() const;
+  ```
+
+## 三、性能与安全平衡
+
+1. **唤醒策略优化**
+    - `notify_one()`：提交单个任务时只唤醒一个线程
+    - `notify_all()`：停止时唤醒所有线程
+
+2. **异常安全**
+    - 任务提交时检查线程池状态
+   ```cpp
+   if (mStop) {
+       throw std::runtime_error("线程池已停止，无法提交任务");
+   }
+   ```
+    - 任务执行异常通过future传播
+
+3. **资源清理**
+   ```cpp
+   void clearTasks();
+   void clearPreTasks();
+   void clearAllTasks();
+   ```
+   提供任务队列清理机制，防止无效任务堆积
+
+## 四、设计模式应用
+
+1. **对象池模式**：线程作为可重用资源
+2. **工厂方法**：通过submit方法创建任务
+3. **观察者模式**：条件变量实现线程等待/通知
+4. **策略模式**：任务调度策略可扩展
+
+## 五、潜在改进方向
+
+1. **动态线程调整**：根据负载自动增减线程
+2. **任务窃取机制**：提高负载均衡
+3. **任务超时处理**：防止任务长时间阻塞
+4. **任务依赖管理**：支持有依赖关系的任务
+5. **线程本地队列**：减少锁竞争
+
+## 总结
+
+这个线程池设计体现了现代C++并发编程的最佳实践：
+- **资源管理**：RAII原则确保资源安全
+- **任务调度**：双队列实现优先级控制
+- **线程安全**：精心设计的锁策略
+- **接口设计**：简洁易用的任务提交接口
+- **扩展性**：提供必要的扩展点
+
+通过这种设计，线程池能够在保证线程安全的前提下，高效地处理大量并发任务，同时提供灵活的任务优先级控制和结果获取机制，是构建高性能并发系统的核心组件。
+
