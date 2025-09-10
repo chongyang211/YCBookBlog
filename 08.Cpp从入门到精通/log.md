@@ -309,15 +309,7 @@ Configuring serial port
 ## 三、性能与安全平衡
 
 1. 
-2. **异常安全**
-    - 任务提交时检查线程池状态
-   ```cpp
-   if (mStop) {
-       throw std::runtime_error("线程池已停止，无法提交任务");
-   }
-   ```
-    - 任务执行异常通过future传播
-
+2. 
 3. **资源清理**
    ```cpp
    void clearTasks();
