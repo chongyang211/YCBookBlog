@@ -304,14 +304,7 @@ Configuring serial port
 ### 6. 锁粒度优化
 
 ### 7. 可扩展性设计
-- **模板化任务提交**：支持任意类型任务
-- **生命周期回调**：提供扩展点
-- **状态查询接口**：便于监控
-  ```cpp
-  size_t getTaskCount() const;
-  size_t getPriorityTaskCount() const;
-  size_t getThreadCount() const;
-  ```
+
 
 ## 三、性能与安全平衡
 
