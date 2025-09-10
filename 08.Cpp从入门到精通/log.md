@@ -293,35 +293,9 @@ Configuring serial port
 ### 3. 双队列优先级设计
 
 
-这种设计实现了：
-- 紧急任务优先处理
-- 普通任务公平调度
-- 避免优先级反转问题
 
-### 4. 基于future/promise的任务结果处理
-```cpp
-template<class F, class... Args>
-auto submit(F&& f, Args&&... args) 
-    -> std::future<typename std::result_of<F(Args...)>::type> 
-{
-    // 封装任务为packaged_task
-    auto task = std::make_shared<std::packaged_task<return_type()>>(
-        std::bind(std::forward<F>(f), std::forward<Args>(args)...)
-    );
-    
-    // 获取future用于获取结果
-    std::future<return_type> res = task->get_future();
-    
-    // 任务加入队列
-    mTasks.emplace({ (*task)(); });
-    
-    return res;
-}
-```
-这种设计实现了：
-- 异步任务结果获取
-- 任务执行状态跟踪
-- 异常传播机制
+
+### 4. 
 
 ### 5. 线程生命周期管理
 - **线程创建**：构造函数中创建固定数量线程
