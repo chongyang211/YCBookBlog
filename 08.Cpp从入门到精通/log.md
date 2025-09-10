@@ -291,19 +291,7 @@ Configuring serial port
 
 
 ### 3. 双队列优先级设计
-- **普通任务队列(mTasks)**：先进先出(FIFO)
-- **优先任务队列(mPrepTasks)**：高优先级任务
-- **调度策略**：
-  ```cpp
-  if (!mPrepTasks.empty()) { // 优先处理优先任务
-      preTask = std::move(mPrepTasks.front());
-      mPrepTasks.pop();
-  }
-  if (!mTasks.empty()) { // 再处理普通任务
-      task = std::move(mTasks.front());
-      mTasks.pop();
-  }
-  ```
+
 
 这种设计实现了：
 - 紧急任务优先处理
