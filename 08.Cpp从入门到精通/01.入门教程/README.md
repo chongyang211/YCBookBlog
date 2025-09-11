@@ -189,7 +189,7 @@
 - 12.2.4 recursive_mutex：是一种特殊的互斥锁，允许同一个线程多次加锁。递归互斥锁。
 - 12.2.5 timed_mutex：是一种支持超时加锁的互斥锁，提供了 `try_lock_for()` 和 `try_lock_until()` 方法。
 - 14.3.1 shared_mutex：
-- 14.4.1 condition_variable：
+- 14.4.1 condition_variable：条件变量用于线程间的同步，允许线程等待某个条件成立。可以和`mutex`锁结合起来使用。
 - 14.4.2 核心方法：
 - 14.4.3 condition_variable案例：
 - 14.5.1 死锁示例：死锁是指多个线程互相等待对方释放锁，导致程序无法继续执行。
