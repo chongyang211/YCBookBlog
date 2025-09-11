@@ -188,6 +188,12 @@
 - 14.2.3 unique_lock：`std::unique_lock<std::mutex> lock(mtx, std::defer_lock);`适用于需要手动控制锁、延迟加锁、锁的所有权转移或与条件变量配合使用的场景。
 - 12.2.4 recursive_mutex：是一种特殊的互斥锁，允许同一个线程多次加锁。递归互斥锁。
 - 12.2.5 timed_mutex：是一种支持超时加锁的互斥锁，提供了 `try_lock_for()` 和 `try_lock_until()` 方法。
+- 14.3.1 shared_mutex：
+- 14.4.1 condition_variable：
+- 14.4.2 核心方法：
+- 14.4.3 condition_variable案例：
+- 14.5.1 死锁示例：死锁是指多个线程互相等待对方释放锁，导致程序无法继续执行。
+- 14.5.2 避免死锁：
 
 
 
