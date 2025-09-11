@@ -1,6 +1,142 @@
 # 专栏笔记总结大全
 
 
+```
+
+void CrashHandler::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+    // 处理 Qt 致命错误
+    if (type == QtFatalMsg) {
+      // 使用 QStringBuilder 优化字符串拼接性能
+      QString crashReport;
+      QTextStream ts(&crashReport);
+      // 添加分隔线
+      ts << "\n⚡️ QT FATAL ERROR DETECTED ⚡️\n";
+      ts << "════════════════════════════════════════\n";
+      ts << "Timestamp: " << QDateTime::currentDateTime().toString(Qt::ISODate) << "\n";
+      ts << "Message: " << msg << "\n";
+      // 上下文信息（如果有）
+      if (context.file) {
+          ts << "File: " << context.file << "\n";
+      }
+      
+      if (context.line) {
+          ts << "Line: " << context.line << "\n";
+      }
+      
+      if (context.function) {
+          ts << "Function: " << context.function << "\n";
+      }
+        
+      // 添加应用程序信息
+      ts << "════════════════════════════════════════\n";
+      ts << "System Information:\n";
+      ts << "  OS: " << QSysInfo::prettyProductName() << "\n";
+      ts << "  Kernel: " << QSysInfo::kernelVersion() << "\n";
+      ts << "  Architecture: " << QSysInfo::currentCpuArchitecture() << "\n";
+      
+      // 添加系统信息   
+      ts << "════════════════════════════════════════\n";
+      ts << "Application Information:\n";
+      ts << "  Name: " << QCoreApplication::applicationName() << "\n";
+      ts << "  Version: " << QCoreApplication::applicationVersion() << "\n";
+      ts << "  PID: " << QCoreApplication::applicationPid() << "\n";
+      ts << "  Thread ID: " << QThread::currentThreadId() << "\n";
+      ts << "  Working Directory: " << QDir::currentPath() << "\n";
+      ts << "  Arguments: " << QCoreApplication::arguments().join(" ") << "\n";
+      
+      // 添加堆栈跟踪
+      ts << "════════════════════════════════════════\n";
+      ts << "Stack Trace:\n";
+      // 安全获取堆栈跟踪
+      QString stackTrace = getStackTrace();
+      if (!stackTrace.isEmpty()) {
+          ts << stackTrace;
+      } else {
+          ts << "  Failed to get stack trace\n";
+      }
+      ts << "════════════════════════════════════════\n";
+      
+      // 写入崩溃报告
+      // ​​日志记录​​：使用YT_LOGI宏记录崩溃信息，但通常致命错误应该使用更高级别的日志，比如YT_LOGFATAL。
+      // 另外，确保YT_LOGI是线程安全的，并且在崩溃时能够正常工作（比如不会因为崩溃而丢失日志）。
+      YT_LOGI("CrashQT : " << crashReport.toStdString());
+      
+      // 输出到控制台
+      std::cerr << crashReport.toStdString() << std::endl;
+      
+      // 立即终止进程
+      // 立即终止进程 - 使用更安全的终止方式
+      std::_Exit(EXIT_FAILURE);
+    } else {
+      // 使用更高效的日志处理方式
+      // 准备日志消息
+      QByteArray localMsg = msg.toLocal8Bit();
+      const char *file = context.file ? context.file : "";
+      const char *function = context.function ? context.function : "";
+      
+      // 格式化日志消息
+      QString formattedMsg = qFormatLogMessage(type, context, msg);
+      
+      // 输出到标准错误
+      fprintf(stderr, "%s (%s:%u, %s)\n",
+              formattedMsg.toLocal8Bit().constData(),
+                file, context.line, function);
+    }
+}
+
+QString CrashHandler::getStackTrace() {
+  QString stackTrace;
+  // 获取堆栈跟踪
+  void* callstack[50];
+  const int maxFrames = sizeof(callstack) / sizeof(callstack[0]);
+  int frames = backtrace(callstack, maxFrames);
+  if (frames > 0) {
+      char** symbols = backtrace_symbols(callstack, frames);
+      if (symbols) {
+          QTextStream ts(&stackTrace);
+          for (int i = 0; i < frames; ++i) {
+              // 尝试解析C++符号
+              QString symbol = symbols[i];
+              char* begin = nullptr;
+              char* end = nullptr;
+              
+              // 查找函数名开始和结束位置
+              for (char* p = symbols[i]; *p; ++p) {
+                  if (*p == '(') begin = p;
+                  else if (*p == '+' || *p == ')') end = p;
+              }
+              
+              if (begin && end && begin < end) {
+                  *begin++ = '\0';
+                  *end = '\0';
+                  
+                  int status = 0;
+                  char* demangled = abi::__cxa_demangle(begin, nullptr, nullptr, &status);
+                  
+                  if (status == 0 && demangled) {
+                      symbol = QString("%1(%2%3) [%4]")
+                                .arg(symbols[i]) // 文件名部分
+                                .arg(demangled)
+                                .arg(end) // 地址偏移部分
+                                .arg(end + strlen(end) + 1); // 地址部分
+                      free(demangled);
+                  }
+              }
+              
+              ts << "  #" << i << " " << symbol << "\n";
+          }
+          free(symbols);
+      } else {
+          stackTrace = "  Failed to get stack symbols\n";
+      }
+  } else {
+      stackTrace = "  No stack frames available\n";
+  }
+  return stackTrace;
+}
+
+```
+
 
 ————————————————————————————————————————————————————————————————————————————————————————————————————————————
 # C++与QML交互综合案例：联系人管理器
