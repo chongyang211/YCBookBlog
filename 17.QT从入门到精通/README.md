@@ -700,67 +700,8 @@ rga_api version 1.3.0_[11] (RGA is compiling with meson base: $PRODUCT_BASE)
 ### 2. 
 ## 二、Qt原生方案
 
-### 1. Qt 消息处理器
-```cpp
-#include <QDebug>
 
-void qtMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
-    if (type == QtFatalMsg) {
-        // 记录致命错误
-        qCritical() << "Fatal error:" << msg;
-        qCritical() << "File:" << context.file;
-        qCritical() << "Line:" << context.line;
-        qCritical() << "Function:" << context.function;
-        
-        // 获取堆栈信息
-        void* array[10];
-        int size = backtrace(array, 10);
-        char** symbols = backtrace_symbols(array, size);
-        for (int i = 0; i < size; i++) {
-            qCritical() << symbols[i];
-        }
-        free(symbols);
-    }
-}
-
-int main(int argc, char *argv[]) {
-    qInstallMessageHandler(qtMessageHandler);
-    QApplication app(argc, argv);
-    // ...
-}
-```
-
-**优点**：
-- 捕获 Qt 框架自身的错误
-- 可获取上下文信息
-
-**缺点**：
-- 无法捕获非 Qt 错误（如 C++ 标准库错误）
-
-### 2. QObject 错误处理
-```cpp
-class SafeObject : public QObject {
-    Q_OBJECT
-protected:
-    bool event(QEvent *event) override {
-        try {
-            return QObject::event(event);
-        } catch (const std::exception& e) {
-            qCritical() << "Exception caught:" << e.what();
-            return true;
-        }
-    }
-};
-```
-
-**优点**：
-- 对象级别的错误捕获
-- 防止异常传播
-
-**缺点**：
-- 无法捕获所有错误
-- 性能开销较大
-
+### 2. 
 ## 三、高级方案：崩溃报告库
 
 ### 1. Google Breakpad
