@@ -184,9 +184,12 @@
 
 - 14.1.1 为何需要锁：多个线程可能同时访问或修改共享资源（如全局变量、数据结构等）。可能会导致数据异常。
 - 14.2.1 mutex：互斥锁是最常用的锁类型，用于确保同一时间只有一个线程可以访问共享资源。
-- 14.2.2 lock_guard：`std::lock_guard<std::mutex> lock(mtx);`自动管理锁的生命周期，离开作用域时自动释放锁。
-- 14.2.3 unique_lock：
+- 14.2.2 lock_guard：`std::lock_guard<std::mutex> lock(mtx);`自动管理锁的生命周期，离开作用域时自动释放锁。适用简单场景！
+- 14.2.3 unique_lock：`std::unique_lock<std::mutex> lock(mtx, std::defer_lock);`适用于需要手动控制锁、延迟加锁、锁的所有权转移或与条件变量配合使用的场景。
 - 12.2.4 recursive_mutex：是一种特殊的互斥锁，允许同一个线程多次加锁。递归互斥锁。
+- 12.2.5 timed_mutex：是一种支持超时加锁的互斥锁，提供了 `try_lock_for()` 和 `try_lock_until()` 方法。
+
+
 
 ## 15.内存模型
 
