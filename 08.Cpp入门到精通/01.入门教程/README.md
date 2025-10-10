@@ -286,22 +286,6 @@
 
 
 
-2.  **显式转换（强制类型转换）**：程序员明确要求的转换。C++推荐使用新的、更安全的转换操作符。
-    *   **C风格转换**：`(type)expression`
-        ```cpp
-        int i = 10;
-        double d = (double)i; // C风格转换
-        ```
-    *   **C++风格转换**：
-        *   `static_cast`：用于良定义的、低风险的转换（如数值类型转换、基类指针到派生类指针）。
-            ```cpp
-            double d = static_cast<double>(i);
-            ```
-        *   `const_cast`：用于移除`const`或`volatile`属性。
-        *   `dynamic_cast`：主要用于安全地沿继承层次结构进行向下或交叉转换（需要多态类型）。
-        *   `reinterpret_cast`：用于低级的、依赖于实现的重新解释，非常危险（如将指针转换为整数）。
-
----
 
 ### **第六部分：`auto` 关键字 (C++11)**
 
