@@ -1,167 +1,256 @@
-Last login: Wed Oct 22 16:17:30 on ttys004
-
-The default interactive shell is now zsh.
-To update your account to use zsh, please run `chsh -s /bin/zsh`.
-For more details, please visit https://support.apple.com/kb/HT208050.
-CHONGYYANG-MB1:~ yangchong$ adb push /Users/yangchong/PalmLinuxApp-v1.4.0-std-2025101315-m3-38-g0e3dd0d8-rv1126-20251022081957-0e3dd0d8/. /oem/yt-palm/
-/Users/yangchong/PalmLinuxApp-v1.4.0-std-2025101315-m3-38-g0e3dd0d8-rv1126-2025...57-0e3dd0d8/./: 7 files pushed, 0 skipped. 2.2 MB/s (44779240 bytes in 19.029s)
-CHONGYYANG-MB1:~ yangchong$ adb shell
-[root@RV1126_RV1109:/]# /oem/yt-palm/run.sh
-/bin/bash: warning: setlocale: LC_ALL: cannot change locale (zh_CN.utf8)
-LD_LIBRARY_PATH=/oem/yt-palm/libs:
-[root@RV1126_RV1109:/]# qt.qpa.wayland: qtvirtualkeyboard currently is not supported at client-side, use QT_IM_MODULE=qtvirtualkeyboard at compositor-side.
-QStandardPaths: wrong permissions on runtime directory /var/run, 7755 instead of 7700
-[I] <MMKV.cpp:172::initialize> version v2.1.0, page size 4096, arch armeabi-v7a/NEON (hard-float)
-[I] <MMKV.cpp:229::initializeMMKV> root dir: /oem/yt-palm/preference
-[I] <MMKV.cpp:259::mmkvWithID> prepare to load mmkv.default (id 731bea0aecca1fdc1986674f2bb78e64) from rootPath /oem/yt-palm/preference
-[I] <MemoryFile.cpp:103::open> open fd[8], flag 0x7, /oem/yt-palm/preference/mmkv.default
-[I] <MemoryFile.cpp:217::mmap> mmap to address [0xa3d24000], oldPtr [(nil)], [/oem/yt-palm/preference/mmkv.default]
-[I] <MemoryFile.cpp:103::open> open fd[9], flag 0x7, /oem/yt-palm/preference/mmkv.default.crc
-[I] <MemoryFile.cpp:217::mmap> mmap to address [0xa6fc0000], oldPtr [(nil)], [/oem/yt-palm/preference/mmkv.default.crc]
-[I] <MMKV_IO.cpp:244::loadMetaInfoAndCheck> meta file [mmkv.default] has flag [0]
-[I] <MMKV_IO.cpp:84::loadFromFile> loading [mmkv.default] with 6769 actual size, file size 8192, InterProcess 0, meta info version:4
-[I] <MMKV_IO.cpp:89::loadFromFile> loading [mmkv.default] with crc 3264058662 sequence 1166 version 4
-[I] <MMKV_IO.cpp:133::loadFromFile> loaded [mmkv.default] with 29 key-values
-[2025-10-22 16:25:41.287] [info] [2378-2378]|[src/main.cpp:71]Application started with log level: 2
-[2025-10-22 16:25:41.305] [info] [2378-2378]|[register/yt_palm_register.cpp:42]switch palm register mode to: StdDeviceRegister
-[2025-10-22 16:25:41.368] [info] [2378-2378]|[xike/yt_xike_device_hal_impl.cpp:211]GetWifiState wifiState : 4
-[2025-10-22 16:25:41.381] [info] [2378-2378]|[xike/yt_xike_device_hal_impl.cpp:225]IsEthernetConnected isConnected : 0
-[2025-10-22 16:25:41.409] [info] [2378-2378]|[hal/yt_device_hal_manager.cpp:175]RefreshNetworkStatus network connected changed: 1 network connected: 1 network type: 0 wifi state: CONNECTED ethernet connected: 0
-[2025-10-22 16:25:41.409] [info] [2378-2378]|[xike/yt_xike_device_hal_impl.cpp:243]StartObserveNetworkStatus
-[2025-10-22 16:25:41.411] [info] [2378-2378]|[xike/yt_xike_device_hal_impl.cpp:269]Network status monitoring started
-[2025-10-22 16:25:41.412] [info] [2378-2378]|[update/yt_update_manager.cpp:65]Detect Xike device to config OTA mode :1
-[2025-10-22 16:25:41.412] [warning] [2378-2378]|[access/yt_access_manager.cpp:236]YtAccessManager Open door not supported
-[2025-10-22 16:25:41.412] [error] [2378-2378]|[access/yt_access_manager.cpp:22]Failed to initialize strategy
-[2025-10-22 16:25:41.412] [info] [2378-2378]|[access/yt_access_manager.cpp:24]YtAccessManager created
-[2025-10-22 16:25:41.412] [info] [2378-2378]|[app/yt_app_customize_manager.cpp:8]AppCustomizeManager constructor called
-[2025-10-22 16:25:41.413] [info] [2378-2378]|[audio/yt_audio_manager.cpp:401]Initializing audio priorities
-[2025-10-22 16:25:41.413] [info] [2378-2378]|[audio/yt_audio_manager.cpp:142]Using standard audio path: qrc:/audio/
-[2025-10-22 16:25:41.413] [info] [2378-2378]|[audio/yt_audio_manager.cpp:49]Created new instance
-[2025-10-22 16:25:41.413] [info] [2378-2378]|[audio/yt_audio_manager.cpp:70]Initializing audio manager
-[2025-10-22 16:25:41.491] [info] [2378-2378]|[preference/yt_preference_manager.cpp:210]GetPlayerVolume volume : 39
-[2025-10-22 16:25:41.492] [info] [2378-2378]|[audio/yt_audio_manager.cpp:87]Get system volume: 39
-[2025-10-22 16:25:41.492] [info] [2378-2378]|[audio/yt_audio_manager.cpp:91]Synced audio volume with system: 39
-[2025-10-22 16:25:41.492] [info] [2378-2378]|[audio/yt_audio_manager.cpp:106]Audio manager initialized successfully
-[2025-10-22 16:25:41.493] [info] [2378-2378]|[src/main.cpp:175]Detect Xike device to config app:1
-[2025-10-22 16:25:41.674] [info] [2378-2378]|[xike/yt_xike_device_hal_impl.cpp:77]GetSerialNumber sn : CK0A3KP02526000185
-[2025-10-22 16:25:41.674] [info] [2378-2378]|[xike/yt_xike_device_hal_impl.cpp:81]GetSerialNumber ota version : 110
-qrc:/qml/pages/Splash.qml:57: TypeError: Cannot call method 'info' of undefined
-[2025-10-22 16:25:41.770] [warning] [Qt-Warning] qrc:/qml/pages/Splash.qml:57: TypeError: Cannot call method 'info' of undefined (qrc:/qml/pages/Splash.qml:57)
-qrc:/qml/components/GifPlayer.qml:128: TypeError: Cannot call method 'info' of undefined
-[2025-10-22 16:25:41.771] [warning] [Qt-Warning] qrc:/qml/components/GifPlayer.qml:128: TypeError: Cannot call method 'info' of undefined (qrc:/qml/components/GifPlayer.qml:128)
-qrc:/qml/pages/Splash.qml:77: TypeError: Cannot call method 'error' of undefined
-[2025-10-22 16:25:41.774] [warning] [Qt-Warning] qrc:/qml/pages/Splash.qml:77: TypeError: Cannot call method 'error' of undefined (qrc:/qml/pages/Splash.qml:77)
-qrc:/qml/main.qml:227: TypeError: Cannot call method 'debug' of undefined
-[2025-10-22 16:25:41.849] [warning] [Qt-Warning] qrc:/qml/main.qml:227: TypeError: Cannot call method 'debug' of undefined (qrc:/qml/main.qml:227)
-qt.qpa.wayland: No shell integration named "xdg-shell" found
-[2025-10-22 16:25:41.913] [warning] [Qt-Warning] No shell integration named "xdg-shell" found
-qml: LogService singleton initialized
-qml: YTLoggerImpl可用，发送测试日志
-[2025-10-22 16:25:41.965] [info] [QML] LogService初始化成功
-qml: 已发送测试信号
-[2025-10-22 16:25:41.968] [info] [QML] Application started
-[2025-10-22 16:25:41.968] [info] [QML] Log service available: true
-[2025-10-22 16:25:41.969] [info] [QML] Keyboard height configured: 480
-[2025-10-22 16:25:41.973] [info] [QML] SplashPage Splash page onCompleted
-[2025-10-22 16:25:41.974] [info] [QML] WifiStatusIndicator initialized
-qrc:/qml/main.qml:207: ReferenceError: currentItem is not defined
-[2025-10-22 16:25:41.981] [warning] [Qt-Warning] qrc:/qml/main.qml:207: ReferenceError: currentItem is not defined (qrc:/qml/main.qml:207)
-[2025-10-22 16:25:41.982] [info] [2393-2378]|[palm/yt_palm_service.cpp:397]PalmService _InitImpl Start
-[2025-10-22 16:25:41.982] [info] [2393-2378]|[palm/yt_palm_service.cpp:406]device to init impl :1, isNetworkAvailable: 1
-[2025-10-22 16:25:41.982] [info] [2393-2378]|[palm/yt_palm_service.cpp:490]InitPalm start app version: v1.4.0.2025102208-0e3dd0d8, SN : CK0A3KP02526000185
-[2025-10-22 16:25:41.985] [info] [2393-2378]|[palm/yt_palm_service.cpp:1124]PalmManager log level set to 2
-[2025-10-22 16:25:41.985] [error] [2422-2378]|[palm/yt_palm_service.cpp:1133][Palmmgr]2025-10-22 16:25:41.983|ERROR|[src/yt_config_mgr.cpp:38]ConfigMgr::LoadFromFile parse failed:unexpected end of input
-[2025-10-22 16:25:41.985] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:41.984|INFO|[camera/camera_device.cpp:196]set log level: 2
-[2025-10-22 16:25:41.985] [error] [2422-2378]|[palm/yt_palm_service.cpp:1133][Palmmgr]2025-10-22 16:25:41.984|ERROR|[src/yt_config_mgr.cpp:38]ConfigMgr::LoadFromFile parse failed:unexpected end of input
-[2025-10-22 16:25:41.985] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:41.985|INFO|[src/yt_palm_manager.cpp:30]init palm manager
-[2025-10-22 16:25:41.985] [info] [2378-2378]|[xike/yt_xike_device_hal_impl.cpp:384]StartWatchdog feed_divide : 30 seconds
-[2025-10-22 16:25:41.985] [info] [2378-2378]|[app/yt_app_watchdog_looper.cpp:35]Watchdog interval calculation - system timeout: 30s, feed interval: 10s, actual interval: 20s
-[2025-10-22 16:25:41.985] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:41.985|INFO|[camera/camera_device.cpp:20]init begin, memory usage: 56540KB
-[2025-10-22 16:25:41.985] [info] [2378-2378]|[utils/yt_future_task.cpp:22]Starting future task name WatchdogLooper, interval ms 20000, single_shot 0, auto_stop 1
-[2025-10-22 16:25:41.985] [info] [2378-2378]|[utils/yt_future_task.cpp:83]Stop future task WatchdogLooper
-[2025-10-22 16:25:41.986] [info] [2378-2378]|[src/main.cpp:232]device is m3 :0
-[2025-10-22 16:25:41.986] [info] [2378-2378]|[src/main.cpp:244]Core file cleanup result: failed
-[2025-10-22 16:25:41.987] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:41.986|INFO|[angstrong/ai_module.cpp:20]ai module init
-[2025-10-22 16:25:41.987] [info] [2423-2378]|[utils/yt_future_task.cpp:55]handleThreadStarted WatchdogLooper in thread 0x239ff38
-[2025-10-22 16:25:41.988] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:41.987|INFO|[camera/fsm_event_queue.cpp:19]FsmEventQueue starting...
-[2025-10-22 16:25:41.989] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:41.988|INFO| [ ANG_SDK ] start the device listener
-[2025-10-22 16:25:43.993] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:43.992|INFO| [ ANG_SDK ] attached
-[2025-10-22 16:25:51.868] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.868|INFO| [ ANG_SDK ] CmdAndes api version: 202508262216, firmware version: 1002001
-[2025-10-22 16:25:51.870] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.870|INFO| [ ANG_SDK ] config uvc process cmd success, ret 0
-[2025-10-22 16:25:51.900] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.900|INFO| [ ANG_SDK ] open camera successful
-[2025-10-22 16:25:51.901] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.901|INFO| [ ANG_SDK ] start the device listener
-[2025-10-22 16:25:51.902] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.901|INFO|[angstrong/common_module.cpp:250]camera open ret:0
-[2025-10-22 16:25:51.904] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.902|INFO|[angstrong/common_module.cpp:239]common module connected
-[2025-10-22 16:25:51.905] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.903|INFO|[angstrong/common_module.cpp:259]wait module connected...
-[2025-10-22 16:25:51.905] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.904|INFO|[angstrong/common_module.cpp:265]wait module connected success
-[2025-10-22 16:25:51.908] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.908|INFO|[angstrong/common_module.cpp:212]set algo log level success, level:2
-[2025-10-22 16:25:51.912] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.912|INFO|[angstrong/common_module.cpp:223]set ufms log level success, level:2
-[2025-10-22 16:25:51.961] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.960|INFO|[angstrong/ai_module.cpp:570]sync time: 2025-10-22 08:25:51 ret:0
-[2025-10-22 16:25:51.964] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:51.964|INFO|[angstrong/ai_module.cpp:287]switch device status:working2 success, cost: 3ms
-[2025-10-22 16:25:51.965] [warning] [2422-2378]|[palm/yt_palm_service.cpp:1137][Palmmgr]2025-10-22 16:25:51.964|WARN|[angstrong/ai_module.cpp:291]ignore device status callback, init_finish:0
-[2025-10-22 16:25:52.006] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.005|INFO|[angstrong/ai_module.cpp:84]=== Module SN: YTA8000F20000047
-[2025-10-22 16:25:52.006] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.006|INFO|[angstrong/ai_module.cpp:86]=== PalmManager Version: v1.2.2.2025091812-88118d5
-[2025-10-22 16:25:52.007] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.006|INFO|[angstrong/ai_module.cpp:88]=== AngstrongSDK Version: 5.0.2.2025091812
-[2025-10-22 16:25:52.011] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.011|INFO| [ ANG_SDK ] CmdAndes api version: 202508262216, firmware version: 1002001
-[2025-10-22 16:25:52.012] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.011|INFO|[angstrong/ai_module.cpp:91]=== Firmware Version: v1.2.1_202508262216V5.0.1.2025082619
-[2025-10-22 16:25:52.016] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.015|INFO|[angstrong/ai_module.cpp:94]=== AlgoSDK Version: v1.3.0.2025082611-fe99742c
-[2025-10-22 16:25:52.020] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.020|INFO|[angstrong/ai_module.cpp:96]=== Algo Version: v1.0
-[2025-10-22 16:25:52.025] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.025|INFO|[angstrong/ai_module.cpp:98]=== Blacklist Version: v1.0
-[2025-10-22 16:25:52.025] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.025|INFO|[angstrong/ai_module.cpp:99]=== config wait_s0_hibernate_timeout_ms: 300000
-[2025-10-22 16:25:52.026] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.025|INFO|[angstrong/ai_module.cpp:100]=== config wait_s1_hibernate_timeout_ms: 600000
-[2025-10-22 16:25:52.027] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.026|INFO|[angstrong/ai_module.cpp:323]switch mode: 2
-[2025-10-22 16:25:52.027] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.026|INFO|[angstrong/ai_module.cpp:446]=== config solution: 3
-[2025-10-22 16:25:52.028] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.026|INFO|[angstrong/ai_module.cpp:447]=== config mode: 2
-[2025-10-22 16:25:52.028] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.026|INFO|[angstrong/ai_module.cpp:448]=== config register_mode: 3
-[2025-10-22 16:25:52.029] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.028|INFO|[angstrong/ai_module.cpp:449]=== config recognize_mode: 4
-[2025-10-22 16:25:52.036] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.035|INFO|[angstrong/ai_module.cpp:452]=== config prefer quality: normal, ret: 0
-[2025-10-22 16:25:52.039] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.038|INFO|[angstrong/ai_module.cpp:457]=== config prefer disable_feature: 0, ret: 0
-[2025-10-22 16:25:52.042] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.042|INFO|[angstrong/ai_module.cpp:463]=== config prefer disable_retrieval: 0, ret: 0
-[2025-10-22 16:25:52.046] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.045|INFO|[angstrong/ai_module.cpp:470]=== config prefer retrieval_level: normal, ret: 0
-[2025-10-22 16:25:52.053] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.051|INFO|[angstrong/ai_module.cpp:478]=== config prefer disable_preferred_image: 0, ret: 0
-[2025-10-22 16:25:52.059] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.058|INFO|[angstrong/ai_module.cpp:485]=== config recognize disable_preferred_image: 0, ret: 0
-[2025-10-22 16:25:52.064] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.063|INFO|[angstrong/ai_module.cpp:494]=== config recognize export_image_after_retrieval_empty: 1, ret: 0
-[2025-10-22 16:25:52.071] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.070|INFO|[angstrong/ai_module.cpp:119]=== config stop_session: true, ret: 0
-[2025-10-22 16:25:52.075] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.075|INFO|[angstrong/ai_module.cpp:127]=== config report image: 1, ret: 0
-[2025-10-22 16:25:52.079] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.079|INFO|[angstrong/ai_module.cpp:138]=== config enable session: 1, ret: 0
-[2025-10-22 16:25:52.084] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.083|INFO|[angstrong/ai_module.cpp:144]=== config report threshold: 1, ret: 0
-[2025-10-22 16:25:52.088] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.088|INFO|[angstrong/ai_module.cpp:150]=== config report score: 1, ret: 0
-[2025-10-22 16:25:52.093] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.092|INFO|[angstrong/ai_module.cpp:157]=== config session_cache_limit: 5, ret: 0
-[2025-10-22 16:25:52.099] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.099|INFO|[angstrong/ai_module.cpp:167]=== config live blacklist: 0, ret: 0
-[2025-10-22 16:25:52.099] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.099|INFO| [ ANG_SDK ] setEventCallback PREFER
-[2025-10-22 16:25:52.100] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.099|INFO|[angstrong/ai_module.cpp:176]=== config prefer event callback, ret: 0
-[2025-10-22 16:25:52.101] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.100|INFO| [ ANG_SDK ] setEventCallback RECOGNIZEPRO
-[2025-10-22 16:25:52.101] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.101|INFO|[angstrong/ai_module.cpp:187]=== config recognize event callback, ret: 0
-[2025-10-22 16:25:52.102] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.101|INFO|[angstrong/ai_module.cpp:193]=== config local metrics: 0
-[2025-10-22 16:25:52.105] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.105|INFO|[angstrong/ai_module.cpp:205]=== config report last image: 0
-[2025-10-22 16:25:52.106] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.105|INFO|[angstrong/common_module.cpp:274]start test device...
-[2025-10-22 16:25:52.774] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.772|INFO|[angstrong/common_module.cpp:377]module stream state: 1, psensor calibration file state: 1, psensor value: 253, extra info: {"ispserver":{"pid":552,"cpu":33.3,"mem":"33.3m"},"uvc_app":{"pid":677,"cpu":17.6,"mem":"111.3m"},"memory":{"total":393,"used":211,"free":83},"disk":{"usage":"6%"},"config":{"led_current.rgb_current": 30, "led_current.ir_current": 17}}
-[2025-10-22 16:25:52.774] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.772|INFO|[angstrong/ai_module.cpp:257]switch device status:ready
-[2025-10-22 16:25:52.774] [warning] [2422-2378]|[palm/yt_palm_service.cpp:1137][Palmmgr]2025-10-22 16:25:52.773|WARN|[angstrong/ai_module.cpp:261]ignore device status callback, init_finish:0
-[2025-10-22 16:25:52.774] [warning] [2422-2378]|[palm/yt_palm_service.cpp:1137][Palmmgr]2025-10-22 16:25:52.773|WARN|[angstrong/ai_module_palm_biz.cpp:636]change device_status:5 to working2
-[2025-10-22 16:25:52.774] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.773|INFO|[angstrong/ai_module_palm_biz.cpp:652]device_status:2 now_ms:195470818 working2_start_ms:195470005 s0_timeout_ms:300000
-[2025-10-22 16:25:52.775] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.775|INFO|[angstrong/ai_module.cpp:46]ai module OnInitFinish
-[2025-10-22 16:25:52.775] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.775|INFO|[camera/camera_device.cpp:80]init finish, ret: 0 cost: 10789ms end_mem:142660KB
-[2025-10-22 16:25:52.779] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.778|INFO| [ ANG_SDK ] CmdAndes api version: 202508262216, firmware version: 1002001
-[2025-10-22 16:25:52.788] [info] [2393-2378]|[palm/yt_palm_service.cpp:527]Init PalmManager ret  0 palmManagerVersion: v1.2.2.2025091812-88118d5, firmwareVersion: v1.2.1_202508262216V5.0.1.2025082619, algoSdkVersion: v1.3.0.2025082611-fe99742c, algoVersion: v1.0, palmMode: 2
-[2025-10-22 16:25:52.793] [info] [2393-2378]|[palm/yt_palm_service.cpp:551]PalmManager currentPalmCount: 653
-[2025-10-22 16:25:52.793] [info] [2422-2378]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-22 16:25:52.792|INFO|[angstrong/ai_module_palm_feat.cpp:179]GetPalmFeatureCount:{"mem_count": 653, "db_count": 653}
-[2025-10-22 16:25:52.794] [info] [2393-2378]|[palm/yt_palm_context.h:586]NotifyPalmAuthStatusChangedfrom 0 to 1
-[2025-10-22 16:25:52.794] [info] [2378-2378]|[palm/yt_palm_context.h:154]DoOnPalmAuthorizeSucceed
-[2025-10-22 16:25:52.795] [info] [QML] onPalmAuthorizeSucceed
-[2025-10-22 16:25:52.810] [info] [2393-2378]|[http/yt_qt_http_client.cpp:57]SSL supported, version: OpenSSL 1.1.1h  22 Sep 2020
-[2025-10-22 16:25:52.971] [info] [2393-2378]|[http/yt_qt_http_client.cpp:293]SSL error ignore policy set to: false
-[2025-10-22 16:25:52.972] [warning] [2393-2378]|[utils/yt_file_util.cpp:34]Directory already exists: /oem/yt-palm/data
-2025-10-22 16:25:54.994: ERROR CORE sqlcipher_page_cipher: hmac check failed for pgno=1
-2025-10-22 16:25:54.994: ERROR CORE sqlite3Codec: error decrypting page 1 data: 1
-2025-10-22 16:25:54.994: ERROR CORE sqlcipher_codec_ctx_set_error 1
-[2025-10-22 16:25:54.995] [info] [2393-2378]|[storage/yt_database_manager.cpp:101]CreateOrOpenDatabase Database opened with new key directly
-[2025-10-22 16:25:57.016] [info] [2393-2378]|[utils/yt_sqlite_util.cpp:48]CheckIntegrity success
-[2025-10-22 16:25:57.017] [info] [2393-2378]|[storage/yt_database_manager.cpp:129]CheckVersion current: 3, config: 3
-[2025-10-22 16:25:57.040] [info] [2393-2378]|[devicectl/yt_devicectl_manager.cpp:141]SyncPalmsFromDB begin
-[2025-10-22 16:25:57.041] [error] [2393-2378]|[storage/yt_database_manager.h:48]ExecSQL SQL execution failed, rc: 1, error: no such table: palm_entity_new, SQL: SELECT COUNT(*) FROM palm_entity_new;
-[2025-10-22 16:25:57.042] [error] [2393-2378]|[storage/yt_palm_db_manager.cpp:160]QueryAllPalms QueryCount failed, ret: 161
-[2025-10-22 16:25:57.042] [info] [2393-2378]|[devicectl/yt_devicectl_manager.cpp:160]SyncPalmsFromDB total : 0 done : 0, to sync : 0, invalid count : 0
-[2025-10-22 16:25:57.042] [info] [2393-2378]|[devicectl/yt_devicectl_manager.cpp:172]SyncPalmsFromDB end
-[2025-10-22 16:25:57.044] [warning] [2393-2378]|[utils/yt_file_util.cpp:34]Directory already exists: /oem/yt-palm/data
-2
+i_module.cpp:721]get psensor:0 count:846
+[2025-10-23 11:29:03.985] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:07.455] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:10.942] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:14.348] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:17.866] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:21.249] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:23.657] [info] [3082-2942]|[looper/yt_sync_palm_looper.cpp:163]RequestSyncPalm query_position:
+[2025-10-23 11:29:23.665] [info] [936-2942]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/synchronize_palm_feature, traceId: 685a4a4b395a556677544d5a327a596f, reqId: 1761190163649-57
+[2025-10-23 11:29:23.672] [info] [3083-2942]|[looper/yt_sync_user_looper.cpp:69]RequestSyncUser next_id: 12610, start_time: 1760690020, sync_type: incr
+[2025-10-23 11:29:23.683] [info] [3430-2942]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/incr-sync-user, traceId: 364f74545444556b5a304f4c74517948, reqId: 1761190163672-58
+[2025-10-23 11:29:24.096] [info] [3023-2942]|[http/yt_qt_http_client.h:70]onResponse req_id 1761190163672-58, tag : /wecardpalm/device/incr-sync-user
+[2025-10-23 11:29:24.097] [info] [3023-2942]|[looper/yt_sync_user_looper.cpp:106]Sync user succeed: empty response, next_id=0
+[2025-10-23 11:29:24.626] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:25.996] [info] [3023-2942]|[http/yt_qt_http_client.h:70]onResponse req_id 1761190163649-57, tag : /wecardpalm/device/synchronize_palm_feature
+[2025-10-23 11:29:26.020] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=abcabc, palm_id=03109d3c-395a-4a29-a1b3-6ed70920c502, name=, status=1, direction=2, palm_data_version=7, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.020] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8615201806426, palm_id=1fb325e8-3ab3-4324-9487-448351a5b0ae, name=, status=2, direction=2, palm_data_version=15, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.020] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=aTnv9B6V, palm_id=219392e4-c06d-4f83-bd38-0e57791811da, name=, status=1, direction=1, palm_data_version=9, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.020] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=12345678, palm_id=4c4c8b9e-dd36-4c17-b594-044b27e2fc2b, name=, status=2, direction=1, palm_data_version=22, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=86188888889, palm_id=720aecca-acda-4974-9e1d-1c6ceb858b82, name=, status=2, direction=2, palm_data_version=13, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_new_upgrade_1, palm_id=73035d09-8e04-4e01-be3c-a5b10b55e60f, name=, status=1, direction=1, palm_data_version=18, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_same_upgrade, palm_id=7c09d068-5de4-405b-b39c-30f5c395ed25, name=, status=1, direction=1, palm_data_version=16, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_same, palm_id=7fa8bb29-a51c-49ae-8c94-632e6b442696, name=, status=1, direction=1, palm_data_version=14, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_new, palm_id=80006db0-7463-4f6e-bce6-2e423df5c18a, name=, status=2, direction=1, palm_data_version=12, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=vISX7nQL, palm_id=98d2e90a-442c-4fff-a212-8acaf8c4206d, name=, status=1, direction=1, palm_data_version=10, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8613012890285, palm_id=a021d71e-30f3-4373-b108-263d9946ed85, name=, status=2, direction=2, palm_data_version=14, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=EXMDBcDS, palm_id=bb0189a5-a4d3-4d35-b483-7ce318f72cec, name=, status=2, direction=1, palm_data_version=17, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=delete_1_upgrade, palm_id=bc717db5-78bf-4217-9d42-dbba754c41d4, name=, status=2, direction=2, palm_data_version=6, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.021] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=delete_user, palm_id=c077ecdc-dc61-4fe1-bbcf-0a9a4284f07c, name=, status=2, direction=2, palm_data_version=25, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.022] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=WC4KKQBv, palm_id=c874de3c-b9dc-437d-a699-9a735181f419, name=, status=1, direction=1, palm_data_version=8, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.022] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_new_upgrade, palm_id=c97cf563-a36e-40d9-bd61-384890c01653, name=, status=1, direction=1, palm_data_version=13, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.022] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8617349756267, palm_id=d1c9f315-14c7-40d4-a461-54f430ee0964, name=, status=1, direction=2, palm_data_version=19, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.022] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=delete_1, palm_id=e181b8b0-85d2-46c1-8319-a2332e96fc9f, name=, status=2, direction=2, palm_data_version=4, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.022] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8613770320839, palm_id=f62fe416-6fd2-4909-acf4-36917d3f1f32, name=, status=1, direction=2, palm_data_version=20, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.022] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=13012890285, palm_id=fd6c532c-df31-4eaa-b3d2-56a529553c25, name=, status=1, direction=2, palm_data_version=8, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190166, user_tags=}
+[2025-10-23 11:29:26.023] [error] [3023-2942]|[storage/yt_database_manager.h:111]Failed to prepare SQL statement: INSERT OR REPLACE INTO palm_entity_new (user_id, palm_id, rgb_digest, ir_digest, status, direction, date_version, feature_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?); , error: no such table: palm_entity_new
+[2025-10-23 11:29:26.024] [error] [3023-2942]|[storage/yt_palm_db_manager.cpp:241]InsertOrUpdatePalms Failed to insert/update palms, ret: 161
+[2025-10-23 11:29:26.024] [error] [3023-2942]|[devicectl/yt_devicectl_manager.cpp:220]update palms to db ret :161 in UpdatePalms
+[2025-10-23 11:29:26.024] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:186]SyncPalmLooper response: hasMore=2, query_position=eyJxdWVyeV9jdHhfaW5mb19sc3QiOlt7Im5leHRfdmVyc2lvbiI6MjIsInBhbG1fZGlyZWN0aW9uIjoxLCJsYXN0X3RpbWUiOjE3NjExOTAxNjN9LHsibmV4dF92ZXJzaW9uIjoyNSwicGFsbV9kaXJlY3Rpb24iOjIsImxhc3RfdGltZSI6MTc2MTE5MDE2M31dfQ==, count=20, updateResult=161
+[2025-10-23 11:29:28.126] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:31.539] [info] [QML] GifPlayer Reached last frame, preparing to loop... total frame count 39
+[2025-10-23 11:29:33.026] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:33.026|INFO|[angstrong/ai_module.cpp:287]switch device status:s0 hibernate success, cost: 1ms
+[2025-10-23 11:29:33.026] [info] [2972-2942]|[palm/yt_palm_service.cpp:559]HandlePalmDeviceStatusmodule status changed from Working2 to S0Hibernate
+[2025-10-23 11:29:33.027] [info] [2950-2942]|[palm/yt_palm_service.cpp:576]module enter hibernate, need close screen? should keep screen on is 0
+[2025-10-23 11:29:33.045] [info] [QML] Screen state changed: OFF
+[2025-10-23 11:29:33.046] [info] [QML] Home Page Screen state changed: OFF
+[2025-10-23 11:29:33.047] [info] [QML] GifPlayer Loop completed, restarting...
+[2025-10-23 11:29:33.237] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:33.237|INFO|[angstrong/ai_module.cpp:721]get psensor:0 count:846
+[2025-10-23 11:29:39.480] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.479|INFO|[angstrong/ai_module.cpp:721]get psensor:124 count:172
+[2025-10-23 11:29:39.481] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.480|INFO|[angstrong/ai_module.cpp:778]enter working2 by too far 2
+[2025-10-23 11:29:39.491] [info] [2971-2942]|[palm/yt_palm_service.cpp:663]handleSessionFrame session_id: , error_code: 1011
+[2025-10-23 11:29:39.491] [info] [2972-2942]|[palm/yt_palm_service.cpp:559]HandlePalmDeviceStatusmodule status changed from S0Hibernate to Working2
+[2025-10-23 11:29:39.491] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.490|INFO|[angstrong/ai_module.cpp:287]switch device status:working2 success, cost: 9ms
+[2025-10-23 11:29:39.493] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.493] [info] [2950-2942]|[palm/yt_palm_service.cpp:582]module exit from hibernate, open screen
+qml: FullscreenGifOverlay: showAndPlay called with source: qrc:/images/gif_palm_bg.gif
+qml: FullscreenGifOverlay: Current state - visible: false _isShowing: false opacity: 0
+qml: FullscreenGifOverlay: Showing overlay with source: qrc:/images/gif_palm_bg.gif
+[2025-10-23 11:29:39.525] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.525|INFO|[angstrong/ai_module.cpp:721]get psensor:135 count:1
+[2025-10-23 11:29:39.531] [info] [QML] Screen state changed: ON
+[2025-10-23 11:29:39.531] [info] [QML] Home Page Screen state changed: ON
+[2025-10-23 11:29:39.532] [info] [QML] GifPlayer Reloading GIF: qrc:/images/gif_palm_home_image.gif
+[2025-10-23 11:29:39.533] [warning] [QML] GifPlayer GIF load failed, this is Null status
+[2025-10-23 11:29:39.534] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.560] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.560|INFO|[angstrong/ai_module.cpp:721]get psensor:147 count:1
+[2025-10-23 11:29:39.577] [info] [QML] GifPlayer Attempting to play GIF
+[2025-10-23 11:29:39.577] [info] [QML] GifPlayer GIF is already playing
+[2025-10-23 11:29:39.578] [info] [QML] GifPlayer GIF play result: true
+[2025-10-23 11:29:39.595] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.595|INFO|[angstrong/ai_module.cpp:721]get psensor:161 count:1
+[2025-10-23 11:29:39.630] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.630|INFO|[angstrong/ai_module.cpp:721]get psensor:163 count:1
+[2025-10-23 11:29:39.642] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.644] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.645] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.667] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.667|INFO|[angstrong/ai_module.cpp:721]get psensor:170 count:1
+[2025-10-23 11:29:39.702] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.702|INFO|[angstrong/ai_module.cpp:721]get psensor:175 count:1
+[2025-10-23 11:29:39.722] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.723] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.738] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.737|INFO|[angstrong/ai_module.cpp:721]get psensor:178 count:1
+[2025-10-23 11:29:39.739] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.773] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.773|INFO|[angstrong/ai_module.cpp:721]get psensor:190 count:1
+[2025-10-23 11:29:39.794] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.795] [info] [QML] FullscreenGifOverlay: Show animation completed
+[2025-10-23 11:29:39.796] [info] [QML] FullscreenGifOverlay main animation started - hiding status bar
+[2025-10-23 11:29:39.797] [info] [QML] FullscreenGifOverlay: Starting GIF playback after show animation , source: qrc:/images/gif_palm_bg.gifvisible:true
+[2025-10-23 11:29:39.808] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.808|INFO|[angstrong/ai_module.cpp:721]get psensor:193 count:1
+[2025-10-23 11:29:39.810] [info] [QML] FullscreenGifOverlay: About to call gifPlayer.play() - isPlaying: falsehasError:falseisLoading:false
+[2025-10-23 11:29:39.810] [info] [QML] GifPlayer Debug - source: qrc:/images/gif_palm_bg.gif
+[2025-10-23 11:29:39.811] [info] [QML] GifPlayer Debug - _isPlaying: false
+[2025-10-23 11:29:39.811] [info] [QML] GifPlayer Debug - _hasError: false
+[2025-10-23 11:29:39.812] [info] [QML] GifPlayer Debug - _isLoading: false
+[2025-10-23 11:29:39.812] [info] [QML] GifPlayer Debug - AnimatedImage.playing: false
+[2025-10-23 11:29:39.813] [info] [QML] GifPlayer Debug - AnimatedImage.status: 1
+[2025-10-23 11:29:39.813] [info] [QML] GifPlayer Debug - AnimatedImage.frameCount: 26
+[2025-10-23 11:29:39.814] [info] [QML] GifPlayer Debug - AnimatedImage.currentFrame: 8
+qml: FullscreenGifOverlay: GIF play started
+[2025-10-23 11:29:39.816] [info] [QML] FullscreenGifOverlay: Play result:true
+[2025-10-23 11:29:39.831] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.843] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.842|INFO|[angstrong/ai_module.cpp:721]get psensor:202 count:1
+[2025-10-23 11:29:39.879] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:39.879|INFO|[angstrong/ai_module.cpp:721]get psensor:195 count:1
+qml: FullscreenGifOverlay: After play() call:
+qml: FullscreenGifOverlay: AnimatedImage.playing: true
+qml: FullscreenGifOverlay: AnimatedImage.visible: true
+qml: FullscreenGifOverlay: AnimatedImage.width: 720 height: 1280
+[2025-10-23 11:29:39.882] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:39.883] [info] [QML] showFrameMessage: Move your palm closer
+qml: FullscreenGifOverlay: Hiding immediately
+[2025-10-23 11:29:40.910] [info] [QML] GifPlayer Loop completed, restarting...
+[2025-10-23 11:29:40.911] [info] [QML] FullscreenGifOverlay main animation ended - showing status bar
+[2025-10-23 11:29:42.134] [info] [2942-2942]|[audio/yt_audio_manager.cpp:440]Processing audio queue
+[2025-10-23 11:29:42.605] [info] [QML] GifPlayer Loop completed, restarting...
+[2025-10-23 11:29:47.973] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:47.972|INFO|[angstrong/ai_module.cpp:721]get psensor:185 count:225
+[2025-10-23 11:29:47.974] [info] [QML] showFrameMessage: Move your palm closer
+qml: FullscreenGifOverlay: showAndPlay called with source: qrc:/images/gif_palm_bg.gif
+qml: FullscreenGifOverlay: Current state - visible: false _isShowing: false opacity: 0
+qml: FullscreenGifOverlay: Showing overlay with source: qrc:/images/gif_palm_bg.gif
+[2025-10-23 11:29:48.008] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.008|INFO|[angstrong/ai_module.cpp:721]get psensor:178 count:1
+[2025-10-23 11:29:48.012] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.044] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.043|INFO|[angstrong/ai_module.cpp:721]get psensor:172 count:1
+[2025-10-23 11:29:48.079] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.079|INFO|[angstrong/ai_module.cpp:721]get psensor:161 count:1
+[2025-10-23 11:29:48.092] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.094] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.116] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.116|INFO|[angstrong/ai_module.cpp:721]get psensor:161 count:1
+[2025-10-23 11:29:48.118] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.151] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.151|INFO|[angstrong/ai_module.cpp:721]get psensor:146 count:1
+[2025-10-23 11:29:48.182] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.188] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.188|INFO|[angstrong/ai_module.cpp:721]get psensor:146 count:1
+[2025-10-23 11:29:48.189] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.223] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.223|INFO|[angstrong/ai_module.cpp:721]get psensor:133 count:1
+[2025-10-23 11:29:48.258] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.258|INFO|[angstrong/ai_module.cpp:721]get psensor:123 count:1
+[2025-10-23 11:29:48.280] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.281] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.284] [info] [QML] FullscreenGifOverlay: Show animation completed
+[2025-10-23 11:29:48.285] [info] [QML] FullscreenGifOverlay main animation started - hiding status bar
+[2025-10-23 11:29:48.287] [info] [QML] FullscreenGifOverlay: Starting GIF playback after show animation , source: qrc:/images/gif_palm_bg.gifvisible:true
+[2025-10-23 11:29:48.288] [info] [QML] FullscreenGifOverlay: About to call gifPlayer.play() - isPlaying: falsehasError:falseisLoading:false
+[2025-10-23 11:29:48.289] [info] [QML] GifPlayer Debug - source: qrc:/images/gif_palm_bg.gif
+[2025-10-23 11:29:48.289] [info] [QML] GifPlayer Debug - _isPlaying: false
+[2025-10-23 11:29:48.290] [info] [QML] GifPlayer Debug - _hasError: false
+[2025-10-23 11:29:48.290] [info] [QML] GifPlayer Debug - _isLoading: false
+[2025-10-23 11:29:48.290] [info] [QML] GifPlayer Debug - AnimatedImage.playing: false
+[2025-10-23 11:29:48.290] [info] [QML] GifPlayer Debug - AnimatedImage.status: 1
+[2025-10-23 11:29:48.291] [info] [QML] GifPlayer Debug - AnimatedImage.frameCount: 26
+qml: FullscreenGifOverlay: GIF play started
+[2025-10-23 11:29:48.291] [info] [QML] GifPlayer Debug - AnimatedImage.currentFrame: 8
+[2025-10-23 11:29:48.293] [info] [QML] FullscreenGifOverlay: Play result:true
+[2025-10-23 11:29:48.293] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.293|INFO|[angstrong/ai_module.cpp:721]get psensor:122 count:1
+qml: FullscreenGifOverlay: After play() call:
+qml: FullscreenGifOverlay: AnimatedImage.playing: true
+qml: FullscreenGifOverlay: AnimatedImage.visible: true
+qml: FullscreenGifOverlay: AnimatedImage.width: 720 height: 1280
+[2025-10-23 11:29:48.297] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.328] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.327|INFO|[angstrong/ai_module.cpp:721]get psensor:120 count:1
+[2025-10-23 11:29:48.332] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.331|INFO|[angstrong/ai_module.cpp:835]will enter target status:1
+[2025-10-23 11:29:48.334] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.334|INFO|[angstrong/ai_module.cpp:287]switch device status:working success, cost: 2ms
+[2025-10-23 11:29:48.334] [info] [2972-2942]|[palm/yt_palm_service.cpp:559]HandlePalmDeviceStatusmodule status changed from Working2 to Working1
+[2025-10-23 11:29:48.334] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.334|INFO|[angstrong/ai_module_palm_biz.cpp:219]wait psensor valid, ret:0
+[2025-10-23 11:29:48.335] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.334|INFO|[angstrong/ai_module_palm_biz.cpp:244]recognize once start
+[2025-10-23 11:29:48.335] [info] [2972-2942]|[palm/yt_palm_service.cpp:622]handleSessionStatus session_id :  stage: 1
+[2025-10-23 11:29:48.435] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.434|INFO|[angstrong/ai_module.cpp:606]session started, session_id:20251023032948-571e40bd-048c-463e-b24b-822d6930e8e3
+[2025-10-23 11:29:48.435] [info] [2972-2942]|[palm/yt_palm_service.cpp:622]handleSessionStatus session_id : 20251023032948-571e40bd-048c-463e-b24b-822d6930e8e3 stage: 2
+[2025-10-23 11:29:48.435] [info] [2950-2942]|[palm/yt_palm_service.cpp:636] session start : 20251023032948-571e40bd-048c-463e-b24b-822d6930e8e3
+[2025-10-23 11:29:48.483] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.483|INFO|[angstrong/ai_module.cpp:937]frame callback, code:1210 detail_code:120014 msg:画面过暗，请调整手掌角度 psensor:120 is_best:1 cost:147ms
+[2025-10-23 11:29:48.484] [info] [2972-2942]|[palm/yt_palm_service.cpp:661]handleSessionFrame Previous error_code: 1011 occurred 22 times, new error_code: 1210
+[2025-10-23 11:29:48.486] [info] [QML] showFrameMessage: Keep your palm still
+[2025-10-23 11:29:48.488] [info] [QML] showPlaySound soundType 17, lastTtsMessage: TTS1206, curTtsMessage TTS1206
+[2025-10-23 11:29:48.510] [info] [2942-2942]|[audio/yt_audio_manager.cpp:440]Processing audio queue
+[2025-10-23 11:29:48.633] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.633|INFO|[angstrong/ai_module.cpp:937]frame callback, code:1210 detail_code:120014 msg:画面过暗，请调整手掌角度 psensor:116 is_best:0 cost:149ms
+[2025-10-23 11:29:48.634] [info] [QML] showFrameMessage: Keep your palm still
+[2025-10-23 11:29:48.635] [info] [QML] showPlaySound soundType 17, lastTtsMessage: TTS1206, curTtsMessage TTS1206
+[2025-10-23 11:29:48.765] [warning] [2969-2942]|[palm/yt_palm_service.cpp:1137][Palmmgr]2025-10-23 11:29:48.765|WARN|[angstrong/ai_module.cpp:915]frame callback, stop by too far: 122
+[2025-10-23 11:29:48.766] [info] [2972-2942]|[palm/yt_palm_service.cpp:661]handleSessionFrame Previous error_code: 1210 occurred 2 times, new error_code: 1011
+[2025-10-23 11:29:48.766] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.766|INFO|[angstrong/ai_module.cpp:937]frame callback, code:1011 detail_code:120014 msg:画面过亮，请调整手掌角度 psensor:122 is_best:0 cost:132ms
+[2025-10-23 11:29:48.766] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.766|INFO|[angstrong/ai_module_palm_biz.cpp:251]recognize once over, ret:1211
+[2025-10-23 11:29:48.766] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.766|INFO|[angstrong/ai_module_palm_biz.cpp:271]recognize end by too far, retry!!
+[2025-10-23 11:29:48.766] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.766|INFO|[angstrong/ai_module.cpp:652]device_status:1 now_ms:33816124 working2_start_ms:33806839 s0_timeout_ms:300000
+[2025-10-23 11:29:48.768] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.768|INFO|[angstrong/ai_module.cpp:721]get psensor:146 count:1
+[2025-10-23 11:29:48.768] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.768|INFO|[angstrong/ai_module.cpp:770]enter working2 by too far
+[2025-10-23 11:29:48.770] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.770|INFO|[angstrong/ai_module.cpp:287]switch device status:working2 success, cost: 1ms
+[2025-10-23 11:29:48.771] [info] [2972-2942]|[palm/yt_palm_service.cpp:559]HandlePalmDeviceStatusmodule status changed from Working1 to Working2
+[2025-10-23 11:29:48.796] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.798] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.805] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.804|INFO|[angstrong/ai_module.cpp:721]get psensor:150 count:1
+[2025-10-23 11:29:48.806] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.840] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.840|INFO|[angstrong/ai_module.cpp:721]get psensor:150 count:1
+[2025-10-23 11:29:48.841] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.875] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.874|INFO|[angstrong/ai_module.cpp:721]get psensor:174 count:1
+[2025-10-23 11:29:48.909] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.909|INFO|[angstrong/ai_module.cpp:721]get psensor:174 count:1
+[2025-10-23 11:29:48.910] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.912] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.945] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.944|INFO|[angstrong/ai_module.cpp:721]get psensor:168 count:1
+[2025-10-23 11:29:48.948] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:48.979] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:48.979|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.004] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.014] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.014|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.016] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.050] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.050|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.084] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.084|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.119] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.119|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.130] [info] [2942-2942]|[audio/yt_audio_manager.cpp:440]Processing audio queue
+[2025-10-23 11:29:49.142] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.144] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.145] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.154] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.154|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.189] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.189|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.197] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.198] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.225] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.223|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.226] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.260] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.260|INFO|[angstrong/ai_module.cpp:721]get psensor:152 count:1
+[2025-10-23 11:29:49.293] [info] [QML] showFrameMessage: Move your palm closer
+[2025-10-23 11:29:49.294] [warning] [2969-2942]|[palm/yt_palm_service.cpp:1137][Palmmgr]2025-10-23 11:29:49.294|WARN|[angstrong/ai_module.cpp:794]palm session canceled
+[2025-10-23 11:29:49.294] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.294|INFO|[angstrong/ai_module_palm_biz.cpp:219]wait psensor valid, ret:77777
+[2025-10-23 11:29:49.294] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.294|INFO|[angstrong/ai_module_palm_biz.cpp:224]drop session by too few frame count:3
+[2025-10-23 11:29:49.297] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.297|INFO|[angstrong/ai_module.cpp:652]device_status:2 now_ms:33816655 working2_start_ms:33816126 s0_timeout_ms:300000
+[2025-10-23 11:29:49.299] [info] [2969-2942]|[palm/yt_palm_service.cpp:1141][Palmmgr]2025-10-23 11:29:49.299|INFO|[angstrong/ai_module.cpp:721]get psensor:0 count:1
+qml: FullscreenGifOverlay: Hiding immediately
+[2025-10-23 11:29:50.454] [info] [QML] GifPlayer Loop completed, restarting...
+[2025-10-23 11:29:50.455] [info] [QML] FullscreenGifOverlay main animation ended - showing status bar
+[2025-10-23 11:29:51.302] [info] [2942-2942]|[audio/yt_audio_manager.cpp:440]Processing audio queue
+[2025-10-23 11:29:53.669] [info] [3083-2942]|[looper/yt_sync_user_looper.cpp:69]RequestSyncUser next_id: 12610, start_time: 1760690020, sync_type: incr
+[2025-10-23 11:29:53.678] [info] [3082-2942]|[looper/yt_sync_palm_looper.cpp:163]RequestSyncPalm query_position:
+[2025-10-23 11:29:53.682] [info] [3430-2942]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/incr-sync-user, traceId: 746437585745716f556f4e763563744a, reqId: 1761190193669-59
+[2025-10-23 11:29:53.687] [info] [1859-2942]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/synchronize_palm_feature, traceId: 6c697a4941346563565552776e616662, reqId: 1761190193672-60
+[2025-10-23 11:29:53.703] [info] [3084-2942]|[pass/yt_pass_config_manager.cpp:654]StartBatchUploadPassRecords No unuploaded pass records
+[2025-10-23 11:29:53.714] [info] [3430-2942]|[http/yt_qt_http_client.cpp:179]Post Request URL: https://device.palmoa.youtu.qq.com/wecardpalm/device/heartbeat, traceId: 4a534e534963684a79737642616f666a, reqId: 1761190193703-61
+[2025-10-23 11:29:54.031] [info] [3023-2942]|[http/yt_qt_http_client.h:70]onResponse req_id 1761190193669-59, tag : /wecardpalm/device/incr-sync-user
+[2025-10-23 11:29:54.032] [info] [3023-2942]|[looper/yt_sync_user_looper.cpp:106]Sync user succeed: empty response, next_id=0
+[2025-10-23 11:29:54.104] [info] [3023-2942]|[http/yt_qt_http_client.h:70]onResponse req_id 1761190193703-61, tag : /wecardpalm/device/heartbeat
+[2025-10-23 11:29:54.104] [info] [3023-2942]|[heartbeat/yt_heartbeat_manager.cpp:77]StartHeartbeat Response: 0
+[I] <MMKV.cpp:1184::sync> MMKV::sync, SyncFlag = 1
+[2025-10-23 11:29:56.110] [info] [3023-2942]|[http/yt_qt_http_client.h:70]onResponse req_id 1761190193672-60, tag : /wecardpalm/device/synchronize_palm_feature
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=abcabc, palm_id=03109d3c-395a-4a29-a1b3-6ed70920c502, name=, status=1, direction=2, palm_data_version=7, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8615201806426, palm_id=1fb325e8-3ab3-4324-9487-448351a5b0ae, name=, status=2, direction=2, palm_data_version=15, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=aTnv9B6V, palm_id=219392e4-c06d-4f83-bd38-0e57791811da, name=, status=1, direction=1, palm_data_version=9, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=12345678, palm_id=4c4c8b9e-dd36-4c17-b594-044b27e2fc2b, name=, status=2, direction=1, palm_data_version=22, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=86188888889, palm_id=720aecca-acda-4974-9e1d-1c6ceb858b82, name=, status=2, direction=2, palm_data_version=13, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_new_upgrade_1, palm_id=73035d09-8e04-4e01-be3c-a5b10b55e60f, name=, status=1, direction=1, palm_data_version=18, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_same_upgrade, palm_id=7c09d068-5de4-405b-b39c-30f5c395ed25, name=, status=1, direction=1, palm_data_version=16, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.134] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_same, palm_id=7fa8bb29-a51c-49ae-8c94-632e6b442696, name=, status=1, direction=1, palm_data_version=14, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.135] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_new, palm_id=80006db0-7463-4f6e-bce6-2e423df5c18a, name=, status=2, direction=1, palm_data_version=12, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.135] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=vISX7nQL, palm_id=98d2e90a-442c-4fff-a212-8acaf8c4206d, name=, status=1, direction=1, palm_data_version=10, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.135] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8613012890285, palm_id=a021d71e-30f3-4373-b108-263d9946ed85, name=, status=2, direction=2, palm_data_version=14, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.135] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=EXMDBcDS, palm_id=bb0189a5-a4d3-4d35-b483-7ce318f72cec, name=, status=2, direction=1, palm_data_version=17, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.135] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=delete_1_upgrade, palm_id=bc717db5-78bf-4217-9d42-dbba754c41d4, name=, status=2, direction=2, palm_data_version=6, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.136] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=delete_user, palm_id=c077ecdc-dc61-4fe1-bbcf-0a9a4284f07c, name=, status=2, direction=2, palm_data_version=25, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.136] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=WC4KKQBv, palm_id=c874de3c-b9dc-437d-a699-9a735181f419, name=, status=1, direction=1, palm_data_version=8, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.136] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=test_new_upgrade, palm_id=c97cf563-a36e-40d9-bd61-384890c01653, name=, status=1, direction=1, palm_data_version=13, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.136] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8617349756267, palm_id=d1c9f315-14c7-40d4-a461-54f430ee0964, name=, status=1, direction=2, palm_data_version=19, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.136] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=delete_1, palm_id=e181b8b0-85d2-46c1-8319-a2332e96fc9f, name=, status=2, direction=2, palm_data_version=4, feature_type=0, rgb_digest_length=0, ir_digest_length=0, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.136] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=8613770320839, palm_id=f62fe416-6fd2-4909-acf4-36917d3f1f32, name=, status=1, direction=2, palm_data_version=20, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.136] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:181]SyncPalmLooper sync palm: PalmEntity{user_id=13012890285, palm_id=fd6c532c-df31-4eaa-b3d2-56a529553c25, name=, status=1, direction=2, palm_data_version=8, feature_type=2, rgb_digest_length=684, ir_digest_length=684, card_no=, timestamp=1761190196, user_tags=}
+[2025-10-23 11:29:56.138] [error] [3023-2942]|[storage/yt_database_manager.h:111]Failed to prepare SQL statement: INSERT OR REPLACE INTO palm_entity_new (user_id, palm_id, rgb_digest, ir_digest, status, direction, date_version, feature_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?); , error: no such table: palm_entity_new
+[2025-10-23 11:29:56.138] [error] [3023-2942]|[storage/yt_palm_db_manager.cpp:241]InsertOrUpdatePalms Failed to insert/update palms, ret: 161
+[2025-10-23 11:29:56.138] [error] [3023-2942]|[devicectl/yt_devicectl_manager.cpp:220]update palms to db ret :161 in UpdatePalms
+[2025-10-23 11:29:56.138] [info] [3023-2942]|[looper/yt_sync_palm_looper.cpp:186]SyncPalmLooper response: hasMore=2, query_position=eyJxdWVyeV9jdHhfaW5mb19sc3QiOlt7Im5leHRfdmVyc2lvbiI6MjIsInBhbG1fZGlyZWN0aW9uIjoxLCJsYXN0X3RpbWUiOjE3NjExOTAxOTN9LHsibmV4dF92ZXJzaW9uIjoyNSwicGFsbV9kaXJlY3Rpb24iOjIsImxhc3RfdGltZSI6MTc2MTE5MDE5M31dfQ==, count=20, updateResult=161
+[
