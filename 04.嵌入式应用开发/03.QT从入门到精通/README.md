@@ -1,13 +1,8 @@
 # 专栏笔记总结大全
 
-python decrypt_log.py /Users/yangchong/Downloads/standardlog 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
-
-python decrypt_log.py /Users/yangchong/Downloads/standardlog/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
-
-python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-08-14T09_31_37_253Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f10 aabbccddeeff00112233445566778899
 
 
-python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-10-24T10_33_07_006Z/app_log/yt_palm.1.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
+python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-10-28T11_12_30_267Z/app_log/yt_palm.3.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
 python decrypt_log.py /Users/yangchong/log/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
 
 
