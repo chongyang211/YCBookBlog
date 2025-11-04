@@ -20,6 +20,8 @@ git tag v1.4.1-std-2025102414-m3
 
 git tag v1.4.0-std-2025101315-m3
 
+git tag v1.5.0-std-2025110412-m3
+
 git tag -d v1.2.3-std-2025090320-m3
 
 git tag -l "v1.2.0-std*"
@@ -87,6 +89,17 @@ iOS:
 - C++和qml小说阅读器项目：https://github.com/RownH/qReader
 - 中文版《QmlBook》，原作地址QmlBook：https://github.com/cwc1987/QmlBook-In-Chinese
 - UI库：https://github.com/zhuzichu520/FluentUI
+
+
+1. 微信app【刷掌识别，WePalm，0.60.0及以上】，激活app【微信 Palm Activation，2.1.3及以上】，我们应用【业务app】，正常走通流程
+2. 新设备，第一次开机【启动激活App】需要扫码激活【必须达到2.1.3及以上】——>录入管理后台【吴鹏】——>拿到激活码
+   - 配置广州，拿到广州环境激活二维码，刷掌识别就会用到广州环境
+   - 配置巴西，拿到巴西环境激活二维码，刷掌识别就会用到巴西环境
+3. 已经激活，如何重置？第一步：找微信支付去重置【提供sn，其实就是重置se芯片】——>第二步：在后台把设备给删掉
+
+业务app已经配置白名单，是一个桌面应用。
+
+注意点：
 
 ## 书籍
 
