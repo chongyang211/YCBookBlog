@@ -30,6 +30,151 @@
 
 --------------------------------------------------------------------------------------------------
 
+## 3. 两种多态的区别对比
+
+### 核心区别表格
+
+| 特性 | 静态多态 | 动态多态 |
+|------|----------|----------|
+| **绑定时间** | 编译时绑定（早绑定） | 运行时绑定（晚绑定） |
+| **实现机制** | 函数重载、运算符重载、模板 | 虚函数、继承 |
+| **性能** | 高效，无运行时开销 | 有轻微性能开销（虚表查找） |
+| **灵活性** | 相对固定 | 高度灵活，支持运行时决策 |
+| **关键字** | 不需要特殊关键字 | 需要`virtual`关键字 |
+
+### 更深入的技术对比案例
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Base {
+public:
+    // 普通函数 - 静态绑定
+    void normalFunc() {
+        cout << "Base::normalFunc()" << endl;
+    }
+    
+    // 虚函数 - 动态绑定  
+    virtual void virtualFunc() {
+        cout << "Base::virtualFunc()" << endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    void normalFunc() {
+        cout << "Derived::normalFunc()" << endl;
+    }
+    
+    void virtualFunc() override {
+        cout << "Derived::virtualFunc()" << endl;
+    }
+};
+
+void demonstrateBinding() {
+    cout << "=== 绑定机制演示 ===" << endl;
+    
+    Derived derived;
+    Base* basePtr = &derived;
+    
+    // 静态绑定 - 编译时确定
+    cout << "静态绑定结果: ";
+    basePtr->normalFunc();  // 输出: Base::normalFunc()
+    
+    // 动态绑定 - 运行时确定  
+    cout << "动态绑定结果: ";
+    basePtr->virtualFunc(); // 输出: Derived::virtualFunc()
+    
+    cout << "\n=== 对象直接调用 ===" << endl;
+    derived.normalFunc();   // 输出: Derived::normalFunc()
+    derived.virtualFunc();  // 输出: Derived::virtualFunc()
+}
+
+// 纯虚函数案例 - 接口抽象
+class Shape {
+public:
+    // 纯虚函数 - 抽象类
+    virtual double area() const = 0;
+    virtual void draw() const = 0;
+    
+    virtual ~Shape() = default;
+};
+
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : radius(r) {}
+    
+    double area() const override {
+        return 3.14159 * radius * radius;
+    }
+    
+    void draw() const override {
+        cout << "绘制圆形，半径: " << radius << endl;
+    }
+};
+
+class Rectangle : public Shape {
+private:
+    double width, height;
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+    
+    double area() const override {
+        return width * height;
+    }
+    
+    void draw() const override {
+        cout << "绘制矩形，宽: " << width << " 高: " << height << endl;
+    }
+};
+
+void processShapes() {
+    cout << "\n=== 抽象类多态演示 ===" << endl;
+    
+    Shape* shapes[2];
+    shapes[0] = new Circle(5.0);
+    shapes[1] = new Rectangle(4.0, 6.0);
+    
+    for (int i = 0; i < 2; i++) {
+        shapes[i]->draw();
+        cout << "面积: " << shapes[i]->area() << endl;
+        delete shapes[i];
+    }
+}
+
+int main() {
+    demonstrateBinding();
+    processShapes();
+    return 0;
+}
+```
+
+## 4. 关键要点总结
+
+### 静态多态特点：
+- ✅ **编译时确定**：编译器在编译阶段就知道调用哪个函数
+- ✅ **性能优秀**：没有运行时开销
+- ✅ **类型安全**：编译器会检查类型匹配
+- ❌ **灵活性有限**：无法在运行时改变行为
+
+### 动态多态特点：
+- ✅ **运行时确定**：程序运行时才决定调用哪个函数
+- ✅ **高度灵活**：支持运行时多态，易于扩展
+- ✅ **接口抽象**：可以通过抽象类定义规范
+- ❌ **性能开销**：有虚表查找的开销
+- ❌ **内存占用**：需要维护虚函数表
+
+### 使用建议：
+1. **需要运行时灵活性**时使用动态多态（虚函数）
+2. **性能要求高**时使用静态多态（函数重载、模板）
+3. **设计抽象接口**时使用纯虚函数
+4. **记得为基类声明虚析构函数**，确保正确释放资源
+
+这两种多态机制各有优势，在实际开发中经常结合使用，根据具体需求选择最合适的方案。
+
 
 --------------------------------------------------------------------------------------------------
 
