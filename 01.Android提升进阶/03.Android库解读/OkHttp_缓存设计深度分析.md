@@ -17,36 +17,6 @@ OkHttp的缓存系统是一个完整的HTTP缓存实现，严格遵循RFC 7234 H
 
 ### 2.1 整体架构
 
-```mermaid
-graph TB
-    subgraph "OkHttp缓存架构"
-        A[OkHttpClient] --> B[CacheInterceptor]
-        B --> C[CacheStrategy]
-        C --> D[Cache]
-        D --> E[DiskLruCache]
-        
-        F[Request] --> G[CacheControl]
-        H[Response] --> I[Headers]
-        I --> J[CacheControl]
-        
-        B --> K[InternalCache]
-        K --> L[CacheRequest]
-        K --> M[Response缓存]
-        
-        subgraph "缓存决策"
-            C --> N[网络请求]
-            C --> O[缓存响应]
-            C --> P[条件请求]
-        end
-        
-        subgraph "存储层"
-            E --> Q[Journal文件]
-            E --> R[Entry文件]
-            E --> S[Snapshot]
-        end
-    end
-```
-
 ### 2.2 核心组件关系
 
 ```mermaid
