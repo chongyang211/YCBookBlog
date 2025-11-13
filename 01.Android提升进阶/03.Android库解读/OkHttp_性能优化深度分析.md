@@ -17,39 +17,6 @@ OkHttp作为现代HTTP客户端库，在性能优化方面采用了多种先进�
 
 ### 2.1 连接池整体架构
 
-```mermaid
-graph TB
-    subgraph "OkHttp连接复用架构"
-        A[OkHttpClient] --> B[ConnectionPool]
-        B --> C[RealConnectionPool]
-        C --> D[RealConnection]
-        
-        E[Request] --> F[RealCall]
-        F --> G[ExchangeFinder]
-        G --> H[RouteSelector]
-        
-        G --> I[Exchange]
-        I --> D
-        
-        subgraph "连接管理"
-            C --> J[连接清理任务]
-            C --> K[连接复用逻辑]
-            C --> L[连接池统计]
-        end
-        
-        subgraph "路由选择"
-            H --> M[Route]
-            H --> N[Proxy]
-            H --> O[InetSocketAddress]
-        end
-        
-        subgraph "协议支持"
-            D --> P[HTTP/1.1]
-            D --> Q[HTTP/2]
-            D --> R[HTTPS/TLS]
-        end
-    end
-```
 
 ### 2.2 连接池核心组件
 
