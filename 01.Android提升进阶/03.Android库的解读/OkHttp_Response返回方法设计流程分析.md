@@ -8,38 +8,6 @@ Response是OkHttp中表示HTTP响应的核心类，它封装了服务器返回�
 
 ### 2.1 
 
-### 2.2 Response创建流程架构图
-
-```mermaid
-graph TB
-    A[服务器响应] --> B[ExchangeCodec读取]
-    B --> C{协议类型}
-    
-    C -->|HTTP/1.1| D[Http1ExchangeCodec]
-    C -->|HTTP/2| E[Http2ExchangeCodec]
-    
-    D --> F[解析状态行]
-    E --> G[解析HTTP/2帧]
-    
-    F --> H[解析响应头]
-    G --> H
-    
-    H --> I[创建Response.Builder]
-    I --> J[设置基本信息]
-    J --> K[设置响应头]
-    K --> L[创建ResponseBody]
-    L --> M[构建Response对象]
-    
-    M --> N[拦截器处理]
-    N --> O[返回给应用层]
-    
-    style D fill:#e3f2fd
-    style E fill:#f3e5f5
-    style I fill:#e8f5e8
-    style L fill:#fff3e0
-    style N fill:#fce4ec
-```
-
 ## 3. Response创建详细流程
 
 ### 3.1 HTTP/1.1响应解析
