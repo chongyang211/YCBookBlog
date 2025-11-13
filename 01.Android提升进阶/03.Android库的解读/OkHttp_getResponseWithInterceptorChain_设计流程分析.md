@@ -746,25 +746,6 @@ public Response proceed(Request request, Transmitter transmitter, @Nullable Exch
 
 ### 5.2 拦截器链状态管理
 
-```mermaid
-stateDiagram-v2
-    [*] --> Created: new RealInterceptorChain()
-    Created --> Executing: proceed()调用
-    Executing --> NextInterceptor: index++, 创建新链
-    NextInterceptor --> Executing: interceptor.intercept()
-    Executing --> Completed: 返回Response
-    Executing --> Error: 异常发生
-    Error --> [*]
-    Completed --> [*]
-    
-    note right of NextInterceptor
-        每次proceed()调用都会：
-        1. index + 1
-        2. 创建新的RealInterceptorChain
-        3. 传递给下一个拦截器
-    end note
-```
-
 ## 6. 异常处理和资源管理
 
 ### 6.1 异常处理策略
