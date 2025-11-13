@@ -384,57 +384,8 @@ flowchart TD
 
 ### 4.3 CacheInterceptor（缓存拦截器）
 
-#### 4.3.1 核心功能
-- **缓存策略**：根据HTTP缓存规范决定缓存行为
-- **缓存读取**：从缓存中读取有效的响应
-- **缓存写入**：将可缓存的响应写入缓存
-- **条件请求**：发送If-None-Match、If-Modified-Since等条件请求
-
+#### 4.3.1 
 #### 4.3.2 缓存策略流程图
-
-```mermaid
-flowchart TD
-    A[接收请求] --> B[从缓存获取候选响应]
-    B --> C[计算缓存策略]
-    C --> D{网络请求为null?}
-    
-    D -->|是| E{缓存响应为null?}
-    D -->|否| F{缓存响应为null?}
-    
-    E -->|是| G[返回504错误]
-    E -->|否| H[返回缓存响应]
-    
-    F -->|是| I[执行网络请求]
-    F -->|否| J[执行条件网络请求]
-    
-    I --> K[获取网络响应]
-    J --> L[获取网络响应]
-    
-    K --> M{响应可缓存?}
-    L --> N{响应状态码?}
-    
-    N -->|304| O[更新缓存响应]
-    N -->|其他| P[使用网络响应]
-    
-    O --> Q[返回更新后的缓存响应]
-    P --> R{响应可缓存?}
-    
-    M -->|是| S[写入缓存]
-    M -->|否| T[返回网络响应]
-    
-    R -->|是| U[写入缓存]
-    R -->|否| V[返回网络响应]
-    
-    S --> T
-    U --> V
-    
-    style D fill:#e3f2fd
-    style E fill:#f3e5f5
-    style F fill:#e8f5e8
-    style M fill:#fff3e0
-    style N fill:#fce4ec
-    style R fill:#e0f2f1
-```
 
 #### 4.3.3 缓存策略类
 
@@ -631,57 +582,8 @@ flowchart TD
 }
 ```
 
-### 4.5 CallServerInterceptor（网络请求拦截器）
-
-#### 4.5.1 核心功能
-- **请求发送**：将HTTP请求发送到服务器
-- **响应接收**：接收服务器的HTTP响应
-- **流控制**：管理请求和响应的数据流
-- **协议处理**：处理HTTP/1.1和HTTP/2的具体协议细节
 
 #### 4.5.2 请求响应流程图
-
-```mermaid
-sequenceDiagram
-    participant Chain as RealInterceptorChain
-    participant CallServer as CallServerInterceptor
-    participant Exchange as Exchange
-    participant Codec as ExchangeCodec
-    participant Connection as RealConnection
-    participant Server as 服务器
-    
-    Chain->>CallServer: intercept(chain)
-    CallServer->>Exchange: writeRequestHeaders(request)
-    Exchange->>Codec: writeRequestHeaders(request)
-    Codec->>Connection: 发送请求头
-    Connection->>Server: HTTP请求头
-    
-    alt 有请求体
-        CallServer->>Exchange: createRequestBody(request)
-        CallServer->>CallServer: 写入请求体数据
-        CallServer->>Exchange: finishRequest()
-        Exchange->>Codec: finishRequest()
-        Codec->>Connection: 发送请求体
-        Connection->>Server: HTTP请求体
-    end
-    
-    CallServer->>Exchange: readResponseHeaders()
-    Exchange->>Codec: readResponseHeaders()
-    Codec->>Connection: 读取响应头
-    Connection->>Server: 请求响应头
-    Server-->>Connection: HTTP响应头
-    Connection-->>Codec: 响应头数据
-    Codec-->>Exchange: 解析后的响应头
-    Exchange-->>CallServer: Response.Builder
-    
-    alt 有响应体
-        CallServer->>Exchange: openResponseBody(response)
-        Exchange->>Codec: openResponseBodySource(response)
-        Note over CallServer: 创建响应体Source
-    end
-    
-    CallServer-->>Chain: 完整的Response对象
-```
 
 #### 4.5.3 关键代码分析
 
