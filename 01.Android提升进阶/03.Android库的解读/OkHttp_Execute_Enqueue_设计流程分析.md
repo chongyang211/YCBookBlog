@@ -6,14 +6,6 @@
 
 ### 1.1 核心方法对比
 
-| 特性 | execute() | enqueue() |
-|------|-----------|-----------|
-| 执行方式 | 同步阻塞 | 异步非阻塞 |
-| 线程模型 | 当前线程执行 | 线程池执行 |
-| 返回方式 | 直接返回Response | 通过Callback回调 |
-| 异常处理 | 抛出IOException | 通过Callback.onFailure |
-| 调度管理 | 简单记录 | 复杂的队列调度 |
-
 ## 2. 整体架构设计
 
 ### 2.1 核心类关系图
@@ -80,35 +72,6 @@ classDiagram
 
 ### 2.2 执行流程架构图
 
-```mermaid
-graph TB
-    A[应用调用] --> B{选择执行方式}
-    B -->|同步| C[call.execute]
-    B -->|异步| D[call.enqueue]
-    
-    C --> E[Dispatcher.executed]
-    D --> F[Dispatcher.enqueue]
-    
-    E --> G[getResponseWithInterceptorChain]
-    F --> H[AsyncCall入队]
-    H --> I[promoteAndExecute]
-    I --> J[线程池执行AsyncCall]
-    J --> K[AsyncCall.execute]
-    K --> G
-    
-    G --> L[拦截器链处理]
-    L --> M[网络请求]
-    M --> N[Response返回]
-    
-    N --> O{执行方式}
-    O -->|同步| P[直接返回Response]
-    O -->|异步| Q[Callback.onResponse]
-    
-    style C fill:#e1f5fe
-    style D fill:#f3e5f5
-    style G fill:#fff3e0
-    style L fill:#e8f5e8
-```
 
 ## 3. Execute方法详细分析
 
