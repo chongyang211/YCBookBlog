@@ -4,14 +4,6 @@
 
 Response是OkHttp中表示HTTP响应的核心类，它封装了服务器返回的所有信息，包括状态码、响应头、响应体等。本文档深入分析Response的设计架构、创建流程、数据处理机制以及各种优化策略。
 
-### 1.1 Response核心职责
-
-- **响应封装**：统一封装HTTP响应的所有信息
-- **流式处理**：支持大文件的流式读取和处理
-- **内存管理**：优化内存使用，避免大响应体的内存溢出
-- **协议适配**：支持HTTP/1.1和HTTP/2协议的响应处理
-- **缓存集成**：与缓存系统无缝集成
-
 ## 2. Response架构设计
 
 ### 2.1 Response类层次结构
@@ -93,7 +85,7 @@ classDiagram
     Response --> Headers : contains
     Response --> Builder : creates
     ResponseBody <|-- RealResponseBody : implements
-    Response +-- Builder : inner class
+    Response -- Builder : inner class
 ```
 
 ### 2.2 Response创建流程架构图
