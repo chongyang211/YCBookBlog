@@ -44,71 +44,6 @@ graph TB
 
 ### 2.2 拦截器类关系图
 
-```mermaid
-classDiagram
-    class Interceptor {
-        <<interface>>
-        +intercept(Chain) Response
-    }
-    
-    class Chain {
-        <<interface>>
-        +request() Request
-        +proceed(Request) Response
-        +connection() Connection
-        +call() Call
-    }
-    
-    class RealInterceptorChain {
-        -List~Interceptor~ interceptors
-        -Transmitter transmitter
-        -Exchange exchange
-        -int index
-        -Request request
-        +proceed(Request) Response
-        +proceed(Request, Transmitter, Exchange) Response
-    }
-    
-    class RetryAndFollowUpInterceptor {
-        -OkHttpClient client
-        -int MAX_FOLLOW_UPS
-        +intercept(Chain) Response
-        -recover(IOException, Transmitter, boolean, Request) boolean
-        -followUpRequest(Response, Route) Request
-    }
-    
-    class BridgeInterceptor {
-        -CookieJar cookieJar
-        +intercept(Chain) Response
-        -cookieHeader(List~Cookie~) String
-    }
-    
-    class CacheInterceptor {
-        -InternalCache cache
-        +intercept(Chain) Response
-        -cacheCandidate(Request) Response
-        -strategy(Request, Response) CacheStrategy
-    }
-    
-    class ConnectInterceptor {
-        -OkHttpClient client
-        +intercept(Chain) Response
-    }
-    
-    class CallServerInterceptor {
-        -boolean forWebSocket
-        +intercept(Chain) Response
-    }
-    
-    Interceptor <|-- RetryAndFollowUpInterceptor
-    Interceptor <|-- BridgeInterceptor
-    Interceptor <|-- CacheInterceptor
-    Interceptor <|-- ConnectInterceptor
-    Interceptor <|-- CallServerInterceptor
-    Chain <|-- RealInterceptorChain
-    RealInterceptorChain --> Interceptor : uses
-```
-
 ## 3. getResponseWithInterceptorChain方法详细分析
 
 ### 3.1 源码解析
@@ -252,45 +187,8 @@ sequenceDiagram
 
 ### 4.1 RetryAndFollowUpInterceptor（重试和重定向拦截器）
 
-#### 4.1.1 核心功能
-- **异常恢复**：处理网络异常和连接失败
-- **重定向处理**：自动处理HTTP重定向响应
-- **重试逻辑**：根据策略决定是否重试请求
-
+#### 4.1.1 
 #### 4.1.2 处理流程图
-
-```mermaid
-flowchart TD
-    A[接收请求] --> B[准备连接]
-    B --> C{是否被取消?}
-    C -->|是| D[抛出IOException]
-    C -->|否| E[执行下一个拦截器]
-    
-    E --> F{是否发生异常?}
-    F -->|是| G[调用recover方法]
-    F -->|否| H[检查响应状态]
-    
-    G --> I{是否可恢复?}
-    I -->|是| J[继续重试]
-    I -->|否| K[抛出异常]
-    
-    H --> L[调用followUpRequest]
-    L --> M{需要重定向?}
-    M -->|否| N[返回响应]
-    M -->|是| O{重定向次数超限?}
-    
-    O -->|是| P[抛出ProtocolException]
-    O -->|否| Q[更新请求]
-    Q --> R[关闭当前响应]
-    R --> J
-    
-    J --> B
-    
-    style G fill:#ffebee
-    style I fill:#fff3e0
-    style M fill:#e8f5e8
-    style O fill:#fce4ec
-```
 
 #### 4.1.3 关键代码分析
 
