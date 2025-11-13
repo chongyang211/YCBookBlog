@@ -2,9 +2,10 @@
 
 
 
-python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-10-28T11_12_30_267Z/app_log/yt_palm.3.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
-python decrypt_log.py /Users/yangchong/log/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
-
+python decrypt_log.py /Users/yangchong/Downloads/palm_logs_2025-11-12T11_21_00_344Z/app_log/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
+python decrypt_log.py /Users/yangchong/log2/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
+python decrypt_log.py /Users/yangchong/Downloads/log/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
+python decrypt_log.py /Users/yangchong/Downloads/log2/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
 
 
 git tag -d v1.2.0-std-20250815-m3
