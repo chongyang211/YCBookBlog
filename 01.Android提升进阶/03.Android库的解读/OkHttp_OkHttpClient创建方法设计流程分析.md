@@ -264,28 +264,6 @@ public final class Dispatcher {
 
 #### 4.1.1 Dispatcher架构图
 
-```mermaid
-graph TB
-    A[Dispatcher] --> B[ExecutorService]
-    A --> C[readyAsyncCalls]
-    A --> D[runningAsyncCalls]
-    A --> E[runningSyncCalls]
-    
-    B --> F[ThreadPoolExecutor]
-    F --> G[核心线程数: 0]
-    F --> H[最大线程数: Integer.MAX_VALUE]
-    F --> I[空闲时间: 60秒]
-    F --> J[队列: SynchronousQueue]
-    
-    C --> K[等待执行的异步请求]
-    D --> L[正在执行的异步请求]
-    E --> M[正在执行的同步请求]
-    
-    style A fill:#e3f2fd
-    style B fill:#f3e5f5
-    style F fill:#e8f5e8
-```
-
 ### 4.2 ConnectionPool连接池初始化
 
 ```java
