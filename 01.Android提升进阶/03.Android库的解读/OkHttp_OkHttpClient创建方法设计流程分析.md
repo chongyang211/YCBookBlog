@@ -128,8 +128,8 @@ classDiagram
 flowchart TD
     A[开始创建OkHttpClient] --> B{使用方式}
     
-    B -->|默认构造| C[new OkHttpClient()]
-    B -->|Builder模式| D[new OkHttpClient.Builder()]
+    B -->|默认构造| C[new OkHttpClient]
+    B -->|Builder模式| D[new OkHttpClient.Builder]
     
     C --> E[使用默认配置]
     D --> F[配置各种参数]
