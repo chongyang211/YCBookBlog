@@ -124,39 +124,6 @@ classDiagram
 
 ### 2.2 OkHttpClient创建流程架构图
 
-```mermaid
-flowchart TD
-    A[开始创建OkHttpClient] --> B{使用方式}
-    
-    B -->|默认构造| C[new OkHttpClient]
-    B -->|Builder模式| D[new OkHttpClient.Builder]
-    
-    C --> E[使用默认配置]
-    D --> F[配置各种参数]
-    
-    E --> G[创建默认组件]
-    F --> H[验证配置参数]
-    
-    G --> I[初始化Dispatcher]
-    H --> I
-    
-    I --> J[初始化ConnectionPool]
-    J --> K[初始化SSL配置]
-    K --> L[初始化拦截器链]
-    L --> M[初始化缓存配置]
-    M --> N[初始化超时配置]
-    N --> O[初始化事件监听器]
-    O --> P[创建OkHttpClient实例]
-    
-    P --> Q[客户端就绪]
-    
-    style C fill:#e3f2fd
-    style D fill:#f3e5f5
-    style G fill:#e8f5e8
-    style H fill:#fff3e0
-    style Q fill:#c8e6c9
-```
-
 ## 3. Builder模式详细实现
 
 ### 3.1 Builder模式设计原理
