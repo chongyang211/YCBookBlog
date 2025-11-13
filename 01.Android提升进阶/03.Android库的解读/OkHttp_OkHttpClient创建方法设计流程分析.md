@@ -223,38 +223,6 @@ public static final class Builder {
 
 ### 3.3 Builder配置流程图
 
-```mermaid
-sequenceDiagram
-    participant App as 应用代码
-    participant Builder as OkHttpClient.Builder
-    participant Validator as 参数验证器
-    participant Factory as 组件工厂
-    participant Client as OkHttpClient
-    
-    App->>Builder: new Builder()
-    Builder->>Builder: 初始化默认配置
-    
-    loop 配置各种参数
-        App->>Builder: 设置配置项
-        Builder->>Builder: 存储配置值
-    end
-    
-    App->>Builder: build()
-    Builder->>Validator: 验证配置参数
-    alt 参数无效
-        Validator-->>Builder: 抛出异常
-        Builder-->>App: 配置异常
-    else 参数有效
-        Validator-->>Builder: 验证通过
-        Builder->>Factory: 创建组件实例
-        Factory-->>Builder: 返回组件
-        Builder->>Client: new OkHttpClient(builder)
-        Client->>Client: 复制Builder配置
-        Client-->>Builder: OkHttpClient实例
-        Builder-->>App: 返回客户端
-    end
-```
-
 ## 4. 核心组件初始化
 
 ### 4.1 Dispatcher调度器初始化
