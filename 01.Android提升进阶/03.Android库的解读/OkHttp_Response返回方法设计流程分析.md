@@ -46,30 +46,6 @@ Response是OkHttp中表示HTTP响应的核心类，它封装了服务器返回�
 
 #### 3.1.2 状态行解析流程图
 
-```mermaid
-flowchart TD
-    A[读取状态行] --> B[StatusLine.parse]
-    B --> C{解析成功?}
-    C -->|否| D[抛出ProtocolException]
-    C -->|是| E[提取协议版本]
-    E --> F[提取状态码]
-    F --> G[提取状态消息]
-    G --> H[创建Response.Builder]
-    H --> I[设置protocol]
-    I --> J[设置code]
-    J --> K[设置message]
-    K --> L{状态码检查}
-    L -->|100 Continue| M{期望Continue?}
-    L -->|其他| N[读取响应头]
-    M -->|是| O[返回null]
-    M -->|否| P[返回Builder]
-    N --> Q[返回完整Builder]
-    
-    style C fill:#fff3e0
-    style L fill:#e3f2fd
-    style M fill:#f3e5f5
-```
-
 #### 3.1.3 StatusLine解析实现
 
 ```java
