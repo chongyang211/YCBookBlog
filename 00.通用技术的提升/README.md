@@ -14,71 +14,7 @@
 
 ### 2.1 协作式 vs 抢占式调度
 
-### 2.2 协作式调度的设计原理
-
-#### 2.2.1 核心机制
-
-```java
-// 协作式调度的核心抽象
-public abstract class Coroutine {
-    private CoroutineState state = CoroutineState.CREATED;
-    private Object yieldValue;
-    
-    // 协程的执行入口
-    public abstract void run();
-    
-    // 主动让出控制权
-    protected void yield() {
-        this.state = CoroutineState.YIELDED;
-        // 保存当前执行状态
-        saveExecutionContext();
-        // 切换到调度器
-        Scheduler.getInstance().schedule();
-    }
-    
-    // 等待异步操作完成
-    protected void await(Future<?> future) {
-        this.state = CoroutineState.WAITING;
-        future.onComplete(() -> {
-            this.state = CoroutineState.READY;
-            Scheduler.getInstance().wakeup(this);
-        });
-        yield();
-    }
-    
-    // 恢复执行
-    public void resume() {
-        this.state = CoroutineState.RUNNING;
-        restoreExecutionContext();
-        run();
-    }
-}
-```
-
-#### 2.2.2 状态转换模型
-
-```mermaid
-stateDiagram-v2
-    [*] --> CREATED: 创建协程
-    CREATED --> READY: 加入调度队列
-    READY --> RUNNING: 调度器选中
-    RUNNING --> YIELDED: yield()主动让出
-    RUNNING --> WAITING: await()等待I/O
-    RUNNING --> COMPLETED: 执行完成
-    YIELDED --> READY: 重新加入队列
-    WAITING --> READY: I/O操作完成
-    COMPLETED --> [*]: 协程销毁
-    
-    note right of RUNNING
-        协程正在执行
-        拥有CPU控制权
-    end note
-    
-    note right of WAITING
-        等待I/O操作完成
-        不占用CPU资源
-    end note
-```
+### 2.2 协作式调度思想
 
 ## 3. 协程实现"多任务"的设计思想
 
