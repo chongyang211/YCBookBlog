@@ -11,34 +11,6 @@
 
 ### 2.1 架构设计思想
 
-Android的消息机制体现了**分层架构**和**责任链模式**的设计思想：
-
-```mermaid
-graph TB
-    subgraph "应用层抽象"
-        A[Handler API] --> B[消息发送接口]
-        A --> C[消息处理接口]
-    end
-    
-    subgraph "框架层实现"
-        D[MessageQueue] --> E[消息存储管理]
-        F[Looper] --> G[事件循环驱动]
-    end
-    
-    subgraph "系统层支撑"
-        H[Native MessageQueue] --> I[epoll机制]
-        I --> J[内核事件通知]
-    end
-    
-    B --> D
-    C --> F
-    D --> H
-    
-    style A fill:#e8f5e8
-    style D fill:#fff3e0
-    style H fill:#f3e5f5
-```
-
 ### 2.2 核心抽象能力
 
 #### 2.2.1 消息抽象（Message Abstraction）
