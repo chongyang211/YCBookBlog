@@ -22,45 +22,6 @@
 
 #### 3.2.1 任务调度器设计
 
-```java
-public class CoroutineScheduler {
-    private final Queue<Coroutine> readyQueue = new LinkedList<>();
-    private final Set<Coroutine> waitingSet = new HashSet<>();
-    private Coroutine currentCoroutine;
-    
-    // 事件循环：单线程多任务的核心
-    public void eventLoop() {
-        while (!readyQueue.isEmpty() || !waitingSet.isEmpty()) {
-            // 1. 处理就绪的协程
-            if (!readyQueue.isEmpty()) {
-                currentCoroutine = readyQueue.poll();
-                currentCoroutine.resume();
-            }
-            
-            // 2. 检查等待中的I/O操作
-            checkIOCompletion();
-            
-            // 3. 处理定时器事件
-            processTimerEvents();
-            
-            // 4. 如果没有就绪任务，等待I/O事件
-            if (readyQueue.isEmpty()) {
-                waitForIOEvents();
-            }
-        }
-    }
-    
-    // 协程主动让出时的调度逻辑
-    public void yield(Coroutine coroutine) {
-        if (coroutine.getState() == CoroutineState.YIELDED) {
-            readyQueue.offer(coroutine);
-        } else if (coroutine.getState() == CoroutineState.WAITING) {
-            waitingSet.add(coroutine);
-        }
-        // 继续事件循环，执行下一个任务
-    }
-}
-```
 
 #### 3.2.2 多任务执行时序图
 
