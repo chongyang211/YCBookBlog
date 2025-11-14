@@ -1,16 +1,54 @@
-# 线程池技术设计方案
+# 消息事件机制技术设计方案
 
-## 1. 概述
+## 1. 概述与背景
 
-### 1.1 背景
-在现代多线程应用程序中，频繁创建和销毁线程会带来巨大的性能开销。线程池作为一种重要的并发编程技术，通过预先创建一定数量的线程并重复使用它们来执行任务，有效解决了线程创建销毁的性能问题，提高了系统的响应速度和资源利用率。
+### 1.1 为什么要设计消息机制
+
+在现代移动应用开发中，消息机制是解决异步编程和线程间通信的核心技术。其设计背景和必要性体现在以下几个方面：
+
+#### 1.1.1 技术背景
+- **多线程环境**: 现代应用需要处理UI渲染、网络请求、数据库操作等多种任务
+- **异步编程需求**: 避免阻塞主线程，提升用户体验
+- **事件驱动架构**: 响应用户交互、系统事件、网络回调等各种事件
+- **线程安全**: 确保多线程环境下的数据一致性和操作安全性
+
+#### 1.1.2 主要解决的问题
+
+```mermaid
+mindmap
+  root((消息机制解决的核心问题))
+    线程间通信
+      主线程与工作线程通信
+      工作线程间数据传递
+      跨进程消息传递
+    异步任务处理
+      网络请求回调
+      文件IO操作
+      数据库访问
+      图片加载处理
+    UI更新安全
+      只能在主线程更新UI
+      后台线程结果回传
+      避免ANR问题
+    事件解耦
+      组件间松耦合
+      观察者模式实现
+      事件总线机制
+    资源管理
+      内存泄漏防护
+      生命周期管理
+      任务调度优化
+```
 
 ### 1.2 设计目标
-- **性能优化**: 减少线程创建和销毁的开销
-- **资源控制**: 限制并发线程数量，防止系统资源耗尽
-- **任务管理**: 提供灵活的任务提交和执行机制
-- **可扩展性**: 支持动态调整线程池大小
-- **可靠性**: 提供完善的异常处理和资源回收机制
+
+| 目标 | 描述 | 实现方式 |
+|------|------|----------|
+| **线程安全** | 确保多线程环境下的数据一致性 | 消息队列同步机制 |
+| **高性能** | 最小化消息传递开销 | 高效的队列数据结构 |
+| **易用性** | 提供简洁的API接口 | 封装复杂的底层实现 |
+| **可扩展性** | 支持自定义消息类型和处理器 | 插件化架构设计 |
+| **可靠性** | 保证消息不丢失，按序处理 | 持久化和重试机制 |
 
 ## 2. 系统架构设计
 
@@ -18,608 +56,919 @@
 
 ```mermaid
 graph TB
-    subgraph "客户端层"
-        A[任务提交者] --> B[ThreadPoolExecutor]
+    subgraph "应用层"
+        A[Activity/Fragment] --> B[业务逻辑层]
+        B --> C[数据访问层]
     end
     
-    subgraph "线程池核心层"
-        B --> C[任务队列 BlockingQueue]
-        B --> D[线程管理器]
-        B --> E[拒绝策略处理器]
+    subgraph "消息机制核心层"
+        D[Handler] --> E[MessageQueue]
+        E --> F[Looper]
+        F --> G[Message]
         
-        D --> F[核心线程池]
-        D --> G[扩展线程池]
+        H[主线程Looper] --> I[主线程MessageQueue]
+        J[工作线程Looper] --> K[工作线程MessageQueue]
         
-        F --> H[Worker Thread 1]
-        F --> I[Worker Thread 2]
-        F --> J[Worker Thread N]
-        
-        G --> K[临时线程 1]
-        G --> L[临时线程 2]
+        L[HandlerThread] --> M[后台Looper]
     end
     
-    subgraph "任务执行层"
-        H --> M[任务执行]
-        I --> M
-        J --> M
-        K --> M
-        L --> M
-        
-        M --> N[任务完成回调]
-        M --> O[异常处理]
+    subgraph "系统层"
+        N[Native层消息机制] --> O[epoll机制]
+        O --> P[文件描述符]
+        P --> Q[内核事件通知]
     end
     
-    subgraph "监控管理层"
-        P[线程池监控] --> B
-        Q[性能统计] --> B
-        R[健康检查] --> B
-    end
+    A --> D
+    B --> D
+    C --> D
+    
+    D --> H
+    D --> J
+    D --> M
+    
+    F --> N
+    
+    style D fill:#e1f5fe
+    style E fill:#f3e5f5
+    style F fill:#e8f5e8
+    style G fill:#fff3e0
 ```
 
-### 2.2 核心组件说明
-
-| 组件 | 职责 | 实现方式 |
-|------|------|----------|
-| ThreadPoolExecutor | 线程池主控制器 | 管理线程生命周期和任务调度 |
-| BlockingQueue | 任务队列 | 存储待执行任务，支持阻塞操作 |
-| Worker Thread | 工作线程 | 从队列获取并执行任务 |
-| RejectedExecutionHandler | 拒绝策略 | 处理无法执行的任务 |
-| ThreadFactory | 线程工厂 | 创建新线程 |
-
-## 3. 线程池状态管理
-
-### 3.1 线程池状态图
-
-```mermaid
-stateDiagram-v2
-    [*] --> RUNNING: 创建线程池
-    RUNNING --> SHUTDOWN: 调用shutdown()
-    RUNNING --> STOP: 调用shutdownNow()
-    SHUTDOWN --> TIDYING: 所有任务完成
-    STOP --> TIDYING: 所有线程停止
-    TIDYING --> TERMINATED: 执行terminated()
-    TERMINATED --> [*]
-    
-    note right of RUNNING
-        接受新任务
-        处理队列中的任务
-    end note
-    
-    note right of SHUTDOWN
-        不接受新任务
-        继续处理队列中的任务
-    end note
-    
-    note right of STOP
-        不接受新任务
-        不处理队列中的任务
-        中断正在执行的任务
-    end note
-```
-
-### 3.2 状态定义
-
-| 状态 | 值 | 描述 |
-|------|----|----- |
-| RUNNING | -1 | 接受新任务并处理队列中的任务 |
-| SHUTDOWN | 0 | 不接受新任务，但会处理队列中的任务 |
-| STOP | 1 | 不接受新任务，不处理队列中的任务，并中断正在执行的任务 |
-| TIDYING | 2 | 所有任务已终止，工作线程数为0 |
-| TERMINATED | 3 | terminated()方法已完成 |
-
-## 4. 任务执行流程设计
-
-### 4.1 任务提交与执行时序图
-
-```mermaid
-sequenceDiagram
-    participant Client as 客户端
-    participant TPE as ThreadPoolExecutor
-    participant Queue as 任务队列
-    participant Worker as 工作线程
-    participant Task as 任务
-    
-    Note over Client,Task: 任务提交阶段
-    Client->>TPE: execute(task)
-    TPE->>TPE: 检查线程池状态
-    
-    alt 核心线程数未满
-        TPE->>Worker: 创建新的核心线程
-        Worker->>Task: 直接执行任务
-    else 核心线程数已满
-        TPE->>Queue: 将任务加入队列
-        alt 队列未满
-            Queue-->>TPE: 任务入队成功
-            Note over Worker: 空闲线程从队列获取任务
-            Worker->>Queue: getTask()
-            Queue->>Worker: 返回任务
-            Worker->>Task: 执行任务
-        else 队列已满
-            alt 线程数 < 最大线程数
-                TPE->>Worker: 创建临时线程
-                Worker->>Task: 直接执行任务
-            else 线程数 = 最大线程数
-                TPE->>TPE: 执行拒绝策略
-                TPE-->>Client: 抛出异常或其他处理
-            end
-        end
-    end
-    
-    Note over Client,Task: 任务执行阶段
-    Worker->>Task: 执行run()方法
-    Task-->>Worker: 任务完成
-    Worker->>TPE: 更新统计信息
-    
-    Note over Client,Task: 线程回收阶段
-    alt 线程空闲时间超过keepAliveTime
-        Worker->>TPE: 请求销毁线程
-        TPE->>Worker: 销毁线程
-    else 继续等待新任务
-        Worker->>Queue: getTask()
-    end
-```
-
-### 4.2 详细执行流程图
-
-```mermaid
-flowchart TD
-    A[任务提交] --> B{线程池是否运行中?}
-    B -->|否| C[执行拒绝策略]
-    B -->|是| D{当前线程数 < 核心线程数?}
-    
-    D -->|是| E[创建新核心线程]
-    E --> F[线程直接执行任务]
-    
-    D -->|否| G{任务队列是否已满?}
-    G -->|否| H[任务加入队列]
-    H --> I[空闲线程获取任务]
-    I --> J[执行任务]
-    
-    G -->|是| K{当前线程数 < 最大线程数?}
-    K -->|是| L[创建临时线程]
-    L --> M[临时线程执行任务]
-    
-    K -->|否| N[执行拒绝策略]
-    
-    F --> O[任务执行完成]
-    J --> O
-    M --> O
-    
-    O --> P{线程是否为临时线程?}
-    P -->|是| Q{空闲时间 > keepAliveTime?}
-    Q -->|是| R[销毁线程]
-    Q -->|否| S[继续等待任务]
-    
-    P -->|否| T{允许核心线程超时?}
-    T -->|是| Q
-    T -->|否| S
-    
-    S --> U[从队列获取下一个任务]
-    U --> V{获取到任务?}
-    V -->|是| J
-    V -->|否| W{线程池是否关闭?}
-    W -->|是| R
-    W -->|否| S
-    
-    C --> X[结束]
-    N --> X
-    R --> X
-```
-
-## 5. 核心参数配置
-
-### 5.1 关键参数说明
-
-```java
-public class ThreadPoolConfig {
-    // 核心线程数：始终保持活跃的线程数量
-    private int corePoolSize;
-    
-    // 最大线程数：线程池允许的最大线程数量
-    private int maximumPoolSize;
-    
-    // 线程空闲时间：非核心线程的最大空闲时间
-    private long keepAliveTime;
-    
-    // 时间单位
-    private TimeUnit unit;
-    
-    // 任务队列：存储待执行任务的队列
-    private BlockingQueue<Runnable> workQueue;
-    
-    // 线程工厂：用于创建新线程
-    private ThreadFactory threadFactory;
-    
-    // 拒绝策略：当任务无法执行时的处理策略
-    private RejectedExecutionHandler handler;
-}
-```
-
-### 5.2 参数配置建议
-
-| 应用场景 | 核心线程数 | 最大线程数 | 队列类型 | 队列大小 |
-|----------|------------|------------|----------|----------|
-| CPU密集型 | CPU核心数 | CPU核心数+1 | LinkedBlockingQueue | 无界 |
-| IO密集型 | 2*CPU核心数 | 4*CPU核心数 | ArrayBlockingQueue | 1000-5000 |
-| 混合型 | CPU核心数+1 | 2*CPU核心数 | LinkedBlockingQueue | 2000-10000 |
-| 高并发短任务 | 10-50 | 100-200 | SynchronousQueue | 0 |
-
-## 6. 任务队列设计
-
-### 6.1 队列类型对比
-
-```mermaid
-graph LR
-    A[BlockingQueue接口] --> B[ArrayBlockingQueue]
-    A --> C[LinkedBlockingQueue]
-    A --> D[SynchronousQueue]
-    A --> E[PriorityBlockingQueue]
-    A --> F[DelayQueue]
-    
-    B --> B1[有界数组队列<br/>固定容量<br/>FIFO顺序]
-    C --> C1[无界链表队列<br/>可选容量<br/>FIFO顺序]
-    D --> D1[同步队列<br/>容量为0<br/>直接传递]
-    E --> E1[优先级队列<br/>无界队列<br/>优先级顺序]
-    F --> F1[延迟队列<br/>无界队列<br/>延迟执行]
-```
-
-### 6.2 队列选择策略
-
-| 队列类型 | 适用场景 | 优点 | 缺点 |
-|----------|----------|------|------|
-| ArrayBlockingQueue | 有界缓冲，防止内存溢出 | 内存占用可控 | 容量固定，可能阻塞 |
-| LinkedBlockingQueue | 高吞吐量场景 | 吞吐量高 | 可能导致内存溢出 |
-| SynchronousQueue | 直接传递，快速响应 | 响应速度快 | 需要足够多的线程 |
-| PriorityBlockingQueue | 任务有优先级要求 | 支持优先级 | 排序开销 |
-
-## 7. 拒绝策略设计
-
-### 7.1 拒绝策略类图
+### 2.2 核心组件关系图
 
 ```mermaid
 classDiagram
-    class RejectedExecutionHandler {
-        <<interface>>
-        +rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+    class Message {
+        +int what
+        +Object obj
+        +int arg1, arg2
+        +long when
+        +Handler target
+        +Runnable callback
+        +Message next
+        +obtain() Message
+        +recycle() void
     }
     
-    class AbortPolicy {
-        +rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+    class Handler {
+        +Looper mLooper
+        +MessageQueue mQueue
+        +sendMessage(Message) boolean
+        +post(Runnable) boolean
+        +handleMessage(Message) void
+        +dispatchMessage(Message) void
     }
     
-    class CallerRunsPolicy {
-        +rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+    class MessageQueue {
+        +Message mMessages
+        +boolean mQuitting
+        +enqueueMessage(Message, long) boolean
+        +next() Message
+        +quit() void
+        +isIdle() boolean
     }
     
-    class DiscardPolicy {
-        +rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+    class Looper {
+        -static ThreadLocal sThreadLocal
+        -MessageQueue mQueue
+        -Thread mThread
+        +prepare() void
+        +loop() void
+        +quit() void
+        +getMainLooper() Looper
     }
     
-    class DiscardOldestPolicy {
-        +rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+    class HandlerThread {
+        +Looper mLooper
+        +run() void
+        +getLooper() Looper
+        +quit() boolean
     }
     
-    class CustomRejectedHandler {
-        +rejectedExecution(Runnable r, ThreadPoolExecutor executor)
-    }
-    
-    RejectedExecutionHandler <|-- AbortPolicy
-    RejectedExecutionHandler <|-- CallerRunsPolicy
-    RejectedExecutionHandler <|-- DiscardPolicy
-    RejectedExecutionHandler <|-- DiscardOldestPolicy
-    RejectedExecutionHandler <|-- CustomRejectedHandler
+    Handler --> Message : creates/handles
+    Handler --> MessageQueue : enqueues to
+    Handler --> Looper : associated with
+    MessageQueue --> Message : stores
+    Looper --> MessageQueue : reads from
+    HandlerThread --> Looper : creates
 ```
 
-### 7.2 拒绝策略对比
+## 3. 消息设计原理
 
-| 策略 | 行为 | 适用场景 | 优缺点 |
-|------|------|----------|--------|
-| AbortPolicy | 抛出RejectedExecutionException | 需要感知任务被拒绝 | 默认策略，简单直接 |
-| CallerRunsPolicy | 调用者线程执行任务 | 降低任务提交速度 | 提供降级机制，但可能阻塞调用者 |
-| DiscardPolicy | 静默丢弃任务 | 任务丢失可接受 | 简单，但任务会丢失 |
-| DiscardOldestPolicy | 丢弃最老的任务 | 新任务优先级更高 | 保证新任务执行，但老任务丢失 |
+### 3.1 消息结构设计
 
-## 8. 线程管理机制
-
-### 8.1 线程生命周期管理
-
-```mermaid
-stateDiagram-v2
-    [*] --> NEW: 创建线程
-    NEW --> RUNNABLE: start()
-    RUNNABLE --> BLOCKED: 等待锁
-    RUNNABLE --> WAITING: wait()/join()
-    RUNNABLE --> TIMED_WAITING: sleep()/wait(timeout)
-    BLOCKED --> RUNNABLE: 获得锁
-    WAITING --> RUNNABLE: notify()/notifyAll()
-    TIMED_WAITING --> RUNNABLE: 超时/notify()
-    RUNNABLE --> TERMINATED: 任务完成/异常
-    TERMINATED --> [*]
-```
-
-### 8.2 Worker线程设计
+消息是消息机制的基本单元，其设计需要考虑性能、内存管理和扩展性：
 
 ```java
-private final class Worker extends AbstractQueuedSynchronizer implements Runnable {
-    final Thread thread;
-    Runnable firstTask;
-    volatile long completedTasks;
+public final class Message implements Parcelable {
+    // 消息标识符
+    public int what;
     
-    Worker(Runnable firstTask) {
-        setState(-1); // 禁止中断直到runWorker
-        this.firstTask = firstTask;
-        this.thread = getThreadFactory().newThread(this);
-    }
+    // 简单数据参数
+    public int arg1;
+    public int arg2;
     
-    public void run() {
-        runWorker(this);
-    }
+    // 复杂数据对象
+    public Object obj;
     
-    // 其他方法...
+    // 消息携带的数据包
+    Bundle data;
+    
+    // 消息处理器
+    Handler target;
+    
+    // 回调函数
+    Runnable callback;
+    
+    // 消息发送时间
+    long when;
+    
+    // 链表指针（用于消息队列）
+    Message next;
+    
+    // 消息池相关
+    private static final Object sPoolSync = new Object();
+    private static Message sPool;
+    private static int sPoolSize = 0;
+    private static final int MAX_POOL_SIZE = 50;
 }
 ```
 
-## 9. 性能监控与调优
-
-### 9.1 监控指标体系
+### 3.2 同步消息与异步消息设计
 
 ```mermaid
-mindmap
-  root((线程池监控))
-    基础指标
-      当前线程数
-      活跃线程数
-      核心线程数
-      最大线程数
-    任务指标
-      已完成任务数
-      队列中任务数
-      队列容量
-      任务提交速率
-    性能指标
-      任务平均执行时间
-      任务等待时间
-      线程利用率
-      吞吐量TPS
-    异常指标
-      拒绝任务数
-      异常任务数
-      超时任务数
-      线程异常退出数
+sequenceDiagram
+    participant App as 应用线程
+    participant Handler as Handler
+    participant Queue as MessageQueue
+    participant Looper as Looper
+    
+    Note over App,Looper: 同步消息处理流程
+    App->>Handler: sendMessage(msg)
+    Handler->>Queue: enqueueMessage(msg, uptimeMillis)
+    Queue->>Queue: 按时间排序插入
+    Looper->>Queue: next() - 阻塞等待
+    Queue->>Looper: 返回消息
+    Looper->>Handler: dispatchMessage(msg)
+    Handler->>App: handleMessage(msg)
+    
+    Note over App,Looper: 异步消息处理流程
+    App->>Handler: post(runnable)
+    Handler->>Queue: enqueueMessage(msg, 0)
+    Queue->>Queue: 立即可用
+    Looper->>Queue: next() - 立即返回
+    Queue->>Looper: 返回消息
+    Looper->>Handler: dispatchMessage(msg)
+    Handler->>Handler: runnable.run()
 ```
 
-### 9.2 性能调优策略
+### 3.3 消息类型分类
 
-| 问题现象 | 可能原因 | 调优建议 |
-|----------|----------|----------|
-| CPU利用率低 | 线程数过少 | 增加核心线程数 |
-| 内存占用高 | 队列积压严重 | 减少队列大小或增加线程数 |
-| 响应时间长 | 任务排队等待 | 增加最大线程数或优化任务逻辑 |
-| 频繁拒绝任务 | 线程池容量不足 | 调整线程数和队列大小 |
-| 线程频繁创建销毁 | keepAliveTime过短 | 增加线程存活时间 |
+| 消息类型 | 特点 | 使用场景 | 处理方式 |
+|----------|------|----------|----------|
+| **普通消息** | 按时间顺序处理 | 一般业务逻辑 | handleMessage() |
+| **延时消息** | 指定时间后处理 | 定时任务、超时处理 | sendMessageDelayed() |
+| **屏障消息** | 阻塞同步消息 | 优先处理异步消息 | postSyncBarrier() |
+| **异步消息** | 不受屏障影响 | UI刷新、高优先级任务 | setAsynchronous(true) |
+| **空闲消息** | 队列空闲时处理 | 资源清理、预加载 | IdleHandler |
 
-## 10. 异常处理机制
+## 4. 消息队列设计
 
-### 10.1 异常处理流程
+### 4.1 消息队列数据结构
+
+消息队列采用**单链表**结构，按照消息的执行时间进行排序：
+
+```mermaid
+graph LR
+    A[MessageQueue] --> B[Message1<br/>when=100]
+    B --> C[Message2<br/>when=200]
+    C --> D[Message3<br/>when=300]
+    D --> E[Message4<br/>when=400]
+    E --> F[null]
+    
+    style A fill:#e3f2fd
+    style B fill:#f1f8e9
+    style C fill:#f1f8e9
+    style D fill:#f1f8e9
+    style E fill:#f1f8e9
+```
+
+### 4.2 消息入队算法
 
 ```mermaid
 flowchart TD
-    A[任务执行] --> B{是否发生异常?}
-    B -->|否| C[任务正常完成]
-    B -->|是| D[捕获异常]
+    A[enqueueMessage] --> B{队列是否为空?}
+    B -->|是| C[设为队列头]
+    B -->|否| D{消息时间 <= 队列头时间?}
+    D -->|是| E[插入队列头]
+    D -->|否| F[遍历找到合适位置]
+    F --> G{找到插入点?}
+    G -->|是| H[插入到指定位置]
+    G -->|否| I[插入到队列尾]
     
-    D --> E{异常类型判断}
-    E -->|RuntimeException| F[记录异常日志]
-    E -->|Error| G[记录严重错误]
-    E -->|InterruptedException| H[处理中断]
+    C --> J[唤醒Looper]
+    E --> J
+    H --> J
+    I --> J
     
-    F --> I[更新异常统计]
-    G --> I
-    H --> J[恢复中断状态]
-    J --> I
-    
-    I --> K[通知异常处理器]
-    K --> L[清理资源]
-    L --> M[线程继续运行]
-    
-    C --> N[更新完成统计]
-    M --> O[获取下一个任务]
-    N --> O
+    J --> K[返回成功]
 ```
 
-### 10.2 异常处理策略
+### 4.3 消息队列核心实现
 
 ```java
-public class ThreadPoolExceptionHandler implements Thread.UncaughtExceptionHandler {
+public final class MessageQueue {
+    Message mMessages; // 队列头
+    private final Object mLock = new Object();
+    
+    boolean enqueueMessage(Message msg, long when) {
+        synchronized (mLock) {
+            msg.when = when;
+            Message p = mMessages;
+            boolean needWake;
+            
+            // 插入到队列头部
+            if (p == null || when == 0 || when < p.when) {
+                msg.next = p;
+                mMessages = msg;
+                needWake = mBlocked;
+            } else {
+                // 找到合适的插入位置
+                needWake = mBlocked && p.target == null && msg.isAsynchronous();
+                Message prev;
+                for (;;) {
+                    prev = p;
+                    p = p.next;
+                    if (p == null || when < p.when) {
+                        break;
+                    }
+                    if (needWake && p.isAsynchronous()) {
+                        needWake = false;
+                    }
+                }
+                msg.next = p;
+                prev.next = msg;
+            }
+            
+            // 唤醒等待的Looper
+            if (needWake) {
+                nativeWake(mPtr);
+            }
+        }
+        return true;
+    }
+}
+```
+
+### 4.4 消息队列管理策略
+
+```mermaid
+graph TB
+    subgraph "消息队列管理"
+        A[消息入队] --> B[时间排序]
+        B --> C[优先级处理]
+        C --> D[内存管理]
+        
+        E[消息出队] --> F[阻塞等待]
+        F --> G[超时处理]
+        G --> H[消息分发]
+        
+        I[队列维护] --> J[空闲检测]
+        J --> K[资源清理]
+        K --> L[性能监控]
+    end
+    
+    style A fill:#e8f5e8
+    style E fill:#fff3e0
+    style I fill:#f3e5f5
+```
+
+## 5. 消息处理器设计
+
+### 5.1 Handler设计模式
+
+Handler采用**策略模式**和**模板方法模式**，提供灵活的消息处理机制：
+
+```mermaid
+classDiagram
+    class Handler {
+        <<abstract>>
+        +handleMessage(Message msg)*
+        +dispatchMessage(Message msg)
+        +sendMessage(Message msg)
+        +post(Runnable r)
+    }
+    
+    class UIHandler {
+        +handleMessage(Message msg)
+        +updateUI()
+    }
+    
+    class NetworkHandler {
+        +handleMessage(Message msg)
+        +processNetworkResponse()
+    }
+    
+    class DatabaseHandler {
+        +handleMessage(Message msg)
+        +executeDatabaseOperation()
+    }
+    
+    Handler <|-- UIHandler
+    Handler <|-- NetworkHandler
+    Handler <|-- DatabaseHandler
+```
+
+### 5.2 消息分发机制
+
+```mermaid
+sequenceDiagram
+    participant Looper as Looper
+    participant Handler as Handler
+    participant Callback as Callback
+    participant Message as Message
+    
+    Looper->>Handler: dispatchMessage(msg)
+    
+    alt 消息有callback
+        Handler->>Message: callback.run()
+    else Handler有Callback
+        Handler->>Callback: handleMessage(msg)
+        alt Callback返回true
+            Note over Handler: 消息已处理，结束
+        else Callback返回false
+            Handler->>Handler: handleMessage(msg)
+        end
+    else 默认处理
+        Handler->>Handler: handleMessage(msg)
+    end
+    
+    Handler-->>Looper: 消息处理完成
+```
+
+### 5.3 Handler生命周期管理
+
+```java
+public class LifecycleHandler extends Handler {
+    private WeakReference<Context> mContextRef;
+    
+    public LifecycleHandler(Context context) {
+        mContextRef = new WeakReference<>(context);
+    }
+    
     @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        // 记录异常日志
-        logger.error("Thread {} threw exception", t.getName(), e);
+    public void handleMessage(Message msg) {
+        Context context = mContextRef.get();
+        if (context == null) {
+            // Context已被回收，忽略消息
+            return;
+        }
         
-        // 更新监控指标
-        exceptionCounter.increment();
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            if (activity.isFinishing() || activity.isDestroyed()) {
+                // Activity已销毁，忽略消息
+                return;
+            }
+        }
         
-        // 通知监控系统
-        alertManager.sendAlert("ThreadPool异常", e.getMessage());
+        // 安全处理消息
+        handleMessageSafely(msg, context);
+    }
+    
+    protected void handleMessageSafely(Message msg, Context context) {
+        // 子类实现具体逻辑
+    }
+}
+```
+
+## 6. Looper设计原理
+
+### 6.1 Looper设计思想
+
+Looper是消息机制的核心驱动器，采用**事件循环**模式，其设计思想包括：
+
+1. **单线程模型**: 每个线程最多只能有一个Looper
+2. **事件驱动**: 基于消息队列的事件循环
+3. **阻塞等待**: 没有消息时进入休眠状态
+4. **优先级调度**: 支持不同优先级的消息处理
+
+### 6.2 Looper工作流程
+
+```mermaid
+flowchart TD
+    A[Looper.prepare] --> B[创建MessageQueue]
+    B --> C[绑定到当前线程]
+    C --> D[Looper.loop]
+    
+    D --> E[从MessageQueue获取消息]
+    E --> F{消息是否为null?}
+    F -->|是| G[退出循环]
+    F -->|否| H[分发消息给Handler]
+    
+    H --> I[Handler.dispatchMessage]
+    I --> J[消息处理完成]
+    J --> K[回收消息到消息池]
+    K --> E
+    
+    G --> L[清理资源]
+    L --> M[Looper结束]
+    
+    style D fill:#e3f2fd
+    style E fill:#f1f8e9
+    style H fill:#fff3e0
+```
+
+### 6.3 Looper核心实现
+
+```java
+public final class Looper {
+    static final ThreadLocal<Looper> sThreadLocal = new ThreadLocal<Looper>();
+    private static Looper sMainLooper;
+    
+    final MessageQueue mQueue;
+    final Thread mThread;
+    
+    public static void prepare() {
+        prepare(true);
+    }
+    
+    private static void prepare(boolean quitAllowed) {
+        if (sThreadLocal.get() != null) {
+            throw new RuntimeException("Only one Looper may be created per thread");
+        }
+        sThreadLocal.set(new Looper(quitAllowed));
+    }
+    
+    public static void loop() {
+        final Looper me = myLooper();
+        if (me == null) {
+            throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
+        }
         
-        // 根据异常类型决定是否重启线程
-        if (e instanceof OutOfMemoryError) {
-            // 内存溢出，需要紧急处理
-            emergencyShutdown();
+        final MessageQueue queue = me.mQueue;
+        
+        for (;;) {
+            Message msg = queue.next(); // 可能阻塞
+            if (msg == null) {
+                // 没有消息表示消息队列正在退出
+                return;
+            }
+            
+            try {
+                msg.target.dispatchMessage(msg);
+            } finally {
+                msg.recycleUnchecked();
+            }
         }
     }
 }
 ```
 
-## 11. 最佳实践与使用建议
+### 6.4 多Looper架构设计
 
-### 11.1 线程池创建最佳实践
-
-```java
-public class ThreadPoolFactory {
-    
-    /**
-     * 创建CPU密集型任务线程池
-     */
-    public static ThreadPoolExecutor createCpuIntensivePool() {
-        int coreSize = Runtime.getRuntime().availableProcessors();
-        return new ThreadPoolExecutor(
-            coreSize,                           // 核心线程数
-            coreSize + 1,                       // 最大线程数
-            60L, TimeUnit.SECONDS,              // 空闲时间
-            new LinkedBlockingQueue<>(),        // 无界队列
-            new CustomThreadFactory("cpu-"),    // 线程工厂
-            new ThreadPoolExecutor.AbortPolicy() // 拒绝策略
-        );
-    }
-    
-    /**
-     * 创建IO密集型任务线程池
-     */
-    public static ThreadPoolExecutor createIoIntensivePool() {
-        int coreSize = Runtime.getRuntime().availableProcessors() * 2;
-        return new ThreadPoolExecutor(
-            coreSize,                           // 核心线程数
-            coreSize * 2,                       // 最大线程数
-            60L, TimeUnit.SECONDS,              // 空闲时间
-            new ArrayBlockingQueue<>(1000),     // 有界队列
-            new CustomThreadFactory("io-"),     // 线程工厂
-            new CallerRunsPolicy()              // 调用者执行策略
-        );
-    }
-}
-```
-
-### 11.2 使用注意事项
-
-1. **合理设置线程数量**
-  - CPU密集型：线程数 = CPU核心数 + 1
-  - IO密集型：线程数 = CPU核心数 × (1 + IO等待时间/CPU计算时间)
-
-2. **选择合适的队列**
-  - 有界队列：防止内存溢出，但可能导致任务被拒绝
-  - 无界队列：不会拒绝任务，但可能导致内存溢出
-
-3. **设置合理的拒绝策略**
-  - 根据业务需求选择合适的拒绝策略
-  - 可以自定义拒绝策略实现特殊需求
-
-4. **及时关闭线程池**
-  - 使用shutdown()优雅关闭
-  - 使用shutdownNow()强制关闭
-  - 使用awaitTermination()等待关闭完成
-
-## 12. 扩展功能设计
-
-### 12.1 动态调整功能
+应用可以有多个Looper，每个线程最多一个：
 
 ```mermaid
-sequenceDiagram
-    participant Monitor as 监控系统
-    participant Manager as 线程池管理器
-    participant Pool as 线程池
-    
-    Monitor->>Manager: 检测到性能指标异常
-    Manager->>Manager: 分析指标数据
-    Manager->>Manager: 计算最优参数
-    Manager->>Pool: setCorePoolSize(newSize)
-    Pool-->>Manager: 参数调整完成
-    Manager->>Monitor: 通知调整结果
-    
-    Note over Monitor,Pool: 持续监控调整效果
-    Monitor->>Manager: 定期上报性能数据
-    Manager->>Manager: 评估调整效果
-    
-    alt 效果良好
-        Manager->>Manager: 保持当前配置
-    else 效果不佳
-        Manager->>Pool: 回滚到之前配置
+graph TB
+    subgraph "主线程"
+        A[Main Looper] --> B[UI Handler]
+        A --> C[Main MessageQueue]
     end
+    
+    subgraph "工作线程1"
+        D[Worker Looper 1] --> E[Network Handler]
+        D --> F[Worker MessageQueue 1]
+    end
+    
+    subgraph "工作线程2"
+        G[Worker Looper 2] --> H[Database Handler]
+        G --> I[Worker MessageQueue 2]
+    end
+    
+    subgraph "HandlerThread"
+        J[HandlerThread Looper] --> K[Background Handler]
+        J --> L[HandlerThread MessageQueue]
+    end
+    
+    M[Application] --> A
+    M --> D
+    M --> G
+    M --> J
+    
+    style A fill:#ffcdd2
+    style D fill:#c8e6c9
+    style G fill:#bbdefb
+    style J fill:#f8bbd9
 ```
 
-### 12.2 任务优先级支持
+### 6.5 为什么支持多Looper
+
+| 原因 | 说明 | 优势 |
+|------|------|------|
+| **线程隔离** | 不同线程处理不同类型任务 | 避免相互影响，提高稳定性 |
+| **性能优化** | 分散处理负载 | 充分利用多核CPU资源 |
+| **职责分离** | UI线程专注界面更新 | 后台线程处理耗时操作 |
+| **优先级管理** | 不同优先级的任务分离 | 保证关键任务及时处理 |
+
+## 7. 消息机制在不同平台的实现
+
+### 7.1 Android消息机制
+
+```mermaid
+graph TB
+    subgraph "Java层"
+        A[Handler] --> B[MessageQueue]
+        B --> C[Looper]
+    end
+    
+    subgraph "Native层"
+        D[NativeMessageQueue] --> E[Looper.cpp]
+        E --> F[epoll机制]
+    end
+    
+    subgraph "内核层"
+        G[eventfd] --> H[epoll_wait]
+        H --> I[文件描述符事件]
+    end
+    
+    B --> D
+    E --> G
+    
+    style A fill:#e8f5e8
+    style D fill:#fff3e0
+    style G fill:#f3e5f5
+```
+
+### 7.2 iOS消息机制（RunLoop）
+
+```mermaid
+graph LR
+    A[CFRunLoop] --> B[CFRunLoopMode]
+    B --> C[CFRunLoopSource]
+    B --> D[CFRunLoopTimer]
+    B --> E[CFRunLoopObserver]
+    
+    F[NSRunLoop] --> A
+    
+    C --> G[Input Sources]
+    C --> H[Custom Sources]
+    
+    style A fill:#e3f2fd
+    style F fill:#f1f8e9
+```
+
+### 7.3 平台对比分析
+
+| 特性 | Android Handler | iOS RunLoop | Web Event Loop |
+|------|-----------------|-------------|----------------|
+| **消息队列** | MessageQueue | CFRunLoopMode | Task Queue |
+| **事件循环** | Looper.loop() | CFRunLoopRun | Event Loop |
+| **线程模型** | 多线程支持 | 主要在主线程 | 单线程 |
+| **底层机制** | epoll | kqueue/select | libuv |
+| **优先级** | 时间排序 | Mode切换 | 微任务/宏任务 |
+
+## 8. 性能优化与最佳实践
+
+### 8.1 性能监控指标
+
+```mermaid
+mindmap
+  root((消息机制性能监控))
+    消息处理性能
+      消息处理时间
+      消息队列长度
+      消息丢失率
+      Handler响应时间
+    内存使用情况
+      Message对象池
+      Handler内存泄漏
+      MessageQueue内存占用
+      Looper线程栈大小
+    系统资源消耗
+      CPU使用率
+      线程数量
+      文件描述符数量
+      网络连接数
+    用户体验指标
+      ANR发生率
+      UI卡顿时间
+      启动时间
+      响应延迟
+```
+
+### 8.2 性能优化策略
 
 ```java
-public class PriorityTask implements Runnable, Comparable<PriorityTask> {
-    private final int priority;
-    private final Runnable task;
+public class MessageOptimizer {
     
-    public PriorityTask(Runnable task, int priority) {
-        this.task = task;
-        this.priority = priority;
+    // 1. 使用消息池避免频繁创建对象
+    public static Message obtainMessage(Handler handler, int what) {
+        Message msg = Message.obtain();
+        msg.target = handler;
+        msg.what = what;
+        return msg;
     }
     
-    @Override
-    public void run() {
-        task.run();
+    // 2. 及时移除未处理的消息
+    public static void cleanupMessages(Handler handler) {
+        handler.removeCallbacksAndMessages(null);
     }
     
-    @Override
-    public int compareTo(PriorityTask other) {
-        return Integer.compare(other.priority, this.priority); // 高优先级优先
+    // 3. 使用WeakReference避免内存泄漏
+    public static class WeakHandler extends Handler {
+        private final WeakReference<Callback> mCallbackRef;
+        
+        public WeakHandler(Callback callback) {
+            mCallbackRef = new WeakReference<>(callback);
+        }
+        
+        @Override
+        public void handleMessage(Message msg) {
+            Callback callback = mCallbackRef.get();
+            if (callback != null) {
+                callback.handleMessage(msg);
+            }
+        }
+    }
+    
+    // 4. 批量处理消息
+    public static void batchProcessMessages(Handler handler, List<Message> messages) {
+        Message batchMsg = Message.obtain();
+        batchMsg.obj = messages;
+        handler.sendMessage(batchMsg);
     }
 }
 ```
 
-## 13. 测试与验证
+### 8.3 最佳实践建议
 
-### 13.1 性能测试方案
+| 实践 | 说明 | 代码示例 |
+|------|------|----------|
+| **使用Message.obtain()** | 复用消息对象，减少GC | `Message.obtain(handler, what, obj)` |
+| **及时清理Handler** | 避免内存泄漏 | `handler.removeCallbacksAndMessages(null)` |
+| **使用WeakReference** | 防止Activity泄漏 | `WeakReference<Activity> activityRef` |
+| **合理设置消息优先级** | 保证重要消息及时处理 | `msg.setAsynchronous(true)` |
+| **避免在Handler中执行耗时操作** | 防止ANR | 使用线程池处理耗时任务 |
+
+## 9. 异常处理与容错机制
+
+### 9.1 异常处理流程
+
+```mermaid
+flowchart TD
+    A[消息处理开始] --> B{是否发生异常?}
+    B -->|否| C[正常处理完成]
+    B -->|是| D[捕获异常]
+    
+    D --> E{异常类型判断}
+    E -->|RuntimeException| F[记录异常日志]
+    E -->|OutOfMemoryError| G[紧急内存清理]
+    E -->|SecurityException| H[权限检查]
+    
+    F --> I[异常上报]
+    G --> J[强制GC]
+    H --> K[降级处理]
+    
+    I --> L[继续处理下一消息]
+    J --> L
+    K --> L
+    
+    C --> M[消息处理结束]
+    L --> M
+```
+
+### 9.2 容错机制设计
 
 ```java
-public class ThreadPoolPerformanceTest {
+public class FaultTolerantHandler extends Handler {
+    private static final int MAX_RETRY_COUNT = 3;
+    private final Map<Message, Integer> retryCountMap = new ConcurrentHashMap<>();
+    
+    @Override
+    public void dispatchMessage(Message msg) {
+        try {
+            super.dispatchMessage(msg);
+            // 处理成功，清除重试计数
+            retryCountMap.remove(msg);
+        } catch (Exception e) {
+            handleException(msg, e);
+        }
+    }
+    
+    private void handleException(Message msg, Exception e) {
+        int retryCount = retryCountMap.getOrDefault(msg, 0);
+        
+        if (retryCount < MAX_RETRY_COUNT) {
+            // 重试处理
+            retryCountMap.put(msg, retryCount + 1);
+            sendMessageDelayed(Message.obtain(msg), 1000 * (retryCount + 1));
+            Log.w(TAG, "Message processing failed, retry " + (retryCount + 1), e);
+        } else {
+            // 达到最大重试次数，记录错误并放弃
+            retryCountMap.remove(msg);
+            Log.e(TAG, "Message processing failed after " + MAX_RETRY_COUNT + " retries", e);
+            
+            // 可以发送错误消息给上层处理
+            Message errorMsg = obtainMessage(MSG_ERROR, e);
+            sendMessage(errorMsg);
+        }
+    }
+}
+```
+
+## 10. 扩展功能设计
+
+### 10.1 消息拦截器
+
+```java
+public interface MessageInterceptor {
+    boolean onMessageReceived(Message msg);
+    void onMessageProcessed(Message msg, long processingTime);
+    void onMessageError(Message msg, Exception e);
+}
+
+public class InterceptorHandler extends Handler {
+    private final List<MessageInterceptor> interceptors = new ArrayList<>();
+    
+    public void addInterceptor(MessageInterceptor interceptor) {
+        interceptors.add(interceptor);
+    }
+    
+    @Override
+    public void dispatchMessage(Message msg) {
+        // 前置拦截
+        for (MessageInterceptor interceptor : interceptors) {
+            if (!interceptor.onMessageReceived(msg)) {
+                return; // 被拦截，不继续处理
+            }
+        }
+        
+        long startTime = System.currentTimeMillis();
+        try {
+            super.dispatchMessage(msg);
+            
+            // 后置处理
+            long processingTime = System.currentTimeMillis() - startTime;
+            for (MessageInterceptor interceptor : interceptors) {
+                interceptor.onMessageProcessed(msg, processingTime);
+            }
+        } catch (Exception e) {
+            // 异常处理
+            for (MessageInterceptor interceptor : interceptors) {
+                interceptor.onMessageError(msg, e);
+            }
+            throw e;
+        }
+    }
+}
+```
+
+### 10.2 消息总线设计
+
+```mermaid
+graph TB
+    subgraph "消息总线架构"
+        A[EventBus] --> B[事件注册中心]
+        B --> C[事件分发器]
+        C --> D[订阅者管理]
+        
+        E[发布者] --> A
+        A --> F[订阅者1]
+        A --> G[订阅者2]
+        A --> H[订阅者N]
+    end
+    
+    subgraph "事件类型"
+        I[UI事件] --> A
+        J[网络事件] --> A
+        K[数据事件] --> A
+        L[系统事件] --> A
+    end
+    
+    style A fill:#e3f2fd
+    style B fill:#f1f8e9
+    style C fill:#fff3e0
+```
+
+## 11. 测试与验证
+
+### 11.1 单元测试设计
+
+```java
+@RunWith(AndroidJUnit4.class)
+public class MessageMechanismTest {
+    
+    private HandlerThread testThread;
+    private Handler testHandler;
+    
+    @Before
+    public void setUp() {
+        testThread = new HandlerThread("TestThread");
+        testThread.start();
+        testHandler = new Handler(testThread.getLooper());
+    }
     
     @Test
-    public void testThroughput() {
-        ThreadPoolExecutor executor = createTestPool();
-        int taskCount = 10000;
-        CountDownLatch latch = new CountDownLatch(taskCount);
+    public void testMessageOrdering() {
+        CountDownLatch latch = new CountDownLatch(3);
+        List<Integer> executionOrder = Collections.synchronizedList(new ArrayList<>());
+        
+        // 发送延时消息
+        testHandler.postDelayed(() -> {
+            executionOrder.add(3);
+            latch.countDown();
+        }, 300);
+        
+        testHandler.postDelayed(() -> {
+            executionOrder.add(1);
+            latch.countDown();
+        }, 100);
+        
+        testHandler.postDelayed(() -> {
+            executionOrder.add(2);
+            latch.countDown();
+        }, 200);
+        
+        latch.await(1, TimeUnit.SECONDS);
+        assertEquals(Arrays.asList(1, 2, 3), executionOrder);
+    }
+    
+    @Test
+    public void testMessageCancellation() {
+        AtomicBoolean executed = new AtomicBoolean(false);
+        Runnable task = () -> executed.set(true);
+        
+        testHandler.postDelayed(task, 1000);
+        testHandler.removeCallbacks(task);
+        
+        SystemClock.sleep(1500);
+        assertFalse(executed.get());
+    }
+    
+    @After
+    public void tearDown() {
+        testThread.quitSafely();
+    }
+}
+```
+
+### 11.2 性能测试方案
+
+```java
+public class MessagePerformanceTest {
+    
+    @Test
+    public void testMessageThroughput() {
+        HandlerThread thread = new HandlerThread("PerformanceTest");
+        thread.start();
+        Handler handler = new Handler(thread.getLooper());
+        
+        int messageCount = 10000;
+        CountDownLatch latch = new CountDownLatch(messageCount);
         
         long startTime = System.currentTimeMillis();
         
-        for (int i = 0; i < taskCount; i++) {
-            executor.execute(() -> {
-                // 模拟任务执行
-                doWork();
-                latch.countDown();
-            });
+        for (int i = 0; i < messageCount; i++) {
+            handler.post(latch::countDown);
         }
         
         latch.await();
         long endTime = System.currentTimeMillis();
         
-        double throughput = taskCount * 1000.0 / (endTime - startTime);
-        System.out.println("吞吐量: " + throughput + " tasks/second");
-    }
-    
-    @Test
-    public void testLatency() {
-        // 测试任务响应时间
-    }
-    
-    @Test
-    public void testResourceUsage() {
-        // 测试资源使用情况
+        double throughput = messageCount * 1000.0 / (endTime - startTime);
+        System.out.println("Message throughput: " + throughput + " messages/second");
+        
+        thread.quitSafely();
     }
 }
 ```
 
-### 13.2 压力测试场景
+## 12. 总结
 
-| 测试场景 | 测试目标 | 关键指标 |
-|----------|----------|----------|
-| 高并发提交 | 验证线程池稳定性 | TPS、响应时间、错误率 |
-| 长时间运行 | 验证内存泄漏 | 内存使用量、GC频率 |
-| 异常场景 | 验证异常处理 | 异常恢复时间、数据一致性 |
-| 资源限制 | 验证资源控制 | CPU使用率、内存使用率 |
+### 12.1 消息机制核心价值
 
-## 14. 总结
+消息机制作为现代移动应用的基础设施，提供了：
 
-本线程池技术设计方案提供了完整的线程池实现架构，包括：
+1. **线程安全的通信机制**: 解决多线程环境下的数据同步问题
+2. **异步任务处理能力**: 避免阻塞主线程，提升用户体验
+3. **事件驱动的架构支持**: 实现松耦合的组件间通信
+4. **高效的资源管理**: 通过消息池和队列优化内存使用
 
-1. **完整的生命周期管理**: 从初始化到销毁的全过程控制
-2. **灵活的任务调度机制**: 支持多种队列类型和拒绝策略
-3. **完善的监控体系**: 提供全方位的性能监控和调优建议
-4. **健壮的异常处理**: 确保系统在异常情况下的稳定性
-5. **可扩展的设计**: 支持功能扩展和定制化需求
+### 12.2 设计原则总结
 
-该方案可以作为高性能并发系统的核心组件，为应用程序提供稳定、高效的多线程执行环境。通过合理的参数配置和监控调优，能够显著提升系统的并发处理能力和资源利用效率。
+| 原则 | 说明 | 实现方式 |
+|------|------|----------|
+| **单一职责** | 每个组件专注特定功能 | Handler处理消息，Looper驱动循环 |
+| **开闭原则** | 对扩展开放，对修改封闭 | 支持自定义Handler和拦截器 |
+| **依赖倒置** | 依赖抽象而非具体实现 | 基于接口的回调机制 |
+| **最少知识** | 组件间最小化依赖 | 通过消息进行解耦通信 |
+
+### 12.3 未来发展方向
+
+1. **响应式编程支持**: 集成RxJava等响应式框架
+2. **协程集成**: 支持Kotlin协程的异步处理
+3. **跨进程消息**: 扩展到进程间通信场景
+4. **AI驱动优化**: 基于机器学习的消息调度优化
+
+消息机制将继续演进，为移动应用提供更高效、更智能的异步处理能力。
