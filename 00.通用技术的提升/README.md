@@ -14,33 +14,6 @@
 
 ### 2.1 协作式 vs 抢占式调度
 
-```mermaid
-sequenceDiagram
-    participant OS as 操作系统
-    participant T1 as 线程1
-    participant T2 as 线程2
-    participant T3 as 线程3
-    
-    Note over OS,T3: 抢占式调度（传统多线程）
-    OS->>T1: 分配时间片
-    T1->>T1: 执行任务
-    OS->>T1: 时间片到期，强制切换
-    OS->>T2: 分配时间片
-    T2->>T2: 执行任务
-    OS->>T2: 时间片到期，强制切换
-    OS->>T3: 分配时间片
-    
-    Note over OS,T3: 协作式调度（单线程模型）
-    T1->>T1: 执行任务
-    T1->>OS: 主动让出（await/yield）
-    OS->>T2: 切换到任务2
-    T2->>T2: 执行任务
-    T2->>OS: 主动让出（I/O等待）
-    OS->>T3: 切换到任务3
-    T3->>T3: 执行任务
-    T3->>OS: 主动让出
-```
-
 ### 2.2 协作式调度的设计原理
 
 #### 2.2.1 核心机制
