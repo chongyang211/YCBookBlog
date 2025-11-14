@@ -14,46 +14,6 @@
 
 ### 2.1 整体架构图
 
-```mermaid
-graph TB
-    subgraph "应用层"
-        A[Activity/Fragment] --> B[业务逻辑层]
-        B --> C[数据访问层]
-    end
-    
-    subgraph "消息机制核心层"
-        D[Handler] --> E[MessageQueue]
-        E --> F[Looper]
-        F --> G[Message]
-        
-        H[主线程Looper] --> I[主线程MessageQueue]
-        J[工作线程Looper] --> K[工作线程MessageQueue]
-        
-        L[HandlerThread] --> M[后台Looper]
-    end
-    
-    subgraph "系统层"
-        N[Native层消息机制] --> O[epoll机制]
-        O --> P[文件描述符]
-        P --> Q[内核事件通知]
-    end
-    
-    A --> D
-    B --> D
-    C --> D
-    
-    D --> H
-    D --> J
-    D --> M
-    
-    F --> N
-    
-    style D fill:#e1f5fe
-    style E fill:#f3e5f5
-    style F fill:#e8f5e8
-    style G fill:#fff3e0
-```
-
 ### 2.2 核心组件关系图
 
 ```mermaid
