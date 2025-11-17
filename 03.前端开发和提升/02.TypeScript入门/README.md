@@ -50,6 +50,7 @@ graph TD
 3. **TypeScript Challenges**（GitHub 练习库）
 4. **React TypeScript Cheatsheet**（实用备忘单）
 5. 推荐书籍：https://book.douban.com/subject/35300876/
+6. 推荐博客：https://wangdoc.com/typescript/any
 
 
 
