@@ -61,16 +61,6 @@ graph TD
 #### **3.1.1 变量名**
 
 #### **3.1.2 变量声明**
-- 使用 `let`、`const` 或 `var` 声明变量：
-    - `let`：块级作用域，可重新赋值。
-    - `const`：块级作用域，不可重新赋值。
-    - `var`：函数作用域，可重新赋值（不推荐使用）。
-- 示例：
-  ```typescript
-  let age: number = 25;
-  const name: string = "Alice";
-  var isActive: boolean = true; // 不推荐
-  ```
 
 ---
 
