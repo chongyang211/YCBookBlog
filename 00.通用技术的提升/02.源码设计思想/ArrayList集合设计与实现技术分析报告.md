@@ -14,75 +14,8 @@
 11. [性能分析与优化建议](#性能分析与优化建议)
 12. [总结](#总结)
 
-## 概述
-
-ArrayList是Java集合框架中最重要的动态数组实现，它在数组的随机访问高性能基础上实现了容量的动态增长。本报告基于对项目中ArrayList源码的深入分析，从设计思想、实现机制、性能特征等多个维度进行全面剖析。
-
-## List集合设计核心思想
-
-### 1. 设计理念
-
 
 ### 2. 接口层次结构
-
-```mermaid
-classDiagram
-    class Collection~E~ {
-        <<interface>>
-        +add(E e) boolean
-        +remove(Object o) boolean
-        +contains(Object o) boolean
-        +size() int
-        +isEmpty() boolean
-        +iterator() Iterator~E~
-    }
-    
-    class List~E~ {
-        <<interface>>
-        +get(int index) E
-        +set(int index, E element) E
-        +add(int index, E element) void
-        +remove(int index) E
-        +indexOf(Object o) int
-        +lastIndexOf(Object o) int
-    }
-    
-    class AbstractList~E~ {
-        <<abstract>>
-        #modCount int
-        +iterator() Iterator~E~
-        +listIterator() ListIterator~E~
-    }
-    
-    class ArrayList~E~ {
-        -elementData Object[]
-        -size int
-        +get(int index) E
-        +set(int index, E element) E
-        +add(E e) boolean
-        +remove(int index) E
-        -grow(int minCapacity) void
-    }
-    
-    class RandomAccess {
-        <<interface>>
-    }
-    
-    class Cloneable {
-        <<interface>>
-    }
-    
-    class Serializable {
-        <<interface>>
-    }
-    
-    Collection~E~ <|-- List~E~
-    List~E~ <|-- AbstractList~E~
-    AbstractList~E~ <|-- ArrayList~E~
-    RandomAccess <|.. ArrayList~E~
-    Cloneable <|.. ArrayList~E~
-    Serializable <|.. ArrayList~E~
-```
 
 ## 动态数组核心设计思路
 
