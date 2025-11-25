@@ -41,13 +41,7 @@
 
 
 ### **1. `console.log()`**
-- **描述**：输出普通日志信息。
-- **示例**：
-  ```javascript
-  console.log('Hello, World!'); // 输出: Hello, World!
-  console.log(42); // 输出: 42
-  console.log({ name: 'Alice', age: 25 }); // 输出: { name: 'Alice', age: 25 }
-  ```
+
 
 ---
 
