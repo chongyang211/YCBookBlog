@@ -3,8 +3,7 @@
 
 
 
-- **`Promise`**：处理异步操作。
-    - 方法：`then()`、`catch()`、`finally()`、`Promise.all()`。
+
 - **`Proxy`**：创建对象的代理。
 - **`Reflect`**：提供操作对象的静态方法。
 
