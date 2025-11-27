@@ -2,8 +2,7 @@
 
 
 
-- **`JSON`**：处理 JSON 数据。
-    - 方法：`JSON.parse()`、`JSON.stringify()`。
+
 - **`Promise`**：处理异步操作。
     - 方法：`then()`、`catch()`、`finally()`、`Promise.all()`。
 - **`Proxy`**：创建对象的代理。
