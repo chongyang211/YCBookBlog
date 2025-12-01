@@ -4,23 +4,7 @@
 #### 1.1 项目背景
 
 
-#### 1.2 架构有哪几种
-- MVC架构
-    - MVC全名是Model View Controller，如图，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用一种业务逻辑、数据、界面显示分离的方法组织代码，在改进和个性化定制界面及用户交互的同时，不需要重新编写业务逻辑。
-- MVP架构
-    - MVP从更早的MVC框架演变过来，与MVC有一定的相似性：Controller/Presenter负责逻辑的处理，Model提供数据，View负责显示。
-- MVVM架构
-    - 待完善
 
-
-#### 1.3 架构演变过程
-- MVP模式是从MVC模式演变来的
-    - 它们的基本思想有相通的地方：Controller/Presenter负责逻辑的处理，Model提供数据，View负责显示，所以他们之间并没有特别大的不同，都是用来将View和Model之间松耦合。
-- MVP与MVC有着一个重大的区别：
-    - 在MVP中View并不直接使用Model，它们之间的通信是通过Presenter (MVC中的Controller)来进行的，所有的交互都发生在Presenter内部，而在MVC中是允许Model和View进行交互的。
-    - 还有重要的一点就是Presenter与View之间的交互是通过接口的。
-- MVVM是通过MVP演变而来的
-    - 主要用了data binding来实现双向交互，这就使得视图和控制层之间的耦合程度进一步降低，关注点分离更为彻底，同时减轻了Activity的压力。
 
 
 #### 1.4 多种架构对比
