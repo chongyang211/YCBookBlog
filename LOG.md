@@ -13,7 +13,7 @@
 第八步：获取返回response数据，这里主要是处理code和body数据
 
 
-帮我写一篇 JavaScript 设计哲学与语言特性 技术文档。要求详细、完整，而且有架构图、时序图等图表，图片使用mermaid画，最终结果需要输出到一份markdown文档中。
+在Android，iOS，web端都有路由概念，帮我写一篇 路由库方案设计 技术文档。要求详细、完整，而且有架构图、时序图等图表，图片使用mermaid画，最终结果需要输出到一份markdown文档中。
 
 1. 原型继承 (Prototypal Inheritance)
 2. 函数一等公民 (First-class Functions)
