@@ -1,6 +1,13 @@
 # 专栏笔记总结大全
 
 
+基础笔记
+
+https://blog.csdn.net/qq_38490457/article/details/109257751?ops_request_misc=%257B%2522request%255Fid%2522%253A%252219be579ab163d0c673158e2976c6aa0d%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=19be579ab163d0c673158e2976c6aa0d&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-109257751-null-null.142^v102^pc_search_result_base1&utm_term=javascript&spm=1018.2226.3001.4187
+
+
+
+
 ## 2.数据类型
 
 - 2.1.1 类型分类：共有六种，字符串型（String）；数值型（Number）；布尔型（Boolean）；undefined型（Undefined）；null型（Null）；对象（object）
