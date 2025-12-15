@@ -44,3 +44,107 @@ https://blog.csdn.net/qq_38490457/article/details/109257751?ops_request_misc=%25
 
 - 10.1.1 模块化概念：模块化是指将一个大的程序文件，拆分成许多小的文件，然后将小文件组合起来。
 
+
+
+
+            下面是一个简单的案例，帮助你理解 **类型导入** 和 **普通导入** 的区别，以及如何在函数中使用类型导入来定义 `this` 的类型。
+
+---
+
+### **案例：类型导入 vs 普通导入**
+
+#### **1. 定义类和类型**
+在 `index-session.ts` 文件中，我们定义一个类 `MainSession` 和一个函数 `handleQRRegister`。
+
+```typescript
+// index-session.ts
+export default class MainSession {
+  logger: string = "Logger initialized";
+  sessionKey: string = "SessionKey123";
+
+  async handleQRRegister(qrCodeContent: string): Promise<void> {
+    // 使用 call 绑定 this
+    return handleQRRegister.call(this, qrCodeContent);
+  }
+}
+
+// 导出一个独立的函数
+export async function handleQRRegister(
+  this: MainSession, // 使用 MainSession 作为 this 的类型
+  qrCodeContent: string
+): Promise<void> {
+  const logger = this.logger;
+  console.log(`Logging from handleQRRegister: ${logger}`);
+  console.log(`QR Code Content: ${qrCodeContent}`);
+}
+```
+
+---
+
+#### **2. 使用类型导入**
+在另一个文件中，我们使用 **类型导入** 来引用 `MainSession` 类型，而不导入实际的类。
+
+```typescript
+// main.ts
+import type MainSession from "./index-session"; // 类型导入
+import { handleQRRegister } from "./index-session"; // 普通导入（函数）
+
+// 创建一个 MainSession 实例
+const session = new (require("./index-session").default)();
+
+// 调用 handleQRRegister 函数，绑定 this
+handleQRRegister.call(session, "Sample QR Code Content");
+```
+
+---
+
+### **关键点解释**
+
+#### **1. 类型导入 (`import type`)**
+
+#### **2. 普通导入 (`import`)**
+- **作用**：导入实际的代码或值，会在编译后的 JavaScript 代码中包含这些内容。
+- **使用场景**：当你需要实际使用类、函数或变量时。
+- **示例**：
+  ```typescript
+  import { handleQRRegister } from "./index-session";
+  ```
+
+#### **3. 函数绑定机制**
+- 在 `handleQRRegister` 函数中，`this` 的类型被定义为 `MainSession`。
+- 使用 `call` 方法将 `this` 绑定到 `MainSession` 的实例。
+- **示例**：
+  ```typescript
+  handleQRRegister.call(session, "Sample QR Code Content");
+  ```
+
+---
+
+### **编译后的 JavaScript 代码**
+编译后的 `main.js` 文件如下：
+
+```javascript
+// main.js
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_session_1 = require("./index-session");
+
+// 创建一个 MainSession 实例
+const session = new index_session_1.default();
+
+// 调用 handleQRRegister 函数，绑定 this
+(0, index_session_1.handleQRRegister).call(session, "Sample QR Code Content");
+```
+
+可以看到，`import type` 的代码被完全移除，因为它只在编译时存在。
+
+---
+
+### **总结**
+- **类型导入**：仅用于类型检查，不会生成运行时代码。
+- **普通导入**：导入实际的代码或值，会生成运行时代码。
+- **函数绑定**：使用 `call` 方法将 `this` 绑定到类的实例。
+
+通过这个案例，你可以清晰地理解类型导入的作用和使用场景。
+
+
