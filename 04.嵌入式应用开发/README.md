@@ -8,6 +8,8 @@ python decrypt_log.py /Users/yangchong/Downloads/log/yt_palm.log 010203040506070
 python decrypt_log.py /Users/yangchong/Downloads/log2/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
 
 
+python decrypt_log.py /Users/yangchong/Downloads/log2/yt_palm.log 0102030405060708090a0b0c0d0e0f30 101116171415a5ba98999e9f9c9d9293
+
 git tag -d v1.2.0-std-20250815-m3
 git push origin --delete v1.2.0-std-20250815-m3
 git tag -d v1.2.0-std-2025081516-m3
