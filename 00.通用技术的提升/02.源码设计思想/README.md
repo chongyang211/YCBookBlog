@@ -171,88 +171,10 @@ public class SecureString {
 
 
 
-## 字符串创建机制
-
-### 创建方式分析
-
-字符串的创建方式直接影响其内存分配和性能表现：
-
-**1. 字面量创建**
-
-
-**2. 构造函数创建**
-
 
 
 **3. 动态创建机制**
 
-```java
-// 动态字符串创建的优化策略
-public class DynamicCreation {
-    
-    // 高效的动态字符串创建
-    public static String createOptimized(String prefix, int number, String suffix) {
-        // 预估容量，避免多次扩容
-        int estimatedLength = prefix.length() + 10 + suffix.length(); // 10位数字的估算
-        StringBuilder sb = new StringBuilder(estimatedLength);
-        
-        return sb.append(prefix)
-                 .append(number)
-                 .append(suffix)
-                 .toString();
-    }
-    
-    // 批量创建优化
-    public static List<String> createBatch(String template, int count) {
-        List<String> result = new ArrayList<>(count);
-        
-        // 使用模板和占位符减少重复计算
-        int placeholderIndex = template.indexOf("{}");
-        if (placeholderIndex == -1) {
-            // 无占位符，直接复用
-            for (int i = 0; i < count; i++) {
-                result.add(template);
-            }
-        } else {
-            // 有占位符，高效替换
-            String prefix = template.substring(0, placeholderIndex);
-            String suffix = template.substring(placeholderIndex + 2);
-            
-            for (int i = 0; i < count; i++) {
-                result.add(createOptimized(prefix, i, suffix));
-            }
-        }
-        
-        return result;
-    }
-    
-    // 延迟创建模式
-    public static class LazyString {
-        private final Supplier<String> supplier;
-        private volatile String value;
-        
-        public LazyString(Supplier<String> supplier) {
-            this.supplier = supplier;
-        }
-        
-        public String get() {
-            if (value == null) {
-                synchronized (this) {
-                    if (value == null) {
-                        value = supplier.get();
-                    }
-                }
-            }
-            return value;
-        }
-        
-        @Override
-        public String toString() {
-            return get();
-        }
-    }
-}
-```
 
 ---
 
