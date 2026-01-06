@@ -326,6 +326,60 @@
 
 
 
+以下是一个使用 `std::shared_ptr` 的案例及其详细说明。代码示例
+
+
+
+
+---
+
+### **代码分析**
+
+
+---
+
+### **自定义删除器示例**
+
+如果需要管理非动态分配的资源，可以为 `std::shared_ptr` 指定自定义删除器。例如，管理一个文件句柄：
+
+```cpp
+#include <iostream>
+#include <memory>  // 包含 std::shared_ptr
+#include <cstdio>  // 包含 FILE, fopen, fclose
+
+int main() {
+    // 自定义删除器，用于关闭文件
+    auto fileDeleter = [](FILE* file) {
+        if (file) {
+            std::cout << "Closing file." << std::endl;
+            fclose(file);
+        }
+    };
+
+    // 创建一个 std::shared_ptr，管理文件句柄
+    std::shared_ptr<FILE> filePtr(fopen("example.txt", "w"), fileDeleter);
+
+    if (filePtr) {
+        std::cout << "File opened successfully." << std::endl;
+        // 使用文件句柄进行操作
+        fprintf(filePtr.get(), "Hello, World!");
+    }
+
+    // filePtr 超出作用域，自动调用自定义删除器关闭文件
+    return 0;
+}
+```
+
+---
+
+### **总结**
+
+- `std::shared_ptr` 是 C++ 中用于管理动态分配内存的智能指针，支持共享所有权和自动释放内存。
+- 它通过引用计数机制确保对象在不再需要时被正确释放。
+- 通过自定义删除器，`std::shared_ptr` 还可以管理非动态分配的资源。
+
+通过使用 `std::shared_ptr`，可以编写更安全、更灵活的 C++ 代码。
+
 
 
 
