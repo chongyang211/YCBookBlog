@@ -22,28 +22,6 @@
 
 
 
-以下是 TypeScript 存在的主要理由和优势：
-
----
-
-### **1. 静态类型检查**
-
-#### **JavaScript 的问题**
-JavaScript 是动态类型语言，变量的类型在运行时才能确定。这会导致以下问题：
-- **类型错误**：只有在运行时才能发现类型不匹配的问题。
-- **代码可维护性差**：在大型项目中，难以追踪变量的类型和结构。
-
-#### **TypeScript 的解决方案**
-TypeScript 引入了静态类型检查，可以在编译时捕获类型错误，提高代码的健壮性。
-
-```typescript
-function add(a: number, b: number): number {
-    return a + b;
-}
-
-add(1, 2); // 正确
-add("1", 2); // 编译时报错：Argument of type 'string' is not assignable to parameter of type 'number'.
-```
 
 ---
 
@@ -147,7 +125,7 @@ function greet(name: string): string {
 
 ---
 
-### **6. 更早的错误检测**
+### **6. 更早错误检测**
 
 #### **JavaScript 的问题**
 JavaScript 的错误通常在运行时才能被发现，增加了调试和维护的难度。
