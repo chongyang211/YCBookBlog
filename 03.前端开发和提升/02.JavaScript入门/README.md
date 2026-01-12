@@ -56,17 +56,6 @@ https://blog.csdn.net/qq_38490457/article/details/109257751?ops_request_misc=%25
 
 ### **2. 核心原理**
 
-#### **（1）调用栈（Call Stack）**
-JavaScript 使用调用栈来管理函数的执行顺序。当发生错误时，引擎会沿着调用栈向上查找是否有 `try...catch` 块来处理错误。
-
-#### **（2）事件循环（Event Loop）**
-在异步代码中，错误可能发生在事件循环的不同阶段。如果错误未被捕获，它会被传递到全局作用域。
-
-#### **（3）全局错误事件**
-JavaScript 提供了全局错误事件来捕获未处理的错误：
-- **浏览器**：`window.onerror` 和 `window.addEventListener('error', ...)`。
-- **Node.js**：`process.on('uncaughtException')` 和 `process.on('unhandledRejection')`。
-
 ---
 
 ### **3. 代码示例**
