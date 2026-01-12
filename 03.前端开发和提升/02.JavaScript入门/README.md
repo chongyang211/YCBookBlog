@@ -48,7 +48,8 @@ https://blog.csdn.net/qq_38490457/article/details/109257751?ops_request_misc=%25
 
 
 
-在 JavaScript 中，**未捕获的错误（Uncaught Error）** 是指没有被 `try...catch` 语句捕获的异常。这类错误会触发 JavaScript 引擎的默认错误处理机制，通常会导致程序终止并打印错误信息。以下是未捕获错误的处理流程及其核心原理：
+
+以下是未捕获错误的处理流程及其核心原理：
 
 ---
 
