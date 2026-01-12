@@ -48,5 +48,148 @@ https://blog.csdn.net/qq_38490457/article/details/109257751?ops_request_misc=%25
 
 
 
+在 JavaScript 中，**未捕获的错误（Uncaught Error）** 是指没有被 `try...catch` 语句捕获的异常。这类错误会触发 JavaScript 引擎的默认错误处理机制，通常会导致程序终止并打印错误信息。以下是未捕获错误的处理流程及其核心原理：
+
+---
+
+### **1. 未捕获错误处理流程**
+
+#### **（1）错误抛出**
+当代码中发生错误（如 `throw new Error("Something went wrong")`）且没有被 `try...catch` 捕获时，错误会被抛出。
+
+#### **（2）错误传播**
+错误会沿着调用栈向上传播，直到找到最近的 `try...catch` 块。如果调用栈中没有 `try...catch` 块，错误会继续传播到全局作用域。
+
+#### **（3）全局错误处理**
+如果错误传播到全局作用域，JavaScript 引擎会触发全局错误处理机制：
+- 在浏览器中，会触发 `window.onerror` 事件。
+- 在 Node.js 中，会触发 `process.on('uncaughtException')` 事件。
+
+#### **（4）程序终止**
+如果全局错误处理机制也没有捕获错误，JavaScript 引擎会终止程序的执行，并打印错误信息到控制台。
+
+---
+
+### **2. 核心原理**
+
+#### **（1）调用栈（Call Stack）**
+JavaScript 使用调用栈来管理函数的执行顺序。当发生错误时，引擎会沿着调用栈向上查找是否有 `try...catch` 块来处理错误。
+
+#### **（2）事件循环（Event Loop）**
+在异步代码中，错误可能发生在事件循环的不同阶段。如果错误未被捕获，它会被传递到全局作用域。
+
+#### **（3）全局错误事件**
+JavaScript 提供了全局错误事件来捕获未处理的错误：
+- **浏览器**：`window.onerror` 和 `window.addEventListener('error', ...)`。
+- **Node.js**：`process.on('uncaughtException')` 和 `process.on('unhandledRejection')`。
+
+---
+
+### **3. 代码示例**
+
+#### **（1）同步代码中的未捕获错误**
+```javascript
+function foo() {
+    throw new Error("Oops!");
+}
+
+function bar() {
+    foo();
+}
+
+bar(); // 未捕获错误，程序终止
+```
+
+#### **（2）异步代码中的未捕获错误**
+```javascript
+setTimeout(() => {
+    throw new Error("Oops!");
+}, 1000); // 未捕获错误，程序终止
+```
+
+#### **（3）全局错误处理（浏览器）**
+```javascript
+window.onerror = function (message, source, lineno, colno, error) {
+    console.log("捕获到全局错误:", message);
+    return true; // 阻止默认错误处理
+};
+
+throw new Error("Oops!"); // 错误被全局处理，程序不会终止
+```
+
+#### **（4）全局错误处理（Node.js）**
+```javascript
+process.on('uncaughtException', (err) => {
+    console.log("捕获到未处理的异常:", err.message);
+});
+
+throw new Error("Oops!"); // 错误被全局处理，程序不会终止
+```
+
+---
+
+### **4. 未捕获错误的处理建议**
+
+#### **（1）使用 `try...catch`**
+在可能抛出错误的代码块中使用 `try...catch` 捕获错误。
+
+```javascript
+try {
+    throw new Error("Oops!");
+} catch (error) {
+    console.log("捕获到错误:", error.message);
+}
+```
+
+#### **（2）全局错误处理**
+在全局作用域中注册错误处理函数，捕获未处理的错误。
+
+```javascript
+// 浏览器
+window.addEventListener('error', (event) => {
+    console.log("捕获到全局错误:", event.message);
+});
+
+// Node.js
+process.on('uncaughtException', (err) => {
+    console.log("捕获到未处理的异常:", err.message);
+});
+```
+
+#### **3）Promise 错误处理**
+使用 `.catch()` 或 `try...catch`（在 `async/await` 中）捕获 Promise 中的错误。
+
+```javascript
+// 使用 .catch()
+Promise.reject(new Error("Oops!")).catch((error) => {
+    console.log("捕获到 Promise 错误:", error.message);
+});
+
+// 使用 async/await
+(async () => {
+    try {
+        await Promise.reject(new Error("Oops!"));
+    } catch (error) {
+        console.log("捕获到错误:", error.message);
+    }
+})();
+```
+
+#### **4）避免静默失败**
+确保所有错误都被捕获和处理，避免程序静默失败。
+
+---
+
+### **5. 总结**
+
+| 阶段               | 描述                                                                 |
+|--------------------|----------------------------------------------------------------------|
+| **错误抛出**       | 代码中发生错误且未被捕获。                                           |
+| **错误传播**       | 错误沿着调用栈向上传播，寻找 `try...catch` 块。                      |
+| **全局错误处理**   | 如果错误未被捕获，触发全局错误事件（如 `window.onerror`）。          |
+| **程序终止**       | 如果全局错误处理也未捕获错误，程序终止并打印错误信息。               |
+
+未捕获错误的处理是 JavaScript 开发中的重要环节。通过合理使用 `try...catch`、全局错误处理和 Promise 错误捕获，可以有效避免程序崩溃，提高代码的健壮性。
+
 
 
