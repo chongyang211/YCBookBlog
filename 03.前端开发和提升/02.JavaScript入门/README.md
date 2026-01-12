@@ -60,45 +60,6 @@ https://blog.csdn.net/qq_38490457/article/details/109257751?ops_request_misc=%25
 
 ### **3. 代码示例**
 
-#### **（1）同步代码中的未捕获错误**
-```javascript
-function foo() {
-    throw new Error("Oops!");
-}
-
-function bar() {
-    foo();
-}
-
-bar(); // 未捕获错误，程序终止
-```
-
-#### **（2）异步代码中的未捕获错误**
-```javascript
-setTimeout(() => {
-    throw new Error("Oops!");
-}, 1000); // 未捕获错误，程序终止
-```
-
-#### **（3）全局错误处理（浏览器）**
-```javascript
-window.onerror = function (message, source, lineno, colno, error) {
-    console.log("捕获到全局错误:", message);
-    return true; // 阻止默认错误处理
-};
-
-throw new Error("Oops!"); // 错误被全局处理，程序不会终止
-```
-
-#### **（4）全局错误处理（Node.js）**
-```javascript
-process.on('uncaughtException', (err) => {
-    console.log("捕获到未处理的异常:", err.message);
-});
-
-throw new Error("Oops!"); // 错误被全局处理，程序不会终止
-```
-
 ---
 
 ### **4. 未捕获错误的处理建议**
