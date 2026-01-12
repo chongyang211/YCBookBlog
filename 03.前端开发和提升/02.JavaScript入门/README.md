@@ -49,25 +49,8 @@ https://blog.csdn.net/qq_38490457/article/details/109257751?ops_request_misc=%25
 
 
 
-以下是未捕获错误的处理流程及其核心原理：
-
----
-
 ### **1. 未捕获错误处理流程**
 
-#### **（1）错误抛出**
-当代码中发生错误（如 `throw new Error("Something went wrong")`）且没有被 `try...catch` 捕获时，错误会被抛出。
-
-#### **（2）错误传播**
-错误会沿着调用栈向上传播，直到找到最近的 `try...catch` 块。如果调用栈中没有 `try...catch` 块，错误会继续传播到全局作用域。
-
-#### **（3）全局错误处理**
-如果错误传播到全局作用域，JavaScript 引擎会触发全局错误处理机制：
-- 在浏览器中，会触发 `window.onerror` 事件。
-- 在 Node.js 中，会触发 `process.on('uncaughtException')` 事件。
-
-#### **（4）程序终止**
-如果全局错误处理机制也没有捕获错误，JavaScript 引擎会终止程序的执行，并打印错误信息到控制台。
 
 ---
 
