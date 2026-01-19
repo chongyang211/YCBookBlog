@@ -31,76 +31,6 @@
 
 **1. 不可变性保证**
 
-```java
-// 线程安全的不可变字符串设计
-public final class ThreadSafeString {
-    // 所有字段都是final，确保不可变性
-    private final char[] value;
-    private final int offset;
-    private final int count;
-    private volatile int hash; // 使用volatile保证可见性
-    
-    // 构造函数：防御性复制
-    public ThreadSafeString(char[] chars) {
-        if (chars == null) {
-            throw new NullPointerException("Input array cannot be null");
-        }
-        
-        // 防御性复制，防止外部修改
-        this.value = new char[chars.length];
-        System.arraycopy(chars, 0, this.value, 0, chars.length);
-        this.offset = 0;
-        this.count = chars.length;
-    }
-    
-    // 字符访问：线程安全的读操作
-    public char charAt(int index) {
-        if (index < 0 || index >= count) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + count);
-        }
-        return value[offset + index];
-    }
-    
-    public int length() {
-        return count;
-    }
-    
-    // 线程安全的哈希计算
-    @Override
-    public int hashCode() {
-        int h = hash;
-        if (h == 0 && value.length > 0) {
-            // 使用局部变量避免重复计算
-            for (char c : value) {
-                h = 31 * h + c;
-            }
-            hash = h; // 最后赋值，保证原子性
-        }
-        return h;
-    }
-    
-    // 线程安全的比较操作
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof ThreadSafeString)) return false;
-        
-        ThreadSafeString other = (ThreadSafeString) obj;
-        
-        // 长度比较
-        if (value.length != other.value.length) return false;
-        
-        // 逐字符比较
-        for (int i = 0; i < value.length; i++) {
-            if (value[i] != other.value[i]) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-}
-```
 
 **2. 并发访问优化**
 
@@ -683,7 +613,7 @@ public class CacheOptimizedString {
 
 ## 字符串缓存池设计
 
-### 缓存池的架构设计
+### 缓存池架构设计
 
 字符串缓存池是避免创建重复字符串对象的核心机制，其设计需要平衡内存使用、访问性能和垃圾回收压力。
 
