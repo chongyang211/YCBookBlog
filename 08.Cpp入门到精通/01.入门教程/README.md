@@ -326,8 +326,85 @@
 
 
 
+### **2. 类型安全性**
 
 
+---
+
+### **3. 底层类型**
+- **`enum class`**：
+    - 可以指定底层类型（如 `int`、`char` 等），默认是 `int`。
+    - 示例：
+      ```cpp
+      enum class TimeUnit : char {
+          NANOSECONDS,
+          MICROSECONDS,
+          MILLISECONDS,
+          SECONDS,
+          MINUTES
+      };
+      ```
+
+- **传统 `enum`**：
+    - 不能指定底层类型，底层类型由编译器决定。
+
+---
+
+### **4. 代码可读性与维护性**
+- **`enum class`**：
+    - 由于作用域限定和强类型特性，代码更安全、更易维护。
+    - 适合大型项目或需要严格类型检查的场景。
+
+- **传统 `enum`**：
+    - 由于作用域全局和弱类型特性，可能导致命名冲突和类型错误。
+    - 适合小型项目或简单场景。
+
+---
+
+### **代码示例对比**
+```cpp
+// enum class
+enum class TimeUnit {
+    NANOSECONDS,
+    MICROSECONDS,
+    MILLISECONDS,
+    SECONDS,
+    MINUTES
+};
+
+// 传统 enum
+enum TimeUnitOnly {
+    NANOSECONDS,
+    MICROSECONDS,
+    MILLISECONDS,
+    SECONDS,
+    MINUTES
+};
+
+int main() {
+    // enum class
+    TimeUnit unit1 = TimeUnit::NANOSECONDS; // 必须使用作用域限定符
+    int value1 = static_cast<int>(unit1);   // 需要显式转换
+
+    // 传统 enum
+    TimeUnitOnly unit2 = NANOSECONDS;       // 直接使用枚举值
+    int value2 = unit2;                     // 隐式转换为整数
+
+    return 0;
+}
+```
+
+---
+
+### **总结**
+| 特性               | `enum class`                     | 传统 `enum`                  |
+|--------------------|----------------------------------|------------------------------|
+| 作用域             | 限定在枚举类型内部               | 全局                         |
+| 类型安全性         | 强类型，不能隐式转换             | 弱类型，可以隐式转换         |
+| 底层类型           | 可指定（默认 `int`）             | 由编译器决定                 |
+| 代码可读性与维护性 | 更安全、更易维护                 | 可能导致命名冲突和类型错误   |
+
+在现代C++中，推荐使用 `enum class`，因为它更安全、更清晰，适合大型项目开发。传统 `enum` 则适合简单场景或需要与旧代码兼容的情况。
 
 
 
