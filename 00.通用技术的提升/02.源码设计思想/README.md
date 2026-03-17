@@ -5,1599 +5,1150 @@
 
 
 
-**设计原理：**
+### 3.3 M:N 模型（混合线程）
 
-**实现机制分析：**
-```java
-// Java中的软引用实现原理
-public class SoftReferenceCache<K, V> {
-    private final Map<K, SoftReference<V>> cache = new ConcurrentHashMap<>();
-    
-    public V get(K key) {
-        SoftReference<V> ref = cache.get(key);
-        if (ref != null) {
-            V value = ref.get();  // 可能返回null，如果对象已被回收
-            if (value == null) {
-                cache.remove(key);  // 清理已失效的引用
-            }
-            return value;
-        }
-        return null;
-    }
-    
-    public void put(K key, V value) {
-        cache.put(key, new SoftReference<>(value));
-    }
-    
-    // 垃圾回收器的决策逻辑（概念性描述）
-    private boolean shouldReclaim(SoftReference<?> ref) {
-        long availableMemory = Runtime.getRuntime().freeMemory();
-        long totalMemory = Runtime.getRuntime().totalMemory();
-        double memoryPressure = 1.0 - (double) availableMemory / totalMemory;
-        
-        // 内存压力越大，越倾向于回收软引用对象
-        return memoryPressure > 0.8;  // 简化的决策逻辑
-    }
-}
+```
+用户线程:   T1  T2  T3  T4  T5  T6
+             \   |   |   |   |   /     M个用户线程映射到N个内核线程
+              \  |   |   |   |  /
+内核线程:    KT1    KT2    KT3
+              \      |      /
+               ──CPU调度器──
 ```
 
+- **实现**：Go goroutine（GMP 模型）、Erlang process、Java 21 Virtual Thread
+- **优点**：兼具用户级线程的轻量和内核级线程的并行能力
+- **缺点**：调度器实现复杂
 
-### 2.3 弱引用（Weak Reference）
+### 3.4 Go GMP 模型（M:N 的经典实现）
 
-弱引用是一种"非拥有性"的引用类型，它不会阻止对象被垃圾回收。
+```
+           ┌─── P (Processor，逻辑处理器) ───┐
+           │  本地运行队列：[G1, G2, G3]      │
+           │  当前运行的 G：G0                 │
+           └──────────┬──────────────────────┘
+                      │ 绑定
+                      ▼
+                M (Machine，OS 内核线程)
+                      │
+                    CPU 核
 
-**设计原理：**
-弱引用的设计基于"观察而不拥有"的思想。它允许程序观察一个对象的存在，但不会因为这种观察而延长对象的生命周期。这种设计特别适合实现观察者模式、缓存系统和避免循环引用。
+G = Goroutine（用户态协程，初始栈仅 2KB）
+M = Machine（真实 OS 线程，栈 1~8MB）
+P = Processor（调度上下文，数量 = GOMAXPROCS）
 
-**典型应用场景：**
-```java
-// 观察者模式中的弱引用应用
-public class WeakObserverPattern {
-    public static class Subject {
-        private final List<WeakReference<Observer>> observers = new ArrayList<>();
-        
-        public void addObserver(Observer observer) {
-            observers.add(new WeakReference<>(observer));
-        }
-        
-        public void notifyObservers(String message) {
-            Iterator<WeakReference<Observer>> it = observers.iterator();
-            while (it.hasNext()) {
-                WeakReference<Observer> ref = it.next();
-                Observer observer = ref.get();
-                if (observer != null) {
-                    observer.update(message);
-                } else {
-                    it.remove();  // 清理已失效的观察者
-                }
-            }
-        }
-    }
-    
-    public interface Observer {
-        void update(String message);
-    }
-    
-    // 使用示例
-    public static void demonstrateWeakObserver() {
-        Subject subject = new Subject();
-        
-        Observer observer = message -> System.out.println("Received: " + message);
-        subject.addObserver(observer);
-        
-        subject.notifyObservers("Hello");  // 正常接收消息
-        
-        observer = null;  // 移除强引用
-        System.gc();      // 触发垃圾回收
-        
-        subject.notifyObservers("World");  // 观察者可能已被回收
-    }
-}
+核心设计：
+- Work Stealing：P 的本地队列空了，从其他 P 偷任务
+- Hand Off：M 阻塞在 syscall 时，P 解绑并交给新 M
+- Preemption：Go 1.14+ 基于信号的异步抢占
 ```
 
-**弱引用的内存语义：**
-- **非拥有性**：不会延长对象的生命周期
-- **即时性**：对象一旦不可达就可能被立即回收
-- **不确定性**：无法保证对象在任何时刻都存在
+---
 
-### 2.4 虚引用（Phantom Reference）
+## 四、线程架构设计
 
-虚引用是最弱的引用类型，主要用于对象回收的通知和资源清理。
+### 4.1 操作系统层面（以 Linux 为例）
 
-**设计原理：**
-虚引用的设计基于"回收通知"的需求。它不能用于访问对象，但可以用于检测对象何时被垃圾回收器回收。这种设计主要用于实现精确的资源管理和清理逻辑。
+Linux 中线程和进程在内核中统一用 `task_struct` 表示：
 
-**实现原理：**
-```java
-// Java中的虚引用应用
-public class PhantomReferenceCleanup {
-    private static final ReferenceQueue<Object> queue = new ReferenceQueue<>();
-    private static final Map<PhantomReference<Object>, Runnable> cleanupTasks = 
-        new ConcurrentHashMap<>();
+```c
+// 简化的 task_struct
+struct task_struct {
+    pid_t pid;                  // 线程 ID（每个线程唯一）
+    pid_t tgid;                 // 线程组 ID（= 进程 PID，同进程的线程 tgid 相同）
     
-    static {
-        // 启动清理线程
-        Thread cleanupThread = new Thread(() -> {
-            while (true) {
-                try {
-                    Reference<?> ref = queue.remove();  // 阻塞等待
-                    Runnable cleanup = cleanupTasks.remove(ref);
-                    if (cleanup != null) {
-                        cleanup.run();  // 执行清理任务
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-        });
-        cleanupThread.setDaemon(true);
-        cleanupThread.start();
-    }
+    struct mm_struct *mm;       // 内存描述符 → 同进程的线程共享同一个 mm
+    struct files_struct *files; // 文件描述符表 → 共享
+    struct signal_struct *signal; // 信号处理 → 共享
     
-    public static void registerCleanup(Object obj, Runnable cleanup) {
-        PhantomReference<Object> ref = new PhantomReference<>(obj, queue);
-        cleanupTasks.put(ref, cleanup);
-    }
-    
-    // 使用示例
-    public static class ResourceHolder {
-        private final long nativeHandle;
-        
-        public ResourceHolder() {
-            this.nativeHandle = allocateNativeResource();
-            
-            // 注册清理任务
-            registerCleanup(this, () -> {
-                freeNativeResource(nativeHandle);
-                System.out.println("Native resource freed: " + nativeHandle);
-            });
-        }
-        
-        private native long allocateNativeResource();
-        private native void freeNativeResource(long handle);
-    }
-}
-```
-
-**虚引用的特殊性质：**
-- **不可访问性**：无法通过虚引用访问对象
-- **回收通知**：对象被回收时会收到通知
-- **清理保证**：确保清理逻辑在对象回收后执行
-
-## 3. 不同编程语言中的引用类型实现
-
-### 3.1 Java中的引用类型体系
-
-Java提供了最完整的引用类型体系，这得益于其成熟的垃圾回收机制。
-
-**Java引用类型的层次结构：**
-```java
-// Java引用类型的完整实现
-public class JavaReferenceSystem {
-    
-    // 1. 强引用 - 默认的引用类型
-    public void strongReferenceDemo() {
-        Object obj = new Object();  // 强引用
-        List<String> list = new ArrayList<>();  // 强引用
-        // 这些对象只有在引用被清除时才可能被回收
-    }
-    
-    // 2. 软引用 - 内存敏感的引用
-    public void softReferenceDemo() {
-        Object obj = new Object();
-        SoftReference<Object> softRef = new SoftReference<>(obj);
-        obj = null;  // 清除强引用
-        
-        // 在内存不足时，softRef指向的对象可能被回收
-        Object retrieved = softRef.get();  // 可能返回null
-    }
-    
-    // 3. 弱引用 - 不阻止回收的引用
-    public void weakReferenceDemo() {
-        Object obj = new Object();
-        WeakReference<Object> weakRef = new WeakReference<>(obj);
-        obj = null;  // 清除强引用
-        
-        System.gc();  // 建议垃圾回收
-        Object retrieved = weakRef.get();  // 很可能返回null
-    }
-    
-    // 4. 虚引用 - 回收通知引用
-    public void phantomReferenceDemo() {
-        ReferenceQueue<Object> queue = new ReferenceQueue<>();
-        Object obj = new Object();
-        PhantomReference<Object> phantomRef = new PhantomReference<>(obj, queue);
-        
-        obj = null;  // 清除强引用
-        System.gc();  // 触发垃圾回收
-        
-        // 检查回收通知
-        Reference<?> ref = queue.poll();
-        if (ref != null) {
-            System.out.println("Object has been garbage collected");
-        }
-    }
-}
-```
-
-**Java引用类型的内存管理集成：**
-Java的引用类型与垃圾回收器紧密集成，不同的垃圾回收器对引用类型有不同的处理策略：
-
-- **Serial GC**：按照引用强度顺序处理
-- **Parallel GC**：并行处理不同强度的引用
-- **G1 GC**：在不同的回收阶段处理不同的引用类型
-- **ZGC/Shenandoah**：低延迟处理引用类型
-
-### 3.2 C++中的智能指针体系
-
-C++通过智能指针实现了类似的引用管理机制，但更注重确定性和性能。
-
-**C++智能指针的设计哲学：**
-```cpp
-#include <memory>
-#include <iostream>
-#include <vector>
-
-// C++智能指针体系
-class CppReferenceSystem {
-public:
-    // 1. unique_ptr - 独占所有权
-    void uniquePtrDemo() {
-        std::unique_ptr<int> ptr = std::make_unique<int>(42);
-        // ptr拥有对象的独占所有权
-        
-        std::unique_ptr<int> ptr2 = std::move(ptr);  // 所有权转移
-        // 现在ptr为空，ptr2拥有对象
-        
-        // 对象在ptr2析构时自动释放
-    }
-    
-    // 2. shared_ptr - 共享所有权（类似强引用）
-    void sharedPtrDemo() {
-        std::shared_ptr<int> ptr1 = std::make_shared<int>(42);
-        std::shared_ptr<int> ptr2 = ptr1;  // 引用计数增加
-        
-        std::cout << "Reference count: " << ptr1.use_count() << std::endl;  // 输出2
-        
-        ptr1.reset();  // 引用计数减少
-        // 对象在最后一个shared_ptr析构时释放
-    }
-    
-    // 3. weak_ptr - 弱引用，不影响引用计数
-    void weakPtrDemo() {
-        std::shared_ptr<int> shared = std::make_shared<int>(42);
-        std::weak_ptr<int> weak = shared;  // 不增加引用计数
-        
-        if (auto locked = weak.lock()) {  // 尝试获取shared_ptr
-            std::cout << "Object still exists: " << *locked << std::endl;
-        } else {
-            std::cout << "Object has been destroyed" << std::endl;
-        }
-        
-        shared.reset();  // 对象被销毁
-        
-        if (auto locked = weak.lock()) {
-            // 这里不会执行，因为对象已被销毁
-        } else {
-            std::cout << "Object no longer exists" << std::endl;
-        }
-    }
-    
-    // 循环引用问题的解决
-    struct Node {
-        std::shared_ptr<Node> next;
-        std::weak_ptr<Node> parent;  // 使用weak_ptr避免循环引用
-        int value;
-        
-        Node(int val) : value(val) {}
-        ~Node() {
-            std::cout << "Node " << value << " destroyed" << std::endl;
-        }
-    };
-    
-    void cyclicReferenceDemo() {
-        auto node1 = std::make_shared<Node>(1);
-        auto node2 = std::make_shared<Node>(2);
-        
-        node1->next = node2;
-        node2->parent = node1;  // 使用weak_ptr，避免循环引用
-        
-        // 当node1和node2离开作用域时，都会被正确销毁
-    }
+    struct thread_struct thread; // CPU 寄存器状态 → 每线程独立
+    void *stack;                 // 内核栈 → 每线程独立
+    // ...
 };
 ```
 
-**C++引用管理的特点：**
-- **确定性析构**：对象的销毁时机是确定的
-- **零开销抽象**：智能指针的开销接近原始指针
-- **RAII原则**：资源获取即初始化，确保资源正确释放
-- **类型安全**：编译时检查引用的正确性
+**`fork()` vs `clone()`**：
 
-### 3.3 JavaScript中的引用与垃圾回收
+```
+fork()  → 创建新进程：复制 mm、files、signal（写时复制）
+clone() → 创建线程：共享 mm、files、signal（通过标志位控制）
 
-JavaScript采用了不同的方法，主要依赖垃圾回收器的智能化。
+clone(CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_THREAD, ...)
+       共享内存    共享文件系统  共享文件描述符  共享信号处理    同一线程组
+```
 
-**JavaScript引用管理的演进：**
-```javascript
-// JavaScript中的引用管理
-class JavaScriptReferenceSystem {
-    
-    // 1. 强引用 - 默认的引用类型
-    strongReferenceDemo() {
-        let obj = { name: "example" };  // 强引用
-        let arr = [1, 2, 3];           // 强引用
-        
-        // 这些对象在引用存在时不会被回收
-        obj = null;  // 清除引用，对象可能被回收
-    }
-    
-    // 2. WeakMap - 弱键引用
-    weakMapDemo() {
-        const weakMap = new WeakMap();
-        let key = { id: 1 };
-        
-        weakMap.set(key, "some value");
-        
-        // key对象可以被垃圾回收，即使它在WeakMap中
-        key = null;  // WeakMap中的条目也会被自动清理
-    }
-    
-    // 3. WeakSet - 弱值引用
-    weakSetDemo() {
-        const weakSet = new WeakSet();
-        let obj = { name: "example" };
-        
-        weakSet.add(obj);
-        
-        // obj可以被垃圾回收，WeakSet不会阻止回收
-        obj = null;  // WeakSet中的条目也会被自动清理
-    }
-    
-    // 4. WeakRef - ES2021引入的弱引用
-    weakRefDemo() {
-        let obj = { name: "example" };
-        const weakRef = new WeakRef(obj);
-        
-        obj = null;  // 清除强引用
-        
-        // 稍后检查对象是否还存在
-        setTimeout(() => {
-            const retrieved = weakRef.deref();
-            if (retrieved) {
-                console.log("Object still exists:", retrieved.name);
-            } else {
-                console.log("Object has been garbage collected");
-            }
-        }, 1000);
-    }
-    
-    // 5. FinalizationRegistry - 清理回调
-    finalizationDemo() {
-        const registry = new FinalizationRegistry((heldValue) => {
-            console.log("Object with held value", heldValue, "was garbage collected");
-        });
-        
-        let obj = { name: "example" };
-        registry.register(obj, "example-object");
-        
-        obj = null;  // 对象被回收时会触发回调
-    }
-    
-    // 内存泄漏的避免
-    avoidMemoryLeaks() {
-        // 避免闭包中的意外引用
-        function createHandler() {
-            const largeData = new Array(1000000).fill("data");
-            
-            return function handler(event) {
-                // 如果不需要largeData，应该避免在闭包中引用它
-                console.log("Event handled");
-            };
+### 4.2 线程上下文切换
+
+```
+线程 A 运行中
+    │
+    ▼ 时钟中断 / 系统调用 / 主动让出
+┌──────────────────────────────┐
+│ 1. 保存 A 的寄存器到 A 的 TCB │  (Thread Control Block)
+│ 2. 切换内核栈指针              │
+│ 3. 恢复 B 的寄存器从 B 的 TCB │
+│ 4. 跳转到 B 的 PC 继续执行    │
+└──────────────────────────────┘
+    │
+    ▼
+线程 B 运行中
+```
+
+**同进程线程切换 vs 跨进程切换**：
+
+| 操作 | 同进程线程切换 | 跨进程切换 |
+|------|--------------|-----------|
+| 保存/恢复寄存器 | 需要 | 需要 |
+| 切换页表（CR3） | **不需要** | 需要 |
+| 刷新 TLB | **不需要** | 需要（代价极大） |
+| 典型耗时 | ~1-2 μs | ~3-5 μs |
+
+### 4.3 线程栈架构
+
+```
+高地址 ┌──────────────┐
+       │  Guard Page   │ ← 栈溢出保护（访问触发 SIGSEGV）
+       ├──────────────┤
+       │              │
+       │  线程栈空间   │ ← 默认 1~8MB（Linux 默认 8MB）
+       │  (向下增长)   │
+       │              │
+       │      ↓       │
+       │    栈顶 SP   │ ← 当前栈指针
+       │              │
+       ├──────────────┤
+       │     TLS      │ ← 线程局部存储
+低地址 └──────────────┘
+```
+
+### 4.4 内存可见性架构
+
+多核 CPU 的缓存层次导致线程间可见性问题：
+
+```
+  Thread 1 (Core 0)          Thread 2 (Core 1)
+       │                          │
+   ┌───┴───┐                  ┌───┴───┐
+   │L1 Cache│                  │L1 Cache│  ← 每核私有，可能有过期数据
+   └───┬───┘                  └───┬───┘
+   ┌───┴───┐                  ┌───┴───┐
+   │L2 Cache│                  │L2 Cache│
+   └───┬───┘                  └───┬───┘
+       └──────────┬───────────────┘
+              ┌───┴───┐
+              │L3 Cache│  ← 共享
+              └───┬───┘
+              ┌───┴───┐
+              │ 主内存  │
+              └───────┘
+```
+
+**解决方案**——内存屏障（Memory Barrier）/ 缓存一致性协议（MESI）：
+- **Store Barrier**：确保写操作对其他核可见
+- **Load Barrier**：确保读到最新值
+- **Full Barrier**：两者兼具
+
+各语言的关键字映射：
+- Java: `volatile`、`synchronized`
+- C/C++: `std::atomic`、`memory_order_*`
+- Go: `sync/atomic`、channel
+
+---
+
+## 五、线程生命周期
+
+### 5.1 状态定义
+
+```
+         ┌──────────┐
+         │   NEW    │ 创建但未启动
+         └────┬─────┘
+              │ start()
+              ▼
+         ┌──────────┐          ┌───────────┐
+    ┌───→│ RUNNABLE │────────→ │  RUNNING  │───┐
+    │    └──────────┘ 被调度    └─────┬─────┘   │
+    │         ↑                      │          │
+    │         │                      │          │
+    │    调度器选中              以下事件触发      │
+    │         │                      │          │
+    │    ┌────┴──────────────────────┤          │
+    │    │              ┌────────────┤          │
+    │    │              │            │          │
+    │    │              ▼            ▼          │
+    │  ┌─┴────────┐ ┌────────┐ ┌─────────┐    │
+    │  │ WAITING  │ │TIMED   │ │ BLOCKED │    │
+    │  │(无限等待) │ │WAITING │ │(锁阻塞)  │    │
+    │  └────┬─────┘ └───┬────┘ └────┬────┘    │
+    │       │           │           │          │
+    │  notify/     超时到期/     获得锁         │
+    │  unpark      notify                      │
+    │       │           │           │          │
+    │       └───────────┴───────────┘          │
+    │               │                          │
+    └───────────────┘                          │
+                                               │
+                          run()结束 / 异常       │
+                                               │
+                                    ┌──────────▼──┐
+                                    │ TERMINATED  │
+                                    └─────────────┘
+```
+
+### 5.2 每种状态的流转细节
+
+#### NEW → RUNNABLE
+
+```java
+Thread t = new Thread(task);  // NEW: 仅分配 Java 对象
+t.start();                     // → RUNNABLE: 
+                               //   1. JVM 调用 pthread_create() 创建内核线程
+                               //   2. 分配线程栈（默认 1MB）
+                               //   3. 加入调度器就绪队列
+```
+
+**注意**：`start()` 只能调用一次，重复调用抛 `IllegalThreadStateException`。
+
+#### RUNNABLE ↔ RUNNING
+
+这两个状态在 Java 中统一为 `RUNNABLE`，但操作系统层面是区分的：
+
+```
+RUNNABLE（就绪队列中等待 CPU）
+    │
+    │ 调度器分配 CPU 时间片
+    ▼
+RUNNING（正在 CPU 上执行）
+    │
+    ├── 时间片用完 → 回到 RUNNABLE（时间片轮转）
+    ├── 更高优先级线程抢占 → 回到 RUNNABLE
+    └── 主动 yield() → 回到 RUNNABLE
+```
+
+#### RUNNING → BLOCKED（锁阻塞）
+
+```java
+synchronized (lockObj) {   // 如果锁被占用
+    // ...                 // → BLOCKED: 进入锁的等待队列（EntryList）
+}                          // 锁释放后 → RUNNABLE
+```
+
+操作系统层面的实现：
+```
+线程尝试获取锁
+    │
+    ├── CAS 成功 → 获得锁，继续执行
+    │
+    └── CAS 失败 → 自旋若干次（Adaptive Spinning）
+              │
+              ├── 自旋成功 → 获得锁
+              └── 自旋失败 → 内核态 futex_wait() → 线程挂起
+                              │
+                           锁释放时 futex_wake() → 线程唤醒 → RUNNABLE
+```
+
+#### RUNNING → WAITING（无限等待）
+
+| 触发方法 | 唤醒方式 |
+|---------|---------|
+| `Object.wait()` | `notify()` / `notifyAll()` |
+| `Thread.join()` | 目标线程终止 |
+| `LockSupport.park()` | `LockSupport.unpark(t)` |
+| `Condition.await()` | `Condition.signal()` |
+
+`wait/notify` 的内部机制：
+
+```
+synchronized (monitor) {
+    monitor.wait();      // 1. 释放 monitor 锁
+                         // 2. 线程进入 WaitSet
+                         // 3. 状态 → WAITING
+                         
+    // 被 notify 唤醒后：
+                         // 4. 从 WaitSet 移到 EntryList
+                         // 5. 状态 → BLOCKED（等待重新获取锁）
+                         // 6. 获得锁后 → RUNNABLE
+}
+```
+
+```
+┌─────── Monitor（对象监视器）───────┐
+│                                    │
+│   Owner:  当前持有锁的线程          │
+│                                    │
+│   EntryList: [T2, T3]             │  ← BLOCKED 状态线程
+│   (等待获取锁的线程)                │
+│                                    │
+│   WaitSet:  [T4, T5]             │  ← WAITING 状态线程
+│   (调用 wait() 的线程)             │
+│                                    │
+└────────────────────────────────────┘
+```
+
+#### RUNNING → TIMED_WAITING（限时等待）
+
+| 触发方法 | 唤醒方式 |
+|---------|---------|
+| `Thread.sleep(ms)` | 超时自动唤醒 |
+| `Object.wait(ms)` | 超时 / `notify()` |
+| `Thread.join(ms)` | 超时 / 目标线程终止 |
+| `LockSupport.parkNanos(ns)` | 超时 / `unpark()` |
+
+内部实现依赖操作系统定时器：
+```
+sleep(1000)
+  → futex_wait(addr, val, timeout=1s)
+    → 内核注册 hrtimer（高精度定时器）
+      → 定时器到期 → 唤醒线程 → RUNNABLE
+```
+
+#### → TERMINATED
+
+```
+run() 方法正常返回
+    或
+run() 方法抛出未捕获异常
+    │
+    ▼
+TERMINATED:
+  1. 释放线程栈内存
+  2. 清理 TLS
+  3. 唤醒所有 join() 等待的线程
+  4. pthread_detach / 回收内核资源
+  5. Thread 对象仍在堆上（等待 GC）
+```
+
+---
+
+## 六、线程核心 API 设计
+
+### 6.1 生命周期控制
+
+| API | 语义 | 设计要点 |
+|-----|------|---------|
+| `new Thread(Runnable)` | 创建线程 | 将"做什么"（Runnable）与"谁来做"（Thread）分离 |
+| `start()` | 启动线程 | 不可重入，内部通过 native 调用 `pthread_create` |
+| `join()` / `join(timeout)` | 等待线程终止 | 底层用 `wait/notify` 实现（线程终止时 JVM 自动 `notifyAll`） |
+| `interrupt()` | 设置中断标志 | **协作式取消**，不强制终止；阻塞 API 检测到标志抛 `InterruptedException` |
+| `isAlive()` | 是否存活 | NEW 和 TERMINATED 返回 false |
+
+**`interrupt()` 的协作式设计是关键设计决策**：
+
+```java
+// 错误思想：stop()（已废弃）—— 强制杀死线程
+//   问题：可能在持有锁的临界区中被杀，导致数据不一致
+
+// 正确思想：interrupt() —— 通知线程"请你终止"
+//   线程自己决定何时、如何安全地终止
+
+public void run() {
+    while (!Thread.currentThread().isInterrupted()) {
+        try {
+            // 业务逻辑
+            blockingOperation();  // sleep/wait/take 等
+        } catch (InterruptedException e) {
+            // 收到中断信号，清理资源后退出
+            cleanup();
+            break;  // 或 Thread.currentThread().interrupt() 传播
         }
-        
-        // 使用WeakMap存储私有数据
-        const privateData = new WeakMap();
-        
-        class MyClass {
-            constructor(data) {
-                privateData.set(this, data);
-            }
-            
-            getData() {
-                return privateData.get(this);
-            }
-        }
-        
-        // 当MyClass实例被回收时，privateData中的条目也会被清理
     }
 }
 ```
 
-**JavaScript引用管理的特点：**
-- **自动垃圾回收**：程序员无需手动管理内存
-- **标记清除算法**：现代引擎使用先进的垃圾回收算法
-- **弱引用支持**：ES2021引入了WeakRef和FinalizationRegistry
-- **内存泄漏预防**：通过WeakMap/WeakSet避免常见的内存泄漏
+### 6.2 调度控制
 
-### 3.4 Go语言中的引用管理
+| API | 语义 | 底层原理 |
+|-----|------|---------|
+| `sleep(ms)` | 当前线程休眠 | `nanosleep()` 系统调用，**不释放锁** |
+| `yield()` | 提示调度器让出 CPU | `sched_yield()` 系统调用，调度器可忽略 |
+| `setPriority(p)` | 设置优先级 | 映射到 OS 线程优先级（`nice` 值），效果因 OS 而异 |
 
-Go语言采用了简化的引用模型，主要依赖垃圾回收器。
+**`sleep` vs `wait` 的本质区别**：
 
-**Go语言的引用管理策略：**
-```go
-package main
+```
+sleep(ms):
+  - Thread 类的静态方法
+  - 不需要持有锁
+  - 不释放任何锁
+  - 纯粹的时间等待
 
-import (
-    "fmt"
-    "runtime"
-    "sync"
-    "unsafe"
-    "weak"  // 假设的弱引用包
+wait(ms):
+  - Object 实例方法
+  - 必须在 synchronized 块内调用
+  - 释放当前对象的 monitor 锁
+  - 等待条件变化的通知
+```
+
+### 6.3 同步原语
+
+```
+低级 ──────────────────────────────────────── 高级
+  │                                              │
+  ├─ CAS（CPU 指令: cmpxchg）                    │
+  │    └─ Atomic 类                              │
+  │         └─ AQS (AbstractQueuedSynchronizer)  │
+  │              ├─ ReentrantLock                 │
+  │              ├─ Semaphore                     │
+  │              ├─ CountDownLatch                │
+  │              ├─ CyclicBarrier                 │
+  │              └─ ReadWriteLock                 │
+  │                                              │
+  ├─ futex (Linux 快速用户态互斥)                  │
+  │    └─ pthread_mutex                          │
+  │         └─ synchronized (JVM Monitor)        │
+  │                                              │
+  └─ 内存屏障 (mfence/lfence/sfence)             │
+       └─ volatile                               │
+```
+
+**AQS 的核心设计**（Doug Lea 的杰作）：
+
+```
+┌─────────── AQS ────────────┐
+│                              │
+│   state: int (原子变量)       │  ← 0=未锁, >0=已锁/重入次数
+│                              │
+│   CLH Queue (双向链表):       │  ← 等待线程排队
+│   head ↔ Node(T1) ↔ Node(T2)│
+│                              │
+│   acquire(): 尝试获取         │
+│     CAS(state) 成功 → 获得   │
+│     失败 → 入队 + park()     │
+│                              │
+│   release(): 释放            │
+│     修改 state               │
+│     unpark(队首线程)          │
+└──────────────────────────────┘
+```
+
+### 6.4 线程间通信
+
+| 机制 | 原理 | 适用场景 |
+|------|------|---------|
+| `wait/notify` | Monitor 的 WaitSet | 经典生产者-消费者 |
+| `Lock/Condition` | AQS + 条件队列 | 精细化条件等待（多个条件） |
+| `BlockingQueue` | Lock + Condition 封装 | 生产者-消费者（推荐） |
+| `volatile` | 内存屏障保证可见性 | 状态标志、双检锁 |
+| `CountDownLatch` | AQS state 倒数到 0 | 等待 N 个任务完成 |
+| `CyclicBarrier` | ReentrantLock + Condition | N 个线程互相等待到齐 |
+
+---
+
+## 七、线程使用
+
+### 7.1 线程池——生产级使用方式
+
+直接创建线程的问题：创建/销毁开销、无法控制并发数、缺乏任务排队。
+
+**线程池架构**：
+
+```
+                    ┌─────── ThreadPool ────────┐
+                    │                            │
+  submit(task) ──→  │  BlockingQueue             │
+                    │  [task1, task2, task3, ...] │
+                    │        │  │  │              │
+                    │        ▼  ▼  ▼              │
+                    │  Worker Threads:            │
+                    │  [W1] [W2] [W3] ... [Wn]   │
+                    │                            │
+                    │  拒绝策略:                   │
+                    │  队列满 + 线程满 → reject   │
+                    └────────────────────────────┘
+```
+
+**核心参数设计**：
+
+```java
+ThreadPoolExecutor(
+    int corePoolSize,      // 核心线程数（常驻）
+    int maximumPoolSize,   // 最大线程数
+    long keepAliveTime,    // 非核心线程空闲存活时间
+    TimeUnit unit,
+    BlockingQueue<Runnable> workQueue,    // 任务队列
+    ThreadFactory threadFactory,          // 线程工厂
+    RejectedExecutionHandler handler     // 拒绝策略
 )
-
-// Go语言中的引用管理
-type GoReferenceSystem struct{}
-
-// 1. 强引用 - 默认的引用类型
-func (g *GoReferenceSystem) StrongReferenceDemo() {
-    obj := &struct{ name string }{"example"}
-    slice := make([]int, 1000)
-    
-    // 这些对象在引用存在时不会被回收
-    _ = obj
-    _ = slice
-    
-    // 当函数结束时，局部变量的引用被清除
-}
-
-// 2. 指针与引用的关系
-func (g *GoReferenceSystem) PointerDemo() {
-    value := 42
-    ptr := &value  // ptr是指向value的指针（强引用）
-    
-    // 通过unsafe包可以进行更底层的操作
-    uintptrValue := uintptr(unsafe.Pointer(ptr))
-    
-    // 注意：uintptr不会阻止垃圾回收
-    runtime.GC()
-    
-    // 重新转换为指针（危险操作）
-    newPtr := (*int)(unsafe.Pointer(uintptrValue))
-    fmt.Println(*newPtr)  // 可能导致程序崩溃
-}
-
-// 3. 使用sync.Pool实现对象复用
-func (g *GoReferenceSystem) ObjectPoolDemo() {
-    pool := &sync.Pool{
-        New: func() interface{} {
-            return make([]byte, 1024)
-        },
-    }
-    
-    // 获取对象
-    buffer := pool.Get().([]byte)
-    
-    // 使用对象
-    copy(buffer, []byte("Hello, World!"))
-    
-    // 归还对象到池中
-    pool.Put(buffer)
-    
-    // 池中的对象可能被垃圾回收器回收
-    runtime.GC()
-}
-
-// 4. 弱引用的模拟实现
-type WeakReference struct {
-    ptr unsafe.Pointer
-    id  uintptr
-}
-
-func NewWeakReference(obj interface{}) *WeakReference {
-    ptr := unsafe.Pointer(&obj)
-    return &WeakReference{
-        ptr: ptr,
-        id:  uintptr(ptr),
-    }
-}
-
-func (w *WeakReference) Get() interface{} {
-    // 这是一个简化的实现，实际的弱引用需要与GC集成
-    if w.ptr != nil {
-        return *(*interface{})(w.ptr)
-    }
-    return nil
-}
-
-// 5. 使用finalizer实现清理逻辑
-func (g *GoReferenceSystem) FinalizerDemo() {
-    type Resource struct {
-        handle uintptr
-    }
-    
-    resource := &Resource{handle: 12345}
-    
-    // 设置finalizer
-    runtime.SetFinalizer(resource, func(r *Resource) {
-        fmt.Printf("Resource %d is being finalized\n", r.handle)
-        // 执行清理逻辑
-    })
-    
-    // 清除引用
-    resource = nil
-    
-    // 触发垃圾回收
-    runtime.GC()
-    runtime.GC()  // 可能需要多次GC才能触发finalizer
-}
-
-// 6. 内存管理的最佳实践
-func (g *GoReferenceSystem) BestPractices() {
-    // 避免循环引用
-    type Node struct {
-        value int
-        next  *Node
-        // 如果需要父节点引用，考虑使用弱引用或者不存储父节点指针
-    }
-    
-    // 及时清理大对象的引用
-    largeSlice := make([]byte, 10*1024*1024)  // 10MB
-    // 使用完毕后
-    largeSlice = nil
-    
-    // 使用context控制生命周期
-    // ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-    // defer cancel()
-    
-    // 监控内存使用
-    var m runtime.MemStats
-    runtime.ReadMemStats(&m)
-    fmt.Printf("Allocated memory: %d KB\n", m.Alloc/1024)
-}
 ```
 
-**Go语言引用管理的特点：**
-- **简化的模型**：主要依赖垃圾回收器
-- **指针语义**：明确的指针概念
-- **Finalizer支持**：类似于Java的finalize机制
-- **性能导向**：注重垃圾回收的性能优化
+**任务提交决策流程**：
 
-## 4. 引用类型的设计模式与最佳实践
+```
+提交任务
+    │
+    ▼
+当前线程数 < corePoolSize ?
+    ├── 是 → 创建新核心线程执行
+    └── 否 ↓
+        workQueue 未满 ?
+        ├── 是 → 任务入队等待
+        └── 否 ↓
+            当前线程数 < maximumPoolSize ?
+            ├── 是 → 创建新非核心线程执行
+            └── 否 → 执行拒绝策略
+                      ├─ AbortPolicy（抛异常，默认）
+                      ├─ CallerRunsPolicy（提交者自己执行）
+                      ├─ DiscardPolicy（静默丢弃）
+                      └─ DiscardOldestPolicy（丢弃队首）
+```
 
-### 4.1 缓存系统的引用策略
+### 7.2 线程池参数调优原则
 
-不同的引用类型在缓存系统中有不同的应用场景和设计模式。
+```
+CPU 密集型任务：
+  corePoolSize = CPU 核数 + 1
+  队列用有界队列
+  理由：CPU 始终在计算，更多线程只增加切换开销
 
-**多层次缓存的引用策略：**
+I/O 密集型任务：
+  corePoolSize = CPU 核数 × 2 （或更高）
+  更精确公式：N × U × (1 + W/C)
+    N = CPU 核数
+    U = 目标 CPU 利用率 (0~1)
+    W = 等待时间
+    C = 计算时间
+  理由：线程大部分时间在等 I/O，需要更多线程保持 CPU 忙碌
+```
+
+### 7.3 并发设计模式
+
+**模式一：不可变对象（最简单的线程安全）**
 ```java
-// 基于引用类型的多层次缓存系统
-public class MultiLevelCache<K, V> {
-    // L1缓存：强引用，小容量，快速访问
-    private final Map<K, V> l1Cache = new ConcurrentHashMap<>();
-    private final int l1MaxSize = 100;
-    
-    // L2缓存：软引用，中等容量，内存敏感
-    private final Map<K, SoftReference<V>> l2Cache = new ConcurrentHashMap<>();
-    private final int l2MaxSize = 1000;
-    
-    // L3缓存：弱引用，大容量，最后的机会
-    private final Map<K, WeakReference<V>> l3Cache = new ConcurrentHashMap<>();
-    
-    public V get(K key) {
-        // 首先尝试L1缓存
-        V value = l1Cache.get(key);
-        if (value != null) {
-            return value;
-        }
-        
-        // 尝试L2缓存
-        SoftReference<V> softRef = l2Cache.get(key);
-        if (softRef != null) {
-            value = softRef.get();
-            if (value != null) {
-                promoteToL1(key, value);  // 提升到L1缓存
-                return value;
-            } else {
-                l2Cache.remove(key);  // 清理失效引用
-            }
-        }
-        
-        // 尝试L3缓存
-        WeakReference<V> weakRef = l3Cache.get(key);
-        if (weakRef != null) {
-            value = weakRef.get();
-            if (value != null) {
-                promoteToL2(key, value);  // 提升到L2缓存
-                return value;
-            } else {
-                l3Cache.remove(key);  // 清理失效引用
-            }
-        }
-        
-        return null;  // 缓存未命中
-    }
-    
-    public void put(K key, V value) {
-        // 新数据直接放入L1缓存
-        if (l1Cache.size() >= l1MaxSize) {
-            evictFromL1();  // L1缓存满时进行淘汰
-        }
-        l1Cache.put(key, value);
-    }
-    
-    private void promoteToL1(K key, V value) {
-        if (l1Cache.size() >= l1MaxSize) {
-            evictFromL1();
-        }
-        l1Cache.put(key, value);
-    }
-    
-    private void promoteToL2(K key, V value) {
-        if (l2Cache.size() >= l2MaxSize) {
-            evictFromL2();
-        }
-        l2Cache.put(key, new SoftReference<>(value));
-    }
-    
-    private void evictFromL1() {
-        // 将L1中的数据降级到L2
-        Iterator<Map.Entry<K, V>> it = l1Cache.entrySet().iterator();
-        if (it.hasNext()) {
-            Map.Entry<K, V> entry = it.next();
-            l2Cache.put(entry.getKey(), new SoftReference<>(entry.getValue()));
-            it.remove();
-        }
-    }
-    
-    private void evictFromL2() {
-        // 将L2中的数据降级到L3
-        Iterator<Map.Entry<K, SoftReference<V>>> it = l2Cache.entrySet().iterator();
-        if (it.hasNext()) {
-            Map.Entry<K, SoftReference<V>> entry = it.next();
-            V value = entry.getValue().get();
-            if (value != null) {
-                l3Cache.put(entry.getKey(), new WeakReference<>(value));
-            }
-            it.remove();
-        }
-    }
+// 不可变 = 天然线程安全，无需任何同步
+public final class Point {
+    private final int x, y;
+    public Point(int x, int y) { this.x = x; this.y = y; }
 }
 ```
 
-### 4.2 观察者模式的引用管理
-
-观察者模式中的引用管理是一个经典的应用场景。
-
-**基于弱引用的观察者模式：**
+**模式二：线程封闭（ThreadLocal）**
 ```java
-// 防止内存泄漏的观察者模式
-public class WeakObservable<T> {
-    private final List<WeakReference<Observer<T>>> observers = 
-        Collections.synchronizedList(new ArrayList<>());
-    
-    public interface Observer<T> {
-        void onChanged(T data);
-    }
-    
-    public void addObserver(Observer<T> observer) {
-        observers.add(new WeakReference<>(observer));
-    }
-    
-    public void removeObserver(Observer<T> observer) {
-        observers.removeIf(ref -> {
-            Observer<T> obs = ref.get();
-            return obs == null || obs == observer;
-        });
-    }
-    
-    public void notifyObservers(T data) {
-        Iterator<WeakReference<Observer<T>>> it = observers.iterator();
-        while (it.hasNext()) {
-            WeakReference<Observer<T>> ref = it.next();
-            Observer<T> observer = ref.get();
-            if (observer != null) {
-                try {
-                    observer.onChanged(data);
-                } catch (Exception e) {
-                    // 处理观察者异常
-                    System.err.println("Observer error: " + e.getMessage());
-                }
-            } else {
-                it.remove();  // 清理失效的观察者
-            }
-        }
-    }
-    
-    public int getObserverCount() {
-        // 清理失效引用并返回有效观察者数量
-        observers.removeIf(ref -> ref.get() == null);
-        return observers.size();
-    }
-}
-
-// 使用示例
-class ObserverExample {
-    public static void demonstrate() {
-        WeakObservable<String> observable = new WeakObservable<>();
-        
-        // 创建观察者
-        WeakObservable.Observer<String> observer1 = data -> 
-            System.out.println("Observer1: " + data);
-        
-        WeakObservable.Observer<String> observer2 = data -> 
-            System.out.println("Observer2: " + data);
-        
-        observable.addObserver(observer1);
-        observable.addObserver(observer2);
-        
-        observable.notifyObservers("Hello");  // 两个观察者都会收到通知
-        
-        observer1 = null;  // 移除强引用
-        System.gc();       // 建议垃圾回收
-        
-        observable.notifyObservers("World");  // 只有observer2会收到通知
-        
-        System.out.println("Active observers: " + observable.getObserverCount());
-    }
-}
+// 每个线程有自己的副本，无共享 = 无竞争
+private static final ThreadLocal<SimpleDateFormat> dateFormat =
+    ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
 ```
 
-### 4.3 资源管理的引用策略
-
-不同类型的资源需要不同的引用管理策略。
-
-**基于引用类型的资源管理框架：**
+**模式三：生产者-消费者**
 ```java
-// 资源管理框架
-public class ResourceManager {
-    
-    // 关键资源使用强引用
-    private final Map<String, CriticalResource> criticalResources = 
-        new ConcurrentHashMap<>();
-    
-    // 缓存资源使用软引用
-    private final Map<String, SoftReference<CacheableResource>> cacheableResources = 
-        new ConcurrentHashMap<>();
-    
-    // 临时资源使用弱引用
-    private final Map<String, WeakReference<TemporaryResource>> temporaryResources = 
-        new ConcurrentHashMap<>();
-    
-    // 需要清理的资源使用虚引用
-    private final ReferenceQueue<CleanableResource> cleanupQueue = new ReferenceQueue<>();
-    private final Map<PhantomReference<CleanableResource>, Runnable> cleanupTasks = 
-        new ConcurrentHashMap<>();
-    
-    public interface Resource {
-        String getId();
-        void close();
-    }
-    
-    public static class CriticalResource implements Resource {
-        private final String id;
-        private boolean closed = false;
-        
-        public CriticalResource(String id) {
-            this.id = id;
-        }
-        
-        @Override
-        public String getId() { return id; }
-        
-        @Override
-        public void close() {
-            if (!closed) {
-                System.out.println("Closing critical resource: " + id);
-                closed = true;
-            }
-        }
-    }
-    
-    public static class CacheableResource implements Resource {
-        private final String id;
-        private final byte[] data;
-        
-        public CacheableResource(String id, int size) {
-            this.id = id;
-            this.data = new byte[size];
-        }
-        
-        @Override
-        public String getId() { return id; }
-        
-        @Override
-        public void close() {
-            System.out.println("Closing cacheable resource: " + id);
-        }
-    }
-    
-    public static class TemporaryResource implements Resource {
-        private final String id;
-        
-        public TemporaryResource(String id) {
-            this.id = id;
-        }
-        
-        @Override
-        public String getId() { return id; }
-        
-        @Override
-        public void close() {
-            System.out.println("Closing temporary resource: " + id);
-        }
-    }
-    
-    public static class CleanableResource implements Resource {
-        private final String id;
-        private final long nativeHandle;
-        
-        public CleanableResource(String id) {
-            this.id = id;
-            this.nativeHandle = System.nanoTime();  // 模拟native资源
-        }
-        
-        @Override
-        public String getId() { return id; }
-        
-        @Override
-        public void close() {
-            System.out.println("Closing cleanable resource: " + id);
-        }
-        
-        public long getNativeHandle() { return nativeHandle; }
-    }
-    
-    // 资源获取方法
-    public CriticalResource getCriticalResource(String id) {
-        return criticalResources.computeIfAbsent(id, CriticalResource::new);
-    }
-    
-    public CacheableResource getCacheableResource(String id, int size) {
-        SoftReference<CacheableResource> ref = cacheableResources.get(id);
-        if (ref != null) {
-            CacheableResource resource = ref.get();
-            if (resource != null) {
-                return resource;
-            }
-        }
-        
-        CacheableResource resource = new CacheableResource(id, size);
-        cacheableResources.put(id, new SoftReference<>(resource));
-        return resource;
-    }
-    
-    public TemporaryResource getTemporaryResource(String id) {
-        WeakReference<TemporaryResource> ref = temporaryResources.get(id);
-        if (ref != null) {
-            TemporaryResource resource = ref.get();
-            if (resource != null) {
-                return resource;
-            }
-        }
-        
-        TemporaryResource resource = new TemporaryResource(id);
-        temporaryResources.put(id, new WeakReference<>(resource));
-        return resource;
-    }
-    
-    public CleanableResource getCleanableResource(String id) {
-        CleanableResource resource = new CleanableResource(id);
-        
-        // 注册清理任务
-        PhantomReference<CleanableResource> phantomRef = 
-            new PhantomReference<>(resource, cleanupQueue);
-        
-        cleanupTasks.put(phantomRef, () -> {
-            System.out.println("Cleaning up native resource: " + resource.getNativeHandle());
-            // 执行native资源清理
-        });
-        
-        return resource;
-    }
-    
-    // 清理线程
-    public void startCleanupThread() {
-        Thread cleanupThread = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    Reference<?> ref = cleanupQueue.remove();
-                    Runnable cleanup = cleanupTasks.remove(ref);
-                    if (cleanup != null) {
-                        cleanup.run();
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-        });
-        cleanupThread.setDaemon(true);
-        cleanupThread.start();
-    }
-    
-    // 资源统计
-    public void printResourceStats() {
-        System.out.println("Critical resources: " + criticalResources.size());
-        
-        // 清理失效的软引用
-        cacheableResources.entrySet().removeIf(entry -> entry.getValue().get() == null);
-        System.out.println("Cacheable resources: " + cacheableResources.size());
-        
-        // 清理失效的弱引用
-        temporaryResources.entrySet().removeIf(entry -> entry.getValue().get() == null);
-        System.out.println("Temporary resources: " + temporaryResources.size());
-        
-        System.out.println("Cleanup tasks pending: " + cleanupTasks.size());
-    }
-}
+BlockingQueue<Task> queue = new LinkedBlockingQueue<>(1000);
+
+// 生产者
+queue.put(task);      // 队列满则阻塞
+
+// 消费者
+Task task = queue.take();  // 队列空则阻塞
 ```
 
-## 5. 引用类型的性能影响与优化策略
+### 7.4 常见陷阱
 
-### 5.1 性能特征分析
-
-不同引用类型对程序性能有不同的影响，理解这些影响对于优化程序性能至关重要。
-
-**引用类型的性能开销对比：**
 ```java
-// 性能测试框架
-public class ReferencePerformanceAnalysis {
-    
-    private static final int ITERATIONS = 1_000_000;
-    private static final int OBJECT_COUNT = 10_000;
-    
-    public static class TestObject {
-        private final int value;
-        private final String data;
-        
-        public TestObject(int value) {
-            this.value = value;
-            this.data = "Data-" + value;
-        }
-        
-        public int getValue() { return value; }
-        public String getData() { return data; }
-    }
-    
-    // 强引用性能测试
-    public void testStrongReferencePerformance() {
-        long startTime = System.nanoTime();
-        
-        List<TestObject> objects = new ArrayList<>(OBJECT_COUNT);
-        for (int i = 0; i < OBJECT_COUNT; i++) {
-            objects.add(new TestObject(i));
-        }
-        
-        // 访问测试
-        int sum = 0;
-        for (int i = 0; i < ITERATIONS; i++) {
-            TestObject obj = objects.get(i % OBJECT_COUNT);
-            sum += obj.getValue();
-        }
-        
-        long endTime = System.nanoTime();
-        System.out.println("Strong reference time: " + (endTime - startTime) / 1_000_000 + "ms");
-        System.out.println("Sum: " + sum);
-    }
-    
-    // 软引用性能测试
-    public void testSoftReferencePerformance() {
-        long startTime = System.nanoTime();
-        
-        List<SoftReference<TestObject>> objects = new ArrayList<>(OBJECT_COUNT);
-        for (int i = 0; i < OBJECT_COUNT; i++) {
-            objects.add(new SoftReference<>(new TestObject(i)));
-        }
-        
-        // 访问测试
-        int sum = 0;
-        int nullCount = 0;
-        for (int i = 0; i < ITERATIONS; i++) {
-            SoftReference<TestObject> ref = objects.get(i % OBJECT_COUNT);
-            TestObject obj = ref.get();
-            if (obj != null) {
-                sum += obj.getValue();
-            } else {
-                nullCount++;
-            }
-        }
-        
-        long endTime = System.nanoTime();
-        System.out.println("Soft reference time: " + (endTime - startTime) / 1_000_000 + "ms");
-        System.out.println("Sum: " + sum + ", Null count: " + nullCount);
-    }
-    
-    // 弱引用性能测试
-    public void testWeakReferencePerformance() {
-        long startTime = System.nanoTime();
-        
-        List<WeakReference<TestObject>> objects = new ArrayList<>(OBJECT_COUNT);
-        List<TestObject> strongRefs = new ArrayList<>(OBJECT_COUNT);  // 保持强引用
-        
-        for (int i = 0; i < OBJECT_COUNT; i++) {
-            TestObject obj = new TestObject(i);
-            objects.add(new WeakReference<>(obj));
-            strongRefs.add(obj);  // 防止被回收
-        }
-        
-        // 访问测试
-        int sum = 0;
-        int nullCount = 0;
-        for (int i = 0; i < ITERATIONS; i++) {
-            WeakReference<TestObject> ref = objects.get(i % OBJECT_COUNT);
-            TestObject obj = ref.get();
-            if (obj != null) {
-                sum += obj.getValue();
-            } else {
-                nullCount++;
-            }
-        }
-        
-        long endTime = System.nanoTime();
-        System.out.println("Weak reference time: " + (endTime - startTime) / 1_000_000 + "ms");
-        System.out.println("Sum: " + sum + ", Null count: " + nullCount);
-    }
-    
-    // 内存使用分析
-    public void analyzeMemoryUsage() {
-        Runtime runtime = Runtime.getRuntime();
-        
-        // 测试强引用的内存使用
-        runtime.gc();
-        long beforeStrong = runtime.totalMemory() - runtime.freeMemory();
-        
-        List<TestObject> strongObjects = new ArrayList<>();
-        for (int i = 0; i < OBJECT_COUNT; i++) {
-            strongObjects.add(new TestObject(i));
-        }
-        
-        long afterStrong = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Strong reference memory: " + (afterStrong - beforeStrong) / 1024 + " KB");
-        
-        // 测试软引用的内存使用
-        strongObjects.clear();
-        runtime.gc();
-        long beforeSoft = runtime.totalMemory() - runtime.freeMemory();
-        
-        List<SoftReference<TestObject>> softObjects = new ArrayList<>();
-        for (int i = 0; i < OBJECT_COUNT; i++) {
-            softObjects.add(new SoftReference<>(new TestObject(i)));
-        }
-        
-        long afterSoft = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Soft reference memory: " + (afterSoft - beforeSoft) / 1024 + " KB");
-        
-        // 测试弱引用的内存使用
-        softObjects.clear();
-        runtime.gc();
-        long beforeWeak = runtime.totalMemory() - runtime.freeMemory();
-        
-        List<WeakReference<TestObject>> weakObjects = new ArrayList<>();
-        for (int i = 0; i < OBJECT_COUNT; i++) {
-            weakObjects.add(new WeakReference<>(new TestObject(i)));
-        }
-        
-        long afterWeak = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Weak reference memory: " + (afterWeak - beforeWeak) / 1024 + " KB");
-    }
+// 陷阱1：共享可变状态未同步
+int count = 0;                    // ← 多线程 count++ 会丢失更新
+AtomicInteger count = new AtomicInteger(0);  // ✓ 用原子类
+
+// 陷阱2：死锁（交叉加锁）
+// Thread1: lock(A) → lock(B)
+// Thread2: lock(B) → lock(A)     // ← 互相等待
+// 解法：统一加锁顺序，或用 tryLock + 超时
+
+// 陷阱3：忘记处理 InterruptedException
+try { Thread.sleep(1000); }
+catch (InterruptedException e) { /* 空catch */ }  // ← 吞掉中断信号
+// 正确做法：恢复中断标志或向上传播
+catch (InterruptedException e) {
+    Thread.currentThread().interrupt();  // 恢复标志
 }
 ```
 
-### 5.2 优化策略与最佳实践
+---
 
-**引用类型选择的决策树：**
+## 总结
+
+```
+进程太重 → 线程诞生（共享地址空间的轻量执行单元）
+    │
+    ├── 设计思想：资源容器(进程) 与 执行单元(线程) 正交分离
+    │
+    ├── 三种模型：1:1(OS原生) / N:1(用户态) / M:N(混合)
+    │
+    ├── 架构：task_struct + clone() + 栈 + TLS + 缓存一致性
+    │
+    ├── 生命周期：NEW → RUNNABLE ↔ RUNNING → BLOCKED/WAITING/TIMED_WAITING → TERMINATED
+    │
+    ├── 核心API：start/join/interrupt(协作取消) + sleep/wait/notify + Lock/AQS
+    │
+    └── 使用：线程池(生产标配) + 不可变/封闭/生产消费模式 + 避免死锁/竞争/中断丢失
+```
+
+
+- 01.线程基础概念
+    - 1.1 线程问题答疑
+    - 1.2 线程设计思想
+    - 1.3 线程模型设计
+    - 1.4 线程基础概念
+    - 1.5 为何设计多线程
+    - 1.6 线程调度机制
+- 02.线程生命周期设计
+    - 2.1 生命周期模型图
+    - 2.2 Java线程生命周期
+    - 2.3 生命周期如何流转
+    - 2.4 线程销毁和死亡
+    - 2.5 影响生命周期因素
+- 03.线程核心Api设计
+    - 3.0 线程简单使用api
+    - 3.1 start方法设计原理
+    - 3.2 sleep方法设计原理
+    - 3.3 join方法设计原理
+    - 3.4 yield方法设计原理
+    - 3.5 stop方法设计原理
+    - 3.6 interrupt方法设计
+- 04.线程使用实践
+    - 4.1 线程死锁怎么办
+    - 4.2 线程异常如何处理
+    - 4.3 如何确保线程安全
+    - 4.4 线程睡眠和唤醒
+    - 4.5 设置线程优先级
+    - 4.6 尽量设置线程名称
+- 05.核心原理探索&分析
+    - 5.1 创建线程核心原理
+    - 5.2 线程映射核心原理
+- 06.线程问题排查&优化
+    - 6.1 如何优化线程性能
+    - 6.2 线程问题诊断分析
+
+
+## 01.线程基础概念
+
+### 1.1 线程问题答疑
+
+面试官可能会以此为契机，从各种不同角度考察你对线程的掌握：
+
+1. 相对理论一些的面试官可以会问你线程到底是什么以及Java底层实现方式。
+2. 线程状态的切换，以及和锁等并发工具类的互动。
+3. 线程编程时容易踩的坑与建议等。
+
+比较底层的一些问题：
+
+1. 线程锁机制，如何让线程切换状态。线程的并发设计核心思想是什么？
+
+### 1.2 线程设计思想
+
+线程是操作系统里的一个概念
+
+虽然各种不同的开发语言如 Java、C# 等都对其进行了封装，但是万变不离操作系统。Java 语言里的线程本质上就是操作系统的线程，它们是一一对应的。
+
+不管是那种语言设计线程，其核心思想大概是
+
+1.设计线程并发性；2.设计线程共享资源；3.设计线程同步和互斥；4.设计异步编程；5.设计线程调度等等。
+
+### 1.3 线程模型设计
+
+Java的线程模型设计主要基于线程和锁的概念，以及相关的同步机制。以下是Java线程模型的一些关键设计要点：
+
+1. 线程：Java中的线程是独立的执行单元，可以并发执行。线程的生命周期包括新建、就绪、运行、阻塞和终止等状态。
+2. 同步：Java提供了synchronized关键字和Lock接口等机制来实现线程间的同步。保证多个线程对共享资源的访问顺序和互斥性。
+3. 锁：Java中的锁是用于控制对共享资源的访问的机制。锁可以实现互斥访问和条件等待，确保线程安全和正确的执行顺序。
+4. 线程间通信：Java提供了wait()、notify()和notifyAll()等方法来实现线程间的通信。
+5. 线程池：Java的线程池是一种管理和复用线程的机制。
+6. 并发集合：Java提供了一系列的并发集合类，例如ConcurrentHashMap、ConcurrentLinkedQueue等。
+
+
+### 1.4 线程基础概念
+
+线程（英语：thread）是操作系统能够进行运算调度的最小单位。
+
+1. 被包含在进程之中，是进程中的实际运作单位。一条线程指的是进程中一个单一顺序的控制流。
+2. 在一个进程内部又可以执行多个任务（并发/并行），每条线程并行执行不同的任务。线程是程序使用CPU的基本单位。注意：线程是依赖于进程存在的。
+
+同进程不同线程资源共享
+
+同一进程中的多条线程将共享该进程中的全部系统资源，如虚拟地址空间，文件描述符和信号处理等等。
+
+但同一进程中的多个线程有各自的调用栈（call stack），自己的寄存器环境（register context），自己的线程本地存储（thread-local storage）。
+
+线程有自己的栈（Stack）、寄存器（Register）、本地存储（Thread Local）等，但是会和进程内其他线程共享文件描述符、虚拟地址空间等。
+
+### 1.5 为何设计多线程
+
+设计多线程的背景：主要包括并发编程需求、多核处理器的普及、响应性和用户体验的要求、异步编程需求以及资源共享和协同工作的需求。
+
+设计多线程主要目的：为了实现并发编程和提高程序的性能、响应能力以及资源利用率。
+
+设计多线程是否带来其他问题：多线程编程也带来了一些挑战，如线程安全性、竞态条件、死锁等问题。这里面就涉及到锁机制，线程优先级，资源抢占等知识点！
+
+多线程的作用不是提高执行速度，而是为了提高应用程序的使用率。程序在运行的使用，都是在抢CPU的时间片(执行权)，CPU在多线程程序中执行的时间要比单线程多，所以就提高了程序的使用率。哪个线程能抢占到CPU的资源呢，这个是不确定的，多线程具有随机性。
+
+### 1.6 线程调度机制
+
+应用程序在执行的时候都需要依赖于线程去抢占CPU的时间片，谁抢占到了CPU的时间片，那么CPU就会执行谁
+
+线程的执行：假如我们的计算机只有一个 CPU，那么 CPU在某一个时刻只能执行一条指令，线程只有得到CPU时间片，也就是使用权，才可以执行指令。
+
+线程有两种调度模型：
+
+1. **分时调度模型**：所有线程轮流使用CPU的使用权，平均分配每个线程占用 CPU 的时间片。
+2. **抢占式调度模型**：优先让优先级高的线程使用 CPU，如果线程的优先级相同，那么会随机选择一个，优先级高的线程获取的 CPU 时间片相对多一些。
+
+Java使用的是抢占式调度模型。
+
+## 02.线程生命周期设计
+
+通用的线程生命周期基本上可以用下图这个“五态模型”来描述。这五态分别是：初始状态、可运行状态、运行状态、休眠状态和终止状态。
+
+### 2.1 生命周期模型图
+
+每一种状态分别做了什么事情
+
+1. **初始状态**，指的是线程已经被创建，但是还不允许分配 CPU 执行。这个状态属于编程语言特有的，不过这里所谓的被创建，仅仅是在编程语言层面被创建，而在操作系统层面，真正的线程还没有创建。
+2. **可运行状态**，指的是线程可以分配 CPU 执行。在这种状态下，真正的操作系统线程已经被成功创建了，所以可以分配 CPU 执行。
+3. **运行状态**，当有空闲的 CPU 时，操作系统会将其分配给一个处于可运行状态的线程，被分配到 CPU 的线程的状态就转换成了运行状态。
+4. **休眠状态**，运行状态的线程如果调用一个阻塞的 API（例如以阻塞方式读文件）或者等待某个事件（例如条件变量），那么线程的状态就会转换到休眠状态，同时释放 CPU 使用权，休眠状态的线程永远没有机会获得 CPU 使用权。当等待的事件出现了，线程就会从休眠状态转换到可运行状态。
+5. **终止状态**，线程执行完或者出现异常就会进入终止状态，终止状态的线程不会切换到其他任何状态，进入终止状态也就意味着线程的生命周期结束。
+
+### 2.2 Java线程生命周期
+
+介绍完通用的线程生命周期模型，接下来就来详细看看 Java 语言里的线程生命周期是什么样的。
+
+1. NEW（新建），表示线程被创建出来还没真正启动的状态，可以认为它是个Java内部状态。
+2. RUNNABLE（就绪），表示该线程已经在JVM中执行，当然由于执行需要计算资源，它可能是正在运行，也可能还在等待系统分配给它CPU片段，在就绪队列里面排队。
+3. BLOCKED（阻塞），这个状态和我们前面两讲介绍的同步非常相关，阻塞表示线程在等待Monitor lock。比如，线程试图通过synchronized去获取某个锁，但是其他线程已经独占了，那么当前线程就会处于阻塞状态。
+4. WAITING（等待状态），当调用wait方法或者join方法等，会让线程处于等待执行状态，表示正在等待其他线程采取某些操作。
+5. TIMED_WAITING（计时等待），其进入条件和等待状态类似，但是调用的是存在超时条件的方法，比如wait或join等方法的指定超时版本
+6. TERMINATED（终止状态），当线程执行任务完毕则会自动销毁，并且销毁后不会流转到其他状态
+
+注意点说明一下：就绪（RUNNABLE），在其他一些分析中，会额外区分一种状态RUNNING，但是从Java API的角度，并不能表示出来。
+
+其实在操作系统层面，Java 线程中的 BLOCKED、WAITING、TIMED_WAITING 是一种状态。
+
+即前面我们提到的休眠状态。也就是说只要 Java 线程处于这三种状态之一，那么这个线程就永远没有 CPU 的使用权。
+
+### 2.3 生命周期如何流转
+
+BLOCKED、WAITING、TIMED_WAITING 可以理解为线程导致休眠状态的三种原因。
+
+那具体是哪些情形会导致线程从 RUNNABLE 状态转换到这三种状态呢？而这三种状态又是何时转换回 RUNNABLE 的呢？以及 NEW、TERMINATED 和 RUNNABLE 状态是如何转换的？
+
+RUNNABLE（运行） 与 BLOCKED（阻塞） 的状态转换
+
+1. 只有一种场景会触发这种转换，就是线程等待 synchronized 的隐式锁。synchronized 修饰的方法、代码块同一时刻只允许一个线程执行，其他线程只能等待，这种情况下，等待的线程就会从 RUNNABLE 转换到 BLOCKED 状态。
+2. 当等待的线程获得 synchronized 隐式锁时，就又会从 BLOCKED 转换到 RUNNABLE 状态。有个疑问：线程调用阻塞式 API 时，是否会转换到 BLOCKED 状态呢？
+3. 在操作系统层面，线程是会转换到休眠状态的，但是在 JVM 层面线程的状态不会发生变化，也就是说 Java 线程的状态会依然保持 RUNNABLE 状态。线程会阻塞，指的是操作系统线程的状态，并不是 Java 线程的状态。
+
+RUNNABLE（运行） 与 WAITING （等待）的状态转换
+
+1. 第一种场景，获得 synchronized 隐式锁的线程，调用无参数的 Object.wait() 方法。
+2. 第二种场景，调用无参数的 Thread.join() 方法。当线程 thread A 执行完，原来等待它的B线程又会从 WAITING 状态转换到 RUNNABLE。
+3. 第三种场景，调用 LockSupport.park() 方法。调用 LockSupport.park() 方法，当前线程会阻塞，线程的状态会从 RUNNABLE 转换到 WAITING。
+
+RUNNABLE（运行） 与 TIMED_WAITING 的状态转换
+
+1. 调用带超时参数的 Thread.sleep(long millis) 方法；
+2. 获得 synchronized 隐式锁的线程，调用带超时参数的 Object.wait(long timeout) 方法；
+3. 调用带超时参数的 Thread.join(long millis) 方法；
+4. 调用带超时参数的 LockSupport.parkNanos(Object blocker, long deadline) 方法；
+5. 调用带超时参数的 LockSupport.parkUntil(long deadline) 方法。
+
+从 NEW（新建） 到 RUNNABLE（运行）状态的状态转换
+
+1. 创建出来的 Thread 对象就是 NEW 状态，而创建 Thread 对象主要有两种方法。
+2. 一种是继承 Thread 对象，重写 run() 方法。另一种是实现 Runnable 接口，重写 run() 方法，并将该实现类作为创建 Thread 对象的参数。
+3. NEW 状态的线程，不会被操作系统调度，因此不会执行。从 NEW 状态转换到 RUNNABLE 状态很简单，只要调用线程对象的 start() 方法就可以了。
+
+### 2.4 线程销毁和死亡
+
+线程执行完 run() 方法后，会自动转换到 TERMINATED 状态，当然如果执行 run() 方法的时候异常抛出，也会导致线程终止。
+
+有时候需要强制中断 run() 方法的执行，例如 run() 方法访问一个很慢的网络，我们等不下去了，想终止怎么办呢？
+
+Java 的 Thread 类里面倒是有个 stop() 方法，不过已经标记为 @Deprecated，所以不建议使用了。正确的姿势其实是调用 interrupt() 方法。
+
+那 stop() 和 interrupt() 方法的主要区别是什么呢？
+
+1. stop() 方法会真的杀死线程，不给线程喘息的机会，如果线程持有 ReentrantLock 锁，被 stop() 的线程并不会自动调用 unlock() 去释放锁，那其他线程就再也没机会获得 ReentrantLock 锁，这实在是太危险了。
+2. interrupt() 方法仅仅是通知线程，线程有机会执行一些后续操作，同时也可以无视这个通知。被 interrupt 的线程，是怎么收到通知的呢？一种是异常，另一种是主动检测。
+
+### 2.5 影响生命周期因素
+
+从线程生命周期的状态开始展开，那么在Java编程中，有哪些因素可能影响线程的状态呢？主要有：
+
+线程自身的方法，除了start，还有多个join方法，等待线程结束；yield是告诉调度器，主动让出CPU；另外，就是一些已经被标记为过时的resume、stop、suspend之类，据我所知，在JDK最新版本中，destroy/stop方法将被直接移除。
+
+基类Object提供了一些基础的wait/notify/notifyAll方法。如果我们持有某个对象的Monitor锁，调用wait会让当前线程处于等待状态，直到其他线程notify或者notifyAll。所以，本质上是提供了Monitor的获取和释放的能力，是基本的线程间通信方式。
+
+并发类库中的工具，比如CountDownLatch.await()会让当前线程进入等待状态，直到latch被基数为0，这可以看作是线程间通信的Signal。
+
+这里画了一个状态和方法之间的对应图：
+
+Thread和Object的方法，听起来简单，但是实际应用中被证明非常晦涩、易错，这也是为什么Java后来又引入了并发包。总的来说，有了并发包，大多数情况下，我们已经不再需要去调用wait/notify之类的方法了。
+
+## 03.线程核心Api设计
+
+### 3.0 线程简单使用api
+
+在具体实现中，线程还分为内核线程、用户线程，Java的线程实现其实是与虚拟机相关的。对于我们最熟悉的Sun/Oracle JDK，其线程也经历了一个演进过程，基本上在Java 1.2之后，JDK已经抛弃了所谓的Green Thread，也就是用户调度的线程，现在的模型是一对一映射到操作系统内核线程。
+
+如果我们来看Thread的源码，你会发现其基本操作逻辑大都是以JNI形式调用的本地代码。
+
 ```java
-// 引用类型选择指南
-public class ReferenceSelectionGuide {
-    
-    public enum ReferenceType {
-        STRONG,    // 强引用
-        SOFT,      // 软引用
-        WEAK,      // 弱引用
-        PHANTOM    // 虚引用
-    }
-    
-    public static class ReferenceDecision {
-        private final ReferenceType recommendedType;
-        private final String reason;
-        private final List<String> considerations;
-        
-        public ReferenceDecision(ReferenceType type, String reason, List<String> considerations) {
-            this.recommendedType = type;
-            this.reason = reason;
-            this.considerations = considerations;
-        }
-        
-        // getters...
-    }
-    
-    public static ReferenceDecision selectReferenceType(
-            boolean isEssential,           // 是否是必需的对象
-            boolean isMemorySensitive,     // 是否对内存敏感
-            boolean canRecreate,           // 是否可以重新创建
-            boolean needsCleanup,          // 是否需要清理逻辑
-            boolean isObserver,            // 是否是观察者关系
-            boolean isCyclicReference      // 是否存在循环引用
-    ) {
-        List<String> considerations = new ArrayList<>();
-        
-        // 必需对象使用强引用
-        if (isEssential) {
-            considerations.add("对象是必需的，不能被意外回收");
-            return new ReferenceDecision(ReferenceType.STRONG, 
-                "Essential objects require strong references", considerations);
-        }
-        
-        // 需要清理逻辑的对象使用虚引用
-        if (needsCleanup) {
-            considerations.add("对象需要清理逻辑，使用虚引用监控回收");
-            return new ReferenceDecision(ReferenceType.PHANTOM, 
-                "Objects requiring cleanup should use phantom references", considerations);
-        }
-        
-        // 观察者关系或循环引用使用弱引用
-        if (isObserver || isCyclicReference) {
-            considerations.add("避免内存泄漏，使用弱引用");
-            if (isCyclicReference) {
-                considerations.add("打破循环引用");
-            }
-            return new ReferenceDecision(ReferenceType.WEAK, 
-                "Observer pattern or cyclic references should use weak references", considerations);
-        }
-        
-        // 内存敏感且可重新创建的对象使用软引用
-        if (isMemorySensitive && canRecreate) {
-            considerations.add("内存敏感的缓存对象，可以在内存不足时回收");
-            return new ReferenceDecision(ReferenceType.SOFT, 
-                "Memory-sensitive cacheable objects should use soft references", considerations);
-        }
-        
-        // 默认使用强引用
-        considerations.add("默认选择，确保对象不被意外回收");
-        return new ReferenceDecision(ReferenceType.STRONG, 
-            "Default choice for regular objects", considerations);
-    }
-    
-    // 使用示例
-    public static void demonstrateSelection() {
-        // 缓存对象
-        ReferenceDecision cacheDecision = selectReferenceType(
-            false, true, true, false, false, false);
-        System.out.println("Cache object: " + cacheDecision.recommendedType);
-        
-        // 观察者对象
-        ReferenceDecision observerDecision = selectReferenceType(
-            false, false, false, false, true, false);
-        System.out.println("Observer object: " + observerDecision.recommendedType);
-        
-        // 需要清理的资源
-        ReferenceDecision resourceDecision = selectReferenceType(
-            false, false, false, true, false, false);
-        System.out.println("Resource object: " + resourceDecision.recommendedType);
-    }
+private native void start0();
+private native void setPriority0(int newPriority);
+private native void interrupt0();
+```
+
+这种实现有利有弊，总体上来说，Java语言得益于精细粒度的线程和相关的并发操作，其构建高扩展性的大型应用的能力已经毋庸置疑。但是，其复杂性也提高了并发编程的门槛，近几年的Go语言等提供了协程（coroutine），大大提高了构建并发应用的效率。于此同时，Java也在Loom项目中，孕育新的类似轻量级用户线程（Fiber）等机制，也许在不久的将来就可以在新版JDK中使用到它。
+
+下面，我来分析下线程的基本操作。如何创建线程想必你已经非常熟悉了，请看下面的例子：
+
+```java
+Runnable task = () -> {System.out.println("Hello World!");};
+Thread myThread = new Thread(task);
+myThread.start();
+myThread.join();
+```
+
+我们可以直接扩展Thread类，然后实例化。但在本例中，我选取了另外一种方式，就是实现一个Runnable，将代码逻放在Runnable中，然后构建Thread并启动（start），等待结束（join）。
+
+Runnable的好处是，不会受Java不支持类多继承的限制，重用代码实现，当我们需要重复执行相应逻辑时优点明显。而且，也能更好的与现代Java并发库中的Executor之类框架结合使用，比如将上面start和join的逻辑完全写成下面的结构：
+
+```java
+Future future = Executors.newFixedThreadPool(1)
+  .submit(task)
+  .get();
+```
+这样我们就不用操心线程的创建和管理，也能利用Future等机制更好地处理执行结果。线程生命周期通常和业务之间没有本质联系，混淆实现需求和业务需求，就会降低开发的效率。
+
+### 3.1 start方法设计原理
+
+为什么要设计start方法，而不是创建对象即启动线程？出于那些考虑：
+
+1. 线程初始化：在创建线程对象时，可能需要进行一些初始化操作，例如设置线程的名称、优先级、绑定特定的处理器等。通过将线程的启动操作放在start()方法中，可以确保在线程初始化完成后再启动线程。
+2. 线程状态管理：通过使用start()方法，可以在适当的时机将线程状态从新建状态转换为就绪状态，然后由线程调度器决定何时运行该线程。
+3. 安全性考虑：直接在创建线程对象时启动线程可能会导致一些安全性问题。例如，如果在构造函数中启动线程，可能会导致线程在对象完全初始化之前就开始执行，从而可能访问到未初始化的数据。
+
+问你的问题
+
+一个线程两次调用start()方法会出现什么情况？谈谈线程的生命周期和状态转移。
+
+典型回答
+
+Java的线程是不允许启动两次的，第二次调用必然会抛出IllegalThreadStateException，这是一种运行时异常，多次调用start被认为是编程错误。
+
+在第二次调用start()方法的时候，线程可能处于终止或者其他（非NEW）状态，但是不论如何，都是不可以再次启动的。
+
+### 3.2 sleep方法设计原理
+
+为什么要设计线程sleep方法
+
+1. 因为线程是抢占式的，为了让线程可以调度。设计sleep()方法通过告知线程调度器，当前线程暂时不需要执行，从而让其他线程有机会执行。
+2. 有场景需要指定了当前线程暂停执行的时间长度。设计sleep()方法即可设置JVM线程休眠时间
+3. 模拟一些时间敏感的操作，如定时任务等。设计sleep()方法，可以控制操作的时间间隔，从而实现一定的时间延迟效果。
+
+Thread.Sleep(0) 。既然是 Sleep 0 毫秒，那么他跟去掉这句代码相比，有啥区别么？
+
+答案是：有，而且区别很明显。Thread.Sleep(0)的作用，就是“触发操作系统立刻重新进行一次CPU竞争”。
+
+为了让某些优先级比较低的线程也能获取到CPU控制权，可以使用Thread.sleep(0)手动触发一次操作系统分配时间片的操作，这也是平衡CPU控制权的一种操作。
+
+竞争的结果也许是当前线程仍然获得CPU控制权，也许会换成别的线程获得CPU控制权。
+
+
+### 3.3 join方法设计原理
+
+Java thread 为何要设计join方法，出于什么考虑？
+
+设计join()方法是为了实现线程之间的协作和同步。这种设计可以确保线程的执行顺序和协作，避免并发问题和数据竞争，提高多线程程序的可靠性和稳定性。
+
+join()有什么作用？Thread的join()的含义是等待该线程终止，即将挂起调用线程的执行，直到被调用的对象完成它的执行。比如存在两个线程t1和t2，下述代码表示先启动t1，直到t1的任务结束，才轮到t2启动。
+
+```
+t1.start();
+t1.join();
+t2.start();
+```
+
+join方法实现原理，join方法是通过调用线程的wait方法来达到同步的目的的。
+
+例如A线程中调用了B线程的join方法，则相当于在A线程中调用了B线程的wait方法，当B线程执行完，B线程会自动调用自身的notifyAll方法唤醒A线程，从而达到同步的目的。
+
+### 3.4 yield方法设计原理
+
+Java thread 为何要设计yield方法，出于什么考虑？
+
+设计yield()方法是为了实现线程的让步。提高多线程程序的公平性和协作性。
+
+线程礼让的原理是是什么
+
+暂定当前的线程，让CPU去执行其他的线程,这个暂定的时间是相当短暂的;当我某一个线程暂定完毕以后,其他的线程还没有抢占到cpu的执行权;那么这个是时候当前的线程会和其他的线程再次抢占cpu的执行权;
+
+yield礼让线程会释放锁吗
+
+yield()方法和sleep()方法类似，也不会释放“锁标志”，区别在于，它没有参数，即yield()方法只是使当前线程重新回到可执行状态，所以执行yield()的线程有可能在进入到可执行状态后马上又被执行，另外yield()方法只能使同优先级或者高优先级的线程得到执行机会，这也和sleep()方法不同。
+
+什么是线程优先级了？下面就来具体聊一聊。
+
+现代操作系统基本采用时分的形式调度运行的线程，操作系统会分出一个个时间片，线程会分配到若干时间片，当前时间片用完后就会发生线程调度，并等待这下次分配。线程分配到的时间多少也就决定了线程使用处理器资源的多少，而线程优先级就是决定线程需要或多或少分配一些处理器资源的线程属性。
+
+在Java程序中，通过一个整型成员变量Priority来控制优先级，优先级的范围从1~10.在构建线程的时候可以通过**setPriority(int)**方法进行设置，默认优先级为5，优先级高的线程相较于优先级低的线程优先获得处理器时间片。需要注意的是在不同JVM以及操作系统上，线程规划存在差异，有些操作系统甚至会忽略线程优先级的设定。
+
+另外需要注意的是，sleep()和yield()方法，同样都是当前线程会交出处理器资源，而它们不同的是，sleep()交出来的时间片其他线程都可以去竞争，也就是说都有机会获得当前线程让出的时间片。而yield()方法只允许与当前线程具有相同优先级的线程能够获得释放出来的CPU时间片。
+
+### 3.5 stop方法设计原理
+
+Java thread 为何要设计stop方法，出于什么考虑？
+
+stop()方法是用于停止线程的方法。然而，需要注意的是，stop()方法已被标记为过时（deprecated），不推荐使用。
+
+这是因为stop()方法存在一些潜在的问题和风险，导致其设计不符合安全性和可靠性的要求。
+
+为什么stop设计不符合安全性和可靠性要求：
+
+安全性问题：stop()方法会立即终止线程的执行，可能导致线程在不可预测的状态下停止。这可能会导致资源泄漏、数据不一致或其他潜在的问题。
+
+数据一致性：线程在执行过程中可能会修改共享的数据结构或对象状态。如果线程被突然终止，可能会导致数据结构处于不一致的状态，从而引发错误或异常。
+
+锁的释放：线程在执行过程中可能持有某些锁，如果线程被强制终止，可能会导致锁无法释放，从而导致其他线程无法访问共享资源，引发死锁等问题。
+
+可控性和可靠性：stop()方法的使用会导致线程的突然终止，无法进行清理和善后工作。
+
+### 3.6 interrupt方法设计
+
+Java thread 为何要设计interrupt方法，出于什么考虑？
+
+设计interrupt()方法是为了实现线程的中断，提供一种优雅的方式来处理线程的中断请求。提高多线程程序的可控性和可靠性。
+
+interrupt()是如何设计停止线程的操作？
+
+interrupt()方法是用于停止线程的操作。并不能直接停止线程的执行。它只是向线程发出一个中断请求，线程可以根据自身的逻辑来决定如何响应中断请求。
+
+有两种相应中断请求方式：一种是异常，另一种是主动检测。
+
+1. 异常处理中断请求：interrupt()方法会触发InterruptedException异常，以响应线程的中断请求。当线程处于阻塞状态（如调用了sleep()、wait()、join()等方法）时，如果收到中断请求，会立即抛出InterruptedException异常，提前结束阻塞状态。
+2. 主动检测处理中断请求：通过调用Thread.interrupted()方法，可以获取当前线程的中断状态，并根据需要进行相应的处理。
+
+
+## 04.线程使用实践
+
+### 4.1 线程死锁怎么办
+
+什么场景下会出现死锁
+
+线程死锁是指两个或多个线程相互等待对方释放资源而无法继续执行的情况。
+
+如果发生了线程死锁，可以采取以下几种方式来解决：
+
+分析和定位死锁：需要分析和定位导致死锁的原因和位置。可以使用工具来检测死锁，如Java自带的jstack命令或使用专业的性能分析工具。通过分析死锁的堆栈信息，可以确定哪些线程和资源参与了死锁。
+
+解除死锁：如果能够确定死锁的原因和位置，可以解除死锁。一种常见的方法是通过打破循环等待条件来解除死锁。
+
+避免嵌套锁：尽量避免在持有一个锁的情况下去请求另一个锁，这样容易导致死锁。如果确实需要多个锁，可以尝试按照固定的顺序获取锁，避免循环等待。
+
+优化代码逻辑：对于可能导致死锁的代码逻辑，可以进行优化和重构，避免出现死锁的情况。例如，减少锁的粒度、减少资源竞争、使用更合适的并发数据结构等。
+
+### 4.2 线程异常如何处理
+
+在Java中，线程中的异常是不能抛出到调用该线程的外部方法中捕获的。为什么不能抛出到外部线程捕获？
+
+JVM的这种设计源自于这样一种理念：因为线程是独立执行的代码片断，线程的问题应该由线程自己来解决，而不要委托到外部。
+
+”基于这样的设计理念，在Java中，线程方法的异常都应该在线程代码边界之内（run方法内）进行try catch并处理掉。换句话说，我们不能捕获从线程中逃逸的异常。
+
+基于这样的设计理念，在Java中，线程方法的异常（无论是checked还是unchecked exception），都应该在线程代码边界之内（run方法内）进行try catch并处理掉。
+
+Java中如何捕获线程异常
+
+1. 第一种：使用try-catch块：可以在线程的run()方法内部使用try-catch块来捕获异常。
+2. 第二种：可以为线程设置一个未捕获异常处理器（UncaughtExceptionHandler）。通过实现UncaughtExceptionHandler接口，并将其设置给线程，可以在线程抛出未捕获的异常时进行处理。
+3. 第三种：如果使用ExecutorService来管理线程池，可以通过submit()方法提交任务，并使用Future对象来捕获线程执行过程中的异常。
+
+```java
+Thread thread = new Thread(() -> {
+    // 线程执行逻辑
+});
+thread.setUncaughtExceptionHandler((t, e) -> {
+    // 异常处理逻辑
+});
+thread.start();
+```
+
+### 4.3 如何确保线程安全
+
+首先思考一下为何会出现线程不安全问题
+
+线程不安全问题的主要原因是多个线程同时访问共享的可变状态或资源，而没有适当的同步机制来保证线程之间的互斥访问和正确的操作顺序。
+
+可以采取以下几种方式来确保线程安全
+
+1. 使用同步（synchronization）：通过使用synchronized关键字或使用Lock接口及其实现类，可以在多个线程之间实现互斥访问共享资源。
+2. 使用原子类（Atomic classes）：如AtomicInteger提供了原子性操作，可以确保对共享变量的操作是线程安全的。原子类的操作是基于底层的CAS（Compare and Swap）机制实现的，可以避免竞态条件和数据不一致的问题。
+3. 使用volatile关键字：对于某些特定的场景，可以使用volatile关键字来确保共享变量的可见性和有序性，避免线程之间的数据不一致问题。
+4. 避免共享可变状态：尽量避免多个线程共享可变状态，尽量将可变状态限制在单个线程内部。
+
+
+### 4.4 线程睡眠和唤醒
+
+怎么设置线程睡眠
+
+1. 第一种方式：sleep()方法，来自Thread类静态方法。
+2. 第二种方式：wait()方法，来自Object类实例方法。
+
+怎么唤醒一个阻塞的线程
+
+1. 如果线程是因为调用了wait()、sleep()或者join()方法而导致的阻塞，可以中断线程，并且通过抛出InterruptedException来唤醒它；
+2. 如果线程遇到了IO阻塞，无能为力，因为IO是操作系统实现的，Java代码并没有办法直接接触到操作系统。
+
+假设现在是 2018-4-7 12:00:00.000，如果我调用一下 Thread.Sleep(1000) ，在 2018-4-7 12:00:01.000 的时候，这个线程会不会被唤醒？
+
+答案是：不一定。因为你只是告诉操作系统：在未来的1000毫秒内我不想再参与到CPU竞争。那么1000毫秒过去之后，这时候也许另外一个线程正在使用CPU，那么这时候操作系统是不会重新分配CPU的，直到那个线程挂起或结束；况且，即使这个时候恰巧轮到操作系统进行CPU 分配，那么当前线程也不一定就是总优先级最高的那个，CPU还是可能被其他线程抢占去。
+
+与此相似的，Thread有个Resume函数，是用来唤醒挂起的线程的。好像上面所说的一样，这个函数只是“告诉操作系统我从现在起开始参与CPU竞争了”，这个函数的调用并不能马上使得这个线程获得CPU控制权。
+
+wait和sleep方法的区别，最大的不同是在等待时wait会释放锁，而sleep一直持有锁。Wait通常被用于线程间交互，sleep通常被用于暂停执行。
+
+wait()和sleep()其他区别：
+
+1. sleep()方法调用的过程中，线程不会释放对象锁。而 调用 wait 方法线程会释放对象锁
+2. sleep()睡眠后不出让系统资源，wait让出系统资源其他线程可以占用CPU
+3. wait()方法必须要在同步方法或者同步块中调用，也就是必须已经获得对象锁。而sleep()方法没有这个限制可以在任何地方种使用。另外，wait()方法会释放占有的对象锁，使得该线程进入等待池中，等待下一次获取资源。而sleep()方法只是会让出CPU并不会释放掉对象锁；
+4. sleep()方法在休眠时间达到后如果再次获得CPU时间片就会继续执行，而wait()方法必须等待Object.notify/Object.notifyAll通知后，才会离开等待池，并且再次获得CPU时间片才会继续执行。
+
+
+### 4.5 设置线程优先级
+
+Java thread 为何要设计线程优先级，出于什么考虑？
+
+设计线程优先级，可以实现线程调度和资源分配的灵活性和可控性，提高线程的执行优先级和响应性，以及优化系统的整体性能和效率。
+
+这种设计可以帮助开发者更好地管理和控制多线程应用程序的执行顺序和资源分配。
+
+线程优先级的设计考虑了以下几个方面
+
+1. 线程调度：线程优先级可以影响线程在竞争CPU资源时的调度顺序。具有较高优先级的线程在竞争CPU资源时更有可能被调度执行。
+2. 资源分配：线程优先级可以影响线程在竞争其他系统资源时的分配顺序。
+3. 平衡性：通过合理设置线程的优先级，可以使得不同类型的任务或线程能够得到适当的资源分配，从而提高系统的整体性能和效率。
+4. 可控性：通过设置线程的优先级，开发者可以根据任务的重要性和紧急程度来调整线程的执行顺序，以满足特定的需求和优化性能。
+
+设置线程的优先级，需要使用如下方法来设置
+
+```
+public final void setPriority(int newPriority)
+```
+
+参数值 newPriority 指定了线程的优先级，取值必须在 MIN_PRIORITY 和 MAX_PRIORITY 之间，默认取值是 NORM_PRIORITY
+
+使用方法如下所示，建立三个线程，分别设置不同的优先级
+
+```java
+public class MyThread extends Thread {
+
+	private int index;
+
+	public MyThread(int index) {
+		this.index = index;
+	}
+
+	@Override
+	public void run() {
+		for (int i = 0; i < 5; i++) {
+			System.out.println("Index: " + index + "-----" + i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+}
+
+public class Test {
+
+	public static void main(String[] args) {
+		Thread thread1=new MyThread(1);
+		Thread thread2=new MyThread(2);
+		Thread thread3=new MyThread(3);
+		thread1.setPriority(Thread.MIN_PRIORITY);
+		thread2.setPriority(Thread.NORM_PRIORITY);
+		thread3.setPriority(Thread.MAX_PRIORITY);
+		thread1.start();
+		thread2.start();
+		thread3.start();
+	}
+
 }
 ```
 
-## 6. 引用类型的未来发展趋势
+输出结果为：
 
-### 6.1 新兴的引用管理技术
+```text
+Index: 2-----0
+Index: 1-----0
+Index: 3-----0
+Index: 3-----1
+Index: 1-----1
+Index: 2-----1
+Index: 3-----2
+Index: 1-----2
+Index: 2-----2
+Index: 3-----3
+Index: 1-----3
+Index: 2-----3
+Index: 3-----4
+Index: 2-----4
+Index: 1-----4
+```
 
-**1. 自适应引用管理**
-未来的引用管理系统可能会根据运行时的内存使用情况和访问模式，自动调整引用的强度。
+### 4.6 尽量设置线程名称
 
-**2. 机器学习驱动的垃圾回收**
-通过机器学习算法预测对象的生命周期，优化引用类型的选择和垃圾回收策略。
 
-**3. 硬件辅助的引用管理**
-新的硬件特性可能会提供更高效的引用跟踪和垃圾回收支持。
+## 05.核心原理探索&分析
 
-### 6.2 编程语言的演进方向
+### 5.1 创建线程核心原理
 
-**1. 更精细的引用控制**
-未来的编程语言可能会提供更多种类的引用类型，以满足不同场景的需求。
+线程创建和启动流程总结：
 
-**2. 编译时引用优化**
-编译器可能会自动分析代码，选择最优的引用类型，减少程序员的负担。
+使用 new Thread() 定义一个线程对象，然后调用 start() 方法进行 Java 层面的线程启动
 
-**3. 跨语言的引用管理**
-在多语言混合编程的环境中，统一的引用管理机制变得越来越重要。
+调用本地方法 start0()，然后会去调用JVM中的JVM_StartThread方法进行线程创建和启动
 
-## 7. 总结：引用类型设计的核心价值
+调用 new JavaThread() 会进入内核模式，由底层操作系统进行线程创建
 
-引用类型的设计体现了现代编程语言在内存管理方面的深刻思考。它们不仅仅是技术实现的细节，更是编程哲学的体现：
+底层操作系统新创建的线程为Initialized装态(初始化)，调用 sync -> wait() 方法进行等待，直到被唤醒才会执行 thread -> run()；
 
-**1. 语义的精确表达**
-不同的引用类型允许程序员精确地表达对象之间的关系和依赖程度。
+回到JVM层，会将Java中的Thread和JVM中的Thread进行绑定
 
-**2. 性能与安全的平衡**
-通过提供多种引用选择，程序员可以在性能和内存安全之间找到最佳平衡点。
+调用Thread::start() 方法进行线程启动，并将线程状态设置成RUNNABLE，接着调用OS::start_thread() 根据不同的操作系统选择不同的线程启动方式
 
-**3. 复杂性的分层管理**
-引用类型将内存管理的复杂性分解为不同的层次，使得程序员可以根据需要选择合适的抽象级别。
+线程启动后状态设置成RUNNABLE，唤醒等待线程，执行 thread -> run() 方法
 
-**4. 系统的可扩展性**
-良好的引用类型设计为系统的扩展和优化提供了基础。
+JavaThread::run() 方法会回调 new Thread 中复写的 run() 方法
 
-理解引用类型的设计思想，不仅有助于编写更高效、更安全的程序，更重要的是能够培养正确的内存管理思维。在未来的软件开发中，随着系统复杂性的增加和性能要求的提高，引用类型的重要性将会越来越突出。
-
-引用类型的设计灵魂在于其对对象关系的精确建模和对内存资源的智能管理，这种设计哲学值得每一个程序员深入理解和掌握。
-
-
-
-
-
-
-- 01.四种引用介绍
-    - 1.1 引用说明
-    - 1.2 为何需要4种引用
-    - 1.3 引用类型有哪些
-- 02.一般使用场景
-    - 2.1 强引用场景
-    - 2.2 软引用场景
-    - 2.3 弱引用场景
-    - 2.4 虚引用场景
-    - 2.5 四种引用比较
-- 03.引用原理说明
-    - 3.0 引用回收的流程
-    - 3.1 看看Reference的源代码
-    - 3.2 看看ReferenceQueue的enqueue函数
-    - 3.3 看看ReferenceQueue的enqueueLocked(Reference)函数
-    - 3.4 接着看看ReferenceQueue.isEnqueued()代码
-    - 3.5 那么enqueueLocked(Reference)函数中的Cleaner是做什么的
-    - 3.6 软引用SoftReference源码
-    - 3.7 弱引用WeakReference源码
-    - 3.8 虚引用PhantomReference源码
-    - 3.9 弱引用回收的原理分析
-- 04.引用回收机制
-    - 4.1 待完善
-
-
-
-### 01.四种引用介绍
-#### 1.1 引用说明
-- java.lang.ref包中提供了几个类：
-    - SoftReference类、WeakReference类和PhantomReference类，它们分别代表软引用、弱引用和虚引用。
-    - ReferenceQueue类表示引用队列，它可以和这三种引用类联合使用，以便跟踪Java虚拟机回收所引用的对象的活动。
-
-
-#### 1.2 为何需要4种引用
-
-
-
-#### 1.3 引用类型有哪些
-- 引用类型有哪些种
-    - 强引用：默认的引用方式，不会被垃圾回收，JVM宁愿抛出OutOfMemory错误也不会回收这种对象。
-    - 软引用（SoftReference）：如果一个对象只被软引用指向，只有内存空间不足够时，垃圾回收器才会回收它；
-    - 弱引用（WeakReference）：如果一个对象只被弱引用指向，当JVM进行垃圾回收时，无论内存是否充足，都会回收该对象。
-    - 虚引用（PhantomReference）：虚引用和前面的软引用、弱引用不同，它并不影响对象的生命周期。如果一个对象与虚引用关联，则跟没有引用与之关联一样，在任何时候都可能被垃圾回收器回收。虚引用通常和ReferenceQueue配合使用。
-
-
-### 02.一般使用场景
-#### 2.1 强引用场景
-- 关于强引用引用的场景，直接new出来的对象
-    - String str = new String("yc");
-- 强引用介绍
-    - 强引用是使用最普遍的引用。如果一个对象具有强引用，那垃圾回收器绝不会回收它。当内存空间不足，Java虚拟机宁愿抛出OutOfMemoryError错误，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足的问题。
-    - 通过引用，可以对堆中的对象进行操作。在某个函数中，当创建了一个对象，该对象被分配在堆中，通过这个对象的引用才能对这个对象进行操作。
-- 强引用的特点
-    - 强引用可以直接访问目标对象。强引用可能导致内存泄露。注意相互引用情况。
-- 如何回收强引用
-    - 如果想中断强引用和某个对象之间的关联，可以显示地将引用赋值为null，这样一来的话，JVM在合适的时间就会回收该对象。
-    - 看看Vector类的清理方法：在清除数据的时候，将数组中的每个元素都置为null，中断强引用与对象之间的关系，让GC的时候能够回收这些对象的内存。
-    ```
-    protected Object[] elementData;
-    
-    public synchronized void removeAllElements() {
-        modCount++;
-        // Let gc do its work
-        for (int i = 0; i < elementCount; i++)
-            elementData[i] = null;
-    
-        elementCount = 0;
-    }
-    ```
-- 思考：将引用设置成null后在什么时候jvm回收对象呢？
-
-
-
-#### 2.2 软引用场景
-- 关于SoftReference软引用
-    - SoftReference：软引用–>当虚拟机内存不足时，将会回收它指向的对象；需要获取对象时，可以调用get方法。
-    - 可以通过java.lang.ref.SoftReference使用软引用。一个持有软引用的对象，不会被JVM很快回收，JVM会根据当前堆的使用情况来判断何时回收。当堆的使用率临近阈值时，才会回收软引用的对象。
-- 软引用应用场景
-    - 例如从网络上获取图片，然后将获取的图片显示的同时，通过软引用缓存起来。当下次再去网络上获取图片时，首先会检查要获取的图片缓存中是否存在，若存在，直接取出来，不需要再去网络上获取。
-- 软引用的简单使用用法如下
-    ``` java
-    MyObject aRef = new  MyObject();
-    SoftReference aSoftRef = new SoftReference(aRef);
-    MyObject anotherRef = (MyObject)aSoftRef.get();
-    ```
-- 软引用的特点
-    - 如果一个对象只具有软引用，那么如果内存空间足够，垃圾回收器就不会回收它；如果内存空间不足了，就会回收这些对象的内存。只要垃圾回收器没有回收它，该对象就可以被程序使用。
-    - 软引用可用来实现内存敏感的高速缓存。软引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收，Java虚拟机就会把这个软引用加入到与之关联的引用队列中。
-- 如何回收软引用
-    - 那么当这个SoftReference所软引用的aMyOhject被垃圾收集器回收的同时，ref所强引用的SoftReference对象被列入ReferenceQueue。也就是说，ReferenceQueue中保存的对象是Reference对象，而且是已经失去了它所软引用的对象的Reference对象。另外从ReferenceQueue这个名字也可以看出，它是一个队列，当我们调用它的poll()方法的时候，如果这个队列中不是空队列，那么将返回队列前面的那个Reference对象。
-    - 在任何时候，我们都可以调用ReferenceQueue的poll()方法来检查是否有它所关心的非强可及对象被回收。如果队列为空，将返回一个null,否则该方法返回队列中前面的一个Reference对象。利用这个方法，我们可以检查哪个SoftReference所软引用的对象已经被回收。于是我们可以把这些失去所软引用的对象的SoftReference对象清除掉。
-    - 常用的方式为
-    ```
-    SoftReference ref = null;
-    while ((ref = (EmployeeRef) q.poll()) != null) {
-        // 清除ref
-    }
-    ```
-- 实际应用案例
-    - 正常是用来处理图片这种占用内存大的情况
-- 这样使用软引用好处
-    - 通过软引用的get()方法，取得drawable对象实例的强引用，发现对象被未回收。在GC在内存充足的情况下，不会回收软引用对象。此时view的背景显示
-    - 实际情况中,我们会获取很多图片，然后可能给很多个view展示, 这种情况下很容易内存吃紧导致oom,内存吃紧，系统开始会GC。这次GC后，drawables.get()不再返回Drawable对象，而是返回null，这时屏幕上背景图不显示，说明在系统内存紧张的情况下，软引用被回收。
-    - 使用软引用以后，在OutOfMemory异常发生之前，这些缓存的图片资源的内存空间可以被释放掉的，从而避免内存达到上限，避免Crash发生。
-- 注意避免软引用获取对象为null
-    - 在垃圾回收器对这个Java对象回收前，SoftReference类所提供的get方法会返回Java对象的强引用，一旦垃圾线程回收该Java对象之后，get方法将返回null。所以在获取软引用对象的代码中，一定要判断是否为null，以免出现NullPointerException异常导致应用崩溃。
-
-
-#### 2.3 弱引用场景
-- 关于WeakReference弱引用
-- WeakReference
-    - 弱引用–>随时可能会被垃圾回收器回收，不一定要等到虚拟机内存不足时才强制回收。要获取对象时，同样可以调用get方法。
-- 特点
-    - 如果一个对象只具有弱引用，那么在垃圾回收器线程扫描的过程中，一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。不过，由于垃圾回收器是一个优先级很低的线程，因此不一定会很快发现那些只具有弱引用的对象。
-    - 弱引用也可以和一个引用队列（ReferenceQueue）联合使用，如果弱引用所引用的对象被垃圾回收，Java虚拟机就会把这个弱引用加入到与之关联的引用队列中。
-- 防止内存泄漏，要保证内存被虚拟机回收
-    - 为什么handler会造成内存泄漏？这种情况就是由于android的特殊机制造成的：当一个android主线程被创建的时候，同时会有一个Looper对象被创建，而这个Looper对象会实现一个MessageQueue(消息队列)，当我们创建一个handler对象时，而handler的作用就是放入和取出消息从这个消息队列中，每当我们通过handler将一个msg放入消息队列时，这个msg就会持有一个handler对象的引用。因此当Activity被结束后，这个msg在被取出来之前，这msg会继续存活，但是这个msg持有handler的引用，而handler在Activity中创建，会持有Activity的引用，因而当Activity结束后，Activity对象并不能够被gc回收，因而出现内存泄漏。
-- 根本原因
-    - Activity在被结束之后，MessageQueue并不会随之被结束，如果这个消息队列中存在msg，则导致持有handler的引用，但是又由于Activity被结束了，msg无法被处理，从而导致永久持有handler对象，handler永久持有Activity对象，于是发生内存泄漏。但是为什么为static类型就会解决这个问题呢？因为在java中所有非静态的对象都会持有当前类的强引用，而静态对象则只会持有当前类的弱引用。声明为静态后，handler将会持有一个Activity的弱引用，而弱引用会很容易被gc回收，这样就能解决Activity结束后，gc却无法回收的情况。当然解决源头还是在Activity退出的时候，移除Handler内部消息队列的数据。
-- 解决办法，采用弱引用管理handler，代码如下所示
-    ``` java
-    private MyHandler handler = new MyHandler(this);
-    private static class MyHandler extends Handler{
-        WeakReference<FirstActivity> weakReference;
-        MyHandler(FirstActivity activity) {
-            weakReference = new WeakReference<>(activity);
-        }
-    
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-            }
-        }
-    }
-    ```
-
-
-
-#### 2.4 虚引用场景
-- 关于PhantomReference类虚引用
-    - 虚引用是所有引用类型中最弱的一个。一个持有虚引用的对象，和没有引用几乎是一样的，随时都可能被垃圾回收器回收。当试图通过虚引用的get()方法取得强引用时，总是会失败。并且，虚引用必须和引用队列一起使用，它的作用在于跟踪垃圾回收过程。 当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在垃圾回收后，销毁这个对象，奖这个虚引用加入引用队列。
-- Android实际开发中没有用到过
-    - 貌似开发中没有接触过虚引用
-
-
-#### 2.5 四种引用比较
-- 弱引用和软引用区别
-    - 只具有弱引用的对象拥有更短暂的生命周期，可能随时被回收。而只具有软引用的对象只有当内存不够的时候才被回收，在内存足够的时候，通常不被回收。
-- 使用软引用或者弱引用防止内存泄漏
-    - 在Android应用的开发中，为了防止内存溢出，在处理一些占用内存大而且声明周期较长的对象时候，可以尽量应用软引用和弱引用技术。
-    - 软引用，弱引用都非常适合来保存那些可有可无的缓存数据。如果这样做，当系统内存不足时，这些缓存数据会被回收，不会导致内存溢出。而当内存资源充足时，这些缓存数据又可以存在相当长的时间。
-- 到底什么时候使用软引用，什么时候使用弱引用呢？
-    - 个人认为，如果只是想避免OutOfMemory异常的发生，则可以使用软引用。如果对于应用的性能更在意，想尽快回收一些占用内存比较大的对象，则可以使用弱引用。
-    - 还有就是可以根据对象是否经常使用来判断。如果该对象可能会经常使用的，就尽量用软引用。如果该对象不被使用的可能性更大些，就可以用弱引用。
-    - 另外，和弱引用功能类似的是WeakHashMap。WeakHashMap对于一个给定的键，其映射的存在并不阻止垃圾回收器对该键的回收，回收以后，其条目从映射中有效地移除。WeakHashMap使用ReferenceQueue实现的这种机制。
-
-
-
-### 03.引用原理说明
-#### 3.0 引用回收的流程
-- 带完善
-
-
-#### 3.1 看看Reference的源代码
-- 源码说明：
-    - 看到Reference除了带有对象引用referent的构造函数，还有一个带有ReferenceQueue参数的构造函数。那么这个ReferenceQueue用来做什么呢？
-    - 需要我们从enqueue这个函数来开始分析。当系统要回收Reference持有的对象引用referent的时候，Reference的enqueue函数会被调用，而在这个函数中调用了ReferenceQueue的enqueue函数。
-    - 那么我们来看看ReferenceQueue的enqueue函数做了什么？
-- **看看这段源代码**
-    ```java
-    public abstract class Reference<T> {
-    
-        private static boolean disableIntrinsic = false;
-        private static boolean slowPathEnabled = false;
-        volatile T referent;         /* Treated specially by GC */
-        final ReferenceQueue<? super T> queue;
-        Reference queueNext;
-        Reference<?> pendingNext;
-    
-        //返回此引用对象的引用。如果这个引用对象有由程序或垃圾收集器清除，然后此方法返回
-        public T get() {
-            return getReferent();
-        }
-    
-        private final native T getReferent();
-    
-        //清除此引用对象。调用此方法不会将对象加入队列
-        public void clear() {
-            this.referent = null;
-        }
-    
-        //是否引用对象已进入队列，由程序或垃圾收集器。
-        //如果该引用对象在创建队列时没有注册，则该方法将始终返回
-        public boolean isEnqueued() {
-            return queue != null && queue.isEnqueued(this);
-        }
-    
-        //添加引用对象到其注册的队列，如果他的方法是通过java代码调用
-        public boolean enqueue() {
-           return queue != null && queue.enqueue(this);
-        }
-    
-        Reference(T referent) {
-            this(referent, null);
-        }
-    
-        Reference(T referent, ReferenceQueue<? super T> queue) {
-            this.referent = referent;
-            this.queue = queue;
-        }
-    }
-    ```
-
-
-
-#### 3.2 看看ReferenceQueue的enqueue函数
-- **源码说明**
-    - 可以看到首先获取同步锁，然后调用了enqueueLocked(Reference)函数
-- **看看这段代码**
-    - 可以看到这里用了synchronized同步锁，然后调用了对象的 notifyAll()方法（唤醒所有 wait 线程），notifyAll会将该对象等待池内的所有线程移动到锁池中，等待锁竞争。
-    ``` java
-    boolean enqueue(Reference<? extends T> reference) {
-        synchronized (lock) {
-            //将给定的引用加入这个队列
-            if (enqueueLocked(reference)) {
-                //然后
-                lock.notifyAll();
-                return true;
-            }
-            return false;
-        }
-    }
-    ```
-
-
-#### 3.3 看看ReferenceQueue的enqueueLocked(Reference)函数
-- **源码说明**
-    - 通过 enqueueLocked函数可以看到ReferenceQueue维护了一个队列（链表结构），而enqueue这一系列函数就是将reference添加到这个队列（链表）中
-- **看看这段代码**
-    ``` java
-    private boolean enqueueLocked(Reference<? extends T> r) {
-        // Verify the reference has not already been enqueued.
-        if (r.queueNext != null) {
-            return false;
-        }
-    
-        if (r instanceof Cleaner) {
-            // If this reference is a Cleaner, then simply invoke the clean method instead
-            // of enqueueing it in the queue. Cleaners are associated with dummy queues that
-            // are never polled and objects are never enqueued on them.
-            Cleaner cl = (sun.misc.Cleaner) r;
-            cl.clean();
-    
-            // Update queueNext to indicate that the reference has been
-            // enqueued, but is now removed from the queue.
-            r.queueNext = sQueueNextUnenqueued;
-            return true;
-        }
-    
-        if (tail == null) {
-            head = r;
-        } else {
-            tail.queueNext = r;
-        }
-        tail = r;
-        tail.queueNext = r;
-        return true;
-    }
-    ```
-
-
-#### 3.4 接着看看ReferenceQueue.isEnqueued()代码
-- **让我们回到Reference源码中**
-    - 可以看到除了enqueue这个函数还有一个isEnqueued函数，同样这个函数调用了ReferenceQueue的同名函数，源码如下：
-    ``` java
-    boolean isEnqueued(Reference<? extends T> reference) {
-        synchronized (lock) {
-            return reference.queueNext != null && reference.queueNext != sQueueNextUnenqueued;
-        }
-    }
-    ```
-- **源码分析说明**
-    - 可以看到先获取同步锁，然后判断该reference是否在队列（链表）中。由于enqueue和isEnqueue函数都要申请同步锁，所以这是线程安全的。
-    - 这里要注意“reference.queueNext != sQueueNextUnenqueued”用于判断该Reference是否是一个Cleaner类，在上面ReferenceQueue的enqueueLocked函数中我们可以看到如果一个Reference是一个Cleaner，则调用它的clean方法，同时并不加入链表，并且将其queueNext设置为sQueueNextUnequeued，这是一个空的虚引用
-
-
-#### 3.5 那么enqueueLocked(Reference)函数中的Cleaner是做什么的
-- 在stackoverflow网站中找到这个解释
-    * sun.misc.Cleaner是JDK内部提供的用来释放非堆内存资源的API。JVM只会帮我们自动释放堆内存资源，但是它提供了回调机制，通过这个类能方便的释放系统的其他资源。
-    * 可以看到Cleaner是用于释放非堆内存的，所以做特殊处理。
-    * 通过enqueue和isEnqueue两个函数的分析，ReferenceQueue队列维护了那些被回收对象referent的Reference的引用，这样通过isEnqueue就可以判断对象referent是否已经被回收，用于一些情况的处理。
-
-
-#### 3.6 软引用SoftReference源码
-- **源码如下所示**
-    ```java
-    public class SoftReference<T> extends Reference<T> { 
-        static private long clock; 
-        private long timestamp; 
-        public SoftReference(T referent) { 
-            super(referent); 
-            this.timestamp = clock; 
-        } 
-        public SoftReference(T referent, ReferenceQueue<? super T> q) { 
-            super(referent, q); 
-            this.timestamp = clock; 
-        } 
-        public T get() { 
-            T o = super.get(); 
-            if (o != null && this.timestamp != clock) 
-                this.timestamp = clock; 
-            return o; 
-        } 
-    } 
-    ```
-- **关于这段源码分析**
-    - 可以看到SoftReference有一个类变量clock和一个变量timestamp，这两个参数对于SoftReference至关重要。
-        * clock：记录了上一次GC的时间。这个变量由GC（garbage collector）来改变。
-        * timestamp：记录对象被访问（get函数）时最近一次GC的时间。
-    - 那么这两个参数有什么用？
-        * 我们知道软引用是当内存不足时可以回收的。但是这只是大致情况，实际上软应用的回收有一个条件：
-        * clock - timestamp <= free_heap * ms_per_mb
-        * free_heap是JVM Heap的空闲大小，单位是MB
-        * ms_per_mb单位是毫秒，是每MB空闲允许保留软引用的时间。Sun JVM可以通过参数-XX:SoftRefLRUPolicyMSPerMB进行设置
-    - 举个栗子：
-        * 目前有3MB的空闲，ms_per_mb为1000，这时如果clock和timestamp分别为5000和2000，那么
-        * 5000 - 2000 <= 3 * 1000
-        * 条件成立，则该次GC不对该软引用进行回收。
-        * 所以每次GC时，通过上面的条件去判断软应用是否可以回收并进行回收，即我们通常说的内存不足时被回收。
-
-
-
-#### 3.7 弱引用WeakReference源码
-- **源码分析说明**
-    - 没有其他代码，GC时被回收掉。
-- **源码如下所示**
-    ```java
-    public class WeakReference<T> extends Reference<T> { 
-        public WeakReference(T referent) { 
-            super(referent); 
-        } 
-        public WeakReference(T referent, ReferenceQueue<? super T> q) { 
-            super(referent, q); 
-        } 
-    } 
-    ```
-
-
-#### 3.8 虚引用PhantomReference源码
-- **源码分析说明**
-    - 可以看到get函数返回null，正如前面说得虚引用无法获取对象引用。（注意网上有些文章说虚引用不持有对象的引用，这是有误的，通过构造函数可以看到虚引用是持有对象引用的，但是无法获取该引用
-    - 同时可以看到虚引用只有一个构造函数，所以必须传入ReferenceQueue对象。
-    - 前面提到虚引用的作用是判断对象是否被回收，这个功能正是通过ReferenceQueue实现的。
-    - 这里注意：不仅仅是虚引用可以判断回收，弱引用和软引用同样实现了带有ReferenceQueue的构造函数，如果创建时传入了一个ReferenceQueue对象，同样也可以判断。
-- **源码如下所示**
-    ```java
-    public class PhantomReference<T> extends Reference<T> { 
-        public T get() { 
-            return null; 
-        } 
-        public PhantomReference(T referent, ReferenceQueue<? super T> q) { 
-            super(referent, q); 
-        } 
-    }
-    ```
+所以，Java创建线程会涉及到内核模式的调用，非常消耗CPU资源，应该尽量让Java线程能够得到复用，减少不必要的重复创建。
 
 
+### 5.2 线程映射核心原理
 
+Java线程属于内核级线程，JDK1.2 基于操作系统原生线程模型来实现。
 
+Sun JDK，它的Windows版本和Linux版本都使用一对一的线程模型实现，一条Java线程就映射到一条轻量级进程之中。
+
+内核级线程（Kernel Level Thread ，KLT）：它们是依赖于内核的，即无论是用户进程中的线 程，还是系统进程中的线程，它们的创建、撤消、切换都由内核实现。
+
+用户级线程（User Level Thread，ULT）：操作系统内核不知道应用线程的存在。
+
+
+## 06.线程问题排查&优化
+
+### 6.1 如何优化线程性能
+
+线程性能可以通过合理的线程调度、减少线程上下文切换、避免过度同步等方式进行优化。使用线程池和并发集合也可以提高性能。
+
+### 6.2 线程问题诊断分析
+
+多线程程序很难调试，出了 Bug 基本上都是靠日志，靠线程 dump 来跟踪问题
+
+分析线程 dump 的一个基本功就是分析线程状态，大部分的死锁、饥饿、活锁问题都需要跟踪分析线程的状态。
+
+你可以通过 jstack 命令或者Java VisualVM这个可视化工具将 JVM 所有的线程栈信息导出来，完整的线程栈信息不仅包括线程的当前状态、调用栈，还包括了锁的信息。
 
 
 
