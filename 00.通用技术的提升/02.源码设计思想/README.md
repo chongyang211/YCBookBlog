@@ -2,48 +2,10 @@
 
 
 
-
-
-
-### 3.3 M:N 模型（混合线程）
-
-
-### 3.4 Go GMP 模型（M:N 的经典实现）
-
-
----
-
 ## 四、线程架构设计
 
 ### 4.1 操作系统层面（以 Linux 为例）
 
-Linux 中线程和进程在内核中统一用 `task_struct` 表示：
-
-```c
-// 简化的 task_struct
-struct task_struct {
-    pid_t pid;                  // 线程 ID（每个线程唯一）
-    pid_t tgid;                 // 线程组 ID（= 进程 PID，同进程的线程 tgid 相同）
-    
-    struct mm_struct *mm;       // 内存描述符 → 同进程的线程共享同一个 mm
-    struct files_struct *files; // 文件描述符表 → 共享
-    struct signal_struct *signal; // 信号处理 → 共享
-    
-    struct thread_struct thread; // CPU 寄存器状态 → 每线程独立
-    void *stack;                 // 内核栈 → 每线程独立
-    // ...
-};
-```
-
-**`fork()` vs `clone()`**：
-
-```
-fork()  → 创建新进程：复制 mm、files、signal（写时复制）
-clone() → 创建线程：共享 mm、files、signal（通过标志位控制）
-
-clone(CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_THREAD, ...)
-       共享内存    共享文件系统  共享文件描述符  共享信号处理    同一线程组
-```
 
 ### 4.2 线程上下文切换
 
