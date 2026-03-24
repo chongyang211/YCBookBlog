@@ -12,12 +12,6 @@
 
 #### 各语言处理差异
 
-| 处理阶段 | Java | C++ | JavaScript | Python | Go | Rust |
-|---------|------|-----|-----------|--------|-----|------|
-| 捕获语法 | `try-catch-finally` | `try-catch`+RAII | `try-catch-finally` | `try-except-finally` | `defer-recover` | `Result<T,E>`/`panic-catch_unwind` |
-| 资源清理 | `finally`/try-with-resources | RAII 析构函数 | `finally` | `finally`/`with` | `defer` | `Drop` trait (RAII) |
-| 未捕获处理 | `UncaughtExceptionHandler` | `std::terminate()` | `unhandledrejection` | `threading.excepthook` | 进程崩溃(打印栈) | 进程 abort |
-| 跨线程传递 | `Future.get()` 抛 `ExecutionException` | `std::future` 重抛 | `Promise.catch()` | `Future.result()` 重抛 | channel 传 error | `JoinHandle` 返回 `Result` |
 
 ---
 
