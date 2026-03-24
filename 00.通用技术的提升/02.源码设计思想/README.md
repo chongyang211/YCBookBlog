@@ -47,48 +47,6 @@
 
 #### 8.3 JavaScript
 
-```javascript
-// 1. try-catch-finally
-try {
-    JSON.parse(invalid);
-} catch (e) {
-    if (e instanceof SyntaxError) { /* ... */ }
-} finally {
-    cleanup();
-}
-
-// 2. Promise 异常链（关键！JS 线程异常的主要形式）
-fetch(url)
-    .then(resp => resp.json())
-    .catch(err => console.error(err)); // 捕获链上任意一环的异常
-
-// 3. async/await + try-catch
-async function work() {
-    try {
-        const data = await fetch(url);
-    } catch (e) {
-        // 捕获异步异常
-    }
-}
-
-// 4. 全局未捕获
-window.addEventListener('error', (e) => { /* 同步错误 */ });
-window.addEventListener('unhandledrejection', (e) => { /* Promise rejection */ });
-
-// 5. Web Worker 异常
-const worker = new Worker('task.js');
-worker.onerror = (e) => {
-    console.error('Worker error:', e.message);
-    // Worker 内部未捕获的异常会触发这里
-};
-
-// 6. Node.js
-process.on('uncaughtException', (err) => { /* 同步 */ });
-process.on('unhandledRejection', (reason) => { /* Promise */ });
-```
-
-**原理**：V8 引擎内部维护 try-catch 栈。`throw` → 沿执行上下文栈查找 handler。Promise rejection 是独立机制：rejection 存入微任务队列，若在当前 tick 结束时无 `.catch()` 处理，触发 `unhandledrejection`。**JS 单线程模型意味着没有传统线程异常问题，异步异常通过 Promise 链传播。**
-
 #### 8.4 Python
 
 ```python
