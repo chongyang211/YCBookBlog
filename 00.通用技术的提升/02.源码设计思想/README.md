@@ -3,108 +3,11 @@
 
 
 
-
----
-
-### 三、异常如何处理
-
-#### 通用处理模型
-
-#### 各语言处理差异
-
-
----
-
-### 四、异常整体设计框架
-
-
-#### 4.3 设计哲学对比
-
----
-
-### 五、异常可以监听并处理吗
-
-**可以**，每种语言都提供了线程异常监听机制：
-
-| 语言 | 监听机制 | 粒度 | 示例 |
-|------|---------|------|------|
-| **Java** | `Thread.setUncaughtExceptionHandler()` | 单线程 | `thread.setUncaughtExceptionHandler((t, e) -> log(e))` |
-| | `Thread.setDefaultUncaughtExceptionHandler()` | 全局 | Android 常用于全局崩溃捕获 |
-| | `ThreadPoolExecutor.afterExecute()` | 线程池级 | 重写钩子方法 |
-| **C++** | `std::set_terminate()` | 全局 | 替换默认 terminate handler |
-| | 信号处理 `signal(SIGSEGV, handler)` | 进程级 | 捕获段错误等 |
-| **JavaScript** | `window.onerror` / `addEventListener('error')` | 全局同步 | 捕获未处理错误 |
-| | `window.onunhandledrejection` | 全局异步 | 捕获未处理的 Promise rejection |
-| | `worker.onerror` | Worker级 | 监听 Worker 线程异常 |
-| **Python** | `threading.excepthook` (3.8+) | 全局线程 | `threading.excepthook = custom_hook` |
-| | `sys.excepthook` | 全局主线程 | 替换默认异常打印 |
-| **Go** | `defer + recover()` | 当前goroutine | 只能捕获当前goroutine的panic |
-| **Rust** | `std::panic::set_hook()` | 全局 | 自定义 panic 信息输出 |
-| | `std::panic::catch_unwind()` | 调用级 | 捕获 panic，类似 try-catch |
-| **C#** | `AppDomain.UnhandledException` | 应用域 | 全局未处理异常 |
-| | `TaskScheduler.UnobservedTaskException` | Task级 | 未观察的 Task 异常 |
-
----
-
 ### 六、异常如何捕获以及捕获原理
 
 #### 6.1 两大底层实现机制
 
-**机制一：基于表的零开销异常（Table-Based / Zero-Cost Exception）—— C++、Rust**
-
-```
-编译期：
-  编译器为每个函数生成 .eh_frame 表（DWARF格式）
-  记录：PC范围 → 清理动作(cleanup) → landing pad(catch块地址)
-
-运行时（异常抛出时）：
-  1. throw → __cxa_throw() → libunwind
-  2. 从当前 PC 开始，查 .eh_frame 表
-  3. 逐帧回溯（unwind），找到匹配的 catch 块
-  4. 两阶段：
-     Phase 1（搜索）：找到匹配的 handler，不执行清理
-     Phase 2（清理）：逐帧执行析构函数/cleanup，跳转到 handler
-
-优点：无异常时零开销（没有额外指令）
-缺点：抛异常时开销大（查表+回溯），二进制体积增大
-```
-
-**机制二：基于 setjmp/longjmp（传统 C 方式）**
-
-```
-try → setjmp() 保存当前寄存器/栈帧到 jmp_buf
-throw → longjmp() 恢复到保存点，跳转到 catch 块
-
-优点：实现简单
-缺点：try 块有运行时开销（每次都要 setjmp），且无法自动调用析构函数
-```
-
-**机制三：语言运行时异常（Java/Python/JS/C#）**
-
-```
-JVM 为例：
-  1. 每个方法有异常表（Exception Table）：
-     [startPC, endPC, handlerPC, catchType]
-  2. 异常发生时：
-     a. JVM 创建异常对象，记录栈轨迹（fillInStackTrace）
-     b. 在当前方法的异常表中查找匹配项
-     c. 找到 → 跳转到 handlerPC
-     d. 未找到 → 弹出当前帧，在调用方法中继续查找
-     e. 到达栈顶仍未找到 → UncaughtExceptionHandler
-  3. finally 在编译时被复制到 try 和 catch 的所有出口
-```
-
-#### 6.2 各语言捕获原理对比
-
-| 语言 | 底层机制 | 无异常开销 | 抛异常开销 | 栈展开方式 |
-|------|---------|-----------|-----------|-----------|
-| **Java** | JVM 异常表 + 对象创建 | 近零（只是表存在） | 中（`fillInStackTrace` 最贵） | JVM 内部逐帧回溯 |
-| **C++** | .eh_frame 表 + libunwind | 零（zero-cost） | 高（两阶段 unwind） | DWARF 表驱动 |
-| **JavaScript** | V8 内部：类似异常表 | 低 | 中 | 引擎内部实现 |
-| **Python** | CPython 字节码 + 异常栈 | 低（设置 handler 有开销）| 中 | 解释器逐帧回退 |
-| **Go** | `defer` 链表 + `runtime.gopanic` | defer 有微小开销 | 中（遍历 defer 链） | 遍历 G 栈的 defer 链 |
-| **Rust** | 同 C++ (.eh_frame) | 零 | 高（同 C++ unwind） | libunwind |
-| **C** | 无内建异常 | N/A | N/A | `setjmp/longjmp` 或信号 |
+#### 6.2 各语言捕获对比
 
 ---
 
@@ -139,42 +42,6 @@ JVM 为例：
 ### 八、每种语言异常处理手段和原理
 
 #### 8.1 Java
-
-```java
-// 1. try-catch-finally
-try {
-    riskyOperation();
-} catch (SpecificException e) {
-    handle(e);
-} finally {
-    cleanup(); // 一定执行
-}
-
-// 2. try-with-resources（自动关闭 AutoCloseable）
-try (var stream = new FileInputStream("f")) {
-    // 异常时自动调用 stream.close()
-}
-
-// 3. 线程未捕获异常
-thread.setUncaughtExceptionHandler((t, e) -> {
-    log.error("Thread " + t.getName() + " died", e);
-});
-
-// 4. 线程池异常：submit 的异常封装在 Future 中
-Future<?> f = executor.submit(task);
-try {
-    f.get(); // 这里抛出 ExecutionException
-} catch (ExecutionException e) {
-    Throwable cause = e.getCause(); // 原始异常
-}
-
-// 5. CompletableFuture 异常链
-CompletableFuture.supplyAsync(() -> riskyOp())
-    .exceptionally(ex -> fallback)
-    .thenAccept(result -> use(result));
-```
-
-**原理**：JVM 异常表驱动。`throw` → 创建异常对象（最耗时的是 `fillInStackTrace()` 遍历所有栈帧）→ 查异常表 → 匹配 catch type（支持继承匹配）→ 跳转。`finally` 在编译时被复制插入到所有正常/异常出口。
 
 #### 8.2 C++
 
@@ -472,19 +339,6 @@ pthread_cleanup_pop(1);  // 执行清理
 ```
 
 **原理**：C 在语言层面不支持异常。`setjmp` 保存 CPU 寄存器和栈指针到 `jmp_buf`，`longjmp` 恢复，直接跳转回保存点。**致命缺陷：不执行中间帧的任何清理代码**。信号处理基于 OS 内核：硬件异常 → CPU 陷入内核 → 内核向进程发信号 → 用户态信号处理函数执行。线程取消通过 `pthread_cancel` 设置标志位，线程在下一个取消点检查并响应。
-
----
-
-### 核心设计总结
-
-| 设计维度 | 传统异常派(Java/C++/C#/Python) | 值错误派(Go/Rust) |
-|---------|------------------------------|------------------|
-| 错误传递 | 抛出异常对象，沿栈展开 | 返回 error/Result，调用方显式处理 |
-| 强制处理 | Java checked exception | Go `if err != nil`（惯例）；Rust `Result` 编译器 warning |
-| 不可恢复 | Error/terminate/abort | panic（Go 崩进程，Rust 可 catch_unwind） |
-| 跨线程 | Future 封装重抛 | channel 传 error / JoinHandle 返回 Result |
-| 资源清理 | finally / RAII / with | defer / Drop(RAII) |
-| 性能哲学 | 无异常时低开销，抛异常时可接受 | 零异常开销（错误就是普通返回值） |
 
 
 
