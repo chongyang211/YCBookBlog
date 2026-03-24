@@ -2,85 +2,6 @@
 
 
 
-
-
-
-### 二、硬件触发异常（CPU 层面）
-
----
-
-### 三、软件触发异常（语言运行时层面）
-
-软件异常是程序**主动**检测到错误条件后，通过语言机制触发的。
-
-#### 3.1 throw / raise 的底层实现
-
-**Java（JVM 字节码层面）**：
-
-```
-// 源码
-throw new NullPointerException("msg");
-
-// 字节码
-new           #2    // 在堆上分配 NullPointerException 对象
-dup
-ldc           "msg" // 加载错误消息字符串
-invokespecial #3    // 调用构造函数
-athrow              // ← 这条指令触发异常
-
-// athrow 指令做了什么：
-// 1. 从操作数栈弹出异常对象引用
-// 2. 调用 fillInStackTrace()，遍历当前线程的栈帧，记录每一帧的类名/方法名/行号
-// 3. 在当前方法的 ExceptionTable 中查找匹配的 handler
-// 4. 找到 → 跳转到 handler_pc
-// 5. 未找到 → 弹出当前栈帧，在调用方法中继续查找（栈展开）
-// 6. 到达栈顶仍未找到 → 调用 Thread.dispatchUncaughtException()
-```
-
-**C++（编译器+运行时层面）**：
-
-```cpp
-throw std::runtime_error("msg");
-
-// 编译器将 throw 转换为：
-// 1. __cxa_allocate_exception(sizeof(runtime_error))  分配异常对象内存
-// 2. 在分配的内存上构造 runtime_error 对象
-// 3. __cxa_throw(exception_obj, type_info, destructor) 触发异常
-
-// __cxa_throw 做了什么：
-// Phase 1（搜索阶段）：
-//   调用 _Unwind_RaiseException()
-//   从当前 PC 开始，查 .eh_frame 段（DWARF 格式的展开表）
-//   逐帧检查：这一帧有没有能匹配此类型的 catch？
-//   找到匹配 → 记录位置，进入 Phase 2
-//   找不到 → std::terminate()
-//
-// Phase 2（清理阶段）：
-//   再次从 throw 点逐帧展开
-//   每经过一帧：执行该帧的局部对象的析构函数（RAII保障）
-//   到达目标 catch 块（landing pad）→ 跳转执行
-```
-
-**Go（运行时层面）**：
-
-```go
-panic("something wrong")
-
-// 编译器转换为：runtime.gopanic(interface{})
-// 
-// gopanic 做了什么：
-// 1. 创建 _panic 结构体，挂到当前 goroutine 的 _panic 链表头
-// 2. 遍历当前 goroutine 的 _defer 链表（后进先出）
-// 3. 逐个执行 defer 函数
-//    - 若某个 defer 调用了 recover() → 停止 panic，恢复正常执行
-//    - 否则继续执行下一个 defer
-// 4. 所有 defer 执行完仍无 recover → runtime.fatalpanic()
-//    - 打印 panic 信息和所有 goroutine 的栈
-//    - 调用 exit(2) 终止进程
-```
-
----
-
 ### 四、运行时隐式触发异常
 
 很多异常看起来是"自动发生的"，实际上是运行时/编译器**插入了检查代码**：
@@ -154,27 +75,6 @@ int* ip = (int*)p;  // 不检查！直接强转，错了就是未定义行为
 
 ### 五、异常触发的完整分层模型
 
-```
-┌─────────────────────────────────────────────────────┐
-│  Layer 4: 应用代码                                    │
-│  throw new BusinessException("余额不足")              │
-│  程序员根据业务逻辑主动抛出                             │
-├─────────────────────────────────────────────────────┤
-│  Layer 3: 语言运行时（JVM / V8 / CPython / Go runtime）│
-│  空指针检测、类型检查、数组越界、栈溢出检测              │
-│  将底层信号/错误转换为语言级异常对象                     │
-├─────────────────────────────────────────────────────┤
-│  Layer 2: 操作系统内核                                 │
-│  接收 CPU 异常 → 向进程发送信号（SIGSEGV/SIGFPE等）     │
-│  进程调度、内存管理、缺页处理                           │
-├─────────────────────────────────────────────────────┤
-│  Layer 1: CPU 硬件                                    │
-│  除零(#DE)、缺页(#PF)、非法指令(#UD)、对齐(#AC)        │
-│  通过 IDT 中断描述符表跳转到内核处理                    │
-└─────────────────────────────────────────────────────┘
-```
-
-**异常传播方向**：自底向上。硬件异常 → OS信号 → 运行时异常对象 → 应用层 catch。
 
 **异常转换示例**：
 
