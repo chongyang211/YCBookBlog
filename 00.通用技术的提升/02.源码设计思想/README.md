@@ -17,27 +17,8 @@
 
 ### 四、异常整体设计框架
 
-#### 4.1 Java 异常体系（最典型的层次设计）
 
-```
-Throwable
-├── Error（不应捕获，JVM级）
-│   ├── OutOfMemoryError
-│   ├── StackOverflowError
-│   └── VirtualMachineError
-└── Exception
-    ├── RuntimeException（Unchecked，运行时）
-    │   ├── NullPointerException
-    │   ├── IndexOutOfBoundsException
-    │   ├── ConcurrentModificationException
-    │   └── IllegalStateException
-    └── Checked Exception（编译器强制处理）
-        ├── IOException
-        ├── InterruptedException  ← 线程中断专用
-        └── ExecutionException    ← 线程池异常传递专用
-```
-
-#### 4.2 C++ 异常体系
+#### 4.2 C++异常体系
 
 ```
 std::exception
