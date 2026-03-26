@@ -5,48 +5,6 @@
 
 
 
-
----
-
-### 6. Semaphore — 控制并发数
-
-**原理**：基于 AQS，维护许可数。`acquire()` 获取许可（无许可则阻塞），`release()` 归还许可。底层是 CAS 操作。
-
-```java
-Semaphore semaphore = new Semaphore(2);  // 最多2个线程同时执行
-
-for (int i = 0; i < 5; i++) {
-  int id = i;
-  new Thread(() -> {
-    semaphore.acquire();             // 获取许可，超过2个则阻塞
-    System.out.println("Thread " + id + " working");
-    Thread.sleep(1000);
-    semaphore.release();             // 归还许可
-  }).start();
-}
-```
-
----
-
-### 7. Future / CompletableFuture — 异步结果通信
-
-**原理**：`Future` 内部用 AQS 状态机（NEW → COMPLETING → NORMAL），`get()` 阻塞等待状态变为完成。`CompletableFuture` 支持链式回调。
-
-```java
-// Future：阻塞获取结果
-ExecutorService pool = Executors.newFixedThreadPool(2);
-Future<Integer> future = pool.submit(() -> {
-  Thread.sleep(1000);
-  return 42;
-});
-int result = future.get();           // 阻塞直到结果就绪
-
-// CompletableFuture：非阻塞链式
-CompletableFuture.supplyAsync(() -> fetchData())
-  .thenApply(data -> process(data))  // 上一步完成后自动执行
-  .thenAccept(result -> save(result));
-```
-
 ---
 
 ### 8. Exchanger — 两个线程交换数据
