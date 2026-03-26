@@ -5,28 +5,6 @@
 
 
 
----
-
-### 5. CyclicBarrier — 多线程在某个点同步
-
-**原理**：基于 `ReentrantLock` + `Condition`，到达屏障的线程阻塞等待，最后一个到达时全部唤醒。**可重用**（cyclic）。
-
-```java
-CyclicBarrier barrier = new CyclicBarrier(3, () -> {
-  System.out.println("All threads arrived, proceed!");  // 最后一个到达时执行
-});
-
-for (int i = 0; i < 3; i++) {
-  int id = i;
-  new Thread(() -> {
-    System.out.println("Thread " + id + " reached barrier");
-    barrier.await();                 // 阻塞，直到3个线程都到
-    System.out.println("Thread " + id + " continues");
-  }).start();
-}
-```
-
-**vs CountDownLatch**：CountDownLatch 一次性，CyclicBarrier 可重复使用。
 
 ---
 
