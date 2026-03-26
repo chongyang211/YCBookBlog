@@ -3,26 +3,7 @@
 
 
 
----
 
-### 4. CountDownLatch — 等待 N 个线程完成
-
-**原理**：内部维护一个 `int` 计数器（基于 AQS），每次 `countDown()` 减 1，`await()` 阻塞直到计数器归零。**一次性**，归零后不可重置。
-
-```java
-CountDownLatch latch = new CountDownLatch(3);
-
-for (int i = 0; i < 3; i++) {
-  int id = i;
-  new Thread(() -> {
-    System.out.println("Task " + id + " done");
-    latch.countDown();               // 完成一个，计数减1
-  }).start();
-}
-
-latch.await();                       // 主线程阻塞，直到3个任务全完成
-System.out.println("All tasks completed");
-```
 
 ---
 
