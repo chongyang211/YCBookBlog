@@ -3,30 +3,9 @@
 
 
 
-### 完整执行流程
-
-### 一句话总结
-
-
-
-### 设计思想总结
-
-
 
 ## 启动与关闭的核心原理分析
 
-### 部署目录结构（install 后）
-
-```
-/data/iotservice/          ← SCRIPT_DIR 的上一级
-├── iotservice             ← 可执行二进制
-├── lib/                   ← 动态库（boost、protobuf 等）
-├── scripts/
-│   ├── start.sh
-│   └── stop.sh
-├── certs/
-└── res/
-```
 
 ---
 
