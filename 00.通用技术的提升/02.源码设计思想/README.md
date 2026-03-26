@@ -10,24 +10,6 @@
 
 
 
-### 核心要解决的三个问题
-
-```
-┌──────────────┐
-│  互斥(Mutual │  同一时刻只有一个线程修改共享数据
-│  Exclusion)  │  → mutex, atomic, spinlock
-└──────┬───────┘
-       │
-┌──────▼───────┐
-│  同步(Sync/  │  线程间协调执行顺序（A 做完再 B 做）
-│  Ordering)   │  → condition_variable, semaphore, barrier, future/promise
-└──────┬───────┘
-       │
-┌──────▼───────┐
-│  可见性      │  一个线程的写入对其他线程可见
-│ (Visibility) │  → memory barrier, volatile(Java), atomic memory order
-└──────────────┘
-```
 
 ### 内存模型（Memory Model）
 
