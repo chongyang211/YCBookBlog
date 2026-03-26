@@ -1,4 +1,54 @@
 
+## `stop.sh` 分析
+
+### 作用
+
+停止 iotservice 进程，采用**两层保障**策略确保进程一定被杀掉。
+
+### 逐段原理
+
+**`set -e`**
+
+**`SCRIPT_DIR` / `PID_FILE`** — 定位 PID 文件 `/tmp/iotservice.pid`（由 iotservice 进程启动时写入）。
+
+**方法1：PID 文件精确停止（主方案）**
+
+```sh
+if [ -f "$PID_FILE" ]; then
+    pid=$(cat "$PID_FILE")
+    kill "$pid" 2>/dev/null || true
+    rm -f "$PID_FILE"
+fi
+```
+
+- 读取 PID 文件获取进程号 → `kill` 发送 `SIGTERM`（默认信号）
+- 进程收到 SIGTERM → 进入 `HandleSignal` 回调 → 优雅退出
+- `2>/dev/null || true`：进程已死时 kill 会报错，静默忽略
+- 最后删除 PID 文件，清理现场
+
+**方法2：进程名兜底（备用方案）**
+
+```sh
+pkill -f "${APP_NAME}" 2>/dev/null || true
+```
+
+- `pkill -f` 按命令行匹配所有含 `iotservice` 的进程
+- 覆盖两种异常情况：
+    1. PID 文件丢失或损坏（进程在但文件没了）
+    2. 有残留子进程（PID 文件只记录主进程）
+
+### 核心设计思想
+
+```
+方法1（精确）: PID文件 → kill 指定进程
+      │
+      │  如果 PID 文件不存在 / 进程未被杀死
+      ▼
+方法2（兜底）: pkill 按进程名扫杀所有匹配进程
+```
+
+**两层保障**：精确停止 + 模糊扫杀，确保无论什么异常情况，进程都能被终止。这是运维脚本的常见模式——**先礼后兵**，优先用 PID 精确定位，再用进程名兜底扫尾。
+
 
 
 
