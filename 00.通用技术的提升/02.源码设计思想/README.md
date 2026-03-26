@@ -5,34 +5,6 @@
 
 ---
 
-### 3. BlockingQueue — 封装好的生产者-消费者
-
-**原理**：内部用 `ReentrantLock` + 两个 `Condition` 实现。`put()` 满时阻塞，`take()` 空时阻塞。开发者无需手动管理锁。
-
-```java
-BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(5);
-
-// 生产者
-new Thread(() -> {
-  for (int i = 0; i < 10; i++) {
-    queue.put(i);                    // 满了自动阻塞
-    System.out.println("Produced: " + i);
-  }
-}).start();
-
-// 消费者
-new Thread(() -> {
-  for (int i = 0; i < 10; i++) {
-    int val = queue.take();          // 空了自动阻塞
-    System.out.println("Consumed: " + val);
-  }
-}).start();
-```
-
-**底层**：`ArrayBlockingQueue` = 数组 + `ReentrantLock` + `notEmpty Condition` + `notFull Condition`。
-
----
-
 ### 4. CountDownLatch — 等待 N 个线程完成
 
 **原理**：内部维护一个 `int` 计数器（基于 AQS），每次 `countDown()` 减 1，`await()` 阻塞直到计数器归零。**一次性**，归零后不可重置。
