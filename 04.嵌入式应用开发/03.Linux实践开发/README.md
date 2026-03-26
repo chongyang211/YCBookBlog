@@ -5,24 +5,8 @@
 
 ### 完整执行流程
 
-```
-start.sh 执行
-  │
-  ├─ ① set -e              ← 遇错即停
-  ├─ ② 定位应用根目录        ← 解决"从哪里运行都能找到自己"
-  ├─ ③ export LD_LIBRARY_PATH ← 解决"找不到 .so"
-  └─ ④ start-stop-daemon     ← 解决"防重复启动 + 后台运行"
-       │
-       └─ fork+exec → iotservice 进程
-            │
-            ├─ RunGuardCheck → PID 文件锁（程序内部的二次防护）
-            ├─ 注册 SIGINT/SIGTERM 信号
-            └─ 进入 asio 事件循环
-```
-
 ### 一句话总结
 
-`start.sh` 做了 3 件事：**定位自己** → **配置库路径** → **通过 `start-stop-daemon` 幂等地后台启动进程**。核心原理就是用 `LD_LIBRARY_PATH` 解决动态库加载，用 `start-stop-daemon` 解决进程管理，让脚本成为二进制和运行环境之间的桥梁。
 
 
 ### 设计思想总结
