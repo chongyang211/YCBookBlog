@@ -9,14 +9,6 @@
 ### 两大核心范式
 
 
-**2. 消息传递（Message Passing）**
-
-线程之间不直接共享数据，而是通过**通道/队列**发送消息：
-
-- **Go**：`chan`（CSP 模型）— "Don't communicate by sharing memory; share memory by communicating"
-- **Rust**：`mpsc::channel`
-- **Erlang/Elixir**：Actor 模型，每个进程有自己的邮箱
-- **C++**：没有语言级 channel，通常用 `std::queue` + `mutex` + `condition_variable` 手动实现
 
 ### 核心要解决的三个问题
 
