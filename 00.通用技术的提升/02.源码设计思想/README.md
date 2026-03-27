@@ -10,14 +10,6 @@
 
 #### 范式 1：共享内存（Shared Memory）
 
-```
-线程A ──写──→ [共享变量] ←──读── 线程B
-```
-
-- 多个线程直接访问同一块内存
-- 问题：需要**同步机制**保证可见性和有序性
-- 代表：mutex、atomic、condition_variable、读写锁、volatile
-- C++/Java/C# 的主流模型
 
 #### 范式 2：消息传递（Message Passing）
 
