@@ -3,13 +3,9 @@
 
 
 
----
-
-### 三、硬件只给了两个工具
-
 剥到最底层，CPU 提供给操作系统和语言设计者的**全部工具**只有两个：
 
-#### 工具 1：原子指令（Atomic RMW）
+> 工具 1：原子指令（Atomic RMW）
 
 ```
 cmpxchg [addr], expected, desired   // Compare-And-Swap
@@ -18,7 +14,7 @@ lock xadd [addr], val               // Fetch-And-Add
 
 **一条不可被打断的指令**完成"读-改-写"。这是所有锁、信号量、无锁结构的基石。
 
-#### 工具 2：内存屏障（Memory Barrier / Fence）
+> 工具 2：内存屏障（Memory Barrier / Fence）
 
 ```
 mfence   // 全屏障：之前的读写全部完成后，才能执行之后的读写
@@ -30,7 +26,7 @@ sfence   // 写屏障
 
 **OS 在此之上加了第三个工具**：
 
-#### 工具 3：阻塞/唤醒（Futex）
+> 工具 3：阻塞/唤醒（Futex）
 
 ```
 futex_wait(addr, expected)   // 如果 *addr==expected，让线程睡眠
