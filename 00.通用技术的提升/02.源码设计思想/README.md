@@ -2,59 +2,6 @@
 
 
 
-## 3. 两类上下文切换
-
-### 3.1 进程级切换（重量级）
-
-### 3.2 线程级切换（轻量级）
-
-## 4. 底层实现（以Linux x86-64为例）
-
-Linux内核中，上下文切换的核心在 `__switch_to` 函数：
-
-```
-schedule() 
-  → context_switch()
-    → switch_mm()          // 切换内存描述符（进程切换时换页表）
-    → switch_to()          // 切换寄存器上下文
-      → __switch_to()      // 架构相关的汇编实现
-```
-
-关键步骤的伪汇编（x86-64简化版）：
-
-```asm
-; 保存prev任务的寄存器到其task_struct->thread
-mov [prev + THREAD_RSP], rsp    ; 保存栈指针
-mov [prev + THREAD_RBP], rbp    ; 保存帧指针
-mov [prev + THREAD_RBX], rbx    ; 保存callee-saved寄存器
-; ... 保存r12-r15等
-
-; 恢复next任务的寄存器
-mov rsp, [next + THREAD_RSP]    ; 恢复栈指针
-mov rbp, [next + THREAD_RBP]
-mov rbx, [next + THREAD_RBX]
-; ... 恢复r12-r15等
-
-; 切换完成，从next的栈上返回，等价于跳转到next上次被切走的位置
-ret
-```
-
-这里有个精妙之处：**`ret`指令从新栈上弹出返回地址**，而这个地址正是next线程上次调用switch_to时保存的返回点，所以next线程就像"从sleep中醒来"一样从上次中断处继续执行。
-
-### 页表切换（进程切换时）
-
-```c
-// switch_mm() 简化逻辑
-void switch_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm) {
-    if (prev_mm != next_mm) {
-        // 写入CR3寄存器，硬件自动刷新TLB
-        load_cr3(next_mm->pgd);  
-    }
-    // PCID优化：现代CPU支持给TLB条目打标签，避免全量刷新
-}
-```
-
-## 5. 切换时机（何时触发）
 
 ## 6. 各语言的实现差异
 
