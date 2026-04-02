@@ -56,14 +56,6 @@ void switch_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm) {
 
 ## 5. 切换时机（何时触发）
 
-| 触发条件 | 类型 | 说明 |
-|----------|------|------|
-| **时间片耗尽** | 抢占式 | 时钟中断触发，调度器决定切换 |
-| **系统调用阻塞** | 自愿 | read/write/sleep/mutex_lock等，主动让出CPU |
-| **中断处理返回** | 抢占式 | 中断处理完后检查是否需要调度 |
-| **高优先级任务就绪** | 抢占式 | 实时任务被唤醒，抢占当前任务 |
-| **yield** | 自愿 | 主动让出（如sched_yield、Java的Thread.yield） |
-
 ## 6. 各语言的实现差异
 
 ### C/C++：直接映射OS线程
