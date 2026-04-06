@@ -8,20 +8,6 @@
 
 ### Java：OS线程 + JVM层
 
-```java
-// Java线程 = OS原生线程（HotSpot实现）
-// 切换时除了OS寄存器，JVM还需要处理：
-// - JIT编译后的本地栈帧
-// - GC安全点（safepoint）检查
-// - monitor锁状态
-Thread t = new Thread(() -> { /* ... */ });
-```
-
-Java 21引入了**虚拟线程（Virtual Thread）**，采用M:N模型：
-- 大量虚拟线程映射到少量平台线程
-- 虚拟线程阻塞时，JVM在用户态将其"卸载"，换另一个虚拟线程上来
-- 本质上是**用户态上下文切换**，避免了内核态切换的开销
-
 ### JavaScript：单线程 + 事件循环（无传统切换）
 
 ```javascript
