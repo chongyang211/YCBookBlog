@@ -21,8 +21,18 @@
 - [16.编译链接与演进](16.编译链接与演进.md)：预处理/编译/链接全流程、ODR规则、模板实例化模型、C++20模块、ABI兼容性、C++版本特性总结
 
 
-## C++工程实践专栏（3篇）
+## C++工程实践专栏（8篇）
 
-- [Cpp编译和链接原理](../04.开发技巧/Cpp编译和链接原理.md)：编译链接问题排查、链接错误分析、Makefile管理编译、头文件依赖处理
-- [崩溃流程和捕获原理](../04.开发技巧/崩溃流程和捕获原理.md)：崩溃九大原因、硬件异常到信号完整流程、信号处理与sigaction、GDB核心转储分析、崩溃捕获框架设计
-- [调试技巧和原理分析](../04.开发技巧/调试技巧和原理分析.md)：GDB核心技巧、断点/监视点/条件断点、AddressSanitizer/Valgrind/ThreadSanitizer、ptrace底层原理、断点实现机制
+### 原理篇
+
+- [Cpp编译和链接原理](../04.开发技巧/Cpp编译和链接原理.md)：编译链接问题排查、链接错误分析、Makefile管理编译、头文件依赖处理、ELF结构与符号解析、GOT/PLT/PIE、COMDAT 与模板链接
+- [崩溃流程和捕获原理](../04.开发技巧/崩溃流程和捕获原理.md)：崩溃九大原因、硬件异常到信号完整流程、信号处理与sigaction、GDB核心转储分析、崩溃捕获框架设计、DWARF 与 .eh_frame、异步信号安全、进程终止与僵尸
+- [调试技巧和原理分析](../04.开发技巧/调试技巧和原理分析.md)：GDB核心技巧、断点/监视点/条件断点、AddressSanitizer/Valgrind/ThreadSanitizer、ptrace底层原理、断点实现机制、TSan 与 happens-before、perf 火焰图采样原理
+
+### 实战篇
+
+- [01.从一次BusError排查Cpp崩溃问题](../04.开发技巧/01.从一次BusError排查Cpp崩溃问题.md)：真实 SIGBUS 排查案例、硬件层真相、si_code 解读、macOS vs Linux 差异、ASan shadow memory 解析
+- [GDB与LLDB调试实战手册](../04.开发技巧/GDB与LLDB调试实战手册.md)：命令速查、LLDB 对照、脚本化调试、远程与核心调试、优化代码调试、调试器底层原理
+- [Sanitizer全家桶实战](../04.开发技巧/Sanitizer全家桶实战.md)：ASan/UBSan/TSan/MSan/LSan 系统化使用、shadow memory + redzone + quarantine 原理、vector clock、组合使用与 CI 集成、误报抑制
+- [内存泄漏排查实战](../04.开发技巧/内存泄漏排查实战.md)：狭义 vs 广义泄漏、LSan mark-sweep、tcmalloc/jemalloc heap profile、ptmalloc2 不归还之谜、智能指针时代新泄漏模式、线上排查方法论
+- [性能优化与perf火焰图](../04.开发技巧/性能优化与perf火焰图.md)：perf stat/record/script 三件套、火焰图（On-CPU/Off-CPU/Differential）、PMU/NMI/perf_event_open/LBR/PEBS 原理、四类热点模式与解法
