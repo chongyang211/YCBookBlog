@@ -1,0 +1,398 @@
+# 性能优化与 perf 火焰图：从测不准到看得清
+
+## 00. 文章元信息
+
+- **所属卷册**：卷四·开发技巧（工程实战篇）
+- **主题定位**：C++ 工程师谈"性能优化"常常陷入两个误区——一是"拍脑袋优化自以为是热点的代码"，二是"只知道用 perf 但看不懂它在说什么"。本章以 perf + 火焰图 + 硬件 PMU 为核心，讲清楚**怎么科学地测**、**为什么能测准**、**怎么读懂结果**。
+- **读者收益**：
+  1. 建立"先测量、后优化"的基本纪律；
+  2. 熟练使用 `perf stat`、`perf record`、`perf script` 三件套；
+  3. 读懂火焰图——On-CPU、Off-CPU、Differential、Icicle 各自看什么；
+  4. 理解采样原理：PMU、`perf_event_open`、LBR、DWARF unwind；
+  5. 知道"Cache miss 30%"这种数字意味着什么、该查什么。
+- **前置阅读**：
+  - 《调试技巧和原理分析》第 08 节简述了 perf 原理；
+  - 《内存泄漏排查实战》—— heap profile 和本章的 CPU profile 是对偶工具。
+
+---
+
+## 01. 优化的前置纪律：三个"不要"和一个"先测量"
+
+真实的生产级性能优化，80% 的功夫不在写代码，而在建立正确的认知。先说四条纪律：
+
+**不要凭直觉优化。** 经典的例子：程序员花一整天把某段循环用 SSE 指令改写，跑 benchmark 一看快了 20%，心满意足上线——结果发现这段循环只占整个请求的 0.3% CPU 时间，实际收益 0.06%。代价是代码可读性下降、维护成本上升。
+
+**不要脱离硬件谈优化。** 一个函数的"慢"可能来自：分支预测失败、L1 cache miss、L2 cache miss、TLB miss、跨 NUMA 节点访存、false sharing、内存带宽打满、调度延迟、磁盘 IO、网络 IO……不同原因对应的优化手段完全不同。不先测清楚原因就开始改代码，等于蒙眼开枪。
+
+**不要只看 CPU 占用率。** CPU 100% 可能是在"真干活"，也可能是在"自旋等锁"；CPU 30% 可能是"活干得快"，也可能是"卡在 IO 等待"。单一指标永远不够，至少要同时看 CPU% / IO wait / context switch / 内存带宽。
+
+**先测量。** 这是 Knuth "过早优化是万恶之源" 的真正含义——不是"不要优化"，而是"**没测量就不要优化**"。测量之前任何优化都是赌博。
+
+下面的内容，围绕"怎么把'先测量'这件事做到位"展开。
+
+---
+
+## 02. perf 工具链概览
+
+Linux 下性能分析三巨头：
+
+- **perf**：内核原生，基于 `perf_event_open` 系统调用，功能最全；
+- **bpftrace / bcc**：基于 eBPF，适合做自定义钩子；
+- **Intel VTune / AMD uProf**：厂商工具，对本厂 CPU 分析最深，但不开源。
+
+本章以 perf 为主线。perf 最常用的五个子命令：
+
+| 子命令 | 用途 | 典型开销 |
+|--------|------|----------|
+| `perf stat` | 计数型测量：共执行了多少指令、多少 cache miss | < 1% |
+| `perf record` | 采样型测量：按频率抓调用栈 | 2-5% |
+| `perf report` | 交互查看 record 的结果 | 0 |
+| `perf script` | 把 record 结果以文本导出，喂给火焰图 | 0 |
+| `perf top` | 实时采样 + 刷新界面（类似 top） | 5-10% |
+
+一个标准的性能调查工作流：
+
+```
+perf stat     → 先看宏观指标，判断瓶颈大类（CPU / 内存 / 分支）
+    ↓
+perf record   → 针对大类定向采样（CPU 时间或 cache miss）
+    ↓
+perf script   → 导出原始样本
+    ↓
+flamegraph.pl → 生成火焰图
+    ↓
+读图 → 找出占比大的栈 → 定向优化
+```
+
+---
+
+## 03. perf stat：看硬件指标的 30 秒
+
+`perf stat` 不采样，它只统计"从开始到结束一共发生了多少次某个事件"。这些事件来自 CPU 的 **PMU（Performance Monitoring Unit）**——CPU 内部的一组硬件计数器。
+
+### 3.1 最简单的例子
+
+```bash
+perf stat -e cycles,instructions,cache-references,cache-misses,branches,branch-misses ./myprog
+```
+
+输出（示例）：
+
+```
+  9,521,683,432      cycles
+ 11,204,891,023      instructions       #  1.18  insn per cycle
+  1,052,983,100      cache-references
+    103,512,992      cache-misses       #  9.83 % of all cache refs
+  2,140,123,456      branches
+     21,543,210      branch-misses      #  1.00 % of all branches
+
+       3.204 seconds time elapsed
+```
+
+这几个指标足以判断**程序在做什么**：
+
+- **IPC (instructions per cycle)**：现代 CPU 能并行发射多条指令，理论上 IPC 可达 4。现实中：
+  - IPC > 2 → CPU 跑得很顺，优化空间有限；
+  - IPC ≈ 1 → 典型值，有一定优化余地；
+  - IPC < 0.5 → CPU 在"空转"等待，八成是访存/分支/锁争抢的问题。
+- **cache miss rate**：
+  - < 3% → 正常；
+  - 3-10% → 数据访问模式可能有问题，考虑 cache-friendly 重排；
+  - \> 10% → 大概率是内存访问模式糟糕（随机访问大数组、hashmap 访问、大 working set）。
+- **branch miss rate**：
+  - < 1% → 现代 CPU 分支预测器大多能应付；
+  - \> 5% → 有热点分支难以预测，考虑分支消除（查表、位运算、SIMD）。
+
+### 3.2 进阶事件：TLB、LLC、内存带宽
+
+```bash
+perf stat -e dTLB-loads,dTLB-load-misses,L1-dcache-load-misses,LLC-load-misses ./myprog
+```
+
+- **dTLB-load-misses**：数据 TLB 缺失，高的话考虑大页 / 缩减工作集；
+- **L1-dcache-load-misses**：L1 缓存缺失，可能要压缩数据结构、提升局部性；
+- **LLC-load-misses**：最后一级缓存缺失，每次都要跨内存控制器，一次几百周期的惩罚。
+
+### 3.3 分组采样与按线程
+
+```bash
+perf stat --per-thread -p <pid>
+perf stat -I 1000 -e cycles,instructions ./myprog   # 每 1000ms 打一行
+```
+
+`-I` 实时观测尤其好用——可以看到"进程在第 X 秒开始 IPC 从 1.5 掉到 0.3"，直接锁定出问题的时间窗口。
+
+---
+
+## 04. perf record + 火焰图：看哪一行代码最耗时
+
+`perf stat` 告诉你"有没有问题"，`perf record` 告诉你"问题在哪行"。
+
+### 4.1 最简用法
+
+```bash
+perf record -F 99 -g ./myprog
+perf script | ./flamegraph.pl > flame.svg
+```
+
+三个关键参数：
+- `-F 99`：每秒 99 次采样（选 99 不是 100 是为了避免与 100Hz 的定时任务共振）；
+- `-g`：记录调用栈（否则只有当前函数）；
+- `./myprog`：直接启动（也可以 `-p <pid>` 附加到运行中进程）。
+
+**强烈建议编译时加这三个选项**，否则栈回溯会断层：
+
+```
+-g -fno-omit-frame-pointer -O2
+```
+
+`-g` 给出调试信息；`-fno-omit-frame-pointer` 让 perf 能沿着帧指针回溯；`-O2` 保证贴近生产性能。
+
+### 4.2 火焰图的读法
+
+火焰图（Flame Graph）是 Brendan Gregg 发明的可视化法。规则极简：
+
+- **每一个矩形是一个函数**；
+- **矩形宽度 = 该函数（含子函数）在采样中出现的比例**；
+- **Y 轴是调用栈深度，父在下、子在上**；
+- **横向排序没有意义**（只是按名字字母排，不要当成时间序）；
+- **颜色也没有特别意义**（随机上色，方便区分相邻矩形）。
+
+看图的方法：**从上往下找"平顶"**——顶部宽平的矩形意味着 CPU 花了大量时间在这个函数自身（而非等子函数）。这就是热点。
+
+常见图样解读：
+
+- **一整个大平原都是 `__memcpy_avx2`**：数据复制量巨大，优化方向是减少复制（move 语义、零拷贝）；
+- **顶部平顶是 `std::unordered_map::find`**：大量 hash 查询，考虑换 `flat_hash_map`（开放寻址更 cache 友好）或批量查询；
+- **顶部平顶是 `pthread_mutex_lock`**：锁竞争严重，考虑分段锁、无锁队列、读写锁；
+- **"塔尖窄山峰"很多但没有平顶**：没有明显热点，CPU 时间均匀摊在各处——这种程序最难优化。
+
+### 4.3 On-CPU vs Off-CPU 火焰图
+
+经典火焰图显示的是**CPU 忙的时候在干什么**（On-CPU）。但很多性能问题是 **CPU 闲的时候在等什么**——等锁、等 IO、等调度——这叫 **Off-CPU**。
+
+Off-CPU 火焰图靠 bpftrace + perf sched 采样生成：
+
+```bash
+bpftrace -e 'kprobe:schedule { @[kstack] = count(); }'
+```
+
+当线程被 dequeue（调度器决定暂停它），抓一次它当前的栈，就能知道"它是在哪行代码上决定睡觉的"。展开后就是 Off-CPU flamegraph，能看到：
+- 某段代码经常进入 `futex_wait` → 锁竞争；
+- 某段代码经常进入 `io_schedule` → 磁盘/网络阻塞；
+- 某段代码经常进入 `nanosleep` → 代码里有人写了 sleep。
+
+**很多"CPU 占用低但 QPS 不上去"的服务，问题都在 Off-CPU 火焰图里**。
+
+### 4.4 Differential Flame Graph
+
+对比两个版本的火焰图：同一段代码，版本 A 花 5%、版本 B 花 15%，那段就会被染红。这对回归定位极其有用：
+
+```bash
+flamegraph.pl --title "A"   --negate < script_A.txt > fg_A.svg
+flamegraph.pl --title "B"   < script_B.txt > fg_B.svg
+# 或使用 difffolded.pl + flamegraph.pl 生成差值图
+```
+
+---
+
+## 05. 采样原理：为什么 perf 只慢 5%
+
+perf record 看起来在不停抓调用栈，为什么开销却只有 5%？答案藏在 PMU + NMI + `perf_event_open` 三件套里。
+
+### 5.1 PMU：硬件原生支持的计数器
+
+每颗现代 x86_64 CPU 都有 **PMU 单元**，内置几组可编程计数器（一般 4-8 个）。你可以编程告诉 PMU："每发生 100 万次 CPU cycles，给我发一个中断"。这是硬件行为，几乎零开销。
+
+### 5.2 NMI：中断不经过普通路径
+
+PMU 溢出时，CPU 触发 **NMI（Non-Maskable Interrupt）**——这是一种特殊中断，连普通 IRQ 屏蔽都挡不住。NMI 处理函数在内核 perf 子系统里，它做的事极简：
+
+1. 读取 NMI 发生时的 RIP（指令指针）；
+2. 沿着 `RBP` 链或 `.eh_frame` 信息回溯调用栈；
+3. 把栈和时间戳一起写进一个 **ring buffer**；
+4. 返回用户态。
+
+用户态的 `perf record` 进程定期把 ring buffer 里的数据 flush 到 `perf.data` 文件。整个过程采样点越少、写入越少，CPU 干活越纯粹——这就是 5% 开销的来源。
+
+### 5.3 perf_event_open：系统调用接口
+
+用户态的 perf 工具本质上是 `perf_event_open` 的包装：
+
+```c
+struct perf_event_attr attr = {
+    .type = PERF_TYPE_HARDWARE,
+    .config = PERF_COUNT_HW_CPU_CYCLES,
+    .sample_period = 10000000,  // 每 1kw cycles 采样一次
+    .sample_type = PERF_SAMPLE_IP | PERF_SAMPLE_CALLCHAIN,
+    // ...
+};
+int fd = syscall(SYS_perf_event_open, &attr, pid, cpu, -1, 0);
+```
+
+返回一个 fd，用户 `mmap` 它就能看到内核写入的采样数据。`fd` 还能 `ioctl` 启停、重置、过滤。
+
+bpftrace 本质上也是在 `perf_event_open` 基础上加了脚本化逻辑；`perf top` 只是不断读 ring buffer 并实时刷屏。
+
+### 5.4 skid 与栈回溯的"偏差"
+
+采样并不精确命中"溢出时那条指令"——NMI 有延迟（skid），指令指针可能偏离若干条。skid 导致的问题是"火焰图里热点函数偶尔错位到它的下一行"。解决办法是：
+
+- 用 **PEBS（Precise Event Based Sampling）**：Intel 硬件支持，采样时额外记录"上一条退役指令的精确地址"，skid 降到 1-2 条指令内。perf 通过 `:p`、`:pp` 修饰符启用：`-e cycles:pp`；
+- 用 **LBR（Last Branch Records）**：CPU 内部的一个 16/32 项的循环缓冲，记录最近的分支，可以回溯更深的栈而不依赖 frame pointer：`perf record --call-graph lbr`。
+
+### 5.5 调用栈回溯的三种方式
+
+`perf record -g` 的默认回溯方式有三种：
+
+- **fp (frame pointer)**：沿 `RBP` 链回溯，要求编译时 `-fno-omit-frame-pointer`。速度最快，开销最小，但现代编译器默认省略 frame pointer（`-O2` 默认 omit），所以常常抓不到。
+- **dwarf**：靠 `.eh_frame` 虚拟机重演栈帧还原。无需 frame pointer，但每次采样要保存整个用户栈（默认 8KB），开销大、磁盘占用大。命令：`--call-graph dwarf`。
+- **lbr**：用 CPU 硬件的 LBR 寄存器，零软件开销，但栈深度有限（16-32 层）。适合浅栈、极致低开销场景。
+
+工业推荐：**编译时一律加 `-fno-omit-frame-pointer`**，然后用默认的 fp 模式。牺牲不到 1% 性能换来干净准确的火焰图，划算。
+
+---
+
+## 06. 典型案例：四类热点的解法
+
+读懂火焰图只是起点，下面这些模式一旦识别就能立刻行动。
+
+### 6.1 热点是 `memcpy` / 容器拷贝
+
+典型来源：
+- 函数按值传大对象（`std::string`、`std::vector`）；
+- push_back 前未 reserve，导致重复扩容；
+- 返回大对象时没有 RVO（编译器没省略、或者 move ctor 没 noexcept）。
+
+解法：
+- 加 `const T&` / `T&&`；
+- 构造时 `.reserve(n)`；
+- 返回本地大对象用 `return std::move(x);` 或保证 `move` 是 `noexcept`。
+
+### 6.2 热点是哈希表 find/insert
+
+典型来源：
+- 大量 `std::unordered_map` 小查询；
+- 键是字符串（hash 自身就很慢）；
+- 开链哈希的 cache 局部性差。
+
+解法：
+- 换 `absl::flat_hash_map` / `robin_hood::unordered_map`（开放寻址，cache 友好）；
+- 用整数 ID 替代字符串键；
+- 批量查询可以一次性预取多个桶。
+
+### 6.3 热点是 `pthread_mutex_lock`
+
+典型来源：
+- 读多写少的场景用了互斥锁；
+- 全局大锁保护热点数据结构；
+- 多线程争抢同一个 atomic counter。
+
+解法：
+- 读写锁（`std::shared_mutex`）；
+- 分段锁（按 key 哈希分片）；
+- 原子计数器分为 per-CPU counter，查询时求和（Linux 内核的 percpu 模式）；
+- 完全无锁：lock-free queue、MPSC ringbuffer。
+
+### 6.4 热点是 cache miss 高但代码看不出毛病
+
+典型来源：
+- 数据结构按"符合领域模型"而非"符合访问模式"设计；
+- AoS (Array of Structures) vs SoA (Structure of Arrays)；
+- hot field 和 cold field 混在同一 cacheline；
+- false sharing：多线程各自的 counter 落在同一 cacheline，互相失效。
+
+解法：
+- 把 hot/cold field 拆到不同结构；
+- SoA 改造（一个字段一个数组）；
+- 用 `alignas(64)` 把并发写入字段独占 cacheline；
+- 用 `perf c2c` 专项分析跨 socket cache 竞争。
+
+---
+
+## 07. 编译器的"免费午餐"
+
+性能优化不全靠人肉。90% 场景下，把编译器"喂饱"就能解决大半问题。
+
+### 7.1 优化级别与 LTO
+
+- `-O2`：标准生产级，覆盖绝大多数优化（inline、constant propagation、vectorization 等）；
+- `-O3`：激进优化，偶尔因为过度 inline 导致 icache miss 增加，反而变慢。**建议先 `-O2`，再 benchmark 看 `-O3` 是否真提速**；
+- `-flto`：Link-Time Optimization，让跨 TU 的 inline / 死代码消除发生在链接阶段。典型收益 5-15%。代价是链接变慢、debug 体验变差；
+- `-fprofile-generate` / `-fprofile-use`：PGO（Profile Guided Optimization），先跑一版收集热点，再基于热点重编。典型收益 10-20%，适合稳定 workload 的服务。
+
+### 7.2 标记"热点"与"冷路径"
+
+```cpp
+if (__builtin_expect(rare_case, 0)) {   // 告诉编译器这个分支很少进
+    handle_rare();
+}
+
+[[likely]] if (common_case) { ... }     // C++20 语法
+[[unlikely]] if (rare_case) { ... }
+
+// 把冷函数放到单独 section，避免它进 icache
+[[gnu::cold]] void handle_error() { ... }
+```
+
+### 7.3 `__restrict__` 与别名
+
+```cpp
+void add(float* __restrict__ a, const float* __restrict__ b, int n) {
+    for (int i = 0; i < n; i++) a[i] += b[i];
+}
+```
+
+`__restrict__` 向编译器承诺"a 和 b 不重叠"，这样编译器能放心做 SIMD 向量化。去掉它编译器必须假定重叠，只能用标量指令。
+
+---
+
+## 08. 除了 perf，还有什么
+
+perf 是主力，但不是全部。常用辅助工具：
+
+- **valgrind --tool=callgrind / cachegrind**：模拟 CPU 缓存层次，给出精确 miss 计数。开销 50x，适合定向分析短程序。
+- **bpftrace**：自定义探针，观察内核事件、syscall 延迟、调度行为。
+- **strace -c**：统计各 syscall 的总耗时，找"意外的系统调用"。
+- **iostat / vmstat / mpstat**：系统级指标。CPU 低但响应慢时必查。
+- **gperftools (pprof)**：用户态 CPU profile，开销略小于 perf，支持彩色调用图。
+- **Intel VTune**：顶级商用工具，能逐指令分析流水线气泡，定位 frontend/backend bound。公司有授权强烈建议用一次。
+
+---
+
+## 09. 小结：性能优化的正确次序
+
+1. **定目标**：明确"快多少算成功"。没有目标的优化会永无止境。
+2. **先 stat、再 record**：先用 perf stat 判断瓶颈大类（IPC / cache / branch），避免优化方向错。
+3. **火焰图找热点**：确认热点在代码的哪一层级。
+4. **先改算法、再改实现**：O(n²) → O(n log n) 的收益，永远高于把常数项优化 10 倍。
+5. **每次改动都对比**：改一处、测一次，比较火焰图的差异。不要一次改 10 个地方然后说"变快了"。
+6. **回归保障**：把 benchmark 接入 CI，防止下次优化被别人的改动抵消。
+
+**最后一句话**：性能优化是工程，不是艺术。它的核心不是写出炫技代码，而是建立"改动 → 测量 → 对比"的闭环。perf 和火焰图的价值，就是让这个闭环的每一步都看得见。
+
+---
+
+## 10. 思考题
+
+1. 一个程序 IPC = 0.3、cache-miss rate = 15%，可能的原因是什么？你会沿哪条线索深挖？
+2. 为什么 perf record 推荐 `-F 99` 而不是 `-F 100`？
+3. `-fno-omit-frame-pointer` 会让程序慢多少？它保护的是哪种栈回溯？DWARF 回溯为什么不需要它？
+4. 火焰图上一条栈顶是 `__memset_avx2`、向下几层是 `std::vector<char>::resize`。你怎么优化？
+5. 什么场景下 `-O3` 会比 `-O2` 慢？用 perf 怎么验证？
+6. 一个 `std::atomic<int> counter` 在 32 线程并发自增时 perf 显示 cycles 巨多、instructions 较少。原因是什么？怎么改造？
+7. Off-CPU 火焰图显示大量时间花在 `futex_wait`。下一步怎么查是哪个锁的争抢？
+
+---
+
+## 11. 延伸阅读
+
+- Brendan Gregg, *Systems Performance*（业内圣经）
+- Brendan Gregg 博客：`https://www.brendangregg.com/`（火焰图发明人，大量 perf/bpftrace 实践）
+- Intel 64 and IA-32 Architectures Software Developer's Manual Vol. 3B（PMU、PEBS、LBR 细节）
+- Linux 内核 `tools/perf/Documentation/`（perf 自带文档）
+- 本书关联章节：
+  - 《调试技巧和原理分析》第 08 节——perf 采样原理的简述
+  - 《Sanitizer 全家桶实战》——运行时检测的另一面
+  - 《GDB 与 LLDB 调试实战手册》——当需要跳进热点函数看真实执行细节时
+

@@ -1,0 +1,554 @@
+# Sanitizer 全家桶实战：从"能跑"到"跑得稳"
+
+## 00. 文章元信息
+
+- **所属卷册**：卷四·开发技巧（工程实战篇）
+- **主题定位**：系统化梳理 Clang/GCC 提供的 Sanitizer 系列工具（ASan / UBSan / TSan / MSan / LSan），既讲"怎么用"，也讲"背后怎么实现"
+- **读者收益**：
+  1. 知道每一种 Sanitizer 能发现**哪一类 Bug**、不能发现哪一类；
+  2. 读懂 Sanitizer 报告里每一栏的含义，不再被 `==1234==ERROR` 吓到；
+  3. 理解 shadow memory、redzone、quarantine、vector clock、origin tracking 等底层机制；
+  4. 会把 Sanitizer 接入 CI，让一半的线上崩溃在提交 MR 的那一刻就被拦下。
+- **前置阅读**：
+  - 《从一次 BusError 排查 C++ 崩溃问题》——第 7.4 节简述了 ASan shadow memory；
+  - 《GDB 与 LLDB 调试实战手册》——和 Sanitizer 是互补关系，一个是"事后看现场"，一个是"运行时自动抓"；
+  - 《崩溃流程和捕获原理》——理解 SIGSEGV/SIGBUS/SIGABRT 的信号路径有助于看懂 ASan 报告。
+
+---
+
+## 01. 为什么需要 Sanitizer：传统调试的三大盲区
+
+C/C++ 语言历史悠久，一个经验丰富的工程师用 GDB+valgrind+printf 似乎就能排查大部分问题。但随着工程规模扩大、并发越来越多、供应链越来越深，传统调试手段开始暴露三大盲区。
+
+**盲区一：越界访问不是必然崩溃。**
+
+```c++
+int buf[10];
+buf[10] = 42;  // 越界一个元素
+```
+
+这段代码在 99% 的机器上不会崩。因为 `buf[10]` 落在栈帧的某个"无关变量"或"padding"上，写过去没事，读回来你甚至都看不出不对。只有极少数情况触发真正的 SIGSEGV。这类 Bug 会长期潜伏，直到某次编译器版本升级、某次栈帧布局微调，才以"灵异崩溃"的形式爆发。
+
+**盲区二：Use-After-Free 的"健忘症"。**
+
+```c++
+int* p = new int(42);
+delete p;
+// ...... 经过 50 行无关逻辑 ......
+*p = 100;  // 此处才崩
+```
+
+崩溃栈指向"50 行后的赋值"，GDB 能告诉你 `p` 是悬垂指针，但**没法告诉你它是在哪里被 delete 的**。你需要自己翻历史、自己加打印、自己猜。
+
+**盲区三：并发数据竞争的"时间折叠"。**
+
+```c++
+int counter = 0;
+// 线程 A: counter++;
+// 线程 B: counter++;
+```
+
+这段代码在 99.99% 的运行里结果都是 2（看起来"对"了）。它只有在某个特定调度窗口才丢更新。复现？靠运气。
+
+**Sanitizer 的设计目标**：把这三类问题从"偶发崩溃"变成"必然检测"。它的核心思路是——**在运行时给每一次内存访问、每一次同步操作都加一层"记账"**，一旦账本对不上就立刻报警。
+
+代价是：程序变慢 2-20 倍、内存占用翻倍。但对于开发阶段、CI 阶段、压测阶段而言，这个代价完全可以接受。
+
+---
+
+## 02. 家族成员一览：五大 Sanitizer 的分工
+
+| 名称 | 编译选项 | 检测范围 | 性能开销 | 内存开销 |
+|------|----------|----------|----------|----------|
+| **AddressSanitizer (ASan)** | `-fsanitize=address` | 堆/栈/全局越界、UAF、Double-free、内存泄漏（默认包含 LSan） | ~2x | ~2-3x |
+| **LeakSanitizer (LSan)** | `-fsanitize=leak` | 纯内存泄漏 | ~1.1x | ~1.5x |
+| **UndefinedBehaviorSanitizer (UBSan)** | `-fsanitize=undefined` | 有符号溢出、空指针解引用、除零、越界移位、错误类型转换等 UB | ~1.2-1.5x | 几乎无 |
+| **ThreadSanitizer (TSan)** | `-fsanitize=thread` | 数据竞争、死锁、错误同步 | ~5-15x | ~5-10x |
+| **MemorySanitizer (MSan)** | `-fsanitize=memory` | 未初始化内存读取 | ~3x | ~2x |
+
+几点关键认知：
+
+- **ASan ≠ valgrind**：valgrind 是动态二进制翻译，开销 20x 以上；ASan 是编译期插桩，开销只有 2x。生产压测环境完全可以开 ASan。
+- **ASan 和 TSan 互斥**：两者都要重写内存访问路径，不能同时链接。MSan 和 TSan/ASan 也互斥。能同时开的组合是：`ASan + UBSan`、`TSan + UBSan`、`MSan + UBSan`。
+- **MSan 的前置要求最苛刻**：它要求**所有依赖库**（包括 glibc）都用 MSan 重编。否则第三方库返回的"未初始化数据"会被误报。因此 MSan 在工业界使用率最低，一般只在 Chromium / LLVM 自测这种全源码可控项目里用。
+
+一个粗略的"选择决策树"：
+- 开发日常、CI 单测 → **ASan + UBSan**（性价比最高）
+- 多线程代码、锁密集场景 → **TSan + UBSan**
+- 有第三方库返回指针，想查"是不是没初始化" → 能接受重编依赖才用 **MSan**
+- 只想查内存泄漏、不想 2x 开销 → **LSan 单独跑**
+
+---
+
+## 03. ASan 实战：从 0 到 1 看懂一份报告
+
+### 3.1 最小复现
+
+```cpp
+// bug.cpp
+#include <cstdlib>
+int main() {
+    int* arr = (int*)malloc(10 * sizeof(int));
+    arr[10] = 42;   // 越界写
+    free(arr);
+    return 0;
+}
+```
+
+编译：
+
+```bash
+clang++ -O1 -g -fsanitize=address -fno-omit-frame-pointer bug.cpp -o bug
+./bug
+```
+
+三个编译选项缺一不可：
+- `-fsanitize=address`：启用 ASan 插桩；
+- `-g`：带调试信息，报告里才有行号；
+- `-fno-omit-frame-pointer`：保留帧指针，回溯栈帧才准。实测省略后回溯栈会"断层"。
+
+`-O1` 也是刻意的：`-O0` 下编译器插桩过多、速度慢；`-O1` 是 Google 推荐的平衡点，生产压测也用这个。
+
+### 3.2 报告解读
+
+```
+==12345==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x60200000ef68
+WRITE of size 4 at 0x60200000ef68 thread T0
+    #0 0x4b4d1f in main bug.cpp:4:12
+    #1 0x7f3b... in __libc_start_main
+    #2 0x41c... in _start
+
+0x60200000ef68 is located 0 bytes to the right of 40-byte region [0x60200000ef40,0x60200000ef68)
+allocated by thread T0 here:
+    #0 0x4a8c9f in malloc (bug+0x4a8c9f)
+    #1 0x4b4d12 in main bug.cpp:3:22
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow bug.cpp:4:12 in main
+```
+
+逐段拆解：
+
+1. **错误类别** `heap-buffer-overflow`：堆上越界。ASan 把错误类型分得很细——`stack-buffer-overflow`（栈越界）、`global-buffer-overflow`（全局区越界）、`heap-use-after-free`、`stack-use-after-return`、`double-free` 等，每一种对应不同的 shadow byte 取值。
+2. **操作类型** `WRITE of size 4`：4 字节写操作。这是 int 赋值。
+3. **线程编号** `thread T0`：主线程。多线程程序里 T1、T2 等。
+4. **当前栈回溯**：事故发生点。
+5. **受害区域**：`0 bytes to the right of 40-byte region`——"堆上那个 40 字节的块的右边外 0 字节"，说明恰好越界一个元素。这里的"0 bytes"容易误读，它意思是：当前访问地址 = 块末尾 + 0，也就是紧贴着。
+6. **分配栈回溯**：这块堆内存是在哪一行 `malloc` 出来的。**这一段才是 ASan 的杀手锏**——传统 GDB 无法告诉你堆块的分配点。
+
+对 UAF 场景，ASan 还会多给一段"这块内存是在哪里被 `free` 的"栈回溯，即所谓三段式报告（事故点 + 分配点 + 释放点），定位 UAF 速度相比 GDB 提升一个数量级。
+
+### 3.3 环境变量：调教 ASan 行为
+
+ASan 的运行时行为通过 `ASAN_OPTIONS` 环境变量控制，格式是冒号分隔的 `key=value`：
+
+```bash
+ASAN_OPTIONS="halt_on_error=0:detect_leaks=1:abort_on_error=1:print_stacktrace=1:log_path=/tmp/asan" ./bug
+```
+
+常用项速查：
+
+- `halt_on_error=0`：报错后不退出，继续跑（用于压测时收集多个错误）。默认是 1。
+- `detect_leaks=1`：开启内存泄漏检测（LSan 集成）。Linux 下默认 1，macOS 默认 0。
+- `abort_on_error=1`：用 abort() 退出而非 exit()，方便抓 coredump。
+- `print_stacktrace=1`：每次报错都打栈。
+- `log_path=/tmp/asan`：日志写到文件（文件名会带 PID 后缀）而非 stderr。CI 抓日志常用。
+- `detect_stack_use_after_return=1`：额外检测栈返回后访问（开销较大，默认关闭）。
+- `symbolize=1` + `external_symbolizer_path=/usr/bin/llvm-symbolizer`：指定符号化器。没它栈回溯就只有地址。
+
+---
+
+## 04. ASan 底层原理：shadow memory + redzone + quarantine
+
+ASan 报告好看，但要真正用好它，必须理解它的三件法宝。
+
+### 4.1 Shadow Memory：8:1 的内存映射
+
+ASan 给每 8 字节的真实内存配一字节的"影子内存"，记录这 8 字节里"有几个字节可以合法访问"：
+
+```
+影子值     含义
+  0        这 8 字节全可访问
+  1-7      前 N 字节可访问，后 (8-N) 字节是红区
+  负值     整 8 字节都是红区，不可访问
+           -1 (0xFF): heap left redzone
+           -2 (0xFE): heap right redzone
+           -3 (0xFD): freed heap (quarantine)
+           -5 (0xFB): stack redzone
+           ...
+```
+
+shadow memory 在进程启动时由 ASan runtime 通过 `mmap` 预留一大块虚拟地址空间（64 位 Linux 下约 16TB），**映射关系是纯算术**：
+
+```
+shadow_addr = (real_addr >> 3) + offset
+```
+
+其中 `offset` 是 `0x7fff8000`（x86_64 Linux 默认）。这样每次内存访问只需一条位移 + 一次加法就能找到对应 shadow byte。
+
+### 4.2 插桩逻辑：每次访问前的"查账"
+
+编译器在每条 load/store 前插入类似下面的伪代码：
+
+```cpp
+// 原代码：
+// *p = 42;
+
+// ASan 插桩后（逻辑伪码）：
+uintptr_t addr = (uintptr_t)p;
+int8_t shadow = *(int8_t*)((addr >> 3) + 0x7fff8000);
+if (shadow != 0) {
+    // 检查访问字节是否落在合法部分内
+    int8_t last_byte = (addr & 7) + sizeof(*p) - 1;
+    if (shadow < 0 || last_byte >= shadow) {
+        __asan_report_store4(addr);  // 报错并打栈
+    }
+}
+*p = 42;
+```
+
+两条指令的开销放大到每次访问 5-10 条指令——这就是 2x 性能损失的来源。对于热点循环，可以用 `__attribute__((no_sanitize("address")))` 局部关掉插桩。
+
+### 4.3 Redzone：让越界"一步就撞墙"
+
+光有 shadow memory 不够，因为普通 malloc 返回的内存**紧挨着下一块内存**，越界 1 字节也落在别的合法块里，shadow byte 是 0，检测不出来。
+
+解决方案是：**ASan 的 malloc 在真实分配前后各加一段 redzone**（默认 16-64 字节），redzone 对应的 shadow bytes 被置为 0xFA/0xFB 这类"毒值"。这样只要越界访问越过边界，就一定撞进 redzone，立即被发现。
+
+```
+实际内存布局：
+[left redzone 16B][ user malloc 40B ][right redzone 16B]
+shadow bytes:
+    -6 -6        0  0  0  0  0        -6 -6
+```
+
+代价是 ASan 下 malloc 的最小分配单元膨胀，是"内存开销 2-3x"的主要来源。
+
+### 4.4 Quarantine：延迟释放的"死牢"
+
+普通 `free` 会立刻把内存归还给 allocator 再分配；ASan 的 `free` 则把它塞进一个 **quarantine 队列**（默认 256MB），并把整块 shadow bytes 置为 0xFD（已释放）。只有 quarantine 满了才真正归还。
+
+这样在 UAF 发生时，shadow byte 还是 0xFD，ASan 能第一时间抓到，并能打出"释放点栈回溯"。quarantine 大小可通过 `ASAN_OPTIONS=quarantine_size_mb=512` 调整——越大漏检率越低、内存越占。
+
+### 4.5 栈变量：编译期插入 redzone
+
+栈上越界怎么抓？编译器在每个函数入口做手脚：
+
+```cpp
+// 原函数：
+void foo() { int a[10]; /* use a */ }
+
+// 插桩后（概念代码）：
+void foo() {
+    // 申请更大的栈空间：[red][a[10]][red]
+    char frame[16 + 40 + 16];
+    int* a = (int*)(frame + 16);
+    // 调用 __asan_poison_stack_memory 把两侧 redzone 对应的 shadow 置毒
+    __asan_poison_stack_memory(frame, 16);
+    __asan_poison_stack_memory(frame + 56, 16);
+    /* use a */
+    // 返回前清除 shadow
+    __asan_unpoison_stack_memory(frame, 72);
+}
+```
+
+这就是为什么 `-fno-omit-frame-pointer` 必须开——ASan 需要通过帧指针找到插桩时埋下的 shadow 区。
+
+---
+
+## 05. UBSan 实战：抓住所有"未定义行为"
+
+UBSan 专门检测那些**标准明文定义为 Undefined Behavior** 的操作。由于 UB 的后果是"编译器可以假设它永远不发生"，一旦触发代码行为往往完全不可预测。
+
+### 5.1 典型捕获场景
+
+```cpp
+#include <cstdint>
+int main(int argc, char**) {
+    int x = INT32_MAX;
+    int y = x + argc;   // 有符号溢出（UB）
+
+    int arr[3] = {1, 2, 3};
+    int i = 10;
+    int v = arr[i];     // 越界（UB）
+
+    int shift = 35;
+    int z = 1 << shift; // 移位超过宽度（UB）
+
+    int* p = nullptr;
+    int w = *p;         // 空指针解引用（UB）
+
+    return y + v + z + w;
+}
+```
+
+编译：
+
+```bash
+clang++ -O1 -g -fsanitize=undefined -fno-sanitize-recover=all bug.cpp
+```
+
+`-fno-sanitize-recover=all` 的作用是**让 UBSan 一检测到就 abort**。默认行为是只打日志、继续跑，便于收集，但在 CI 里必须 fail fast。
+
+### 5.2 UBSan 的细分子类
+
+UBSan 其实是十几个独立检查器的合集，可以按需开启：
+
+- `-fsanitize=signed-integer-overflow`
+- `-fsanitize=unsigned-integer-overflow`（注意：无符号溢出 C 标准规定是定义行为，不算 UB，这是个扩展）
+- `-fsanitize=shift`
+- `-fsanitize=integer-divide-by-zero`
+- `-fsanitize=null`
+- `-fsanitize=return`（非 void 函数没 return）
+- `-fsanitize=bounds`（数组越界，要有 `-O1+` 才能推断边界）
+- `-fsanitize=alignment`
+- `-fsanitize=vptr`（错误的 dynamic_cast、多态对象生命周期已结束仍调用虚函数）
+
+`-fsanitize=undefined` 是以上（除 `unsigned-integer-overflow`、`vptr` 外）的快捷集合。
+
+### 5.3 原理：编译期插入 if 检查
+
+UBSan 的实现极其"朴素"——编译器在每个潜在 UB 点前后插入一段 if：
+
+```cpp
+// 原代码：
+// int y = x + argc;
+
+// UBSan 插桩后：
+int y;
+if (__builtin_add_overflow(x, argc, &y)) {
+    __ubsan_handle_add_overflow_abort(&loc, x, argc);
+}
+```
+
+所以 UBSan 的开销非常小（5%-20%），而且**内存零额外占用**，唯一的副作用是二进制膨胀。因此**线上也可以开** UBSan（但要用 `-fsanitize-trap=undefined` 让它 UB 时直接 SIGILL，没有运行时报告，省去 runtime 依赖）。这是一种"硬化发布版"的思路，Chromium、Android 都在用。
+
+---
+
+## 06. TSan 实战：抓住所有数据竞争
+
+TSan 专门抓**多线程数据竞争**：两个以上线程同时访问同一块内存、至少一个是写、之间没有同步原语 happens-before 关系。
+
+### 6.1 最小复现
+
+```cpp
+#include <thread>
+int counter = 0;
+void worker() { for (int i = 0; i < 1000; i++) counter++; }
+int main() {
+    std::thread t1(worker), t2(worker);
+    t1.join(); t2.join();
+}
+```
+
+```bash
+clang++ -O1 -g -fsanitize=thread -fno-omit-frame-pointer race.cpp -pthread
+./a.out
+```
+
+输出（节选）：
+
+```
+WARNING: ThreadSanitizer: data race (pid=12345)
+  Write of size 4 at 0x563... by thread T2:
+    #0 worker race.cpp:4:38
+    ...
+  Previous write of size 4 at 0x563... by thread T1:
+    #0 worker race.cpp:4:38
+    ...
+  Location is global 'counter' of size 4 at 0x563...
+```
+
+TSan 不仅告诉你"有竞争"，还同时给出**两个冲突访问的栈**和**涉及的变量符号**。
+
+### 6.2 底层原理：vector clock + shadow cell
+
+TSan 的核心数据结构叫 **vector clock**（向量时钟）。每个线程维护一个"时钟向量"，记录自己"见过"的每个线程的时间戳。每次遇到同步点（锁、原子、fork/join、条件变量）时，向量时钟会在两个线程间合并——这就建立了 happens-before 关系。
+
+内存访问的"记账"方式是：TSan 给每 8 字节真实内存配 **4 个 shadow cell**（64 位每个），记录最近 4 次访问的：(线程 ID、访问类型、时钟值)。每次新访问到来时：
+
+1. 扫描这 4 个 shadow cell；
+2. 对每个旧访问，看双方是不是同一线程（同线程必无竞争）；
+3. 若不同线程，检查两者的 vector clock 是否有 happens-before 关系；
+4. 若两个都是读 → 无竞争；
+5. 否则 → **数据竞争**，立即报警。
+
+这套模型与《调试技巧和原理分析》里介绍的 TSan 算法完全一致。附带提一点：TSan 检测的是"竞争"，不是"bug"——所以 `std::atomic` 上的 relaxed 操作不会报警，因为 TSan 知道那是合法的"无序同步"。
+
+### 6.3 TSan 的限制
+
+- **开销大**：CPU 5-15x、内存 5-10x。不能长期开在生产环境。
+- **动态库要重编**：TSan 和 ASan 一样，无法与未插桩的线程库（如某些闭源 .so）共存——会漏报。
+- **不支持 fork 后不 exec**：TSan 内部用大量 TLS，fork 后直接返回父进程视图容易乱套。
+- **和信号处理打架**：信号处理函数里的 TSan 报告可能死锁。生产上通常配 `TSAN_OPTIONS="second_deadlock_stack=1:halt_on_error=1"`。
+
+---
+
+## 07. LSan 与 MSan 速写
+
+### 7.1 LSan：纯泄漏检测
+
+ASan 默认集成了 LSan（编译时 `-fsanitize=address` 自动包含）。独立使用 LSan 的场景是：你不需要越界/UAF 检测，只想查泄漏，此时用 `-fsanitize=leak` 可以省掉 ASan 2x 的开销。
+
+LSan 的工作原理很像 GC 的 mark-sweep：程序退出时（或主动调用 `__lsan_do_recoverable_leak_check`），遍历所有堆块，从"根集合"（全局变量、线程栈、寄存器）开始扫描，能到达的块是"活的"，到不了的就是泄漏。
+
+LSan 能区分两种泄漏：
+- **direct leak**（直接泄漏）：根集合到不了的块；
+- **indirect leak**（间接泄漏）：活块持有的子块（实际上应该说是"跟着 direct leak 一起泄漏"）。
+
+### 7.2 MSan：未初始化内存检测
+
+MSan 给每 1 字节真实内存配 1 字节 shadow（1:1），每一 bit 记录"这一位有没有被写过"。读到被"毒化"的位就报错。
+
+编译：
+
+```bash
+clang++ -O1 -g -fsanitize=memory -fsanitize-memory-track-origins=2 -fno-omit-frame-pointer bug.cpp
+```
+
+`-fsanitize-memory-track-origins=2` 是 MSan 杀手锏：它不仅告诉你"读了一个未初始化的字节"，还告诉你"这个字节最初是在哪里分配却没初始化的"（原点追踪）。代价是内存再翻一倍。
+
+**MSan 最大阻碍是"所有代码都必须 MSan 重编"**——libc、libc++、甚至静态链接进来的第三方库都得重编一份 MSan 版本。Google 为此专门维护 libc++ 的 MSan 构建；其他项目实践起来非常痛苦。常见的替代方案是用 ASan + `_FORTIFY_SOURCE` + Valgrind 的组合覆盖类似场景。
+
+---
+
+## 08. 组合使用：把 Sanitizer 接入 CI
+
+### 8.1 常见组合矩阵
+
+| 构建配置 | 目的 | 典型场景 |
+|----------|------|----------|
+| `-fsanitize=address,undefined` | 发现内存+UB 问题 | 开发日常、提交前 |
+| `-fsanitize=thread,undefined` | 发现并发+UB 问题 | 多线程模块的单测 |
+| `-fsanitize=undefined -fsanitize-trap=undefined` | UB 硬化的 Release | 对外发版 |
+| `-fsanitize=fuzzer,address,undefined` | 模糊测试找崩溃 | 库/协议栈的安全扫描 |
+
+### 8.2 一个典型的 CMake Preset
+
+```cmake
+option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
+option(ENABLE_TSAN "Enable ThreadSanitizer"  OFF)
+option(ENABLE_UBSAN "Enable UBSan"           OFF)
+
+if(ENABLE_ASAN AND ENABLE_TSAN)
+    message(FATAL_ERROR "ASAN and TSAN are mutually exclusive")
+endif()
+
+if(ENABLE_ASAN)
+    add_compile_options(-fsanitize=address -fno-omit-frame-pointer -O1)
+    add_link_options(-fsanitize=address)
+endif()
+
+if(ENABLE_TSAN)
+    add_compile_options(-fsanitize=thread -fno-omit-frame-pointer -O1)
+    add_link_options(-fsanitize=thread)
+endif()
+
+if(ENABLE_UBSAN)
+    add_compile_options(-fsanitize=undefined -fno-sanitize-recover=all)
+    add_link_options(-fsanitize=undefined)
+endif()
+```
+
+配合 CI 里三个独立 job：
+
+```yaml
+# 以 GitLab CI 为例
+sanitizer:asan:
+  script:
+    - cmake -B build -DENABLE_ASAN=ON -DENABLE_UBSAN=ON
+    - cmake --build build -j
+    - ASAN_OPTIONS=abort_on_error=1:detect_leaks=1 ctest --test-dir build
+
+sanitizer:tsan:
+  script:
+    - cmake -B build -DENABLE_TSAN=ON -DENABLE_UBSAN=ON
+    - cmake --build build -j
+    - TSAN_OPTIONS=halt_on_error=1 ctest --test-dir build
+
+sanitizer:ubsan-trap:
+  script:
+    - cmake -B build -DENABLE_UBSAN=ON -DCMAKE_CXX_FLAGS="-fsanitize-trap=undefined"
+    - cmake --build build -j
+    - ctest --test-dir build
+```
+
+### 8.3 常见误报与抑制文件
+
+工业界最常遇到的误报来自：
+- **第三方闭源库**（ASan 只插桩了你的代码，不能识别人家 allocator 的"合法越界")；
+- **某些标准库实现**（比如老版本 `std::string::find` 会读越界，因为用 SSE 优化按 16 字节读取，实际越界的字节会被掩掉）；
+- **内存池实现**（自定义 allocator 常常和 ASan 冲突）。
+
+解决办法是 **suppression file**：
+
+```
+# asan_suppressions.txt
+leak:libsome_third_party.so
+interceptor_via_lib:libfoo.so.1
+```
+
+运行时：
+
+```bash
+LSAN_OPTIONS=suppressions=asan_suppressions.txt ./my_test
+```
+
+TSan 也支持：
+
+```
+# tsan_suppressions.txt
+race:SomeLegacyFunction
+deadlock:libold_lock.so
+```
+
+---
+
+## 09. 性能调优与使用建议
+
+1. **开发机用 `-O1`，不要 `-O0`**。`-O0` 下 ASan 插桩后慢 10 倍，测试体验崩溃；`-O1` 下慢 2 倍，且行号依然准确（因为有 `-g`）。
+2. **单测优先，集成测试其次**。Sanitizer 的价值在"**缩短发现问题的周期**"，越早跑越值。在单测阶段跑 ASan 比在压测阶段跑 ASan 收益高一个数量级。
+3. **CI 并行跑 ASan/TSan/UBSan 三个 job**。它们互斥且各有分工，但可以在不同物理 runner 并行，不增加 CI 时长。
+4. **Release 版可以开 UBSan-trap**。`-fsanitize=undefined -fsanitize-trap=undefined` 开销极低、不需要 runtime 依赖，是"零成本硬化"的典范。Chromium、Android 内核都在用。
+5. **别和自定义 allocator 打架**。如果你的项目有 tcmalloc / jemalloc / 自研池子，ASan 会替换 malloc 符号，两者冲突。编译时加 `-DNO_TCMALLOC` 或链接时 `--undefined=__asan_default_options` 保证 ASan 先胜。
+6. **抓 coredump 配合**。`ASAN_OPTIONS=abort_on_error=1 halt_on_error=1` 配合 `ulimit -c unlimited`，出错时会生成 core，配合 GDB 可以看得更细——见《GDB 与 LLDB 调试实战手册》第 5 章。
+
+---
+
+## 10. 小结：Sanitizer 是运行时的"类型系统"
+
+回头看这五大 Sanitizer，它们的共同点是——**把"本应在编译期通过类型系统保证"的规则，搬到运行时用 shadow memory + 插桩来兜底**：
+
+- C++ 类型系统没法保证"指针不越界" → ASan 用 redzone + shadow byte 兜底；
+- C++ 语言规范默许"有符号溢出未定义" → UBSan 用插桩 if 兜底；
+- C++ 内存模型的 happens-before 规则是"程序员口头承诺" → TSan 用 vector clock 兜底；
+- C++ 不强制变量初始化 → MSan 用按位 shadow 兜底。
+
+所以不夸张地说，**Sanitizer 是 C++ 补上"运行时安全"短板的最重要工具**。它和 Rust 的借用检查器在思想上殊途同归——区别只在于：Rust 把检查放在编译期拒绝不合规代码，C++ 把检查放在运行期把不合规行为变成爆炸。
+
+理解了它们的原理，就能理解"为什么 ASan 能精确告诉你越界 1 字节"、"为什么 TSan 能在 1000 行代码里挑出唯一那个竞争"，也就能在遇到误报时知道从哪里下手。
+
+---
+
+## 11. 思考题
+
+1. 某个结构体大小是 40 字节，ASan 在它左右分别插入 16 字节 redzone，那么 shadow memory 里这 72 字节对应的 9 个 shadow byte 分别是什么值？
+2. 为什么 `-fsanitize=address` 和 `-fsanitize=thread` 不能同时使用？从 shadow memory 布局角度解释。
+3. UBSan 检测到"`1 << 35`"这种移位越界，它在编译期是怎么做到的？如果 shift 是运行时才能确定的变量，还能检测吗？
+4. TSan 报告里经常出现"previous write by thread T0"，但 T0 已经 join 掉了，为什么 TSan 还能打出当时的栈？
+5. 一段代码在 ASan 下不报错，但在 Valgrind 下报 "uninitialised value"——为什么？该用哪个 Sanitizer 替代 Valgrind 来做 CI？
+6. 为什么 `-fsanitize=memory` 的工业可用性远低于其他 Sanitizer？如何用 ASan + 习惯约束来近似替代？
+
+---
+
+## 12. 延伸阅读
+
+- AddressSanitizer 原始论文：*AddressSanitizer: A Fast Address Sanity Checker*（USENIX ATC 2012）
+- ThreadSanitizer v2 论文：*ThreadSanitizer: data race detection in practice*（WBIA 2009、后续 2014 v2）
+- Clang 官方文档：`https://clang.llvm.org/docs/AddressSanitizer.html` 及同目录下的其他 Sanitizer 专页
+- Google fuzzing 手册中的 Sanitizer 整合章节
+- 本书关联章节：
+  - 《从一次 BusError 排查 C++ 崩溃问题》第 7.4 节——一次真实的 ASan shadow memory 解析
+  - 《调试技巧和原理分析》第 07/08 节——TSan 与 perf 采样原理
+  - 《崩溃流程和捕获原理》第 06/07 节——DWARF 与异步信号安全
+  - 《GDB 与 LLDB 调试实战手册》——Sanitizer 报错后用调试器深挖现场的第二步
+
