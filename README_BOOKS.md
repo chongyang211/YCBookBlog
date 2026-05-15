@@ -1,249 +1,166 @@
-#### 目录介绍
-- 1.Java方面书籍
-- 2.Android书籍
-- 3.网络协议
-- 4.数据结构与算法
-- 5.flutter书籍
-- 6.C/C++书籍
-- 7.嵌入式书籍
-- 8.计算机基础
-- 9.操作系统
-- 10.体系结构
-- 11.数据库
-- 12.设计模式
-- 13.软件工程
-
-
-### 备注信息
-- 这里仅仅只是推荐自己看过的书籍……
-
-
-## 1.Java方面书籍
-- Java并发编程实战
-- Java编程思想
-- 深入理解Java虚拟机
-- Java性能优化权威指南
-- java并发编程的艺术
-- Head First 设计模式
-- 代码整洁之道
-
-## 2.Android方法书籍
-
-[Android开发权威指南](https://book.douban.com/subject/25741542/) 
-
-本书是一本全面介绍Android应用开发的专著。
-
-[第一行代码](https://book.douban.com/subject/26915433/)
-
-本书被广大Android 开发者誉为“Android 学习第一书”。全书系统全面、循序渐进地介绍了Android软件开发的必备知识、经验和技巧。
-
-[Android内核剖析](https://book.douban.com/subject/6811238/)  
-
-本书详细分析了Android内核的内部机制，包括窗口管理系统、Activity管理系统、输入法框架、编译系统等，为Android内核定制及高级应用程序开发提供技术参考。
-
-[Android开发艺术探索](https://book.douban.com/subject/26599538/)  
-
-本书是一本Android进阶类书籍，采用理论、源码和实践相结合的方式来阐述高水准的Android应用开发要点。
-
-[Android源码设计模式解析与实战](https://book.douban.com/subject/26644935/)    
-  本书从Android源码的角度由浅入深地剖析设计模式的运用，让工程师们把设计与模式重视起来，提升自己的设计能力与代码质量。
-
-[深入解析Android 5.0系统](https://book.douban.com/subject/26377840/)    
-  本书详细剖析了最新Android 5.0 系统主要框架的原理和具体实现。
-
-[深入理解Android内核设计思想](https://book.douban.com/subject/25921329/)   
-  本书从操作系统的基础知识入手，全面剖析进程/线程、内存管理、Binder机制、GUI显示系统、多媒体管理、输入系统等核心技术在Android中的实现原理。
-
-[Android软件安全与逆向分析](https://book.douban.com/subject/20556210/)    
-  本书由浅入深、循序渐进地讲解了Android 系统的软件安全、逆向分析与加密解密技术。包括Android软件逆向分析和系统安全方面的必备知识及概念、如何静态分析Android 软件、如何动态调试Android 软件、Android 软件的破解与反破解技术的探讨，以及对典型Android 病毒的全面剖析。
-
-
-
-## 3.网络协议
-
-[计算机网络](https://book.douban.com/subject/10510747/)  
-
-本书是国内外使用最广泛、最权威的计算机网络经典教材。全书按照网络协议模型自下而上（物理层、数据链路层、介质访问控制层、网络层、传输层和应用层）有系统地介绍了计算机网络的基本原理，并结合Internet给出了大量的协议实例。在讲述网络各层次内容的同时，还与时俱进地引入了最新的网络技术，包括无线网络、3G蜂窝网络、RFID与传感器网络、内容分发与P2P网络、流媒体传输与IP语音，以及延迟容忍网络等。
-
-[计算机网络：自顶向下方法](https://book.douban.com/subject/26176870/)  
-
-本书首创采用自顶向下的方法讲解计算机网络的原理和协议，出版以来已被几百所大学和学院选用，是业界最经典的计算机网络教材之一。
-
-[深入理解计算机网络](https://book.douban.com/subject/20560942/)  
-
-本书结合最新计算机网络技术，全面、系统、深入地阐述了计算机网络的体系结构、工作原理，以及各种通信协议实现原理，能满足读者系统和深入地学习和研究计算机网络技术的需求。
-
-[TCP/IP详解 卷1：协议](https://book.douban.com/subject/1088054/)  
-
-TCP/IP详解·卷1：协议是一本完整而详细的TCP/IP协议指南，描述了属于每一层的各个协议以及它们如何在不同操作系统中运行。
-
-[TCP/IP详解 卷2：实现](https://book.douban.com/subject/1087767/)  
-
-TCP/IP详解·卷2：实现完整而详细地介绍了TCP/IP协议是如何实现的。
-
-[TCP/IP详解 卷3：TCP事务协议、HTTP、NNTP和UNIX域协议](https://book.douban.com/subject/1058634/)  
-
-TCP/IP详解·卷3：TCP事务协议、HTTP、NNTP和UNIX域协议是“TCP/IP详解系列”的延续。主要内容包括：TCP事务协议，即T/TCP，这是对TCP的扩展，使客户-服务器事务更快、更高效和更可靠。
-
-[TCP/IP协议族](https://book.douban.com/subject/5386194/)  
-
-世界著名计算机教材精选·TCP/IP协议族(第4版)是介绍TCP/IP协议族的经典图书的最新版本。
-
-[HTTP权威指南](https://book.douban.com/subject/10746113/)  
-
-本书详细解释了HTTP协议，包括HTTP是如何工作的，如何用HTTP来开发基于Web的应用程序，核心的因特网协议如何与架构构建块交互，如何正确实现因特网客户和服务器等。
-
-
-## 4.数据结构与算法
-
-[数据结构与算法分析：C语言描述](https://book.douban.com/subject/1139426/)  
-  本书是Data Structures and Algorithm Analysis in C一书第2版的简体中译本，原书曾被评为20世纪顶尖的30部计算机著作之一。在本书中，作者更加精炼并强化了他对算法和数据结构方面创新的处理方法。通过C程序的实现，着重阐述了抽象数据类型的概念，并对算法的效率、性能和运行时间进行了分析。
-
-[数据结构与算法分析：Java语言描述](https://book.douban.com/subject/3351237/)  
-  本书是国外数据结构与算法分析方面的经典教材，使用卓越的Java编程语言作为实现工具讨论了数据结构（组织大量数据的方法）和算法分析（对算法运行时间的估计）。 随着计算机速度的不断增加和功能的日益强大，人们对有效编程和算法分析的要求也不断增长。本书把算法分析与最有效率的Java程序的开发有机地结合起来，深入分析每种算法，内容全面、缜密严格，并细致讲解精心构造程序的方法。
-
-[数据结构（C语言版）](https://book.douban.com/subject/1886174/)  
-  数据结构(C语言版)针对采用ANSI C实现数据结构进行了全面的描述和深入的讨论。书中详细讨论了栈、队列、链表以及查找结构、高级树结构等功能，对裴波那契堆、伸展树、红黑树、2-3树、2-3-4树、二项堆、最小-最大堆、双端堆等新的数据结构进行了有效分析。
-
-[数据结构（C语言版） 严蔚敏](https://book.douban.com/subject/2024655/)  
-  本书是为“数据结构”课程编写的教材，也可作为学习数据结构及其算法的C程序设计的参数教材。
-  本书的前半部分从抽象数据类型的角度讨论各种基本类型的数据结构及其应用；后半部分主要讨论查找和排序的各种实现方法及其综合分析比较。
-
-[算法导论](https://book.douban.com/subject/20432061/)  
-  本书将严谨性和全面性融为一体，深入讨论各类算法，并着力使这些算法的设计和分析能为各个层次的读者接受。
-
-[算法](https://book.douban.com/subject/19952400/)  
-  本书是算法领域经典的参考书，涵盖所有程序员必须掌握的50种算法，全面介绍了关于算法和数据结构的必备知识，并特别针对排序、搜索、图处理和字符串处理进行了论述。
-
-## 5.flutter书籍
-
-
-## 6.C/C++书籍
-
-C语言基础版本书籍：
-
-[C Primer Plus]()
-
-C++编辑书籍：
-
-[C++ Primer Plus]()
-
-## 7.嵌入式书籍
-
-[深入理解LINUX内核](https://book.douban.com/subject/2287506/)  
-  本书指导你对内核中使用的最重要的数据结构、算法和程序设计诀窍进行一次遍历。通过对表面特性的探究，作者给那些想知道自己机器工作原理的人提供了颇有价值的见解。
-
-[深入Linux内核架构](https://book.douban.com/subject/4843567/)  
-  本书讨论了Linux内核的概念、结构和实现。
-
-[Linux程序设计](https://book.douban.com/subject/4831448/)  
-  本书是Linux程序设计领域的经典名著，以简单易懂、内容全面和示例丰富而受到广泛好评。
-
-[Linux内核设计与实现](https://book.douban.com/subject/6097773/)  
-  本书详细描述了Linux内核的主要子系统和特点，包括Linux内核的设计、实现和接口。
-
-[Linux/Unix设计思想](https://book.douban.com/subject/7564417/)    
-  本书将Linux的开发方式与Unix的原理有效地结合起来，总结出Linux与Unix软件开发中的设计原则。
-
-[鸟哥的Linux私房菜：基础学习篇(第3版)](https://book.douban.com/subject/4889838/)  
-  本书是最具知名度的Linux入门书鸟哥的Linux私房菜基础学习篇的最新版，全面而详细地介绍了Linux操作系统。本书内容丰富全面，基本概念的讲解非常细致，深入浅出。各种功能和命令的介绍，都配以大量的实例操作和详尽的解析。本书是初学者学习Linux不可多得的一本入门好书。
-
-[鸟哥的Linux私房菜：服务器架设篇(第3版)](https://book.douban.com/subject/10794788/)     
-  您已有Linux基础，想要进一步学习服务器架设？还想了解如何维护与管理您的服务器？本书是您绝佳的选择。
-
-[UNIX环境高级编程](https://book.douban.com/subject/1788421/)  
-  本书是被誉为UNIX编程“圣经”的Advanced Programming in the UNIX Environment一书的更新版。本书内容权威，概念清晰，阐述精辟，对于所有层次UNIX程序员都是一本不可或缺的参考书。
-
-## 8.计算机基础
-
-[计算机科学导论](https://book.douban.com/subject/1142213/)  
-
-本书是大学计算机相关专业的基础课教材，涉及到计算机科学的各个方面。本书着重讲解基本概念而不是数学模型和技术细节，通过大量的图表和演示范例讲解计算机科学的基础知识。
-
-[深入理解计算机系统](https://book.douban.com/subject/5333562/)  
-
-本书从程序员的视角详细阐述计算机系统的本质概念，并展示这些概念如何实实在在地影响应用程序的正确性、性能和实用性。
-
-## 9.操作系统
-
-[现代操作系统](https://book.douban.com/subject/3852290/)  
-
-本书是操作系统领域的经典之作，书中集中讨论了操作系统的基本原理，包括进程、线程、存储管理、文件系统、输入/输出、死锁等，同时还包含了有关计算机安全、多媒体操作系统、掌上计算机操作系统、微内核、多核处理机上的虚拟机以及操作系统设计等方面的内容。
-
-[操作系统：精髓与设计原理](https://book.douban.com/subject/5064311/)   
-
-本书不仅全面地讲述了操作系统的基本概念、原理和方法，还清楚地展现了当代操作系统的本质和特点。作者针对近几年操作系统领域的最新变化，对操作系统的设计原理进行深入的阐述，同时将其对操作系统整个领域全面而深入的理解呈现给读者。
-
-## 10.体系结构
-
-[计算机体系结构：量化研究方法](https://book.douban.com/subject/20452387/)   
-
-本书是最权威的计算机体系结构著作，是久负盛名的经典作品。书中系统地介绍了计算机系统的设计基础、指令集系统结构、流水线和指令集并行技术、层次化存储系统与存储设备、互连网络以及多处理器系统等重要内容。
-
-[计算机组成与设计：硬件/软件接口](https://book.douban.com/subject/2110638/)  
-
-本书是计算机组成的经典教材。全书着眼于当前计算机设计中最基本的概念，展示了软硬件间的关系，并全面介绍当代计算机系统发展的主流技术和最新成就。
-
-[计算机组成与体系结构：性能设计](https://book.douban.com/subject/6398113/)  
-
-本书是介绍当代计算机体系主流技术和最新技术的优秀教材，以Intel x86和ARM两个处理器系列为例，深入讨论了计算机组成与体系结构的基本原理和概念，并将它们运用到当代计算机系统设计的问题中。
-
-[计算机组成与体系结构](https://book.douban.com/subject/1881545/)  
-
-本书系统介绍计算机组成与体系结构，主要内容包括：数字逻辑和数字系统、机器层次的数据表示方法、汇编层次的机器组织和结构、存储器的组成和结构、接口和通信、功能组织、多处理器和可供选择的其他结构、性能增强、网络结构和分布式计算机系统等。
-
-[计算机组织与体系结构](https://book.douban.com/subject/1737686/)  
-
-本书是介绍当代计算机体系主流技术的最新技术的优秀教材。作者以Intel Pentium 4和IBM/Motorola PowerPC作为考察实例，将当代计算机系统性能问题和计算机组织与体系结构的基本概念及原理紧密联系起来。
-
-## 11.数据库
-
-[数据库系统概念](https://book.douban.com/subject/10548379/)  
-  本书是数据库领域的殿堂级作品，是夯实数据库理论基础，增强数据库技术内功的必备之选，对深入理解数据库，深入研究数据库，深入操作数据库都具有极强的指导作用。
-
-[数据库系统实现](https://book.douban.com/subject/4838430/)  
-  本书是关于数据库系统实现方面内容最为全面的著作之一，是美国斯坦福大学计算机科学专业数据库系列课程第二门课程的指定教材。
-
-[高性能MySQL](https://book.douban.com/subject/23008813/)  
-  本书是MySQL 领域的经典之作，拥有广泛的影响力。
-
-[MySQL 5 权威指南](https://book.douban.com/subject/1909003/)  
-  本书是MySQL数据库管理员和开发人员的必备参考书。
-
-[MongoDB权威指南](https://book.douban.com/subject/25798102/)  
-  本书是一本广受好评的MongoDB权威著作。书中介绍了面向文档的存储方式及利用MongoDB的无模式数据模型处理文档、集合和多个数据库，讲述了如何执行基本的写操作以及各种复杂的条件查询，还介绍了索引、聚合工具以及其他高级查询技术，另外对监控、安全性和身份验证、备份和修复、水平扩展MongoDB数据库等内容也有所涉及。
-
-[Redis设计与实现](https://book.douban.com/subject/25900156/)  
-  本书系统而全面地描述了Redis内部运行机制，是NoSQL数据库开发人员案头必备。
-
-[NoSQL精粹](https://book.douban.com/subject/25662138/)  
-  NoSQL精粹为考虑是否可以使用和如何使用NoSQL数据库的企业提供了可靠的决策依据。书中全方位比较了关系型数据库与NoSQL数据库的异同；分别以Riak、MongoDB、Cassandra和Neo4J为代表，详细讲解了键值数据库、文档数据库、列族数据库和图数据库这4大类NoSQL数据库的优劣势、用法和适用场合；深入探讨了实现NoSQL数据库系统的各种细节，以及与关系型数据库的混用。
-
-## 12.设计模式
-
-[设计模式：可复用面向对象软件的基础](https://book.douban.com/subject/1052241/)  
-  本书是引导读者走出软件设计迷宫的指路明灯，凝聚了软件开发界几十年设计经验的结晶。四位顶尖的面向对象领域专家精心选取了具有价值的设计实践，加以分类整理和命名，并用简洁而易于重用的形式表达出来。本书已经成为面向对象技术人员的圣经和词典，书中定义的23个模式逐渐成为开发界技术交流所必备的基础知识和语汇。
-
-[Head First 设计模式](https://book.douban.com/subject/2243615/)  
-  O'Reilly：Head First设计模式（中文版）趋近完美，因为它在提供专业知识的同时，仍然具有相当高的可读性。
-
-[大话设计模式](https://book.douban.com/subject/2334288/)  
-  本书是准备攀登面向对象编程高峰朋友们的引路人和提携者，是学习、体会和领悟了众多大师智慧结晶后的图书作品，是你深入理解和感受GoF的设计模式及其它大师作品的必备书籍。本书通篇都是以情景对话的形式，用多个小故事或编程示例来组织讲解GoF总结的23个设计模式。
-
-## 13.软件工程
-
-[软件工程：实践者的研究方法](https://book.douban.com/subject/6047742/)  
-  软件工程:实践者的研究方法(原书第7版)自1982年发行第1版以来，一直受到软件工程界的高度重视，成为高等院校计算机相关专业软件工程课程的重要教学参考书。近30年来，它的各个后继版本一直都是软件专业人土熟悉的读物，在国际软件工程一界享有无可置疑的权威地位。它在全面而系统地介绍软件工程的有关概念、原则、方法和工具方面获得了广大读者的好评。
-
-[软件工程](https://book.douban.com/subject/6109617/)  
-  本书是系统介绍软件工程理论的经典教材，自1982年初版以来，随着软件工程学科的发展不断更新版本，影响了一代又一代软件工程人才，对学科的发展建设也产生了积极影响。全书分四部分完整讨论了软件工程的各级段内容，是软件工程和系统工程专业本科和研究生的优秀教材，也是软件工程师必备的参考书籍。
-
-[面向对象分析与设计](https://book.douban.com/subject/3892590/)  
-  本书是一本注重实效的书，面向架构师和软件开发者等软件工程实践者的实际需要，通过大量例子说明了基本概念，解释了方法，并展示了在不同领域的成功应用。
-
-[深入浅出面向对象分析与设计](https://book.douban.com/subject/3530721/)  
-  本书将告诉你如何分析、设计以及撰写真正面向对象的软件；容易重用、好维护、可扩展的软件；不再使你心碎的软件；让你增添新功能而不会破坏旧机制的软件。
-
-
-
-
+# 混合模式（Hybrid）技术方案
+
+## 1. 背景与目标
+
+混合模式 = **识别 + 注册** 二合一：用户刷掌后，设备自动判断是已注册还是未注册：
+
+- **已注册** → 直接识别成功，回传 `user_id + otc`；
+- **未注册** → 提示二次刷掌（注册阈值）→ 拉起扫码 → `registerPalm` 完成录入。
+
+按触发方式分两套实现，事件命名空间和会话生命周期不同：
+
+| 模式 | Coordinator | Route | 触发方式 | 结果后行为 |
+| --- | --- | --- | --- | --- |
+| 掌唤混合 | `HybridCoordinator` | `/hybrid` | 进入页面后**常驻刷掌** | 由前端结果页倒计时结束 → `restartHybrid` 启下一轮 |
+| 机唤混合 | `HostHybridCoordinator` | `/host-hybrid` | 仅由上位机 `wakeup(6001)` 触发 | 不自动 restart，等待下一次 wakeup |
+
+## 2. 整体流程
+
+```
+                ┌───────────────┐
+                │   activate    │
+                └───────┬───────┘
+                        ▼
+        ┌──────── CAPTURING_PALM (round-1) ────────┐
+        │  recognize(RECOGNITION) → palm_state?    │
+        └─────┬───────────────────────────┬────────┘
+              │ Registered                │ Unregistered
+              ▼                           ▼
+    notifyRecognizeSuccess        RECAPTURING_PALM (round-2)
+    (user_id + otc)               recognize(ENROLLMENT) → session_key
+                                          │
+                                          ▼
+                                    SCANNING_QR (palmpact://...)
+                                          │
+                                          ▼
+                                    ENROLLING (registerPalm)
+                                          │
+                                          ▼
+                                  notifyEnrollSuccess
+```
+
+任意阶段失败 → `notifyFailure(code, msg)` → stage 复位为 `IDLE` + 广播失败事件 + 上位机回包（机唤）。
+
+## 3. Native 状态机
+
+两个 Coordinator 共享同一组 `Stage`：
+
+| Stage | 含义 | 触发的 SDK 调用 |
+| --- | --- | --- |
+| `IDLE` | 空闲 | — |
+| `CAPTURING_PALM` | 第一次采集（识别阈值） | `palmClientManager.recognize()` |
+| `RECOGNIZING_PALM` | 第一次采集后调 `recognize(RECOGNITION)` | API |
+| `RECAPTURING_PALM` | 第二次采集（注册阈值） | `palmClientManager.register()` |
+| `RECOGNIZING_PALM_FOR_ENROLL` | 第二次采集后调 `recognize(ENROLLMENT)` | API |
+| `SCANNING_QR` | 扫码 | `palmClientManager.scanQr()` |
+| `ENROLLING` | 调 `registerPalm` | API |
+
+**已注册边界**：第一次未注册→第二次又判已注册（极少数并发场景），fallback 走 `notifyRecognizeSuccess`。
+
+**已注册判定**：`code == 0 && palm_state == "Unregistered"`，或 `mapRecognizeErr(code) == CODE_NOT_ENROLLED(100025)`。
+
+## 4. JSBridge 协议
+
+### 4.1 前端 → Native（call）
+
+| 方法 | 时机 | 备注 |
+| --- | --- | --- |
+| `activateHybrid` / `activateHostHybrid` | 页面 mounted | 机唤返回 `linkManager.isConnected()` |
+| `deactivateHybrid` / `deactivateHostHybrid` | 页面 unmounted | 切模式 / 路由 |
+| `cancelHybrid` / `cancelHostHybrid` | 用户主动取消 | 走 `CODE_OPERATION_CANCELLED` |
+| `timeoutHybrid` / `timeoutHostHybrid` | 前端各阶段倒计时归零 | Native 按当前 `stage` 选择 timeout code |
+| `restartHybrid` | **仅掌唤**：结果页结束 | 触发下一轮 `startCapture` |
+
+### 4.2 Native → 前端（broadcast）
+
+事件命名空间：掌唤 `hybrid:*`，机唤 `hostHybrid:*`。
+
+| 事件 | 触发 stage | payload |
+| --- | --- | --- |
+| `linkStateChanged` *(仅机唤)* | USB 连接变化 | `{ connected, reason? }` |
+| `commandReceived` *(仅机唤)* | 收到 6001 | `{}` |
+| `submitting` | 进入 `RECOGNIZING_PALM` / `RECOGNIZING_PALM_FOR_ENROLL` | `{}` |
+| `recapture` | 进入 `RECAPTURING_PALM` | `{}` |
+| `qrScanning` | 进入 `SCANNING_QR` | `{}` |
+| `qrSubmitting` | 进入 `ENROLLING` | `{}` |
+| `recognizeSuccess` | 已注册路径成功 | `RecognizePalmResp` |
+| `enrollSuccess` | 未注册路径成功 | `RegisterPalmResp` |
+| `failure` | 任意失败 | `{ code, message }` |
+
+### 4.3 上位机协议（机唤特有）
+
+| FuncId | 作用 | 关键 code |
+| --- | --- | --- |
+| `FUNC_WAKEUP=6001` | wakeup / 结果回包 | `CODE_ALREADY_AWAKE`, success/失败码 |
+| `FUNC_TERMINATE` | host 主动取消 | `CODE_NOT_AWAKE`, `CODE_ABORT_UNAVAILABLE` |
+| `FUNC_STAGE` | 阶段进展 | `STARTED`, `READY_TO_SCAN`, `HYBRID_SCANNED`, `HYBRID_ENROLLMENT` |
+
+`isRequestInFlight()`（`RECOGNIZING_*` / `ENROLLING`）期间 `FUNC_TERMINATE` 拒绝中断，返回 `CODE_ABORT_UNAVAILABLE`。
+
+## 5. 前端 Phase 状态机
+
+### 5.1 掌唤 `HybridPage.vue`
+
+```
+waiting → submitting →
+   ├── result_success_recognize
+   └── recapturing → submitting → qrScanning → qrSubmitting → result_success_enroll
+任意失败 → result_failure → reset → waiting (call restartHybrid)
+```
+
+倒计时：`RECAPTURE_TIMEOUT_SEC=10s`，`SCAN_QR_TIMEOUT_SEC=60s`，结果页 `RESULT_DISPLAY_SEC`。
+
+### 5.2 机唤 `HostHybridPage.vue`
+
+```
+waiting_connection ⇄ waiting_command (linkStateChanged)
+waiting_command —commandReceived→ scanning_palm → recognizing_palm →
+   ├── result_success_recognize
+   └── recapturing_palm → recognizing_palm_for_enroll →
+         scanning_qr → qr_submitting → result_success_enroll
+任意失败 → result_failure → reset → waiting_(connection|command)
+```
+
+倒计时：`SCAN_PALM_TIMEOUT_SEC=10s`，`SCAN_QR_TIMEOUT_SEC=30s`，结果页 `RESULT_DISPLAY_SEC`。
+
+`useInterruptible`（仅 `waiting_*` 阶段允许被其他模式抢占）。
+
+## 6. 超时与异常
+
+| 场景 | 处理 |
+| --- | --- |
+| 第一次刷掌超时 | 前端倒计时 → `timeout*` → Native `CODE_TIMEOUT_CAPTURE` |
+| 第二次刷掌超时 | 同上 → `CODE_TIMEOUT_RECAPTURE`（机唤特有码 205） |
+| 扫码超时 | 同上 → `CODE_QR_SCAN_TIMEOUT` |
+| 用户取消 | `cancel*` → `CODE_OPERATION_CANCELLED` → 前端 `isCancelCode` 直接 `reset` 不显示失败页 |
+| Host 主动 terminate | Native 直接广播 failure + 回包，跳过 `notifyFailure` 的 stage guard |
+| USB 断连（仅机唤） | 进行中（`stage != IDLE`）→ `notifyFailure(CODE_INTERNAL_ERROR)`；广播 `linkStateChanged` |
+| API 失败 | `mapRecognizeErr` / `mapRegisterErr` / `toHostCode` 映射统一错误码 |
+
+## 7. 关键实现要点
+
+1. **stage 单点切换**：`notifyFailure` / `notifySuccess` 一律先把 `stage = IDLE` 再广播，避免重复触发。
+2. **`stage == IDLE` guard**：`notifyFailure` 首行直接 return，防止已结束会话被二次失败覆盖。
+3. **`pendingSessionKey`**：`recognize(ENROLLMENT)` 拿到后保存，`registerPalm` 时取出，结束时清空。
+4. **掌唤的 `cancelSession`**：`deactivate` / `host terminate` 调用，统一 `palmClientManager.stop()` + 复位。
+5. **机唤 `notifyFailure` 末尾 `palmClientManager.stop()`**：防止 SDK 残留回调，掌唤不需要（结果页倒计时后还要 restart）。
+6. **二次采集走 `register()` 而非 `recognize()`**：这是 SDK 阈值控制的关键差异。
+7. **前端 `isResult` / `isScanning` guard**：所有事件 handler 进入前判断当前 phase 合法性，避免迟到事件污染状态。
+8. **结果后行为差异**：掌唤 `reset()` 内调用 `restartHybrid`；机唤不调用，等待 host 下次 wakeup。
+
+## 8. 与单一模式的复用
+
+| 复用点 | 说明 |
+| --- | --- |
+| `DeviceApiService.recognizePalm` | 通过 `RecognizeMode` (`RECOGNITION` / `ENROLLMENT`) 区分阈值 |
+| `DeviceApiService.registerPalm` | 与纯录入模式共用 |
+| `PalmClientManager.recognize/register/scanQr` | SDK 层 API 一致 |
+| 前端组件 `PalmGuide` / `PalmScan` / `QrScan` / `ResultSuccess` / `ResultFailure` | 全部复用 |
+| `HostProtocol` 错误码、Stage 枚举 | 全模式共用 |
+
+## 9. 文件索引
+
+- `Android/.../mode/HybridCoordinator.java` — 掌唤
+- `Android/.../mode/HostHybridCoordinator.java` — 机唤
+- `web/src/features/hybrid/HybridPage.vue`
+- `web/src/features/host-hybrid/HostHybridPage.vue`
