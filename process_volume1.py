@@ -2,76 +2,6 @@
 import os
 import re
 
-# 第五卷章节信息，从主文件章节计划表中获取
-volume5_chapters = [
-    {
-        'filename': '5.1床前明月.md',
-        'title': '床前明月：第一次想家，是在哪个深夜',
-        'core_poem': '李白《静夜思》「举头望明月，低头思故乡」',
-        'pain_point': '异乡独居者的深夜返乡：最简单的诗，最深的刺'
-    },
-    {
-        'filename': '5.2遍插茱萸.md',
-        'title': '遍插茱萸：节日综合征，越热闹越孤独',
-        'core_poem': '王维《九月九日忆山东兄弟》「每逢佳节倍思亲」',
-        'pain_point': '节庆孤独：朋友圈越热闹，自己越荒凉'
-    },
-    {
-        'filename': '5.3春风又绿.md',
-        'title': '春风又绿：回不去的江南，走不出的京城',
-        'core_poem': '王安石《泊船瓜洲》「春风又绿江南岸，明月何时照我还」',
-        'pain_point': '归期未有期：故乡只剩下一个动词——「回」'
-    },
-    {
-        'filename': '5.4月故乡明.md',
-        'title': '月故乡明：异乡人的月亮，不是故乡的月亮',
-        'core_poem': '杜甫《月夜忆舍弟》「露从今夜白，月是故乡明」',
-        'pain_point': '精神无家：他乡融不进，故乡回不去'
-    },
-    {
-        'filename': '5.5家书抵金.md',
-        'title': '家书抵金：战火与流量时代，都难抵家书',
-        'core_poem': '杜甫《春望》「烽火连三月，家书抵万金」',
-        'pain_point': '联络过载反面：信息满天飞，心事却无人可说'
-    },
-    {
-        'filename': '5.6凭君传语.md',
-        'title': '凭君传语：漂泊者的报平安焦虑',
-        'core_poem': '岑参《逢入京使》「马上相逢无纸笔，凭君传语报平安」',
-        'pain_point': '异乡人的平安：说得越轻描淡写，压得越重'
-    },
-    {
-        'filename': '5.7海上明月.md',
-        'title': '海上明月：异地恋与异乡情的最高礼赞',
-        'core_poem': '张九龄《望月怀远》「海上生明月，天涯共此时」',
-        'pain_point': '异地牵挂：同一个月，隔千里'
-    },
-    {
-        'filename': '5.8少小离家.md',
-        'title': '少小离家：衣锦必已两鬓白',
-        'core_poem': '贺知章《回乡偶书》「儿童相见不相识，笑问客从何处来」',
-        'pain_point': '归乡陌生：故乡已经把你认不出来'
-    },
-    {
-        'filename': '5.9日暮乡关.md',
-        'title': '日暮乡关：楼越高，家越远',
-        'core_poem': '崔颢《黄鹤楼》「日暮乡关何处是，烟波江上使人愁」',
-        'pain_point': '都市悬空：住在高楼里，找不到地气'
-    },
-    {
-        'filename': '5.10海日残夜.md',
-        'title': '海日残夜：候鸟式打工人的岁末慰藉',
-        'core_poem': '王湾《次北固山下》「海日生残夜，江春入旧年。乡书何处达，归雁洛阳边」',
-        'pain_point': '年末疲惫：一年又一年，永远在路上'
-    },
-    {
-        'filename': '5.11寸草春晖.md',
-        'title': '寸草春晖：与父母和解，把乡愁还给具体的人',
-        'core_poem': '孟郊《游子吟》「谁言寸草心，报得三春晖」',
-        'pain_point': '亲情遗憾：子欲养而亲不待的永恒怕'
-    }
-]
-
 def generate_content(title, core_poem, pain_point):
     """生成新的8幕结构内容"""
     # 解析核心诗词，提取诗词标题和作者
@@ -79,7 +9,8 @@ def generate_content(title, core_poem, pain_point):
     poem_author = ''
     poem_text = ''
     
-    # 简单解析格式，例如 "李白《将进酒》「天生我材必有用，千金散尽还复来」"
+    # 简单解析格式，例如 "骆宾王《咏鹅》「鹅，鹅，鹅，曲项向天歌」"
+    import re
     match = re.search(r'(.+?)《(.+?)》「(.+?)」', core_poem)
     if match:
         poem_author = match.group(1)
@@ -92,7 +23,7 @@ def generate_content(title, core_poem, pain_point):
         poem_text = core_poem
     
     # 生成新内容
-    new_content = f"""# {title}
+    new_content = f"""{title}
 
 > 核心诗词：{core_poem}
 > 精神痛点：{pain_point}
@@ -203,34 +134,90 @@ def generate_content(title, core_poem, pain_point):
     return new_content
 
 def main():
-    volume_dir = '/Users/yc/YCBookBlog/09.出版作品的书籍/06.品读唐诗宋词/05.千里乡愁'
+    volume_dir = '/Users/yc/YCBookBlog/09.出版作品的书籍/06.品读唐诗宋词/01.童年初心'
     
-    for chapter in volume5_chapters:
-        filename = chapter['filename']
-        filepath = os.path.join(volume_dir, filename)
+    # 第一卷章节信息来自主文件表格
+    chapters = [
+        {
+            'filename': '1.1咏鹅三声.md',
+            'title': '# 第一章 咏鹅三声：在天真里看见最初的自己',
+            'core_poem': '骆宾王《咏鹅》「鹅，鹅，鹅，曲项向天歌」',
+            'pain_point': '童心丢失：成年后的功利与麻木'
+        },
+        {
+            'filename': '1.2卧看牧童.md',
+            'title': '# 第二章 卧看牧童：专注一件小事的能力',
+            'core_poem': '袁枚《所见》「意欲捕鸣蝉，忽然闭口立」',
+            'pain_point': '注意力涣散：5秒切换，无法深度沉浸'
+        },
+        {
+            'filename': '1.3偷采白莲.md',
+            'title': '# 第三章 偷采白莲：不藏踪迹的透明人生',
+            'core_poem': '白居易《池上》「不解藏踪迹，浮萍一道开」',
+            'pain_point': '精致利己：成年后事事算计，失去坦诚'
+        },
+        {
+            'filename': '1.4路人借问.md',
+            'title': '# 第四章 路人借问：为一条鱼停下的分寸',
+            'core_poem': '胡令能《小儿垂钓》「怕得鱼惊不应人」',
+            'pain_point': '功利排序：永远把人脉、面子排在万物之先'
+        },
+        {
+            'filename': '1.5追蝶菜花.md',
+            'title': '# 第五章 追蝶菜花：追一只没用的蝴蝶',
+            'core_poem': '杨万里《宿新市徐公店》「飞入菜花无处寻」',
+            'pain_point': '丧失热忱：不敢为“无用之物”倾注热情'
+        },
+        {
+            'filename': '1.6小荷初露.md',
+            'title': '# 第六章 小荷初露：对世界保持好奇与期待',
+            'core_poem': '杨万里《小池》「小荷才露尖尖角，早有蜻蜓立上头」',
+            'pain_point': '感知钝化：对日常细碎美好毫无反应'
+        },
+        {
+            'filename': '1.7稚子脱冰.md',
+            'title': '# 第七章 稚子脱冰：把冰当成乐器的想象力',
+            'core_poem': '杨万里《稚子弄冰》「彩丝穿取当银钲」',
+            'pain_point': '想象力荒漠：再也无法把一块冰看成一件乐器'
+        },
+        {
+            'filename': '1.8散学放鸢.md',
+            'title': '# 第八章 散学放鸢：童年是一场东风',
+            'core_poem': '高鼎《村居》「儿童散学归来早，忙趁东风放纸鸢」',
+            'pain_point': '童年的集体消失：放学即晚托的时代疾病'
+        },
+        {
+            'filename': '1.9卧剥莲蓬.md',
+            'title': '# 第九章 卧剥莲蓬：英雄眼里最软的画面',
+            'core_poem': '辛弃疾《清平乐·村居》「最喜小儿无赖，溪头卧剥莲蓬」',
+            'pain_point': '柔软丧失：成年的硬度，挡不住一个剥莲蓬的孩子'
+        },
+        {
+            'filename': '1.10不脱蓑衣.md',
+            'title': '# 第十章 不脱蓑衣：不脱蓑衣卧月明',
+            'core_poem': '吕岩《牧童》「归来饱饭黄昏后，不脱蓑衣卧月明」',
+            'pain_point': '身体失控：吃饱饭就刷手机，身体再不会“松”'
+        }
+    ]
+    
+    for chapter in chapters:
+        filepath = os.path.join(volume_dir, chapter['filename'])
         print(f"处理文件: {filepath}")
         
         title = chapter['title']
         core_poem = chapter['core_poem']
         pain_point = chapter['pain_point']
+        print(f"  标题: {title}")
+        print(f"  核心诗词: {core_poem}")
+        print(f"  精神痛点: {pain_point}")
         
-        # 在标题前加上章节编号
-        # 从文件名提取编号，如 5.1 -> 第一章
-        match = re.search(r'(\d+)\.(\d+)', filename)
-        if match:
-            chapter_num = int(match.group(2))
-            chapter_cn = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一"][chapter_num - 1]
-            full_title = f"第{chapter_cn}章 {title}"
-        else:
-            full_title = title
-        
-        new_content = generate_content(full_title, core_poem, pain_point)
+        new_content = generate_content(title, core_poem, pain_point)
         
         # 写入新内容
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(new_content)
         
-        print(f"  已更新: {full_title}")
+        print(f"  已更新")
 
 if __name__ == '__main__':
     main()

@@ -116,7 +116,7 @@ def generate_content(title, core_poem, pain_point):
         poem_text = core_poem
     
     # 生成新内容
-    new_content = f"""# 第{title}
+    new_content = f"""# {title}
 
 > 核心诗词：{core_poem}
 > 精神痛点：{pain_point}
