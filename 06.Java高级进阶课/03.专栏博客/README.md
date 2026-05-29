@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 21 篇 ｜ 🆕 待写 30 篇
+> ✅ 已完成 23 篇 ｜ 🆕 待写 28 篇
 >
-> 📌 最近更新：第 21 篇《TreeMap与红黑树原理》——五大性质数学根基+插入≤2旋转/删除≤3旋转上限+ConcurrentSkipListMap 选跳表的工程铁律
+> 📌 最近更新：第 23 篇《Java数字类型原理》——IEEE 754 二进制本质+Integer缓存池-128~127边界+BigDecimal的unscaledValue/scale设计+long(分)金额方案+整型溢出 Math.addExact 防御
 
 ---
 
@@ -32,8 +32,8 @@
 - ✅ [19.ArrayList与LinkedList源码深析](19.ArrayList与LinkedList源码深析.md)：动态扩容机制、fail-fast迭代器、modCount、为什么LinkedList几乎被弃用
 - ✅ [20.ConcurrentHashMap演进史](20.ConcurrentHashMap演进史.md)：JDK7分段锁→JDK8 CAS+synchronized→红黑树→ForwardingNode协助扩容、size()的精确性取舍
 - ✅ [21.TreeMap与红黑树原理](21.TreeMap与红黑树原理.md)：红黑树五大性质、插入删除调整、跳表对比、ConcurrentSkipListMap为什么不用红黑树
-- 🆕 22.LinkedHashMap与LRU缓存实现：accessOrder与insertOrder、双向链表组织、手撕LRU/LFU、Caffeine设计思想
-- 🆕 23.Java数字类型原理：Integer缓存池、自动装箱陷阱、BigDecimal精度与RoundingMode、IEEE754浮点数本质
+- ✅ [22.LinkedHashMap与LRU实现](22.LinkedHashMap与LRU实现.md)：双血统架构、三大钩子、insertOrder/accessOrder、手撕LRU、Caffeine W-TinyLFU
+- ✅ [23.Java数字类型原理](23.Java数字类型原理.md)：Integer缓存池、自动装箱陷阱、BigDecimal精度与RoundingMode、IEEE754浮点数本质
 - 🆕 24.Object通用方法的契约：hashCode/equals一致性、toString/clone/finalize的废与立、wait/notify与监视器
 
 ## 📘 卷三 · 类型系统与语言机制（7 篇）
@@ -141,13 +141,13 @@ flowchart LR
 | 卷 | 主题 | 篇数 | 已完成 |
 |---|---|---|---|
 | 卷一 | JVM 与运行时核心 | 10 | 10 ✅ |
-| 卷二 | 容器与基础数据结构 | 8 | 5 |
+| 卷二 | 容器与基础数据结构 | 8 | 7 |
 | 卷三 | 类型系统与语言机制 | 7 | 1 |
 | 卷四 | 反射与字节码增强 | 5 | 1 |
 | 卷五 | 并发编程深水区 | 10 | 3 |
 | 卷六 | IO、网络与序列化 | 7 | 1 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **21** |
+| **合计** | — | **51** | **23** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~21 为已完成篇目（卷一全部收官 ✅、卷二已写 5 篇），22~51 为待写篇目。
+> 注：全 51 篇按卷连续编号 01~51，其中 01~23 为已完成篇目（卷一全部收官 ✅、卷二已写 7 篇），24~51 为待写篇目。
 
