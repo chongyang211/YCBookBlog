@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 28 篇 ｜ 🆕 待写 23 篇
+> ✅ 已完成 31 篇 ｜ 🆕 待写 20 篇
 >
-> 📌 最近更新：第 28 篇《Stream 原理与流水线设计》——双向链表流水线架构+Spliterator 分割器与 8 大特征位+Sink 责任链反向构建+短路求值的 cancellationRequested 机制+Collectors 五元素拆解+parallelStream 共用 commonPool 的全站事故根因+并行流 NQ 模型+10 条并行铁律
+> 📌 最近更新：第 31 篇《MethodHandle 与 VarHandle》——反射热路径 35% CPU 双案例切入+java.lang.invoke 包与七大主角全景+MethodType/Lookup 五大解析器/invokeExact 严格匹配/句柄变换四套 API+invokedynamic + LambdaMetafactory + SwitchBootstraps 同源链路串讲+VarHandle 代替 Unsafe 的 plain/opaque/acquire-release/volatile 四级内存语义+JMH 三方实证 invokeExact 1.16x/反射 7-100x+动态字段读取器/手撚 Switch 底层/无锁计数器三大实战+8 条反模式清单
 
 ---
 
@@ -45,15 +45,15 @@
 - ✅ [26.注解原理与编译期/运行期处理](26.注解原理与编译期运行期处理.md)：元注解、APT注解处理器、Lombok字节码魔法、运行时反射读取注解
 - ✅ [27.Lambda与方法引用底层原理](27.Lambda与方法引用底层原理.md)：invokedynamic指令、LambdaMetafactory动态生成、与匿名内部类的性能差异
 - ✅ [28.Stream原理与流水线设计](28.Stream原理与流水线设计.md)：Spliterator分割器、有状态/无状态操作、短路求值、并行流的ForkJoinPool陷阱
-- 🆕 29.Optional设计哲学：Tony Hoare的"十亿美元错误"、什么时候用什么时候不用、为什么不能Serializable
-- 🆕 30.Record/Sealed/Pattern Matching：现代Java类型系统、不可变数据载体、密封继承、模式匹配三件套
+- ✅ [29.Optional设计哲学](29.Optional设计哲学.md)：Tony Hoare的"十亿美元错误"、什么时候用什么时候不用、为什么不能Serializable
+- ✅ [30.Record与Sealed与Pattern Matching](30.Record与Sealed与Pattern%20Matching.md)：现代Java类型系统、不可变数据载体、密封继承、模式匹配三件套
 
 ## 📙 卷四 · 反射与字节码增强（5 篇）
 
 把"动态修改运行时行为"的生态打通。
 
 - ✅ [07.反射机制与动态代理底层原理](07.反射机制与动态代理底层原理.md)：反射调用链与Inflation优化、JDK动态代理Proxy类生成、CGLIB继承代理、Spring AOP选择策略
-- 🆕 31.MethodHandle与VarHandle：反射的现代继任者、与invokedynamic的关系、性能对比与典型用法
+- ✅ [31.MethodHandle与VarHandle](31.MethodHandle与VarHandle.md)：反射的现代继任者、与invokedynamic的关系、性能对比与典型用法
 - 🆕 32.ASM/Javassist/ByteBuddy字节码框架对比：API层级差异、手撕一个简易Mock框架、生产场景选型
 - 🆕 33.Java Agent与Instrumentation机制：premain/agentmain、retransformClasses、Arthas如何attach到运行JVM
 - 🆕 34.AOP三种实现路线对比：JDK代理/CGLIB/AspectJ编译期织入、Spring AOP内部如何选择代理方式
@@ -142,12 +142,12 @@ flowchart LR
 |---|---|---|---|
 | 卷一 | JVM 与运行时核心 | 10 | 10 ✅ |
 | 卷二 | 容器与基础数据结构 | 8 | 8 ✅ |
-| 卷三 | 类型系统与语言机制 | 7 | 5 |
-| 卷四 | 反射与字节码增强 | 5 | 1 |
+| 卷三 | 类型系统与语言机制 | 7 | 7 ✅ |
+| 卷四 | 反射与字节码增强 | 5 | 2 |
 | 卷五 | 并发编程深水区 | 10 | 3 |
 | 卷六 | IO、网络与序列化 | 7 | 1 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **28** |
+| **合计** | — | **51** | **31** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~28 为已完成篇目（卷一、卷二**双卷收官 ✅** + 卷三推进中），29~51 为待写篇目。
+> 注：全 51 篇按卷连续编号 01~51，其中 01~31 为已完成篇目（卷一、卷二、卷三**三卷收官 ✅** + 卷四推进中），32~51 为待写篇目。
 
