@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 23 篇 ｜ 🆕 待写 28 篇
+> ✅ 已完成 25 篇 ｜ 🆕 待写 26 篇
 >
-> 📌 最近更新：第 23 篇《Java数字类型原理》——IEEE 754 二进制本质+Integer缓存池-128~127边界+BigDecimal的unscaledValue/scale设计+long(分)金额方案+整型溢出 Math.addExact 防御
+> 📌 最近更新：第 25 篇《枚举原理与最佳实践》——enum 即 final class extends Enum<E extends Enum<E>>+自类型递归泛型+values() 编译器合成与防御性拷贝+枚举单例的五道防线（反射/序列化/克隆/线程安全/懒加载）+EnumMap 数组下标 10× HashMap+EnumSet long 位向量+状态机最优雅实现
 
 ---
 
@@ -34,14 +34,14 @@
 - ✅ [21.TreeMap与红黑树原理](21.TreeMap与红黑树原理.md)：红黑树五大性质、插入删除调整、跳表对比、ConcurrentSkipListMap为什么不用红黑树
 - ✅ [22.LinkedHashMap与LRU实现](22.LinkedHashMap与LRU实现.md)：双血统架构、三大钩子、insertOrder/accessOrder、手撕LRU、Caffeine W-TinyLFU
 - ✅ [23.Java数字类型原理](23.Java数字类型原理.md)：Integer缓存池、自动装箱陷阱、BigDecimal精度与RoundingMode、IEEE754浮点数本质
-- 🆕 24.Object通用方法的契约：hashCode/equals一致性、toString/clone/finalize的废与立、wait/notify与监视器
+- ✅ [24.Object通用方法的契约](24.Object通用方法的契约.md)：hashCode/equals一致性、toString/clone/finalize的废与立、wait/notify与监视器
 
 ## 📘 卷三 · 类型系统与语言机制（7 篇）
 
 把"Java 语法糖背后的真相"还原。
 
 - ✅ [06.Java泛型擦除与类型系统原理](06.Java泛型擦除与类型系统原理.md)：类型擦除机制、桥接方法、泛型边界与限制、PECS原则、运行时获取泛型信息
-- 🆕 25.枚举原理与最佳实践：枚举即final class、values()反射机制、单例枚举、EnumMap/EnumSet位运算优化
+- ✅ [25.枚举原理与最佳实践](25.枚举原理与最佳实践.md)：枚举即final class、values()反射机制、单例枚举、EnumMap/EnumSet位运算优化
 - 🆕 26.注解原理与编译期/运行期处理：元注解、APT注解处理器、Lombok字节码魔法、运行时反射读取注解
 - 🆕 27.Lambda与方法引用底层：invokedynamic指令、LambdaMetafactory动态生成、与匿名内部类的性能差异
 - 🆕 28.Stream原理与流水线设计：Spliterator分割器、有状态/无状态操作、短路求值、并行流的ForkJoinPool陷阱
@@ -141,13 +141,13 @@ flowchart LR
 | 卷 | 主题 | 篇数 | 已完成 |
 |---|---|---|---|
 | 卷一 | JVM 与运行时核心 | 10 | 10 ✅ |
-| 卷二 | 容器与基础数据结构 | 8 | 7 |
-| 卷三 | 类型系统与语言机制 | 7 | 1 |
+| 卷二 | 容器与基础数据结构 | 8 | 8 ✅ |
+| 卷三 | 类型系统与语言机制 | 7 | 2 |
 | 卷四 | 反射与字节码增强 | 5 | 1 |
 | 卷五 | 并发编程深水区 | 10 | 3 |
 | 卷六 | IO、网络与序列化 | 7 | 1 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **23** |
+| **合计** | — | **51** | **25** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~23 为已完成篇目（卷一全部收官 ✅、卷二已写 7 篇），24~51 为待写篇目。
+> 注：全 51 篇按卷连续编号 01~51，其中 01~25 为已完成篇目（卷一、卷二**双卷收官 ✅** + 卷三推进中），26~51 为待写篇目。
 
