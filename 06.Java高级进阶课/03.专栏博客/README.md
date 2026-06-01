@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 37 篇 ｜ 🆕 待写 14 篇
+> ✅ 已完成 38 篇 ｜ 🆕 待写 13 篇
 >
-> 📌 最近更新：第 37 篇《ReentrantLock & ReadWriteLock & StampedLock 三剑客》（**Lock 全家桶工程化收官 🗡️**）——缓存读写之痛 + RWLock 升级死锁双案例切入 + ReentrantLock vs synchronized 六维对比 + 公平/非公平选型决策树 + lockInterruptibly 中断契约源码 + tryLock 超时三大坑 + Condition 多条件队列生产消费者范例 + ReentrantReadWriteLock 高低位编码（高 16 位读 + 低 16 位写）+ 第一个读者优化 firstReader/HoldCounter + 写锁 5 行守住一致性 + **锁降级标准范式**（写降读合法）+ **锁升级死锁机理**（多读者无限互等）+ 写饥饿 readerShouldBlock 让步 + StampedLock 三种模式（写/悲观读/**乐观读**）+ stamp long 编码版本号 + **乐观读三步曲**（拿戳/拷贝字段/validate）+ acquireFence 内存屏障奥秘 + tryConvertToWriteLock 唯一支持锁升级的 API + StampedLock 四大坑（不可重入/无 Condition/不响应中断/区间副作用）+ **三剑客性能横评**（读多 95:5 StampedLock 暴打 + 读写均衡 50:50 优势收窄 + 写多 5:95 RWLock 反而慢）+ Loom 时代选型（synchronized Pinning + JDK 24 JEP 491 解 Pin + 三剑客虚拟线程友好）+ 工程实战 try-finally 范式 + 全局锁序消除循环等待 + getQueueLength 监控埋点 + 三大设计哲学（状态压缩/乐观并发/工具匹配场景）+ 死规矩 6 条
+> 📌 最近更新：第 38 篇《CAS、Atomic、Unsafe 与 VarHandle》（**无锁原语层一次讲透 ⚡**）——AtomicLong 32 核翻车 + ABA 转账幽灵 bug 双案例切入 + CAS 三要素与伪代码语义 + **LOCK CMPXCHG x86 单指令原子** + HotSpot Atomic::cmpxchg native 实现 + **MESI 缓存一致性协议**（M/E/S/I 四态 + RFO + Invalidate 广播）+ ARM LL/SC 原语对比（LDREX/STREX）+ 自旋开销与上限 + Atomic 全家桶四大类（基本/引用/数组/字段更新器）+ AtomicInteger 源码 JDK 7→8→9 演进（手写自旋 → Unsafe intrinsic → VarHandle）+ Treiber Stack 无锁链表的 ABA 隐患 + AtomicXxxFieldUpdater 零内存改造遗留代码 + **ABA 本质**（值相等 ≠ 状态未变）+ AtomicStampedReference 版本戳方案 + AtomicMarkableReference 单标志方案 + 必须防 ABA 的三大场景 + **LongAdder 化整为零核心思想** + Striped64 数据结构（base + cells[] + cellsBusy）+ add 双重快慢路径 + **longAccumulate 扩容机制源码**（NCPU 上限/2 倍扩容/collide 抖动防护）+ 线程探针 getProbe 分散竞争 + **@Contended 伪共享防护**（cache line 144B 独占）+ sum 弱一致语义 + LongAccumulator 任意二元运算 + Unsafe 五大能力域（CAS/直接内存/park-unpark/对象操作/类操作）+ park 凭证机制 vs wait/notify + Unsafe 反射黑魔法获取 + JDK 9 模块化对 Unsafe 的封锁 + **VarHandle 在 Atomic 中的落地** + 与 31 篇衔接（plain/opaque/acquire-release/volatile 四级）+ Unsafe → VarHandle 迁移指南 + 三档竞争度性能横评（单线程/16 线程/64 线程）+ 选型决策树 + 三大设计哲学（无锁三要素/分段思想/语义分级 + 跨卷分段链回扣）+ 死规矩 6 条
 ---
 
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
@@ -67,7 +67,7 @@
 - ✅ [35.Thread与线程生命周期源码](35.Thread与线程生命周期源码.md)：start/run/join/interrupt真相、ThreadLocal与InheritableThreadLocal、内存泄漏与弱引用Entry
 - ✅ [36.AQS同步框架源码](36.AQS同步框架源码.md)：并发包的灵魂、CLH队列、独占/共享模式、模板方法设计、Condition条件队列与signal/await
 - ✅ [37.ReentrantLock_ReadWriteLock_StampedLock三剑客](37.ReentrantLock_ReadWriteLock_StampedLock三剑客.md)：公平锁与非公平锁、锁降级、乐观读、与synchronized的取舍
-- 🆕 38.CAS与Atomic家族：Unsafe底层、ABA问题、AtomicStampedReference、LongAdder分段思想、Striped64设计
+- ✅ [38.CAS_Atomic_Unsafe_VarHandle](38.CAS_Atomic_Unsafe_VarHandle.md)：Unsafe底层、ABA问题、AtomicStampedReference、LongAdder分段思想、Striped64设计
 - 🆕 39.五大同步器对比：CountDownLatch/CyclicBarrier/Semaphore/Exchanger/Phaser的实现差异与适用场景
 - 🆕 40.CompletableFuture异步编程：Future的进化、组合算子thenApply/thenCompose、ForkJoinPool common pool陷阱
 - 🆕 41.虚拟线程(Loom)与结构化并发：用户态调度、carrier线程、Pinning问题、与协程/反应式的取舍
@@ -143,9 +143,9 @@ flowchart LR
 | 卷二 | 容器与基础数据结构 | 8 | 8 ✅ |
 | 卷三 | 类型系统与语言机制 | 7 | 7 ✅ |
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
-| 卷五 | 并发编程深水区 | 10 | 6 |
+| 卷五 | 并发编程深水区 | 10 | 7 |
 | 卷六 | IO、网络与序列化 | 7 | 1 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **37** |
+| **合计** | — | **51** | **38** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~37 为已完成篇目（卷一、卷二、卷三、**卷四收官 ✅** + 卷五深入 6/10），38~51 为待写篇目。
+> 注：全 51 篇按卷连续编号 01~51，其中 01~38 为已完成篇目（卷一、卷二、卷三、**卷四收官 ✅** + 卷五深入 7/10），39~51 为待写篇目。
