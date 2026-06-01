@@ -2,10 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 33 篇 ｜ 🆕 待写 18 篇
+> ✅ 已完成 37 篇 ｜ 🆕 待写 14 篇
 >
-> 📌 最近更新：第 33 篇《Java Agent 与 Instrumentation 机制》——Arthas 一行命令 watch 线上任意方法+JRebel 不重启热更新双案例切入+Java Agent 四种形态全景（premain/agentmain/JVMTI Native Agent/JVM 内置）+premain 启动期 Agent 的 MANIFEST 三件套与启动顺序+agentmain 运行期 Agent 与 Attach API（SIGQUIT+Unix Domain Socket 黑盒揭秘）+Instrumentation 三大核心 API（addTransformer/retransformClasses/redefineClasses）与类重定义兼容性约束（不能加字段加方法的根因）+JVMTI 与 jdwp/JFR/async-profiler+Arthas watch/trace/redefine/jad/sc 字节码层实现拆解+50 行手撕磁盘监听式热更新 Agent+JRebel 版本化 ClassLoader 突破限制原理+JDK 21 JEP 451 收紧 attach 安全性
-
+> 📌 最近更新：第 37 篇《ReentrantLock & ReadWriteLock & StampedLock 三剑客》（**Lock 全家桶工程化收官 🗡️**）——缓存读写之痛 + RWLock 升级死锁双案例切入 + ReentrantLock vs synchronized 六维对比 + 公平/非公平选型决策树 + lockInterruptibly 中断契约源码 + tryLock 超时三大坑 + Condition 多条件队列生产消费者范例 + ReentrantReadWriteLock 高低位编码（高 16 位读 + 低 16 位写）+ 第一个读者优化 firstReader/HoldCounter + 写锁 5 行守住一致性 + **锁降级标准范式**（写降读合法）+ **锁升级死锁机理**（多读者无限互等）+ 写饥饿 readerShouldBlock 让步 + StampedLock 三种模式（写/悲观读/**乐观读**）+ stamp long 编码版本号 + **乐观读三步曲**（拿戳/拷贝字段/validate）+ acquireFence 内存屏障奥秘 + tryConvertToWriteLock 唯一支持锁升级的 API + StampedLock 四大坑（不可重入/无 Condition/不响应中断/区间副作用）+ **三剑客性能横评**（读多 95:5 StampedLock 暴打 + 读写均衡 50:50 优势收窄 + 写多 5:95 RWLock 反而慢）+ Loom 时代选型（synchronized Pinning + JDK 24 JEP 491 解 Pin + 三剑客虚拟线程友好）+ 工程实战 try-finally 范式 + 全局锁序消除循环等待 + getQueueLength 监控埋点 + 三大设计哲学（状态压缩/乐观并发/工具匹配场景）+ 死规矩 6 条
 ---
 
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
@@ -56,7 +55,7 @@
 - ✅ [31.MethodHandle与VarHandle](31.MethodHandle与VarHandle.md)：反射的现代继任者、与invokedynamic的关系、性能对比与典型用法
 - ✅ [32.ASM/Javassist/ByteBuddy字节码框架对比](32.ASM_Javassist_ByteBuddy字节码框架对比.md)：API层级差异、手撕一个简易Mock框架、生产场景选型
 - ✅ [33.Java Agent与Instrumentation机制](33.JavaAgent与Instrumentation机制.md)：premain/agentmain、retransformClasses、Arthas如何attach到运行JVM
-- 🆕 34.AOP三种实现路线对比：JDK代理/CGLIB/AspectJ编译期织入、Spring AOP内部如何选择代理方式
+- ✅ [34.AOP三种实现路线对比](34.AOP三种实现路线对比.md)：JDK代理/CGLIB/AspectJ编译期织入、Spring AOP内部如何选择代理方式
 
 ## 📔 卷五 · 并发编程深水区（10 篇）
 
@@ -65,9 +64,9 @@
 - ✅ [08.并发编程之synchronized与锁升级](08.并发编程之synchronized与锁升级.md)：对象头Mark Word、偏向锁/轻量级锁/重量级锁原理、锁消除/锁粗化/自适应自旋、虚拟线程Pinning问题
 - ✅ [09.volatile与Java内存模型JMM](09.volatile与Java内存模型JMM.md)：CPU缓存架构与MESI协议、JMM抽象模型、happens-before规则、volatile内存屏障实现、DCL单例分析
 - ✅ [10.线程池核心原理与源码设计](10.线程池核心原理与源码设计.md)：七大参数、ctl状态控制、execute提交流程、Worker线程复用秘密、ForkJoinPool工作窃取、参数设置策略
-- 🆕 35.Thread与线程生命周期源码：start/run/join/interrupt真相、ThreadLocal与InheritableThreadLocal、内存泄漏与弱引用Entry
-- 🆕 36.AQS框架：并发包的灵魂、CLH队列、独占/共享模式、模板方法设计、Condition条件队列与signal/await
-- 🆕 37.ReentrantLock/ReadWriteLock/StampedLock源码剖析：公平锁与非公平锁、锁降级、乐观读、与synchronized的取舍
+- ✅ [35.Thread与线程生命周期源码](35.Thread与线程生命周期源码.md)：start/run/join/interrupt真相、ThreadLocal与InheritableThreadLocal、内存泄漏与弱引用Entry
+- ✅ [36.AQS同步框架源码](36.AQS同步框架源码.md)：并发包的灵魂、CLH队列、独占/共享模式、模板方法设计、Condition条件队列与signal/await
+- ✅ [37.ReentrantLock_ReadWriteLock_StampedLock三剑客](37.ReentrantLock_ReadWriteLock_StampedLock三剑客.md)：公平锁与非公平锁、锁降级、乐观读、与synchronized的取舍
 - 🆕 38.CAS与Atomic家族：Unsafe底层、ABA问题、AtomicStampedReference、LongAdder分段思想、Striped64设计
 - 🆕 39.五大同步器对比：CountDownLatch/CyclicBarrier/Semaphore/Exchanger/Phaser的实现差异与适用场景
 - 🆕 40.CompletableFuture异步编程：Future的进化、组合算子thenApply/thenCompose、ForkJoinPool common pool陷阱
@@ -143,11 +142,10 @@ flowchart LR
 | 卷一 | JVM 与运行时核心 | 10 | 10 ✅ |
 | 卷二 | 容器与基础数据结构 | 8 | 8 ✅ |
 | 卷三 | 类型系统与语言机制 | 7 | 7 ✅ |
-| 卷四 | 反射与字节码增强 | 5 | 4 |
-| 卷五 | 并发编程深水区 | 10 | 3 |
+| 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
+| 卷五 | 并发编程深水区 | 10 | 6 |
 | 卷六 | IO、网络与序列化 | 7 | 1 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **33** |
+| **合计** | — | **51** | **37** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~33 为已完成篇目（卷一、卷二、卷三**三卷收官 ✅** + 卷四推进中），34~51 为待写篇目。
-
+> 注：全 51 篇按卷连续编号 01~51，其中 01~37 为已完成篇目（卷一、卷二、卷三、**卷四收官 ✅** + 卷五深入 6/10），38~51 为待写篇目。
