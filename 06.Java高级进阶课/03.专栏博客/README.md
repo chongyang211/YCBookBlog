@@ -2,10 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 40 篇 ｜ 🆕 待写 11 篇
+> ✅ 已完成 41 篇 ｜ 🆕 待写 10 篇
 >
-> 📌 最近更新：第 40 篇《CompletableFuture 异步编程》（**异步编排一次讲透 �**）——3 个 Future.get 把 RT 从 50ms 拖到 600ms 的首页聚合案例切入 + **Future 进化史五大阶段**（JDK5 Future → Guava ListenableFuture 回调地狱 → JDK8 CompletableFuture 组合算子 → Reactor/RxJava 响应式 → JDK21 Loom 虚拟线程）+ 三类 API 全景（创建/转换/组合）+ **30+ 算子命名规律**（Apply/Accept/Run × Async/同步 × Either/Both）+ Async 后缀的真正含义 + Caller-Runs 优化与线程池传染坑 + **内部状态机源码**（result 三态 + AltResult/NIL 哨兵 + Treiber stack 依赖链 + postComplete 链式传播）+ **ForkJoinPool common pool 三大陷阱**（容器单核 ThreadPerTask OOM/IO 阻塞占死池/parallelStream 共池）+ supplyAsync 自定义线程池最佳实践 + **异常处理三姿势**（exceptionally/handle/whenComplete 本质差异）+ 异常穿透机制 + **CompletionException 双重包装陷阱**（exceptionally 里 instanceof 永远 false）+ **同线程池 join 自身的经典死锁** + thenCompose vs thenApply 扁平化（CF<CF<T>> 坑）+ orTimeout/completeOnTimeout JDK9+ + **4 大实战场景**（首页多接口聚合 + Fast Fail 任一败即败 + 多级流水线 + MDC/TraceId 跨线程透传）+ TTL 工业级方案 + 与 Reactor/Loom 横向取舍决策树 + 死规矩 8 条
----
+> 📌 最近更新：第 41 篇《虚拟线程(Loom)与结构化并发》（**卷五并发深水区收官篇 🏁**）——百万连接 echo server 对比案例切入（平台线程 800 OOM vs 虚拟线程 100万）+ **Loom 立项十年史**（Quasar 2013 → JEP 444 JDK21 正式 → JEP 491 JDK24 解 pin）+ **双层模型**（carrier 线程 + Continuation 续延 + M:N 调度）+ yield/freeze/mount/unmount 全流程 + 创建 VT 的 4 种姿势 + **反模式**（不要池化虚拟线程）+ **Pinning 钉死问题深度诊断**（synchronized + 阻塞/JNI 两大场景 + -Djdk.tracePinnedThreads=full 实战 + JFR jdk.VirtualThreadPinned + JDK 21 vs JDK 24 解 pin 对比）+ **StructuredTaskScope 结构化并发（JEP 453）**（ShutdownOnFailure / ShutdownOnSuccess + 父子作用域 + 取消传播）+ **ScopedValue 替代 ThreadLocal（JEP 446）** + **Goroutine / Kotlin Coroutine / Loom 三者对比**（颜色化函数问题 + 适用场景决策树）+ **从 CompletableFuture 迁移到 VT 的5 个改造姿势** + Spring Boot 3.2 / Tomcat 11 / Helidon 4 生态现状 + **不该用虚拟线程的 4 个场景**（CPU 密集型/长持锁/JNI/极低延迟）+ 死规矩 8 条 + **卷五收官：4 条主线 + 6 个设计母题回顾**---
 
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
 
@@ -70,7 +69,7 @@
 - ✅ [38.CAS_Atomic_Unsafe_VarHandle](38.CAS_Atomic_Unsafe_VarHandle.md)：Unsafe底层、ABA问题、AtomicStampedReference、LongAdder分段思想、Striped64设计
 - ✅ [39.五大同步器对比](39.五大同步器对比.md)：CountDownLatch一次性闸门、CyclicBarrier可循环屏障、Semaphore信号量、Exchanger双向交换、Phaser分阶段同步器、AQS共享模式落地、long state 4段位运算压缩、树形分层
 - ✅ [40.CompletableFuture异步编程](40.CompletableFuture异步编程.md)：Future进化史、三类API全景、30+算子命名规律、Async后缀与Caller-Runs、内部状态机（AltResult/Treiber stack）、ForkJoinPool common pool三大陷阱、异常三姿势、CompletionException双重包装、thenCompose扁平化、orTimeout/completeOnTimeout、MDC跨线程透传
-- 🆕 41.虚拟线程(Loom)与结构化并发：用户态调度、carrier线程、Pinning问题、与协程/反应式的取舍
+- ✅ [41.虚拟线程Loom与结构化并发](41.虚拟线程Loom与结构化并发.md)：用户态调度、carrier线程+Continuation双层模型、M:N调度、yield/freeze/mount全流程、Pinning钉死诊断、JDK21 vs JDK24解pin、StructuredTaskScope结构化并发、ScopedValue、与Goroutine/Coroutine对比、从CF迁移路径、5个改造姿势、Spring Boot 3.2/Tomcat 11生态
 
 ## 📒 卷六 · IO、网络与序列化（7 篇）
 
@@ -143,9 +142,9 @@ flowchart LR
 | 卷二 | 容器与基础数据结构 | 8 | 8 ✅ |
 | 卷三 | 类型系统与语言机制 | 7 | 7 ✅ |
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
-| 卷五 | 并发编程深水区 | 10 | 9 |
+| 卷五 | 并发编程深水区 | 10 | 10 ✅ |
 | 卷六 | IO、网络与序列化 | 7 | 1 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **40** |
+| **合计** | — | **51** | **41** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~40 为已完成篇目（卷一、卷二、卷三、**卷四收官 ✅** + 卷五深入 9/10），41~51 为待写篇目。
+> 注：全 51 篇按卷连续编号 01~51，其中 01~41 为已完成篇目（卷一、卷二、卷三、卷四、**卷五全收官 ✅**），42~51 为待写篇目（卷六 IO/卷七 设计模式）。
