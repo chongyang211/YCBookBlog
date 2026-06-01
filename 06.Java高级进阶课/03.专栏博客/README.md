@@ -2,10 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 41 篇 ｜ 🆕 待写 10 篇
+> ✅ 已完成 43 篇 ｜ 🆕 待写 8 篇
 >
-> 📌 最近更新：第 41 篇《虚拟线程(Loom)与结构化并发》（**卷五并发深水区收官篇 🏁**）——百万连接 echo server 对比案例切入（平台线程 800 OOM vs 虚拟线程 100万）+ **Loom 立项十年史**（Quasar 2013 → JEP 444 JDK21 正式 → JEP 491 JDK24 解 pin）+ **双层模型**（carrier 线程 + Continuation 续延 + M:N 调度）+ yield/freeze/mount/unmount 全流程 + 创建 VT 的 4 种姿势 + **反模式**（不要池化虚拟线程）+ **Pinning 钉死问题深度诊断**（synchronized + 阻塞/JNI 两大场景 + -Djdk.tracePinnedThreads=full 实战 + JFR jdk.VirtualThreadPinned + JDK 21 vs JDK 24 解 pin 对比）+ **StructuredTaskScope 结构化并发（JEP 453）**（ShutdownOnFailure / ShutdownOnSuccess + 父子作用域 + 取消传播）+ **ScopedValue 替代 ThreadLocal（JEP 446）** + **Goroutine / Kotlin Coroutine / Loom 三者对比**（颜色化函数问题 + 适用场景决策树）+ **从 CompletableFuture 迁移到 VT 的5 个改造姿势** + Spring Boot 3.2 / Tomcat 11 / Helidon 4 生态现状 + **不该用虚拟线程的 4 个场景**（CPU 密集型/长持锁/JNI/极低延迟）+ 死规矩 8 条 + **卷五收官：4 条主线 + 6 个设计母题回顾**---
-
+> 📌 最近更新：第 43 篇《Netty 核心架构剖析》（**卷六 IO/网络第 3 篇 �**）——从「为什么所有高性能 Java 服务器最后都长成 Netty 的样子」切入（8 大工业需求 vs JDK NIO 只解决了1个）+ **EventLoop 单线程串行的胜利**（NioEventLoop=Selector+Queue+Thread 三位一体 + run() 主循环 50/50 ioRatio 策略 + **epoll 空轮询 bug 重建 Selector 源码** + inEventLoop 任务转交 + 主从 Reactor boss/worker）+ **服务端启动 9 步走 + ServerBootstrapAcceptor 转发机制**（源码逐行）+ **Pipeline 双向链表 + Inbound/Outbound 传播方向**（与 Servlet Filter / Spring AOP / OkHttp / MyBatis 五大响应链同构）+ **ByteBuf 三段式内存视图 + reader/writer 双指针 + ReferenceCounted 引用计数 + CompositeByteBuf 零拷贝拼装**（承接 42 篇）+ **PooledByteBufAllocator jemalloc 风格内存池**（PoolArena 三级架构 + PoolChunk Buddy 算法完全二叉树 + PoolSubpage Slab 位图 + PoolThreadCache 99% 命中率揭秘）+ **FastThreadLocal 数组下标趋 JDK ThreadLocal 哈希表快 3x** + **LengthFieldBasedFrameDecoder 拆包黑魔法**（lengthAdjustment 三种误区 + cumulator 累积器）+ **Netty 在 Loom 时代为什么不过时**（41 篇伏笔揭开：Netty+VT 互补不是替代）+ 死规矩 6 条
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
 
 把"虚拟机如何把字节码跑起来"讲透。
@@ -76,8 +75,9 @@
 把"数据怎么进出 Java 进程"讲完整。
 
 - ✅ [11.IO模型演进：BIO到NIO到AIO](11.IO模型演进之BIO到NIO到AIO.md)：五种IO模型对比、NIO三大组件、Selector多路复用、select/poll/epoll底层对比、零拷贝原理、Reactor模式与Netty
-- 🆕 42.NIO之ByteBuffer与堆外内存：HeapBuffer/DirectBuffer、Cleaner回收机制、堆外内存泄漏排查实战
-- 🆕 43.Netty核心架构剖析：EventLoop线程模型、Pipeline双向链表、ChannelHandler、内存池PooledByteBufAllocator、零拷贝实现
+- ✅ [42.NIO之ByteBuffer与堆外内存](42.NIO之ByteBuffer与堆外内存.md)：ByteBuffer状态机（四指针不变式+flip/compact/rewind/clear）、HeapBuffer临时DirectBuffer拷贝真相、IOUtil.write源码、Cleaner+PhantomReference回收链路、Bits全局账簿+System.gc回退机制、-XX:MaxDirectMemorySize与容器、堆外泄漏4大现场、NMT/pmap/jcmd/BufferPoolMXBean排查、mmap/sendfile/splice对应API、Netty自造ByteBuf五大优势
+- ✅ [43.Netty核心架构剖析](43.Netty核心架构剖析.md)：EventLoop单线程串行+ioRatio 50/50策略+epoll空轮询重建、主从反应堆boss/worker、服务端启动九步走+ServerBootstrapAcceptor、Pipeline双向链表+Inbound/Outbound传播、与ServletFilter/AOP/OkHttp/MyBatis同构、ByteBuf三段式+引用计数+CompositeByteBuf零拷贝、PooledByteBufAllocator jemalloc风格+PoolChunk Buddy+PoolSubpage Slab+PoolThreadCache 99%命中、FastThreadLocal数组下标快3x、LengthFieldBasedFrameDecoder拆包、Netty+Loom互补
+- 🆕 44.序列化机制全景：JDK原生Serializable+反序列化攻击、JSON（Jackson/FastJson2/Gson）、Protobuf TLV编码+varint、Kryo、Avro/Thrift对比、反序列化CVE、选型决策树
 - 🆕 44.Java序列化原理与替代方案：Serializable漏洞、writeReplace/readResolve、Kryo/Protobuf/Hessian/JSON选型
 - 🆕 45.HTTP客户端演进：HttpURLConnection→HttpClient→OkHttp/Apache HC、连接池/HTTP2/HTTP3支持现状
 - 🆕 46.TCP与Socket编程在Java中的体现：TIME_WAIT/Nagle/keepalive在Java API的开关、SO_REUSEADDR等参数详解
@@ -143,8 +143,8 @@ flowchart LR
 | 卷三 | 类型系统与语言机制 | 7 | 7 ✅ |
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
 | 卷五 | 并发编程深水区 | 10 | 10 ✅ |
-| 卷六 | IO、网络与序列化 | 7 | 1 |
+| 卷六 | IO、网络与序列化 | 7 | 3 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **41** |
+| **合计** | — | **51** | **43** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~41 为已完成篇目（卷一、卷二、卷三、卷四、**卷五全收官 ✅**），42~51 为待写篇目（卷六 IO/卷七 设计模式）。
+> 注：全 51 篇按卷连续编号 01~51，其中 01~43 为已完成篇目（卷一、卷二、卷三、卷四、**卷五全收官 ✅** + 卷六 3/7），44~51 为待写篇目（卷六 IO 收尾/卷七 设计模式）。
