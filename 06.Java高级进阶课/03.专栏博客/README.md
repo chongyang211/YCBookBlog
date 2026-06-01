@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **51 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 38 篇 ｜ 🆕 待写 13 篇
+> ✅ 已完成 40 篇 ｜ 🆕 待写 11 篇
 >
-> 📌 最近更新：第 38 篇《CAS、Atomic、Unsafe 与 VarHandle》（**无锁原语层一次讲透 ⚡**）——AtomicLong 32 核翻车 + ABA 转账幽灵 bug 双案例切入 + CAS 三要素与伪代码语义 + **LOCK CMPXCHG x86 单指令原子** + HotSpot Atomic::cmpxchg native 实现 + **MESI 缓存一致性协议**（M/E/S/I 四态 + RFO + Invalidate 广播）+ ARM LL/SC 原语对比（LDREX/STREX）+ 自旋开销与上限 + Atomic 全家桶四大类（基本/引用/数组/字段更新器）+ AtomicInteger 源码 JDK 7→8→9 演进（手写自旋 → Unsafe intrinsic → VarHandle）+ Treiber Stack 无锁链表的 ABA 隐患 + AtomicXxxFieldUpdater 零内存改造遗留代码 + **ABA 本质**（值相等 ≠ 状态未变）+ AtomicStampedReference 版本戳方案 + AtomicMarkableReference 单标志方案 + 必须防 ABA 的三大场景 + **LongAdder 化整为零核心思想** + Striped64 数据结构（base + cells[] + cellsBusy）+ add 双重快慢路径 + **longAccumulate 扩容机制源码**（NCPU 上限/2 倍扩容/collide 抖动防护）+ 线程探针 getProbe 分散竞争 + **@Contended 伪共享防护**（cache line 144B 独占）+ sum 弱一致语义 + LongAccumulator 任意二元运算 + Unsafe 五大能力域（CAS/直接内存/park-unpark/对象操作/类操作）+ park 凭证机制 vs wait/notify + Unsafe 反射黑魔法获取 + JDK 9 模块化对 Unsafe 的封锁 + **VarHandle 在 Atomic 中的落地** + 与 31 篇衔接（plain/opaque/acquire-release/volatile 四级）+ Unsafe → VarHandle 迁移指南 + 三档竞争度性能横评（单线程/16 线程/64 线程）+ 选型决策树 + 三大设计哲学（无锁三要素/分段思想/语义分级 + 跨卷分段链回扣）+ 死规矩 6 条
+> 📌 最近更新：第 40 篇《CompletableFuture 异步编程》（**异步编排一次讲透 �**）——3 个 Future.get 把 RT 从 50ms 拖到 600ms 的首页聚合案例切入 + **Future 进化史五大阶段**（JDK5 Future → Guava ListenableFuture 回调地狱 → JDK8 CompletableFuture 组合算子 → Reactor/RxJava 响应式 → JDK21 Loom 虚拟线程）+ 三类 API 全景（创建/转换/组合）+ **30+ 算子命名规律**（Apply/Accept/Run × Async/同步 × Either/Both）+ Async 后缀的真正含义 + Caller-Runs 优化与线程池传染坑 + **内部状态机源码**（result 三态 + AltResult/NIL 哨兵 + Treiber stack 依赖链 + postComplete 链式传播）+ **ForkJoinPool common pool 三大陷阱**（容器单核 ThreadPerTask OOM/IO 阻塞占死池/parallelStream 共池）+ supplyAsync 自定义线程池最佳实践 + **异常处理三姿势**（exceptionally/handle/whenComplete 本质差异）+ 异常穿透机制 + **CompletionException 双重包装陷阱**（exceptionally 里 instanceof 永远 false）+ **同线程池 join 自身的经典死锁** + thenCompose vs thenApply 扁平化（CF<CF<T>> 坑）+ orTimeout/completeOnTimeout JDK9+ + **4 大实战场景**（首页多接口聚合 + Fast Fail 任一败即败 + 多级流水线 + MDC/TraceId 跨线程透传）+ TTL 工业级方案 + 与 Reactor/Loom 横向取舍决策树 + 死规矩 8 条
 ---
 
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
@@ -68,8 +68,8 @@
 - ✅ [36.AQS同步框架源码](36.AQS同步框架源码.md)：并发包的灵魂、CLH队列、独占/共享模式、模板方法设计、Condition条件队列与signal/await
 - ✅ [37.ReentrantLock_ReadWriteLock_StampedLock三剑客](37.ReentrantLock_ReadWriteLock_StampedLock三剑客.md)：公平锁与非公平锁、锁降级、乐观读、与synchronized的取舍
 - ✅ [38.CAS_Atomic_Unsafe_VarHandle](38.CAS_Atomic_Unsafe_VarHandle.md)：Unsafe底层、ABA问题、AtomicStampedReference、LongAdder分段思想、Striped64设计
-- 🆕 39.五大同步器对比：CountDownLatch/CyclicBarrier/Semaphore/Exchanger/Phaser的实现差异与适用场景
-- 🆕 40.CompletableFuture异步编程：Future的进化、组合算子thenApply/thenCompose、ForkJoinPool common pool陷阱
+- ✅ [39.五大同步器对比](39.五大同步器对比.md)：CountDownLatch一次性闸门、CyclicBarrier可循环屏障、Semaphore信号量、Exchanger双向交换、Phaser分阶段同步器、AQS共享模式落地、long state 4段位运算压缩、树形分层
+- ✅ [40.CompletableFuture异步编程](40.CompletableFuture异步编程.md)：Future进化史、三类API全景、30+算子命名规律、Async后缀与Caller-Runs、内部状态机（AltResult/Treiber stack）、ForkJoinPool common pool三大陷阱、异常三姿势、CompletionException双重包装、thenCompose扁平化、orTimeout/completeOnTimeout、MDC跨线程透传
 - 🆕 41.虚拟线程(Loom)与结构化并发：用户态调度、carrier线程、Pinning问题、与协程/反应式的取舍
 
 ## 📒 卷六 · IO、网络与序列化（7 篇）
@@ -143,9 +143,9 @@ flowchart LR
 | 卷二 | 容器与基础数据结构 | 8 | 8 ✅ |
 | 卷三 | 类型系统与语言机制 | 7 | 7 ✅ |
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
-| 卷五 | 并发编程深水区 | 10 | 7 |
+| 卷五 | 并发编程深水区 | 10 | 9 |
 | 卷六 | IO、网络与序列化 | 7 | 1 |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **51** | **38** |
+| **合计** | — | **51** | **40** |
 
-> 注：全 51 篇按卷连续编号 01~51，其中 01~38 为已完成篇目（卷一、卷二、卷三、**卷四收官 ✅** + 卷五深入 7/10），39~51 为待写篇目。
+> 注：全 51 篇按卷连续编号 01~51，其中 01~40 为已完成篇目（卷一、卷二、卷三、**卷四收官 ✅** + 卷五深入 9/10），41~51 为待写篇目。
