@@ -2,7 +2,7 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **48 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 43 篇 ｜ 🆕 待写 5 篇（含卷六 47 + 卷七 4 篇）
+> ✅ 已完成 44 篇 ｜ 🆕 待写 4 篇（卷七 4 篇）
 >
 > 📌 最近更新：**卷六 IO/网络 双篇连发**——第 42 篇《NIO 之 ByteBuffer 与堆外内存》（ByteBuffer 状态机四指针不变式 + flip/compact/rewind/clear、HeapByteBuffer 与 DirectByteBuffer 双形态、IOUtil 临时拷贝真相、Util.bufferCache ThreadLocal 池、Unsafe.allocateMemory + Bits 全局账簿、`-XX:MaxDirectMemorySize` 默认等于 `-Xmx`、Cleaner + PhantomReference 回收链路、Reference Handler 守护线程、堆外泄漏四大现场 + NMT/BufferPoolMXBean/pmap/jcmd 三方对账、`-XX:+DisableExplicitGC` 埋雷、mmap/sendfile/splice 零拷贝家族、Netty ByteBuf 五大改进） + 第 44 篇《Java 序列化原理与替代方案》（Serializable 流格式 AC ED 魔数 + TC_* 文法、ObjectOutputStream 反射读字段、Unsafe.allocateInstance 绕过构造、serialVersionUID 自动哈希算法、五大魔法钩子 writeObject/readObject/writeReplace/readResolve/Externalizable、反序列化 Gadget Chain 攻击 CC1 链拆解、ObjectInputFilter + JEP 290 防御、Jackson/FastJson2/Gson 三剑客对比、Protobuf TLV + Varint 7bit 分组 + ZigZag 负数交错、字段号永不复用三铁律、Kryo/Hessian/Avro/Thrift 横评、五维选型决策树）
 
@@ -78,7 +78,7 @@
 - ✅ [11.IO模型演进BIO到AIO](11.IO模型演进BIO到AIO.md)：五种IO模型对比、NIO三大组件、Selector多路复用、select/poll/epoll底层对比、零拷贝原理、Reactor模式与Netty
 - ✅ [42.NIO之ByteBuffer与堆外内存](42.ByteBuffer与堆外内存)：ByteBuffer状态机（四指针不变式+flip/compact/rewind/clear）、HeapBuffer临时DirectBuffer拷贝真相、IOUtil.write源码、Cleaner+PhantomReference回收链路、Bits全局账簿+System.gc回退机制、-XX:MaxDirectMemorySize与容器、堆外泄漏4大现场、NMT/pmap/jcmd/BufferPoolMXBean排查、mmap/sendfile/splice对应API、Netty自造ByteBuf五大优势
 - ✅ [44.Java序列化原理与替代方案](44.序列化原理与替代方案)：Serializable漏洞与writeReplace/readResolve、JDK原生反序列化攻击与CVE、JSON（Jackson/FastJson2/Gson）、Protobuf TLV编码+varint、Kryo/Hessian/Avro/Thrift对比、选型决策树
-- 🆕 47.文件IO与NIO.2：Path/Files API、WatchService监听、内存映射文件mmap的真实场景
+- ✅ [47.文件IO与NIO.2](47.文件IO与NIO.2.md)：Path跳出File的五大设计、FileSystem SPI多态、Files原子写入(ATOMIC_MOVE)、WatchService三大抽象+inotify底层映射、vim保存/echo覆盖不同事件、去抖与OVERFLOW处理、macOS kqueue 10s延迟坑、FileChannel.map三种模式与缺页中断、大文件分段映射LRU、Unsafe.invokeCleaner逃生、FileLock进程级锁与MappedByteBuffer冲突、DELETE_ON_CLOSE与ShutdownHook清理、配置热更新/日志切割/单实例守护三大场景
 
 ## 📓 卷七 · 设计思想与设计模式（4 篇）
 
@@ -140,8 +140,8 @@ flowchart LR
 | 卷三 | 类型系统与语言机制 | 7 | 7 ✅ |
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
 | 卷五 | 并发编程深水区 | 10 | 10 ✅ |
-| 卷六 | IO、网络与序列化 | 4 | 3 |
+| 卷六 | IO、网络与序列化 | 4 | 4 ✅ |
 | 卷七 | 设计思想与设计模式 | 4 | 0 |
-| **合计** | — | **48** | **43** |
+| 合计 | — | **48** | **44** |
 
-> 注：全 48 篇按卷连续编号，已完成 43 篇（**卷一~卷五全收官 ✅** + 卷六 3/4），剩余 5 篇为待写篇目（卷六 47 文件IO 1 篇 + 卷七 设计模式 4 篇）。
+> 注：全 48 篇按卷连续编号，已完成 44 篇（**卷一~卷六全收官 ✅**），剩余 4 篇为待写篇目（全部在卷七 设计模式）。
