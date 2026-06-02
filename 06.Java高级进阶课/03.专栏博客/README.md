@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **48 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 45 篇 ｜ 🆕 待写 3 篇（卷七 3 篇）
+> ✅ 已完成 46 篇 ｜ 🆕 待写 2 篇（卷七 2 篇）
 >
-> 📌 最近更新：**卷七 设计思想开卷**——第 48 篇《面向对象的真意》（1万字一篇拆透 OO 四大支柱+SOLID+JDK 范本：Order 上帝类事故入场、封装不是 getter/setter、不变量保护、实现继承的脆弱与 CountingHashSet 陷阱、LSP 里氏替换与正方形反例、组合优于继承、子类型多态与参数化多态、invokevirtual/invokeinterface 字节码、vtable内联缓存、单分派与访问者模式、接口 vs 抽象类选型、default 方法演进史、行为参数化、SOLID 五原则成对拆解、Collection 分层与 InputStream 装饰链与 AQS 模板方法与 Comparator 组合子、贫血与充血模型、Record 不可变、sealed 与模式匹配、OO 与 FP 合流；含完整重构案例」
+> 📌 最近更新：**卷七 设计模式 双篇连发**——第 48 篇《面向对象的真意》 + 第 49 篇《JDK设计模式上》（鉴权模块组合拳事故入场、单例六写法+DCL半初始化陷阱+volatile内存屏障、Holder静态内部类+JVM类加载锁、枚举单例防反射防序列化双保险、Runtime反例警告、工厂三兄弟+静态工厂5大优势+JDK工厂命名约定、重叠构造函数地狱与链式Builder+HttpClient范本+Record不可变携手、Cloneable设计错误+Object.clone浅拷贝本质+拷贝构造与Type.copyOf的逆袖、FilterInputStream装饰器金字塔+Collections.unmodifiableList是装饰器、InputStreamReader字节-字符适配、Arrays.asList的伪装阅读、静态代理-JDK动态代理-CGLIB三家对比+$Proxy0生成原理+FastClass机制、Spring代理选型决策、@Transactional自调用穿透代理事故+self注入修正）。
 
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
 
@@ -85,7 +85,7 @@
 把"为什么 Java 这么写"的灵魂还原。
 
 - ✅ [48.面向对象的真意](48.面向对象的真意.md)：Order上帝类事故入场、封装不是getter/setter不变量保护、CountingHashSet陷阱与实现继承脆弱、LSP里氏替换与正方形反例、组合优于继承、子类型与参数化多态、invokevirtual/invokeinterface字节码+vtable内联缓存、单分派与访问者模式、接口vs抽象类选型、default方法演进史、行为参数化、SOLID五原则成对拆解、Collection分层/InputStream装饰链/AQS模板方法/Comparator组合子、贫血vs充血模型、Record不可变、sealed+模式匹配、OO与FP合流、一次完整重构案例
-- 🆕 49.JDK中的设计模式实战盘点（上）：创建型+结构型——单例六种写法、工厂三兄弟、装饰器(IO流)、适配器、代理
+- ✅ [49.JDK设计模式上](49.JDK设计模式上.md)：鉴权模块组合拳事故入场、单例六写法全谱+DCL半初始化陷阱+volatile内存屏障、Holder静态内部类+JVM类加载锁、枚举单例防反射防序列化双保险、工厂三兄弟（简单/方法/抽象）+静态工厂5大优势+JDK工厂命名约定全景、重叠构造函数地狱与链式Builder+HttpClient范本+Record携手、Cloneable设计错误+Object.clone浅拷贝本质+拷贝构造与Type.copyOf的取代、FilterInputStream装饰器金字塔+Collections.unmodifiableList装饰器本质、InputStreamReader字节-字符适配+Arrays.asList的伪装、静态代理-JDK动态代理-CGLIB三家对比+$Proxy0生成原理+FastClass机制+Spring代理选型决策、@Transactional自调用穿透代理事故+self注入修正、完整“一个请求触发7种模式”串讲
 - 🆕 50.JDK中的设计模式实战盘点（下）：行为型——迭代器、观察者、模板方法(AQS)、策略、责任链(ServletFilter)
 - 🆕 51.SPI机制与Java模块化：ServiceLoader源码、JPMS模块系统、与OSGi的差别、双亲委派的破局
 
@@ -141,7 +141,7 @@ flowchart LR
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
 | 卷五 | 并发编程深水区 | 10 | 10 ✅ |
 | 卷六 | IO、网络与序列化 | 4 | 4 ✅ |
-| 卷七 | 设计思想与设计模式 | 4 | 1 |
-| **合计** | — | **48** | **45** |
+| 卷七 | 设计思想与设计模式 | 4 | 2 |
+| **合计** | — | **48** | **46** |
 
-> 注：全 48 篇按卷连续编号，已完成 45 篇（**卷一~卷六全收官 ✅** + 卷七 1/4），剩余 3 篇为卷七 设计模式 待写篇目。
+> 注：全 48 篇按卷连续编号，已完成 46 篇（**卷一~卷六全收官 ✅** + 卷七 2/4），剩余 2 篇为卷七 设计模式 待写篇目。
