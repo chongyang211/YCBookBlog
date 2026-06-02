@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 6/60
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 7/60
 >
-> 📌 最新一篇：**第 06 篇《多重继承内存模型》** ✅（Camera SDK 重构后 reinterpret_cast 跨基类导致事件总线 onEvent 段错误的生产事故入场、多继承四种拓扑普通/菱形/虚继承的对照与代价、子对象按声明顺序拼接 + 各自对齐 + 派生类数据居后、含虚函数的基类才有 vptr、第一个非空基类零偏移特权解释 reinterpret_cast 重构前能跑的物理巧合、godbolt 实测 static_cast 是 lea 偏移指令、static_cast 对 nullptr 的 cmove 特例处理、向上转型与向下转型的偏移对称性、reinterpret_cast 跨继承体系永远 UB 的铁律、菱形继承数据成员双份与名字查找歧义、菱形继承四种替代方案、虚继承让虚基类共享一份与 vbase_offset 槽 GCC vs vbptr+vbtable MSVC 实现差异、虚基类偏移由最派生类决定、构造顺序虚基→直接基→成员→自身与析构反向、虚基由最派生类直接构造的语法约束、dynamic_cast 三种用途向下/交叉/转 void*、通过 vtable offset_to_top 与 typeinfo 链跨子对象穿透、引用版 dynamic_cast 抛 bad_cast、多继承 vs Java 接口 itable vs Rust trait fat pointer 三种设计取舍、纯接口隔离 + 数据集中实现的工程范式、Mixin + CRTP 增量装配能力）
+> 📌 最新一篇：**第 07 篇《内存对齐与缓存行》** ✅（撮合系统 8 线程吞吐反降的生产事故入场、perf c2c 抓 81% HITM 直指假共享、对齐三层模型 ABI/cache/互连各司其职、对齐的硬件本因总线宽度与跨 line 代价 split-lock、cache line 物理意义与 MESI 四态流转、写传播 RFO + invalidate 全套时序、跨核 HITM 25–35 ns 比本地 DRAM 还慢、假共享 ping-pong 现场 8.5ns 对 0.89ns 18 倍差距、隐藏假共享 5 大来源 atomic 数组 / vector<bool> / RAII 偶然紧邻 / 链接器并排 / lock-free 队列 head-tail、alignas 起始对齐 + sizeof 凑齐双重作用、padding 模板与 CacheAligned 写法、hardware_destructive_interference_size 的 ABI 风险与 GCC 13 警告、ShardedCounter 线程本地副本聚合、perf c2c 工作原理 PEBS 精确采样、record 抓取 + report 字段解读 + addr2line 反查源码全链路、SIMD 对齐三件套 aligned_alloc/posix_memalign/_aligned_malloc、std::vector<__m512> 的 C++17 过对齐分配器要求、SoA vs AoS vs AoSoA 三种布局取舍、x86-64 / ARM64 / Apple M1 / POWER9 cache line 大小差异 64/128、NUMA 远端 HITM 100+ ns 治理、避免假共享决策树）
 
 ## 📐 设计理念
 
@@ -26,7 +26,7 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 - ✅ [04.this指针与成员函数](04.this指针与成员函数.md)：成员函数→普通函数翻译、隐式this、const成员函数本质、this是右值、cv限定符在ABI层的体现
 - ✅ [05.虚函数表深度剖析](05.虚函数表深度剖析.md)：vptr在对象头部、vtable在只读段、单继承vtable布局、多继承thunk、虚继承vbtable、构造析构期间虚函数行为
 - ✅ [06.多重继承内存模型](06.多重继承内存模型.md)：多继承对象布局、菱形继承数据冗余、虚继承vbptr、向上转型的指针偏移、dynamic_cast运行时机制
-- ⏳ [07.内存对齐与缓存行](07.内存对齐与缓存行.md)：False sharing假共享、alignas/alignof、SIMD对齐要求、cache line padding实战、perf c2c检测假共享
+- ✅ [07.内存对齐与缓存行](07.内存对齐与缓存行.md)：False sharing假共享、alignas/alignof、SIMD对齐要求、cache line padding实战、perf c2c检测假共享
 - ⏳ [08.内存分配器演进史](08.内存分配器演进史.md)：malloc/free历史、ptmalloc arena、tcmalloc thread cache、jemalloc、operator new重载、内存池设计
 
 ## 📗 卷二 · 类型系统与值类别（8 篇）
@@ -159,7 +159,7 @@ flowchart LR
 
 | 卷 | 主题 | 篇数 | 已完成 |
 |---|---|---|---|
-| 卷一 | 内存模型与对象布局 | 8 | 6 ⏳ |
+| 卷一 | 内存模型与对象布局 | 8 | 7 ⏳ |
 | 卷二 | 类型系统与值类别 | 8 | 0 ⏳ |
 | 卷三 | 模板与编译期计算 | 8 | 0 ⏳ |
 | 卷四 | 资源管理与生命周期 | 7 | 0 ⏳ |
@@ -167,7 +167,7 @@ flowchart LR
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **6 ⏳** |
+| **合计** | — | **60** | **7 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
