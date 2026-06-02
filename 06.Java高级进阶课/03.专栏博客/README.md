@@ -68,7 +68,7 @@
 - ✅ [37.并发锁三剑客](37.并发锁三剑客.md)：公平锁与非公平锁、锁降级、乐观读、与synchronized的取舍
 - ✅ [38.CAS_Atomic_Unsafe_VarHandle](38.CAS和Atomic深入分析)：Unsafe底层、ABA问题、AtomicStampedReference、LongAdder分段思想、Striped64设计
 - ✅ [39.五大同步器对比](39.五大同步器对比.md)：CountDownLatch一次性闸门、CyclicBarrier可循环屏障、Semaphore信号量、Exchanger双向交换、Phaser分阶段同步器、AQS共享模式落地、long state 4段位运算压缩、树形分层
-- ✅ [40.CompletableFuture异步编程](40.CompletableFuture异步编程.md)：Future进化史、三类API全景、30+算子命名规律、Async后缀与Caller-Runs、内部状态机（AltResult/Treiber stack）、ForkJoinPool common pool三大陷阱、异常三姿势、CompletionException双重包装、thenCompose扁平化、orTimeout/completeOnTimeout、MDC跨线程透传
+- ✅ [40.CompletableFuture异步编程](40.CompletableFuture异步)：Future进化史、三类API全景、30+算子命名规律、Async后缀与Caller-Runs、内部状态机（AltResult/Treiber stack）、ForkJoinPool common pool三大陷阱、异常三姿势、CompletionException双重包装、thenCompose扁平化、orTimeout/completeOnTimeout、MDC跨线程透传
 
 
 ## 📒 卷六 · IO、网络与序列化（4 篇）
@@ -76,8 +76,8 @@
 把"数据怎么进出 Java 进程"讲完整。
 
 - ✅ [11.IO模型演进BIO到AIO](11.IO模型演进BIO到AIO.md)：五种IO模型对比、NIO三大组件、Selector多路复用、select/poll/epoll底层对比、零拷贝原理、Reactor模式与Netty
-- ✅ [42.NIO之ByteBuffer与堆外内存](42.NIO之ByteBuffer与堆外内存.md)：ByteBuffer状态机（四指针不变式+flip/compact/rewind/clear）、HeapBuffer临时DirectBuffer拷贝真相、IOUtil.write源码、Cleaner+PhantomReference回收链路、Bits全局账簿+System.gc回退机制、-XX:MaxDirectMemorySize与容器、堆外泄漏4大现场、NMT/pmap/jcmd/BufferPoolMXBean排查、mmap/sendfile/splice对应API、Netty自造ByteBuf五大优势
-- ✅ [44.Java序列化原理与替代方案](44.Java序列化原理与替代方案.md)：Serializable漏洞与writeReplace/readResolve、JDK原生反序列化攻击与CVE、JSON（Jackson/FastJson2/Gson）、Protobuf TLV编码+varint、Kryo/Hessian/Avro/Thrift对比、选型决策树
+- ✅ [42.NIO之ByteBuffer与堆外内存](42.ByteBuffer与堆外内存)：ByteBuffer状态机（四指针不变式+flip/compact/rewind/clear）、HeapBuffer临时DirectBuffer拷贝真相、IOUtil.write源码、Cleaner+PhantomReference回收链路、Bits全局账簿+System.gc回退机制、-XX:MaxDirectMemorySize与容器、堆外泄漏4大现场、NMT/pmap/jcmd/BufferPoolMXBean排查、mmap/sendfile/splice对应API、Netty自造ByteBuf五大优势
+- ✅ [44.Java序列化原理与替代方案](44.序列化原理与替代方案)：Serializable漏洞与writeReplace/readResolve、JDK原生反序列化攻击与CVE、JSON（Jackson/FastJson2/Gson）、Protobuf TLV编码+varint、Kryo/Hessian/Avro/Thrift对比、选型决策树
 - 🆕 47.文件IO与NIO.2：Path/Files API、WatchService监听、内存映射文件mmap的真实场景
 
 ## 📓 卷七 · 设计思想与设计模式（4 篇）
