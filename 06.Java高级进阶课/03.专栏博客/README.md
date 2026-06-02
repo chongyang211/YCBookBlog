@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **48 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 44 篇 ｜ 🆕 待写 4 篇（卷七 4 篇）
+> ✅ 已完成 45 篇 ｜ 🆕 待写 3 篇（卷七 3 篇）
 >
-> 📌 最近更新：**卷六 IO/网络 双篇连发**——第 42 篇《NIO 之 ByteBuffer 与堆外内存》（ByteBuffer 状态机四指针不变式 + flip/compact/rewind/clear、HeapByteBuffer 与 DirectByteBuffer 双形态、IOUtil 临时拷贝真相、Util.bufferCache ThreadLocal 池、Unsafe.allocateMemory + Bits 全局账簿、`-XX:MaxDirectMemorySize` 默认等于 `-Xmx`、Cleaner + PhantomReference 回收链路、Reference Handler 守护线程、堆外泄漏四大现场 + NMT/BufferPoolMXBean/pmap/jcmd 三方对账、`-XX:+DisableExplicitGC` 埋雷、mmap/sendfile/splice 零拷贝家族、Netty ByteBuf 五大改进） + 第 44 篇《Java 序列化原理与替代方案》（Serializable 流格式 AC ED 魔数 + TC_* 文法、ObjectOutputStream 反射读字段、Unsafe.allocateInstance 绕过构造、serialVersionUID 自动哈希算法、五大魔法钩子 writeObject/readObject/writeReplace/readResolve/Externalizable、反序列化 Gadget Chain 攻击 CC1 链拆解、ObjectInputFilter + JEP 290 防御、Jackson/FastJson2/Gson 三剑客对比、Protobuf TLV + Varint 7bit 分组 + ZigZag 负数交错、字段号永不复用三铁律、Kryo/Hessian/Avro/Thrift 横评、五维选型决策树）
+> 📌 最近更新：**卷七 设计思想开卷**——第 48 篇《面向对象的真意》（1万字一篇拆透 OO 四大支柱+SOLID+JDK 范本：Order 上帝类事故入场、封装不是 getter/setter、不变量保护、实现继承的脆弱与 CountingHashSet 陷阱、LSP 里氏替换与正方形反例、组合优于继承、子类型多态与参数化多态、invokevirtual/invokeinterface 字节码、vtable内联缓存、单分派与访问者模式、接口 vs 抽象类选型、default 方法演进史、行为参数化、SOLID 五原则成对拆解、Collection 分层与 InputStream 装饰链与 AQS 模板方法与 Comparator 组合子、贫血与充血模型、Record 不可变、sealed 与模式匹配、OO 与 FP 合流；含完整重构案例」
 
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
 
@@ -84,7 +84,7 @@
 
 把"为什么 Java 这么写"的灵魂还原。
 
-- 🆕 48.面向对象的真意：Java设计哲学的源头、封装/继承/多态在JDK源码里的范本、SOLID原则与Java
+- ✅ [48.面向对象的真意](48.面向对象的真意.md)：Order上帝类事故入场、封装不是getter/setter不变量保护、CountingHashSet陷阱与实现继承脆弱、LSP里氏替换与正方形反例、组合优于继承、子类型与参数化多态、invokevirtual/invokeinterface字节码+vtable内联缓存、单分派与访问者模式、接口vs抽象类选型、default方法演进史、行为参数化、SOLID五原则成对拆解、Collection分层/InputStream装饰链/AQS模板方法/Comparator组合子、贫血vs充血模型、Record不可变、sealed+模式匹配、OO与FP合流、一次完整重构案例
 - 🆕 49.JDK中的设计模式实战盘点（上）：创建型+结构型——单例六种写法、工厂三兄弟、装饰器(IO流)、适配器、代理
 - 🆕 50.JDK中的设计模式实战盘点（下）：行为型——迭代器、观察者、模板方法(AQS)、策略、责任链(ServletFilter)
 - 🆕 51.SPI机制与Java模块化：ServiceLoader源码、JPMS模块系统、与OSGi的差别、双亲委派的破局
@@ -141,7 +141,7 @@ flowchart LR
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
 | 卷五 | 并发编程深水区 | 10 | 10 ✅ |
 | 卷六 | IO、网络与序列化 | 4 | 4 ✅ |
-| 卷七 | 设计思想与设计模式 | 4 | 0 |
-| 合计 | — | **48** | **44** |
+| 卷七 | 设计思想与设计模式 | 4 | 1 |
+| **合计** | — | **48** | **45** |
 
-> 注：全 48 篇按卷连续编号，已完成 44 篇（**卷一~卷六全收官 ✅**），剩余 4 篇为待写篇目（全部在卷七 设计模式）。
+> 注：全 48 篇按卷连续编号，已完成 45 篇（**卷一~卷六全收官 ✅** + 卷七 1/4），剩余 3 篇为卷七 设计模式 待写篇目。
