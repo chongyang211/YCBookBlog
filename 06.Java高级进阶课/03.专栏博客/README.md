@@ -2,9 +2,9 @@
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **48 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。
 >
-> ✅ 已完成 47 篇 ｜ 🆕 待写 1 篇（卷七 1 篇）
+> 🎉 **全册 48 篇正式收官！** ✅ 已完成 48/48
 >
-> 📌 最近更新：**卷七 设计模式 收官三连**——第 50 篇《JDK设计模式下》（订单审批工作流事故入场、迭代器fail-fast机制+modCount版本号对账+Spliterator并行分割、Observable废弃原因+PropertyChangeSupport+Flow响应式四角色+反压机制+SubmissionPublisher、模板方法骨架final钩子abstract+AQS的acquire骨架范本+AbstractList复用魔法+HttpServlet.service分发、策略模式收编if-else长龙+Comparator策略组合子+RejectedExecutionHandler四种拒绝策略+Lambda让策略零代价、责任链链表与递归两种实现+ServletFilter的pre-post洋葱模型+Netty ChannelPipeline双向链+OkHttp Interceptor链式优雅、命令模式Runnable即命令+撤销与命令日志+WAL日志类比、状态模式消除12×8 if地狱+Order状态机StateDiagram+Thread.State范本、备忘录封装边界与Originator-Memento-Caretaker三角+事务回滚与事件溯源替代、解释器模式Pattern AST+何时不用解释器、收官四大设计哲学：协作对象化/流程不动细节可填/组合替代继承/请求是一等公民）。
+> 📌 最终篇：**第 51 篇《SPI与模块化》——全册收官篇**（SLF4J找不到Provider+JDBC自动加载+ToolProvider+镜像480MB+InaccessibleObjectException五大启动事故入场、API与SPI的反向控制、META-INF/services约定、ServiceLoader源码三关键点+懒加载迭代器+JDK 9 Stream新API+Provider元数据先看再选、双亲委派回顾与SPI冲突根源、JDBC破局之路与DriverManager.loadInitialDrivers源码+反向registerDriver、线程上下文类加载器TCCL机制+Tomcat WebApp层级反转+OSGi网状委派、SLF4J 1.x静态绑定vs 2.x ServiceLoader、Dubbo增强SPI按key选+IoC+AOP+Wrapper、SPI五大陷阱+maven-shade合并services、JPMS解决internal包绑架与rt.jar 60MB瘦身、module-info语法全谱（requires/exports/opens/uses/provides）、模块路径vs类路径、强封装与--add-opens逃生、模块化下SPI编译期增强、自动模块与未命名模块兼容路径、拆分包冲突、JPMS vs OSGi五大维度对比+三选一决策树、jdeps分析+jlink定制JRE镜像从480MB降至80~120MB、Spring Boot生态对JPMS的运行时支持开发期不强制态度、SpringFactoriesLoader自定义SPI、SpringApplication.run一行代码触发3层CL+3次ServiceLoader+1次Spring SPI+1次Tomcat反向委派+N次JPMS强封装检查、全册七卷主线回望、十大贯穿设计哲学速查）。
 
 ## 📕 卷一 · JVM 与运行时核心（10 篇）
 
@@ -87,7 +87,7 @@
 - ✅ [48.面向对象的真意](48.面向对象的真意.md)：Order上帝类事故入场、封装不是getter/setter不变量保护、CountingHashSet陷阱与实现继承脆弱、LSP里氏替换与正方形反例、组合优于继承、子类型与参数化多态、invokevirtual/invokeinterface字节码+vtable内联缓存、单分派与访问者模式、接口vs抽象类选型、default方法演进史、行为参数化、SOLID五原则成对拆解、Collection分层/InputStream装饰链/AQS模板方法/Comparator组合子、贫血vs充血模型、Record不可变、sealed+模式匹配、OO与FP合流、一次完整重构案例
 - ✅ [49.JDK设计模式上](49.JDK设计模式上.md)：鉴权模块组合拳事故入场、单例六写法全谱+DCL半初始化陷阱+volatile内存屏障、Holder静态内部类+JVM类加载锁、枚举单例防反射防序列化双保险、工厂三兄弟（简单/方法/抽象）+静态工厂5大优势+JDK工厂命名约定全景、重叠构造函数地狱与链式Builder+HttpClient范本+Record携手、Cloneable设计错误+Object.clone浅拷贝本质+拷贝构造与Type.copyOf的取代、FilterInputStream装饰器金字塔+Collections.unmodifiableList装饰器本质、InputStreamReader字节-字符适配+Arrays.asList的伪装、静态代理-JDK动态代理-CGLIB三家对比+$Proxy0生成原理+FastClass机制+Spring代理选型决策、@Transactional自调用穿透代理事故+self注入修正、完整“一个请求触发7种模式”串讲
 - ✅ [50.JDK设计模式下](50.JDK设计模式下.md)：订单审批工作流事故入场、迭代器fail-fast机制+modCount版本号对账+ListIterator双向遍历+Spliterator并行分割+内迭代forEach对比、Observable废弃四原因+PropertyChangeSupport类型安全推送+Flow响应式四角色+反压机制+SubmissionPublisher开箱即用+EventBus解耦边界、模板方法骨架final钩子abstract+AQS的acquire骨架五钩子范本+AbstractList复用魔法+HttpServlet.service的HTTP方法分发、策略模式收编if-else长龙+Comparator策略组合子（reversed/thenComparing）+RejectedExecutionHandler四种拒绝策略+Lambda让策略零代价、责任链链表与递归两种实现+ServletFilter的pre-post洋葱模型+Netty ChannelPipeline双向链入站出站+OkHttp Interceptor链式优雅+审批引擎重构成Interceptor模型、命令模式Runnable即命令+Callable带返回值+撤销与命令日志+数据库WAL类比、状态模式消除12×8 if地狱+Order状态机stateDiagram+Thread.State范本+枚举携带行为的轻量化变体、备忘录Originator-Memento-Caretaker三角+事务回滚与事件溯源替代+不可变对象天然备忘录、解释器模式Pattern AST编译+何时不用解释器、收官四大设计哲学：协作对象化/流程不动细节可填/组合替代继承/请求是一等公民、Java 8+行为型模式Lambda化对照表
-- 🆕 51.SPI机制与Java模块化：ServiceLoader源码、JPMS模块系统、与OSGi的差别、双亲委派的破局
+- ✅ [51.SPI与模块化](51.SPI与模块化.md)：SLF4J找不到Provider+JDBC自动加载+ToolProvider+镜像480MB+InaccessibleObjectException五大启动事故入场、API与SPI的反向控制本质、META-INF/services约定、ServiceLoader源码三关键点（路径拼接+getResources多jar+TCCL加载）+懒加载迭代器、JDK 9 Stream新API+Provider元数据先看再选、双亲委派回顾与SPI冲突根源、JDBC破局之路+DriverManager.loadInitialDrivers源码+反向registerDriver、线程上下文类加载器TCCL机制+Tomcat WebApp层级反转+OSGi网状委派四种破局方式、SLF4J 1.x静态绑定vs 2.x ServiceLoader、Dubbo增强SPI按key选+@SPI默认+IoC+AOP+Wrapper、自己写一个SPI三步法、SPI五大陷阱+maven-shade ServicesResourceTransformer合并、JPMS解决internal包绑架与rt.jar 60MB瘦身、module-info语法全谱（requires/exports/opens/uses/provides+transitive+static+to限定）、模块路径vs类路径、强封装与InaccessibleObjectException+--add-opens三种修复路径、模块化下SPI的provides与uses编译期增强、自动模块与未命名模块兼容路径+三阶段迁移、拆分包冲突的硬压力、JPMS vs OSGi五大维度对比+三选一决策树、jdeps依赖分析+jlink定制JRE镜像从480MB降至80~120MB、Spring Boot生态对JPMS的运行时支持开发期不强制态度、SpringFactoriesLoader自定义SPI、SpringApplication.run一行代码触发3层CL+3次ServiceLoader+1次Spring SPI+1次Tomcat反向委派+N次JPMS强封装检查的完整旅程、全册七卷主线回望、十大贯穿设计哲学速查表
 
 ---
 
@@ -141,7 +141,7 @@ flowchart LR
 | 卷四 | 反射与字节码增强 | 5 | 5 ✅ |
 | 卷五 | 并发编程深水区 | 10 | 10 ✅ |
 | 卷六 | IO、网络与序列化 | 4 | 4 ✅ |
-| 卷七 | 设计思想与设计模式 | 4 | 3 |
-| **合计** | — | **48** | **47** |
+| 卷七 | 设计思想与设计模式 | 4 | 4 ✅ |
+| **合计** | — | **48** | **48 ✅** |
 
-> 注：全 48 篇按卷连续编号，已完成 47 篇（**卷一~卷六全收官 ✅** + 卷七 3/4），剩余 1 篇为卷七 SPI与模块化 收官篇。
+> 🎉 **全 48 篇按卷连续编号已全部完成**——卷一 ~ 卷七 七卷俱收官，《Java 核心原理深度专栏》正式完结。
