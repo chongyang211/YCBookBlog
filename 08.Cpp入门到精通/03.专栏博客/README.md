@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 10/60（✅ 卷一全部完成 · 🚀 卷二 2/8）
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 11/60（✅ 卷一全部完成 · 🚀 卷二 3/8）
 >
-> 📌 最新一篇：**第 10 篇《右值引用与移动语义》** ✅（风控特征服务 MyEvent 移动构造函数缺 noexcept 导致 vector 扩容静默退化为拷贝、P99 延迟从 8ms 骤升到 280ms、补 8 个字符 noexcept 后 36 倍性能提升生产事故入场、移动语义五层骨架（值类别/引用类型/重载决议/资源转移/异常保证）、语义层设计三层职责分离（T&& 语法/std::move 转换/移动构造行为）、2002 N1377 提案哈弗曼·辛纳特、copy-and-swap 惯用法的启示、C++17 强制 copy elision 加强、std::move 源码全拆（static_cast + remove_reference_t + constexpr + noexcept）、move 生成的汇编被完全擦除零开销证据、SSO 短字符串与 POD 类型上 move 等价 copy 的误解诊正、T&& 只接 rvalue 与重载优先级表、具名右值引用在函数体内是 lvalue 的最大坍的需要再 move、const T&& 的 std::optional/tuple 应用场景、移动构造三步法 接管资源+置空原对象+noexcept、copy-and-swap 风格赋值与 self-check 双路实现、移后对象 "valid but unspecified" 状态与 std::optional 移后 has_value 仍 true 反直觉、= default 移动逐成员与 noexcept 推导、强异常保证与 move_if_noexcept 底层机制、扩容选移动还是拷贝的决策表、unique_ptr 禁拷贝留移动设计、unique_ptr 3 条 mov 指令零开销汇编、vector<unique_ptr> 组合模式、NRVO 与 return 局部变量不应 std::move 的反优化、return 函数形参需显式 move 的例外、const 对象上的 move 静默退化为拷贝、移后再使用陷阱与 clang-tidy bugprone-use-after-move、移动构造不要分配新资源以保证 noexcept、完整的 push_back 旅程 mermaid 流程图、从类型表达意图零开销到默认安全显式声明再到挑食 noexcept 机制与资源所有权语义化四条设计哲学总结、工程红线 10 条与编译器诊断警告速查）
+> 📌 最新一篇：**第 11 篇《完美转发与引用折叠》** ✅（交易服务 Order 工厂按值收形参且不带 forward 导致每次构造触发 2 次 string 深拷贝、改万能引用 + forward 后中转过程 0 次额外拷贝、push_back 与 emplace_back 性能对比真相、完美转发五层架构（万能引用/引用折叠/类型推导/forward/转发链路）、转发的三层完美语义（类型/值类别/cv 限定）、模板推导上下文中 T&& 同语法两种语义辨析、Box 成员函数已固定 T 不是万能引用的判定盲区、C++03 N 参数 2^N 重载组合爆炸催生完美转发、N1385 设计抉择重用 T&& 而非引入新关键字、Scott Meyers universal reference 与 C++17 forwarding reference 命名史、引用折叠四条规则有 & 即 & 全 && 才 && 的简记法、lvalue 推导 T 带 & 与 rvalue 推导 T 不带 & 的钥匙作用、auto&& 五种推导对照表、typedef IntRef&& 不是右值引用的折叠陷阱、std::forward 源码逐字拆解（static_cast<T&&>(t) 配引用折叠）、forward 与 move 在 cast 目标上一字之差导致行为天壤之别、forward 必须显式写 <T> 的根本原因（具名形参丢失 rvalue 性需用外层 T 信息恢复）、汇编层证实 forward 完全擦除调用方分别命中 use(int&) 与 use(int&&) 重载、emplace_back 完美转发避免 push_back 一次移动、make_unique 4 行代码 4 个完美转发关键节点、可变参数包同步推导 lockstep 与 forward<Args>(args)... 同步展开、转发失败八大场景全览（花括号没类型/0 或 NULL 不是指针/类内 static const 取地址链接错/重载函数名无法决议/位域不允许引用/typedef 埋下 & 的歧义/const 成员函数限制/隐式转换不触发）、万能引用劫持拷贝构造的经典坑与 enable_if + decay_t + is_base_of 的标准防护、C++20 requires 与 concept 替代 SFINAE 的可读性飞跃、forward 写错类型参数永远输出 rvalue 的隐蔽 bug、make_tuple 中转后 lvalue 实参被 move 的具名化丢失值类别、forward_as_tuple 引用 tuple 保留转发链、vector<bool> 代理类 prvalue 让 auto& 编译错而 auto&& 兼容的范围 for 默认推荐根因、C++14 lambda 初始化捕获实现完美捕获、emplace 全旅程 mermaid 流程图含每步推导折叠 forward 详解、最终字段类型决定不可消除的 1 次构造而 forward 仅消除中转损耗、从类型系统驱动信息保留零开销到复用语法的 trade-off 再到完美的边界与诚实再到 SFINAE 与转发的协作机制四条设计哲学总结、工程红线 10 条与 clang-tidy bugprone-forwarding-reference-overload 等编译器诊断速查）
 
 ## 📐 设计理念
 
@@ -35,7 +35,7 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 
 - ✅ [09.五大值类别详解](09.五大值类别详解.md)：lvalue/xvalue/prvalue/glvalue/rvalue、值类别决策树、decltype判定值类别、表达式值类别速查
 - ✅ [10.右值引用与移动语义](10.右值引用与移动语义.md)：std::move本质是static_cast、移动构造与移动赋值、移动后对象状态、noexcept移动的关键性、unique_ptr移动
-- ⏳ [11.完美转发与引用折叠](11.完美转发与引用折叠.md)：万能引用T&&、std::forward实现、引用折叠四规则、转发失败八大场景、SFINAE辅助
+- ✅ [11.完美转发与引用折叠](11.完美转发与引用折叠.md)：万能引用T&&、std::forward实现、引用折叠四规则、转发失败八大场景、SFINAE辅助
 - ⏳ [12.类型推导三大规则](12.类型推导三大规则.md)：auto推导、decltype推导、模板参数推导、AAA原则、auto&与auto&&差异、decltype(auto)出现原因
 - ⏳ [13.类型转换与隐式构造](13.类型转换与隐式构造.md)：四大cast、explicit关键字、用户自定义转换、转换函数operator T()、列表初始化禁止窄化
 - ⏳ [14.const与volatile真相](14.const与volatile真相.md)：const语义传递、mutable例外、const_cast适用场景、顶层底层const、volatile不是并发用的
@@ -160,14 +160,14 @@ flowchart LR
 | 卷 | 主题 | 篇数 | 已完成 |
 |---|---|---|---|
 | 卷一 | 内存模型与对象布局 | 8 | 8 ✅ |
-| 卷二 | 类型系统与值类别 | 8 | 2 ⏳ |
+| 卷二 | 类型系统与值类别 | 8 | 3 ⏳ |
 | 卷三 | 模板与编译期计算 | 8 | 0 ⏳ |
 | 卷四 | 资源管理与生命周期 | 7 | 0 ⏳ |
 | 卷五 | STL 与泛型库设计 | 8 | 0 ⏳ |
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **10 ⏳** |
+| **合计** | — | **60** | **11 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
