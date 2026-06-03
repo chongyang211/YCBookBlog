@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 11/60（✅ 卷一全部完成 · 🚀 卷二 3/8）
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 12/60（✅ 卷一全部完成 · 🚀 卷二 4/8）
 >
-> 📌 最新一篇：**第 11 篇《完美转发与引用折叠》** ✅（交易服务 Order 工厂按值收形参且不带 forward 导致每次构造触发 2 次 string 深拷贝、改万能引用 + forward 后中转过程 0 次额外拷贝、push_back 与 emplace_back 性能对比真相、完美转发五层架构（万能引用/引用折叠/类型推导/forward/转发链路）、转发的三层完美语义（类型/值类别/cv 限定）、模板推导上下文中 T&& 同语法两种语义辨析、Box 成员函数已固定 T 不是万能引用的判定盲区、C++03 N 参数 2^N 重载组合爆炸催生完美转发、N1385 设计抉择重用 T&& 而非引入新关键字、Scott Meyers universal reference 与 C++17 forwarding reference 命名史、引用折叠四条规则有 & 即 & 全 && 才 && 的简记法、lvalue 推导 T 带 & 与 rvalue 推导 T 不带 & 的钥匙作用、auto&& 五种推导对照表、typedef IntRef&& 不是右值引用的折叠陷阱、std::forward 源码逐字拆解（static_cast<T&&>(t) 配引用折叠）、forward 与 move 在 cast 目标上一字之差导致行为天壤之别、forward 必须显式写 <T> 的根本原因（具名形参丢失 rvalue 性需用外层 T 信息恢复）、汇编层证实 forward 完全擦除调用方分别命中 use(int&) 与 use(int&&) 重载、emplace_back 完美转发避免 push_back 一次移动、make_unique 4 行代码 4 个完美转发关键节点、可变参数包同步推导 lockstep 与 forward<Args>(args)... 同步展开、转发失败八大场景全览（花括号没类型/0 或 NULL 不是指针/类内 static const 取地址链接错/重载函数名无法决议/位域不允许引用/typedef 埋下 & 的歧义/const 成员函数限制/隐式转换不触发）、万能引用劫持拷贝构造的经典坑与 enable_if + decay_t + is_base_of 的标准防护、C++20 requires 与 concept 替代 SFINAE 的可读性飞跃、forward 写错类型参数永远输出 rvalue 的隐蔽 bug、make_tuple 中转后 lvalue 实参被 move 的具名化丢失值类别、forward_as_tuple 引用 tuple 保留转发链、vector<bool> 代理类 prvalue 让 auto& 编译错而 auto&& 兼容的范围 for 默认推荐根因、C++14 lambda 初始化捕获实现完美捕获、emplace 全旅程 mermaid 流程图含每步推导折叠 forward 详解、最终字段类型决定不可消除的 1 次构造而 forward 仅消除中转损耗、从类型系统驱动信息保留零开销到复用语法的 trade-off 再到完美的边界与诚实再到 SFINAE 与转发的协作机制四条设计哲学总结、工程红线 10 条与 clang-tidy bugprone-forwarding-reference-overload 等编译器诊断速查）
+> 📌 最新一篇：**第 12 篇《类型推导三大规则》** ✅（高频交易撮合引擎 auto stat = stats[symbol] 丢引用造成订单状态错乱的生产事故、auto& 一字之差修复、泛型容器 operator[] 返回 auto 丢引用导致 c[0]=42 编译错、decltype(auto) 一句解决完美返回类型、C++ 类型推导三大规则架构（模板参数推导/auto 推导/decltype 推导）加 decltype(auto) 四件套、模板三种形参情形（T& 保留引用 cv · T&& 万能引用折叠 · T 按值剥光）、数组函数退化与拿数组长度只能靠 T(&)[N] 引用形参、推导失败四大场景（花括号无类型/依赖名非推导上下文/实参冲突/ADL 括号断裂）、auto 与模板同源唯一例外是花括号能推 initializer_list、auto&·auto&&·const auto&·auto* 五种形态对照表、auto x{42} 在 C++17 前后 Direct-init 语义的路口反转、auto i=0,d=1.0 编译错与 auto 返回类型走模板规则丢引用、decltype 两条核心规则区分 id-expression 与一般表达式、decltype(x) 与 decltype((x)) 一字之差天壤之别、decltype(auto) 返回语句加括号返回局部变量引用的 UB 陷阱、decltype 完整保留 cv 与引用是三规则中唯一足量保留信息的、decltype 四大用途（跟随变量类型/返回类型完美保留/SFINAE 检测器/lambda 闭包类型）、declval+decltype 检测模式、C++11 尾返回 auto -> decltype(...) 到 C++14 decltype(auto) 的演进、三种返回方式 auto·auto&·decltype(auto) 在 vector/map/代理类上的对比表、三规则横向对比马道表（引用 cv 保留/数组函数退化/接 prvalue/花括号能力/触发用户转换）、同一变量三种推导对照表、AAA Almost Always Auto 原则五大好处（避免隐式转换惊喜/强制初始化/表达语义不表达实现/避免拷贝/与 lambda·CTAD·ranges 生态契合）与四大禁区（代理类型 vector<bool>/隐式转换依赖接口/公共 API 可读性/位宽相关代码）、Google C++·LLVM·Microsoft Core Guidelines 三家 AAA 立场对比、vector<bool> 代理类赶走 auto UB、拿成员拷贝 GB 级 vector 导致 QPS 崩溃的线上事故、cppinsights.io·boost::type_id_with_cvr·clangd LSP·TypeOf<> 编译错装货四大查类型工具、撮合引擎 auto/auto&/auto&&/decltype(auto) 推导链路 mermaid 流程图、类型推导是零开销静态多态入口·auto 是模板语法糖·decltype 是问类型的一类公民·decltype(auto) 体现组合优于扩展·AAA 与表达意图五条设计哲学总结、工程红线 12 条与 clang-tidy modernize-use-auto · -Wreturn-stack-address 等诊断速查）
 
 ## 📐 设计理念
 
@@ -36,7 +36,7 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 - ✅ [09.五大值类别详解](09.五大值类别详解.md)：lvalue/xvalue/prvalue/glvalue/rvalue、值类别决策树、decltype判定值类别、表达式值类别速查
 - ✅ [10.右值引用与移动语义](10.右值引用与移动语义.md)：std::move本质是static_cast、移动构造与移动赋值、移动后对象状态、noexcept移动的关键性、unique_ptr移动
 - ✅ [11.完美转发与引用折叠](11.完美转发与引用折叠.md)：万能引用T&&、std::forward实现、引用折叠四规则、转发失败八大场景、SFINAE辅助
-- ⏳ [12.类型推导三大规则](12.类型推导三大规则.md)：auto推导、decltype推导、模板参数推导、AAA原则、auto&与auto&&差异、decltype(auto)出现原因
+- ✅ [12.类型推导三大规则](12.类型推导三大规则.md)：auto推导、decltype推导、模板参数推导、AAA原则、auto&与auto&&差异、decltype(auto)出现原因
 - ⏳ [13.类型转换与隐式构造](13.类型转换与隐式构造.md)：四大cast、explicit关键字、用户自定义转换、转换函数operator T()、列表初始化禁止窄化
 - ⏳ [14.const与volatile真相](14.const与volatile真相.md)：const语义传递、mutable例外、const_cast适用场景、顶层底层const、volatile不是并发用的
 - ⏳ [15.RTTI与dynamic_cast](15.RTTI与dynamic_cast.md)：type_info结构、typeid运算符、dynamic_cast运行时查找vtable、跨so边界RTTI失败、关闭RTTI影响
@@ -167,7 +167,7 @@ flowchart LR
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **11 ⏳** |
+| **合计** | — | **60** | **12 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
