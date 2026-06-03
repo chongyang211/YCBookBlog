@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 7/60
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 10/60（✅ 卷一全部完成 · 🚀 卷二 2/8）
 >
-> 📌 最新一篇：**第 07 篇《内存对齐与缓存行》** ✅（撮合系统 8 线程吞吐反降的生产事故入场、perf c2c 抓 81% HITM 直指假共享、对齐三层模型 ABI/cache/互连各司其职、对齐的硬件本因总线宽度与跨 line 代价 split-lock、cache line 物理意义与 MESI 四态流转、写传播 RFO + invalidate 全套时序、跨核 HITM 25–35 ns 比本地 DRAM 还慢、假共享 ping-pong 现场 8.5ns 对 0.89ns 18 倍差距、隐藏假共享 5 大来源 atomic 数组 / vector<bool> / RAII 偶然紧邻 / 链接器并排 / lock-free 队列 head-tail、alignas 起始对齐 + sizeof 凑齐双重作用、padding 模板与 CacheAligned 写法、hardware_destructive_interference_size 的 ABI 风险与 GCC 13 警告、ShardedCounter 线程本地副本聚合、perf c2c 工作原理 PEBS 精确采样、record 抓取 + report 字段解读 + addr2line 反查源码全链路、SIMD 对齐三件套 aligned_alloc/posix_memalign/_aligned_malloc、std::vector<__m512> 的 C++17 过对齐分配器要求、SoA vs AoS vs AoSoA 三种布局取舍、x86-64 / ARM64 / Apple M1 / POWER9 cache line 大小差异 64/128、NUMA 远端 HITM 100+ ns 治理、避免假共享决策树）
+> 📌 最新一篇：**第 10 篇《右值引用与移动语义》** ✅（风控特征服务 MyEvent 移动构造函数缺 noexcept 导致 vector 扩容静默退化为拷贝、P99 延迟从 8ms 骤升到 280ms、补 8 个字符 noexcept 后 36 倍性能提升生产事故入场、移动语义五层骨架（值类别/引用类型/重载决议/资源转移/异常保证）、语义层设计三层职责分离（T&& 语法/std::move 转换/移动构造行为）、2002 N1377 提案哈弗曼·辛纳特、copy-and-swap 惯用法的启示、C++17 强制 copy elision 加强、std::move 源码全拆（static_cast + remove_reference_t + constexpr + noexcept）、move 生成的汇编被完全擦除零开销证据、SSO 短字符串与 POD 类型上 move 等价 copy 的误解诊正、T&& 只接 rvalue 与重载优先级表、具名右值引用在函数体内是 lvalue 的最大坍的需要再 move、const T&& 的 std::optional/tuple 应用场景、移动构造三步法 接管资源+置空原对象+noexcept、copy-and-swap 风格赋值与 self-check 双路实现、移后对象 "valid but unspecified" 状态与 std::optional 移后 has_value 仍 true 反直觉、= default 移动逐成员与 noexcept 推导、强异常保证与 move_if_noexcept 底层机制、扩容选移动还是拷贝的决策表、unique_ptr 禁拷贝留移动设计、unique_ptr 3 条 mov 指令零开销汇编、vector<unique_ptr> 组合模式、NRVO 与 return 局部变量不应 std::move 的反优化、return 函数形参需显式 move 的例外、const 对象上的 move 静默退化为拷贝、移后再使用陷阱与 clang-tidy bugprone-use-after-move、移动构造不要分配新资源以保证 noexcept、完整的 push_back 旅程 mermaid 流程图、从类型表达意图零开销到默认安全显式声明再到挑食 noexcept 机制与资源所有权语义化四条设计哲学总结、工程红线 10 条与编译器诊断警告速查）
 
 ## 📐 设计理念
 
@@ -27,14 +27,14 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 - ✅ [05.虚函数表深度剖析](05.虚函数表深度剖析.md)：vptr在对象头部、vtable在只读段、单继承vtable布局、多继承thunk、虚继承vbtable、构造析构期间虚函数行为
 - ✅ [06.多重继承内存模型](06.多重继承内存模型.md)：多继承对象布局、菱形继承数据冗余、虚继承vbptr、向上转型的指针偏移、dynamic_cast运行时机制
 - ✅ [07.内存对齐与缓存行](07.内存对齐与缓存行.md)：False sharing假共享、alignas/alignof、SIMD对齐要求、cache line padding实战、perf c2c检测假共享
-- ⏳ [08.内存分配器演进史](08.内存分配器演进史.md)：malloc/free历史、ptmalloc arena、tcmalloc thread cache、jemalloc、operator new重载、内存池设计
+- ✅ [08.内存分配器演进史](08.内存分配器演进史.md)：malloc/free历史、ptmalloc arena、tcmalloc thread cache、jemalloc、operator new重载、内存池设计
 
 ## 📗 卷二 · 类型系统与值类别（8 篇）
 
 把"C++ 为什么有左值/右值/将亡值"这种刀尖问题彻底讲清。
 
-- ⏳ [09.五大值类别详解](09.五大值类别详解.md)：lvalue/xvalue/prvalue/glvalue/rvalue、值类别决策树、decltype判定值类别、表达式值类别速查
-- ⏳ [10.右值引用与移动语义](10.右值引用与移动语义.md)：std::move本质是static_cast、移动构造与移动赋值、移动后对象状态、noexcept移动的关键性、unique_ptr移动
+- ✅ [09.五大值类别详解](09.五大值类别详解.md)：lvalue/xvalue/prvalue/glvalue/rvalue、值类别决策树、decltype判定值类别、表达式值类别速查
+- ✅ [10.右值引用与移动语义](10.右值引用与移动语义.md)：std::move本质是static_cast、移动构造与移动赋值、移动后对象状态、noexcept移动的关键性、unique_ptr移动
 - ⏳ [11.完美转发与引用折叠](11.完美转发与引用折叠.md)：万能引用T&&、std::forward实现、引用折叠四规则、转发失败八大场景、SFINAE辅助
 - ⏳ [12.类型推导三大规则](12.类型推导三大规则.md)：auto推导、decltype推导、模板参数推导、AAA原则、auto&与auto&&差异、decltype(auto)出现原因
 - ⏳ [13.类型转换与隐式构造](13.类型转换与隐式构造.md)：四大cast、explicit关键字、用户自定义转换、转换函数operator T()、列表初始化禁止窄化
@@ -159,15 +159,15 @@ flowchart LR
 
 | 卷 | 主题 | 篇数 | 已完成 |
 |---|---|---|---|
-| 卷一 | 内存模型与对象布局 | 8 | 7 ⏳ |
-| 卷二 | 类型系统与值类别 | 8 | 0 ⏳ |
+| 卷一 | 内存模型与对象布局 | 8 | 8 ✅ |
+| 卷二 | 类型系统与值类别 | 8 | 2 ⏳ |
 | 卷三 | 模板与编译期计算 | 8 | 0 ⏳ |
 | 卷四 | 资源管理与生命周期 | 7 | 0 ⏳ |
 | 卷五 | STL 与泛型库设计 | 8 | 0 ⏳ |
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **7 ⏳** |
+| **合计** | — | **60** | **10 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
