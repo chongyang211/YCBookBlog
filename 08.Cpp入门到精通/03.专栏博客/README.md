@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 14/60（✅ 卷一全部完成 · 🚀 卷二 6/8）
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 22/60（✅ 卷一 · ✅ 卷二 · 🚀 卷三 6/8）
 >
-> 📌 最新一篇：**第 14 篇《const与volatile真相》** ✅（高并发广告竞价 PriceCache `const` 成员函数下 `mutable unordered_map` 无锁写引发跨请求价格串扰的生产事故、嵌入式 `volatile bool stop_flag` 在 ARM Cortex-A53 单核三年正常但移植到双核 A72 后 store buffer 延迟 flush 导致 worker 线程永不停止、const 三层语义模型（语法层编译器拒绝 / API 层契约 / 实现层 mutable+const_cast 后门）、按位常量 vs 逻辑常量的工程取舍、const 成员函数本质是 `this` 类型变 `const T*` 零运行时开销、const 引用延长右值生命期到全表达式末尾、mutable 唯一无可替代的
+> 📌 最新一篇：**第 22 篇《Concepts 深度剖析》** ✅（量化容器库 subsumption 蕴含断裂事故 + requires 位置屠杀事故引入、concept 定义语法四配方 + requires 表达式四项检查、requires clause vs expression 同名陷阱、requires 子句四种悬挂位置与位置①唯一偏序规则、重载决议三步裁决法、原子约束归一化流水线与 subsumption 精算、标准库 <concepts> 高频子集速查、SFINAE→Concepts 逐行翻译范式对比、17000 行→3 行错误信息革命 + 实例化减少 87% + 编译时间 4.2s→0.9s、类模板约束陷阱与偏特化绕路、四步迁移路径）
 
 ## 📐 设计理念
 
@@ -39,19 +39,19 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 - ✅ [12.类型推导三大规则](12.类型推导三大规则.md)：auto推导、decltype推导、模板参数推导、AAA原则、auto&与auto&&差异、decltype(auto)出现原因
 - ✅ [13.类型转换与隐式构造](13.类型转换与隐式构造.md)：五大cast（static/const/reinterpret/dynamic/bit_cast）、C风格cast的盲选搜索顺序、严格别名规则、explicit关键字、单参ctor与operator T()两扇隐式门、列表初始化禁止窄化、most vexing parse
 - ✅ [14.const与volatile真相](14.const与volatile真相.md)：const三层语义（语法/API/实现）、按位常量vs逻辑常量、mutable的合法逃逸与并发反模式、顶层底层const边界、const_cast在并发代码的反模式、volatile真正用途（MMIO/信号/setjmp）、volatile为何不是同步工具、std::atomic的ARM stlr/ldar屏障对比、ref-qualifier三件套、propagate_const、跨语言const对比
-- ⏳ [15.RTTI与dynamic_cast](15.RTTI与dynamic_cast.md)：type_info结构、typeid运算符、dynamic_cast运行时查找vtable、跨so边界RTTI失败、关闭RTTI影响
-- ⏳ [16.类型擦除技术原理](16.类型擦除技术原理.md)：std::function/std::any/std::variant实现、SBO小对象优化、虚函数 vs 概念、Sean Parent的Polymorphism
+- ✅ [15.RTTI与dynamic_cast](15.RTTI与dynamic_cast.md)：两个跨SO事故引入、typeid双模行为、5种转换方向、vtable查找、Itanium vs MSVC ABI、-fno-rtti代价、跨边界陷阱、三套替代方案、决策树
+- ✅ [16.类型擦除技术原理](16.类型擦除技术原理.md)：日志格式化器类爆炸与lambda悬垂引用事故、手工Concept+Model、function三元SBO结构、any的void*+type_info、SBO准入三条件、variant vs any 18×性能差、Sean Parent遗产、lambda从捕获到调用4步生涯
 
 ## 📘 卷三 · 模板与编译期计算（8 篇）
 
 把"编译期是另一个图灵机"全部展开。
 
-- ⏳ [17.模板实例化机制](17.模板实例化机制.md)：两阶段名称查找、隐式实例化、显式实例化、extern template、模板代码膨胀治理
-- ⏳ [18.模板特化与偏特化](18.模板特化与偏特化.md)：全特化/偏特化、函数模板不能偏特化、tag dispatch替代方案、特化优先级匹配
-- ⏳ [19.SFINAE与enable_if](19.SFINAE与enable_if.md)：替换失败非错误、enable_if用法、void_t检测器、detection idiom、C++20 requires取代
-- ⏳ [20.可变参数模板原理](20.可变参数模板原理.md)：parameter pack展开、折叠表达式、递归终止、std::tuple实现、std::apply原理
-- ⏳ [21.constexpr编译期计算](21.constexpr编译期计算.md)：constexpr演进史、consteval立即函数、constinit、编译期容器、constexpr虚函数
-- ⏳ [22.Concepts深度剖析](22.Concepts深度剖析.md)：concept定义、requires子句、约束模板、命名约束的可读性飞跃、与SFINAE对比
+- ✅ [17.模板实例化机制](17.模板实例化机制.md)：嵌入式flash溢出事故引入、两阶段名称查找+ADL、POI规则、extern template vs 显式实例化、Thin Template模式、export失败史、ODR COMDAT折叠、vector<int>从源码到机器码7步生涯
+- ✅ [18.模板特化与偏特化](18.模板特化与偏特化.md)：序列化库偏特化蝴蝶效应、全特化强符号ODR陷阱、偏序算法三步推演、函数模板无偏特化的设计原因、tag dispatch/enable_if替代、vector<bool>争议全特化
+- ✅ [19.SFINAE与enable_if](19.SFINAE与enable_if.md)：序列化 17000 行错误与默认模板实参重定义两大事故引入、立即上下文边界、enable_if 偏特化把戏、void_t 五行通用探测器、detection idiom 框架、四种插桩位置（位置②首选）、优先级标签 priority 继承链构造偏序、表达式 SFINAE、类模板成员模板 SFINAE 正确写法、C++20 requires 蕴含关系（subsumption）三大碾压
+- ✅ [20.可变参数模板原理](20.可变参数模板原理.md)：高频交易日志库 14GB 内存爆炸事故引入、pack 是 AST 占位符不是对象、pattern... 模式与展开分离、七大展开位置、折叠表达式四式 + 32 运算符、递归 vs if constexpr vs 折叠编译耗时对比、tuple 递归多继承 + EBO、apply 五行源码、emplace 完美转发链路、类型擦除收口工程范式
+- ✅ [21.constexpr编译期计算](21.constexpr编译期计算.md)：四代演进全景、consteval 立即函数与 if consteval、constinit SIOF 根治、C++20 瞬态与 C++23 持久分配、constexpr 虚函数与编译期多态、编译器字节码虚拟机内幕、编译期 LUT/正则/JSON 实战、前移即优化性能证据
+- ✅ [22.Concepts深度剖析](22.Concepts深度剖析.md)：subsumption 蕴含断裂与 requires 位置屠杀双事故引入、concept 定义四配方 + requires 表达式四检查、requires clause vs expression 同名陷阱、四种悬挂位置与偏序规则、三步裁决法、原子约束归一化与 subsumption 精算、SFINAE→Concepts 逐行翻译对比、错误信息 17000→3 行与编译时间 4.2s→0.9s、类模板陷阱、四步迁移路径
 - ⏳ [23.元编程模板技巧](23.元编程模板技巧.md)：类型列表type_list、Loki/Boost.MPL范本、编译期计算斐波那契、CRTP奇异递归
 - ⏳ [24.Modules模块化设计](24.Modules模块化设计.md)：模块vs头文件、import/export、二进制接口BMI、构建系统支持、为什么20年才落地
 
@@ -160,14 +160,14 @@ flowchart LR
 | 卷 | 主题 | 篇数 | 已完成 |
 |---|---|---|---|
 | 卷一 | 内存模型与对象布局 | 8 | 8 ✅ |
-| 卷二 | 类型系统与值类别 | 8 | 5 ⏳ |
-| 卷三 | 模板与编译期计算 | 8 | 0 ⏳ |
+| 卷二 | 类型系统与值类别 | 8 | 8 ✅ |
+| 卷三 | 模板与编译期计算 | 8 | 6 ⏳ |
 | 卷四 | 资源管理与生命周期 | 7 | 0 ⏳ |
 | 卷五 | STL 与泛型库设计 | 8 | 0 ⏳ |
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **14 ⏳** |
+| **合计** | — | **60** | **22 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
