@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 12/60（✅ 卷一全部完成 · 🚀 卷二 4/8）
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 14/60（✅ 卷一全部完成 · 🚀 卷二 6/8）
 >
-> 📌 最新一篇：**第 12 篇《类型推导三大规则》** ✅（高频交易撮合引擎 auto stat = stats[symbol] 丢引用造成订单状态错乱的生产事故、auto& 一字之差修复、泛型容器 operator[] 返回 auto 丢引用导致 c[0]=42 编译错、decltype(auto) 一句解决完美返回类型、C++ 类型推导三大规则架构（模板参数推导/auto 推导/decltype 推导）加 decltype(auto) 四件套、模板三种形参情形（T& 保留引用 cv · T&& 万能引用折叠 · T 按值剥光）、数组函数退化与拿数组长度只能靠 T(&)[N] 引用形参、推导失败四大场景（花括号无类型/依赖名非推导上下文/实参冲突/ADL 括号断裂）、auto 与模板同源唯一例外是花括号能推 initializer_list、auto&·auto&&·const auto&·auto* 五种形态对照表、auto x{42} 在 C++17 前后 Direct-init 语义的路口反转、auto i=0,d=1.0 编译错与 auto 返回类型走模板规则丢引用、decltype 两条核心规则区分 id-expression 与一般表达式、decltype(x) 与 decltype((x)) 一字之差天壤之别、decltype(auto) 返回语句加括号返回局部变量引用的 UB 陷阱、decltype 完整保留 cv 与引用是三规则中唯一足量保留信息的、decltype 四大用途（跟随变量类型/返回类型完美保留/SFINAE 检测器/lambda 闭包类型）、declval+decltype 检测模式、C++11 尾返回 auto -> decltype(...) 到 C++14 decltype(auto) 的演进、三种返回方式 auto·auto&·decltype(auto) 在 vector/map/代理类上的对比表、三规则横向对比马道表（引用 cv 保留/数组函数退化/接 prvalue/花括号能力/触发用户转换）、同一变量三种推导对照表、AAA Almost Always Auto 原则五大好处（避免隐式转换惊喜/强制初始化/表达语义不表达实现/避免拷贝/与 lambda·CTAD·ranges 生态契合）与四大禁区（代理类型 vector<bool>/隐式转换依赖接口/公共 API 可读性/位宽相关代码）、Google C++·LLVM·Microsoft Core Guidelines 三家 AAA 立场对比、vector<bool> 代理类赶走 auto UB、拿成员拷贝 GB 级 vector 导致 QPS 崩溃的线上事故、cppinsights.io·boost::type_id_with_cvr·clangd LSP·TypeOf<> 编译错装货四大查类型工具、撮合引擎 auto/auto&/auto&&/decltype(auto) 推导链路 mermaid 流程图、类型推导是零开销静态多态入口·auto 是模板语法糖·decltype 是问类型的一类公民·decltype(auto) 体现组合优于扩展·AAA 与表达意图五条设计哲学总结、工程红线 12 条与 clang-tidy modernize-use-auto · -Wreturn-stack-address 等诊断速查）
+> 📌 最新一篇：**第 14 篇《const与volatile真相》** ✅（高并发广告竞价 PriceCache `const` 成员函数下 `mutable unordered_map` 无锁写引发跨请求价格串扰的生产事故、嵌入式 `volatile bool stop_flag` 在 ARM Cortex-A53 单核三年正常但移植到双核 A72 后 store buffer 延迟 flush 导致 worker 线程永不停止、const 三层语义模型（语法层编译器拒绝 / API 层契约 / 实现层 mutable+const_cast 后门）、按位常量 vs 逻辑常量的工程取舍、const 成员函数本质是 `this` 类型变 `const T*` 零运行时开销、const 引用延长右值生命期到全表达式末尾、mutable 唯一无可替代的
 
 ## 📐 设计理念
 
@@ -37,8 +37,8 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 - ✅ [10.右值引用与移动语义](10.右值引用与移动语义.md)：std::move本质是static_cast、移动构造与移动赋值、移动后对象状态、noexcept移动的关键性、unique_ptr移动
 - ✅ [11.完美转发与引用折叠](11.完美转发与引用折叠.md)：万能引用T&&、std::forward实现、引用折叠四规则、转发失败八大场景、SFINAE辅助
 - ✅ [12.类型推导三大规则](12.类型推导三大规则.md)：auto推导、decltype推导、模板参数推导、AAA原则、auto&与auto&&差异、decltype(auto)出现原因
-- ⏳ [13.类型转换与隐式构造](13.类型转换与隐式构造.md)：四大cast、explicit关键字、用户自定义转换、转换函数operator T()、列表初始化禁止窄化
-- ⏳ [14.const与volatile真相](14.const与volatile真相.md)：const语义传递、mutable例外、const_cast适用场景、顶层底层const、volatile不是并发用的
+- ✅ [13.类型转换与隐式构造](13.类型转换与隐式构造.md)：五大cast（static/const/reinterpret/dynamic/bit_cast）、C风格cast的盲选搜索顺序、严格别名规则、explicit关键字、单参ctor与operator T()两扇隐式门、列表初始化禁止窄化、most vexing parse
+- ✅ [14.const与volatile真相](14.const与volatile真相.md)：const三层语义（语法/API/实现）、按位常量vs逻辑常量、mutable的合法逃逸与并发反模式、顶层底层const边界、const_cast在并发代码的反模式、volatile真正用途（MMIO/信号/setjmp）、volatile为何不是同步工具、std::atomic的ARM stlr/ldar屏障对比、ref-qualifier三件套、propagate_const、跨语言const对比
 - ⏳ [15.RTTI与dynamic_cast](15.RTTI与dynamic_cast.md)：type_info结构、typeid运算符、dynamic_cast运行时查找vtable、跨so边界RTTI失败、关闭RTTI影响
 - ⏳ [16.类型擦除技术原理](16.类型擦除技术原理.md)：std::function/std::any/std::variant实现、SBO小对象优化、虚函数 vs 概念、Sean Parent的Polymorphism
 
@@ -160,14 +160,14 @@ flowchart LR
 | 卷 | 主题 | 篇数 | 已完成 |
 |---|---|---|---|
 | 卷一 | 内存模型与对象布局 | 8 | 8 ✅ |
-| 卷二 | 类型系统与值类别 | 8 | 3 ⏳ |
+| 卷二 | 类型系统与值类别 | 8 | 5 ⏳ |
 | 卷三 | 模板与编译期计算 | 8 | 0 ⏳ |
 | 卷四 | 资源管理与生命周期 | 7 | 0 ⏳ |
 | 卷五 | STL 与泛型库设计 | 8 | 0 ⏳ |
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **12 ⏳** |
+| **合计** | — | **60** | **14 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
