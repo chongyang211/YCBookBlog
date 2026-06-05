@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 26/60（✅ 卷一 · ✅ 卷二 · ✅ 卷三 · 🚀 卷四 2/7）
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 29/60（✅ 卷一 · ✅ 卷二 · ✅ 卷三 · 🚀 卷四 4/7）
 >
-> 📌 最新一篇：**第 26 篇《对象构造与析构》** ✅（构造期虚函数幽灵事故 + 初始化列表赋值双倍开销事故引入、构造析构六步流水线全图、成员声明顺序 vs 初始化列表顺序的陷阱与 -Wreorder、虚继承构造由最终派生类负责、析构逆序的依赖链必然性、虚析构必要性汇编证据、初始化列表三步超赋值（const/引用/无默认构造）、默认成员初始化器优先级、委托构造与继承构造陷阱、vptr 逐步切换机制汇编验证、三五法则与特殊成员函数生成规则表、移动构造 noexcept 红利实测（vector 扩容 7.2ms→1.4ms））
+> 📌 最新一篇：**第 29 篇《shared_ptr 底层剖析》** ✅（图节点循环引用泄露 + enable_shared_from_this 双控制块双事故引入、控制块五字段精确布局、strong_count/weak_count 双计数器语义、make_shared 一次分配 vs 普通构造两次分配布局图、原子操作 LOCK 前缀汇编与高竞争退化实测、weak_ptr::lock 的 CAS 原子快照、循环引用标准解法 owner→weak_ptr、enable_shared_from_this 初始化时机与双控制块预防、unique/shared 性能全景对比（拷贝 ~15ns/析构 ~28ns））
 
 ## 📐 设计理念
 
@@ -61,9 +61,9 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 
 - ✅ [25.RAII的设计哲学](25.RAII的设计哲学.md)：交易引擎死锁+fd泄露双事故引入、五要素模型、C goto cleanup vs RAII一行替代汇编证据、析构抛异常根因、Java GC/Go defer/Rust Drop五种范式对比、异常安全三级+copy-and-swap、scope_guard三剑客+手搓三行、六大应用范式、四种反模式
 - ✅ [26.对象构造与析构](26.对象构造与析构.md)：构造期虚函数幽灵+初始化列表双倍开销双事故引入、六步流水线全图、成员声明顺序陷阱、虚继承规则、析构逆序必然性、虚析构汇编证据、初始化列表三步超赋值、默认成员初始化器优先级、委托/继承构造陷阱、vptr 逐步切换机制、三五法则+特殊成员函数生成规则、move noexcept 红利实测
-- ⏳ [27.拷贝与移动控制](27.拷贝与移动控制.md)：三五法则Rule of Five、=default/=delete、拷贝省略copy elision、强制RVO、特殊成员函数生成规则
-- ⏳ [28.unique_ptr原理剖析](28.unique_ptr原理剖析.md)：独占语义、deleter定制、make_unique为什么晚、unique_ptr<T[]>、嵌入式智能指针
-- ⏳ [29.shared_ptr底层剖析](29.shared_ptr底层剖析.md)：控制块结构、引用计数原子操作、make_shared一次分配、weak_ptr不增加strong count、循环引用
+- ✅ [27.拷贝与移动控制](27.拷贝与移动控制.md)：浅拷贝 double-free + vector 非 noexcept 退化拷贝双事故、五法则棋盘图、深拷贝 vs 浅拷贝汇编、copy-and-swap 统一赋值、移动后状态约定、=default/=delete 全函数可删除、C++17 强制拷贝省略+RVO 汇编证据、return std::move 陷阱、noexcept 移动 vector 扩容 7× 加速证据
+- ✅ [28.unique_ptr原理剖析](28.unique_ptr原理剖析.md)：异常路径泄露+auto_ptr 亡故双事故、核心三行源码、sizeof=裸指针铁证、Deleter 无状态 EBO/有状态/函数指针三种代价、C++11 漏掉 make_unique 原因、异常安全 make_unique vs new、T[] 数组特化、解引用汇编 100% 一致
+- ✅ [29.shared_ptr底层剖析](29.shared_ptr底层剖析.md)：循环引用泄露+双控制块双事故、控制块五字段布局、双计数器与析构时机、make_shared 一次 vs 两次分配布局图、原子 LOCK 汇编+高竞争退化、weak_ptr::lock 的 CAS 快照、循环引用标准解法、enable_shared_from_this 初始化时机、性能全景对比表
 - ⏳ [30.weak_ptr与this增强](30.weak_ptr与this增强.md)：weak_from_this、enable_shared_from_this CRTP、二级指针失效检测、Observer场景
 - ⏳ [31.五种存储期管理](31.五种存储期管理.md)：static/thread/automatic/dynamic/temporary、static局部变量线程安全初始化、TLS实现
 
@@ -162,12 +162,12 @@ flowchart LR
 | 卷一 | 内存模型与对象布局 | 8 | 8 ✅ |
 | 卷二 | 类型系统与值类别 | 8 | 8 ✅ |
 | 卷三 | 模板与编译期计算 | 8 | 8 ✅ |
-| 卷四 | 资源管理与生命周期 | 7 | 2 ⏳ |
+| 卷四 | 资源管理与生命周期 | 7 | 4 ⏳ |
 | 卷五 | STL 与泛型库设计 | 8 | 0 ⏳ |
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **26 ⏳** |
+| **合计** | — | **60** | **29 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
