@@ -88,6 +88,13 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       {
         text: 'Web',
         link: '/web-dev/',
+        items: [
+          { text: 'HTML工具手册', link: '/pages/cfa178/' },
+          { text: 'JavaScript入门', link: '/pages/0f13b4/' },
+          { text: 'TypeScript入门', link: '/pages/85bb9e/' },
+          { text: 'Vue高级进阶', link: '/pages/cc1d0b/' },
+          { text: '专栏博客', link: '/pages/850962/' },
+        ],
       },
       {
         text: 'Phone',
