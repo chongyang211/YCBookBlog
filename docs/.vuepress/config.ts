@@ -59,12 +59,12 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: '算法',
         link: '/algorithm/',
         items: [
-          { text: '基础认知', link: '/09.算法/01.基础认知/' },
-          { text: '线性结构', link: '/09.算法/02.线性结构/' },
-          { text: '树与哈希', link: '/09.算法/03.树与哈希/' },
-          { text: '工业级实现', link: '/09.算法/04.工业级实现/' },
-          { text: '算法思想', link: '/09.算法/05.算法思想/' },
-          { text: '实战与综合', link: '/09.算法/06.实战与综合/' },
+          { text: '基础认知', link: '/pages/245c07/' },
+          { text: '线性结构', link: '/pages/7631f3/' },
+          { text: '树与哈希', link: '/pages/d1e7ae/' },
+          { text: '工业级实现', link: '/pages/430428/' },
+          { text: '算法思想', link: '/pages/2e8a53/' },
+          { text: '实战与综合', link: '/pages/af1a01/' },
         ],
       },
       {
