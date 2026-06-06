@@ -18,7 +18,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
   locales: {
     '/': {
       lang: 'zh-CN',
-      title: "编程进阶，你值得拥有！",
+      title: "编程进阶网",
       description: '编程进阶，你值得拥有！',
     }
   },
