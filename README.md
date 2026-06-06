@@ -32,8 +32,10 @@ npm install --legacy-peer-deps
 ### 本地开发
 
 ```bash
-npm run dev          # macOS / Linux
-npm run dev:win      # Windows
+# macOS / Linux
+npm run dev 
+# Windows         
+npm run dev:win      
 ```
 
 启动后访问 `http://localhost:8080` 预览博客，支持热更新。
