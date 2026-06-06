@@ -50,6 +50,13 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         link: '/column/',
       },
       {
+        text: '算法',
+        link: '/algorithm/',
+        items: [
+          { text: '数据结构与算法', link: '/09.算法/' },
+        ],
+      },
+      {
         text: 'C/C++',
         link: '/cpp/',
         items: [
