@@ -147,6 +147,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       {
         text: '工具',
         link: '/tools/',
+        items: [
+          { text: 'JSON工具', link: '/tools/json/' },
+        ],
       },
       {
         text: '更多',
