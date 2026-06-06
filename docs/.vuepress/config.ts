@@ -115,8 +115,12 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: 'Phone',
         link: '/phone/',
         items: [
-          { text: 'Android提升进阶', link: '/android/' },
-          { text: 'iOS开发和进阶', link: '/ios/' },
+          { text: 'Android库解读', link: '/pages/502baa/' },
+          { text: 'Android专栏', link: '/pages/65f3a0/' },
+          { text: 'Android智能硬件', link: '/pages/a22b52/' },
+          { text: 'iOS ObjC入门', link: '/pages/bb502c/' },
+          { text: 'iOS Swift入门', link: '/pages/643728/' },
+          { text: 'iOS入门精通', link: '/pages/78b9d9/' },
         ],
       },
       {
