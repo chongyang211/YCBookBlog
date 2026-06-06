@@ -1,3 +1,17 @@
+---
+title: h
+date: 2025-03-26 20:31:01
+permalink: /pages/90b460/
+categories:
+  - book
+  - C语言入门精通
+  - 标准集库
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # stddef.h
 
 `stddef.h`提供了常用类型和宏的定义，但没有声明任何函数。

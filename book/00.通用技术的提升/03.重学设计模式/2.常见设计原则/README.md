@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-06 09:48:30
+permalink: /pages/ca10aa/
+categories:
+  - book
+  - 通用技术的提升
+  - 重学设计模式
+  - 常见设计原则
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 常见设计原则系列
 
 ## 1.系列概述

@@ -1,3 +1,16 @@
+---
+title: README
+date: 2025-11-14 15:30:18
+permalink: /pages/531c20/
+categories:
+  - book
+  - 通用技术的提升
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 
 
 

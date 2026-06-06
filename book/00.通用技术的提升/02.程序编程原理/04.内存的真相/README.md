@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-14 17:02:14
+permalink: /pages/5db9ac/
+categories:
+  - book
+  - 通用技术的提升
+  - 程序编程原理
+  - 内存的真相
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 第 4 卷｜内存的真相
 
 > **从虚拟内存到垃圾回收**——理解程序运行的物理基础。

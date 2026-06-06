@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-04-10 09:39:42
+permalink: /pages/02950e/
+categories:
+  - book
+  - 通用技术的提升
+  - 方案设计思想
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 方案设计思想系列
 
 ## 系列概述

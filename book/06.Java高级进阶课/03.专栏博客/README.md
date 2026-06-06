@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-10-20 19:36:04
+permalink: /pages/ca4c47/
+categories:
+  - book
+  - Java高级进阶课
+  - 专栏博客
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 专栏笔记总结大全
 
 > Java 核心原理深度专栏，自下而上贯穿 **JVM → 容器 → 类型系统 → 字节码 → 并发 → IO/网络 → 设计思想** 七大原理域，共计 **47 篇**，体系化拆解 Java 的每一根骨头与每一种设计哲学。

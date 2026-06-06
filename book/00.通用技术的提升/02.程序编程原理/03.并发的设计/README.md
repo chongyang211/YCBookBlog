@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-14 17:01:24
+permalink: /pages/9dfe1f/
+categories:
+  - book
+  - 通用技术的提升
+  - 程序编程原理
+  - 并发的设计
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 第 3 卷｜并发之道
 
 > **专栏分量最重的一卷**——18 篇文章，从硬件原子指令到结构化并发，把并发编程半个世纪的进化史完整走一遍。

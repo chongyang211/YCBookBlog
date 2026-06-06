@@ -1,3 +1,16 @@
+---
+title: README
+date: 2026-05-21 19:57:22
+permalink: /pages/2f9555/
+categories:
+  - book
+  - Go入门到精通
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 
 # 《现代 Go 由浅入深：从入门到工程精通》总目录与导读
 

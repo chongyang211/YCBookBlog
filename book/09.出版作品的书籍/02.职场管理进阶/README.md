@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-04-22 12:40:00
+permalink: /pages/fe3727/
+categories:
+  - book
+  - 出版作品的书籍
+  - 职场管理进阶
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 《从执行到管理》
 
 > 一个普通技术人从"单打独斗"到"带团打仗"的十年管理修炼手册

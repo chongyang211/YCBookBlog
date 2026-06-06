@@ -1,3 +1,17 @@
+---
+title: h
+date: 2025-03-26 20:31:01
+permalink: /pages/6c3b43/
+categories:
+  - book
+  - C语言入门精通
+  - 标准集库
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # ctype.h
 
 `ctype.h`头文件定义了一系列字符处理函数的原型。

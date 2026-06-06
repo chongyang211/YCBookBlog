@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-25 10:12:23
+permalink: /pages/20d11f/
+categories:
+  - book
+  - Cpp入门到精通
+  - 综合案例
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 卷二 · 综合案例总导读（6 案例精品版）
 
 > 本卷是**卷一《语法卷》**的配套实战篇。学完卷一第 2-18 章基础语法后，通过 **6 个层层递进的精品案例**把散落的知识点串起来，形成"能独立写项目"的能力。

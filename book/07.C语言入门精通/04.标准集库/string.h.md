@@ -1,3 +1,17 @@
+---
+title: h
+date: 2025-03-26 20:31:01
+permalink: /pages/f69d3a/
+categories:
+  - book
+  - C语言入门精通
+  - 标准集库
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # string.h
 
 `string.h`主要定义了字符串处理函数和内存操作函数。

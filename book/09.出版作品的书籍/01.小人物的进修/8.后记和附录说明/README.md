@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-05 12:15:21
+permalink: /pages/94df8b/
+categories:
+  - book
+  - 出版作品的书籍
+  - 小人物的进修
+  - 后记和附录说明
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 第八章：后记与附录说明
 
 > 正文之外的四篇收尾与工具——让这本书既有"温度"，也有"工具感"。

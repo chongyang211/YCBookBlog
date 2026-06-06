@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-04-18 16:32:11
+permalink: /pages/d71763/
+categories:
+  - book
+  - 平常记录小说集
+  - 口播思考感悟
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 
 
 

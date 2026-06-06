@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-09-15 19:21:34
+permalink: /pages/ef8fe4/
+categories:
+  - book
+  - Linux应用开发
+  - QT核心库实践
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 专栏笔记总结大全
 
 

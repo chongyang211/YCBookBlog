@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-07-25 19:58:29
+permalink: /pages/2c10e4/
+categories:
+  - book
+  - 通用技术的提升
+  - 计算机原理技术
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 计算机原理技术系列
 
 > 由浅入深，从疑惑到论证，全面理解计算机底层原理

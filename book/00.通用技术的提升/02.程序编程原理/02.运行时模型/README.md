@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-14 17:00:29
+permalink: /pages/26aa39/
+categories:
+  - book
+  - 通用技术的提升
+  - 程序编程原理
+  - 运行时模型
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 第 2 卷｜运行时模型
 
 > **从类到对象，从加载到执行**——程序运行时究竟发生了什么？

@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-07 20:19:43
+permalink: /pages/a4e0ab/
+categories:
+  - book
+  - Cpp入门到精通
+  - 入门教程
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 卷一《语法卷：现代 C++ 基础入门》总目录与导读
 
 > 本卷是《现代 C++ 由浅入深：从入门到工程精通》四卷本的**第一卷**。

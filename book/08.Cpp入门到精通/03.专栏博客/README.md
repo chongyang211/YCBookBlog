@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-06-02 15:49:39
+permalink: /pages/a764fa/
+categories:
+  - book
+  - Cpp入门到精通
+  - 专栏博客
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 🚀 C++ 核心原理深度专栏
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。

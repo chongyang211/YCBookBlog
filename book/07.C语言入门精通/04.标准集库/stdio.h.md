@@ -1,3 +1,17 @@
+---
+title: h
+date: 2025-03-26 20:31:01
+permalink: /pages/5ba89b/
+categories:
+  - book
+  - C语言入门精通
+  - 标准集库
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # stdio.h
 
 `stdio.h`是 C 语言的标准 I/O 库，用于读取和写入文件，也用于控制台的输入和输出。

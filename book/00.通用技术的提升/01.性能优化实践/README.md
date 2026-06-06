@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-27 10:51:17
+permalink: /pages/6d6b15/
+categories:
+  - book
+  - 通用技术的提升
+  - 性能优化实践
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 性能优化实践
 
 > 一份**跨平台、有技术深度、带科学求证**的性能工程指南。

@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-05-23 10:17:52
+permalink: /pages/83a8d7/
+categories:
+  - book
+  - 通用技术的提升
+  - 数据结构算法
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 数据结构与算法系列
 
 ## 系列概述

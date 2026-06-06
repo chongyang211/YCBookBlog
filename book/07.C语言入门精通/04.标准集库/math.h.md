@@ -1,3 +1,17 @@
+---
+title: h
+date: 2025-03-26 20:31:01
+permalink: /pages/34f262/
+categories:
+  - book
+  - C语言入门精通
+  - 标准集库
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # math.h
 
 `math.h`头文件提供了很多数学函数。

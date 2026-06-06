@@ -1,3 +1,17 @@
+---
+title: 全书Prompt模板
+date: 2026-05-24 19:50:39
+permalink: /pages/8aa6d7/
+categories:
+  - book
+  - 平常记录小说集
+  - 书房里的谎言
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 《书房里的谎言》Prompt 模板（统一版·自包含·v1.0）
 
 > **本文件用途**：把《全书方案的设计.md》《全书框架和分卷.md》《一致性档案.md》《参考作品的拆解.md》四份资料**蒸馏成一份"调用器"**——日常写作时，**只调用这一份文件**，不再翻其他文件。

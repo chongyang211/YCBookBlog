@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-22 09:17:16
+permalink: /pages/24a4cc/
+categories:
+  - book
+  - 出版作品的书籍
+  - 毛选选集解读
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 毛选选集解读 · 专栏绪论
 
 > **为何写这本专栏 / 这本专栏的定位 / 你能从中得到什么 / 我对你的期望**

@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-21 20:00:31
+permalink: /pages/05649e/
+categories:
+  - book
+  - Go入门到精通
+  - 入门教程
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 
 # 卷一《语法卷：现代 Go 基础入门》总目录与导读
 

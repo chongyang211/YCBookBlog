@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-06 18:39:49
+permalink: /pages/579f46/
+categories:
+  - book
+  - 平常记录小说集
+  - 孤鹰踏破青云
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 祁同伟：胜天半子·逆袭全记
 
 > 总框架：分 5 卷，每卷 10 章，共 50 章，约 10 万字。核心主线为祁同伟从大别山寒门少年逆袭为汉东省公安厅厅长，践行“胜天半子”信条，保留人物复杂性，侧重逆袭的艰辛与谋略，弱化后期纯粹堕落，突出与命运博弈的坚守。

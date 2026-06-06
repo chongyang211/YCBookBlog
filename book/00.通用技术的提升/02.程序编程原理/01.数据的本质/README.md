@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-14 17:00:02
+permalink: /pages/99a77a/
+categories:
+  - book
+  - 通用技术的提升
+  - 程序编程原理
+  - 数据的本质
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 第 1 卷｜数据的本质
 
 > **万物起源**——计算机如何用有限的位表示无限的信息？这是所有上层设计的源头。

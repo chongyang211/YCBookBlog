@@ -1,3 +1,16 @@
+---
+title: README
+date: 2025-09-18 21:30:11
+permalink: /pages/efd540/
+categories:
+  - book
+  - Linux应用开发
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 专栏笔记总结大全
 
 

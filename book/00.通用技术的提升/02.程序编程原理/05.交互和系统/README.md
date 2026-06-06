@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-14 17:03:33
+permalink: /pages/f6f0bc/
+categories:
+  - book
+  - 通用技术的提升
+  - 程序编程原理
+  - 交互和系统
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 第 5 卷｜交互与系统
 
 > **从硬件触点到屏幕像素，从消息循环到跨进程通信**——用户交互与系统协作背后的事件驱动架构。

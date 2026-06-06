@@ -1,3 +1,17 @@
+---
+title: 全书Prompt模板
+date: 2026-05-24 09:04:28
+permalink: /pages/eb9fcd/
+categories:
+  - book
+  - 平常记录小说集
+  - 孤鹰踏破青云
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 《孤鹰踏破青云》Prompt 模板（统一版·自包含·v1.0）
 
 > **本文件是写作 50 章的唯一 Prompt 入口·单文件自包含**。

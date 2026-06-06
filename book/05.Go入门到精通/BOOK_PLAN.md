@@ -1,3 +1,16 @@
+---
+title: BOOK_PLAN
+date: 2026-05-21 19:58:55
+permalink: /pages/256f18/
+categories:
+  - book
+  - Go入门到精通
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 
 # 《现代 Go 由浅入深：从入门到工程精通》出版方案 BOOK_PLAN
 

@@ -1,3 +1,18 @@
+---
+title: README
+date: 2025-08-25 08:33:50
+permalink: /pages/ff0407/
+categories:
+  - book
+  - 通用技术的提升
+  - 重学设计模式
+  - 面向对象设计
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 面向对象设计 · 12 篇主线之旅
 
 > 一条主线、十二篇文章、一个真实可跑的电商订单系统——  

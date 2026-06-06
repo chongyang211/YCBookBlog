@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-11-14 19:36:13
+permalink: /pages/29ba68/
+categories:
+  - book
+  - 通用技术的提升
+  - 程序编程原理
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 程序编程原理｜跨语言底层设计思想
 
 > **一本给"语言之上的程序员"写的书——看见设计，而不是语法**。

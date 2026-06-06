@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-04-07 11:47:14
+permalink: /pages/6cc1aa/
+categories:
+  - book
+  - Java高级进阶课
+  - 综合案例
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 卷二 · Java 综合案例总导读（6 案例精品版）
 
 > 本卷是 **卷一《Java 入门教程》** 的配套实战篇。学完入门教程第 1-15 章基础语法后，通过 **6 个层层递进的精品案例** 把散落的知识点串起来，形成"能独立写项目"的能力。

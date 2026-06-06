@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-04-07 12:23:54
+permalink: /pages/c49a16/
+categories:
+  - book
+  - C语言入门精通
+  - 专栏博客
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 专栏笔记总结大全
 
 

@@ -1,3 +1,18 @@
+---
+title: README
+date: 2026-05-21 21:49:12
+permalink: /pages/1d92a1/
+categories:
+  - book
+  - 出版作品的书籍
+  - 小人物的进修
+  - 做事方法论实践
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 第五章：做事方法论实践
 
 做事的全流程可以拆成三个阶段：**事前（想清楚）→ 事中（做扎实）→ 事后（复盘透）**。本章 20 篇方法论按这三段重新编排，每一篇都对应某个阶段里最常用、最见效的那把"工具"。

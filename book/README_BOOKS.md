@@ -1,3 +1,15 @@
+---
+title: README_BOOKS
+date: 2025-06-25 16:10:18
+permalink: /pages/b4b6fe/
+categories:
+  - book
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 基于vuepress-theme-vdoing + Memberstack的专栏会员系统完整实现指南
 
 完全按照你的需求，我为你准备了**零后端代码、最快3小时上线**的完整实现方案。这个方案完美保留了vuepress-theme-vdoing强大的专栏功能，同时通过Memberstack实现了完整的会员注册、登录、支付和内容权限控制。

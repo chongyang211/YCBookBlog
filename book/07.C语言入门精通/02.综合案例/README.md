@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-07-18 10:25:23
+permalink: /pages/4cfc16/
+categories:
+  - book
+  - C语言入门精通
+  - 综合案例
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 ## C语言综合案例
 
 - [01.学生成绩系统]()

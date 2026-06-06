@@ -1,3 +1,17 @@
+---
+title: 全书Prompt模板
+date: 2026-05-23 13:46:47
+permalink: /pages/1e1322/
+categories:
+  - book
+  - 精品小说的书籍
+  - 答题王的伤疤
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 《答题王的伤疤》Prompt 模板（统一版·自包含·v2.2 极简触发版）
 
 > **本文件是写作 60 章的唯一 Prompt 入口·单文件自包含**。

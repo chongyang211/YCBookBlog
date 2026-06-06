@@ -1,3 +1,16 @@
+---
+title: README
+date: 2025-09-17 12:30:14
+permalink: /pages/a5cbf0/
+categories:
+  - book
+  - Cpp入门到精通
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 《现代 C++ 由浅入深：从入门到工程精通》出版方案
 
 > 本文件是基于 `08.Cpp入门到精通/` 目录现有 80+ 篇技术文档的**出版整合方案**。  

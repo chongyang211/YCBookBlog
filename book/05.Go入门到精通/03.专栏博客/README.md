@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-21 20:02:33
+permalink: /pages/be583d/
+categories:
+  - book
+  - Go入门到精通
+  - 专栏博客
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 
 # 🚀 Go 深度技术原理专栏
 

@@ -1,3 +1,18 @@
+---
+title: README
+date: 2025-02-22 14:21:17
+permalink: /pages/ddb72e/
+categories:
+  - book
+  - 通用技术的提升
+  - 重学设计模式
+  - 巧学设计模式
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 巧学设计模式
 
 > **23 种 GoF 设计模式，一条电商主线串到底**——拒绝"模式定义 + UML"的流水账，每篇都从真实业务痛点引入，每篇都告诉你"它和别的模式怎么配"。

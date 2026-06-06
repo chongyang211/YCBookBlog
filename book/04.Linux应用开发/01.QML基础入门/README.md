@@ -1,3 +1,17 @@
+---
+title: README
+date: 2025-09-01 09:35:01
+permalink: /pages/646795/
+categories:
+  - book
+  - Linux应用开发
+  - QML基础入门
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 专栏笔记总结大全
 
 

@@ -1,3 +1,17 @@
+---
+title: README
+date: 2026-05-21 20:01:46
+permalink: /pages/7e0920/
+categories:
+  - book
+  - Go入门到精通
+  - 综合案例
+tags:
+  - 
+author: 
+  name: xugaoyi
+  link: https://github.com/xugaoyi
+---
 # 卷二 · 综合案例总导读
 
 > 本卷是**卷一《语法卷》**的配套实战篇。学完卷一 18 章基础语法后，通过 **5 个循序渐进的项目**把散落的知识点串起来，形成"能独立写项目"的能力。其中 **05.gosite 静态博客生成器** 是"集大成的毕业设计"，一篇覆盖卷一全部 18 章。
