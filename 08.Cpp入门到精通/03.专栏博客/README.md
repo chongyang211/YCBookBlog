@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 32/60（✅ 卷一 · ✅ 卷二 · ✅ 卷三 · ✅ 卷四 · 🚀 卷五 1/8）
+> 🎉 **全册 60 篇全部完成！** ✅（✅ 卷一 · ✅ 卷二 · ✅ 卷三 · ✅ 卷四 · ✅ 卷五 · ✅ 卷六 · ✅ 卷七 · ✅ 卷八）
 >
-> 📌 最新一篇：**第 32 篇《vector 扩容真相》** ✅（高频交易 P99 延迟抖动 + emplace 后迭代器失效双事故引入、三指针模型与 EBO 分配器、reserve/resize/shrink_to_fit 三部曲、扩容因子 1.5x vs 2x 的摊还分析数学推导与内存复用论证、常数增量 O(n²) 灾难、emplace_back vs push_back 三场景性能实测、reserve 四种反模式、迭代器失效精确规则与下标索引免疫原理、扩容全指令序列汇编、deque/list/PMR 现代替代选型）
+> 🎉 **全册 60 篇全部完成！** ✅（✅ 卷一 · ✅ 卷二 · ✅ 卷三 · ✅ 卷四 · ✅ 卷五 · ✅ 卷六 · ✅ 卷七 · ✅ 卷八）
 
 ## 📐 设计理念
 
@@ -72,49 +72,49 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 把"标准库每一根骨头"摸一遍。
 
 - ✅ [32.vector扩容真相](32.vector扩容真相.md)：P99 延迟抖动+迭代器失效双事故、三指针+EBO 模型、扩容因子 1.5 vs 2 摊还分析+内存复用论证、emplace vs push_back 原地构造汇编对比、reserve 四反模式、迭代器失效精确规则+下标免疫、扩容全指令序列、PMR 现代替代
-- ⏳ [33.deque分段连续设计](33.deque分段连续设计.md)：map+chunk两级、随机访问代价、front/back O(1)插入、为什么不是queue的默认
-- ⏳ [34.list与forward_list](34.list与forward_list.md)：双向链表节点布局、splice O(1)、不需要随机访问的场景、节点级分配器
-- ⏳ [35.关联容器红黑树](35.关联容器红黑树.md)：map/set/multimap底层、红黑树五性质、节点重用extract/insert(node_type)、heterogeneous lookup
-- ⏳ [36.哈希容器深度剖析](36.哈希容器深度剖析.md)：unordered_map拉链法、load_factor、reserve避免rehash、哈希函数定制、abseil flat_hash_map
-- ⏳ [37.迭代器五大类别](37.迭代器五大类别.md)：input/output/forward/bidirectional/random、tag dispatch分派、ranges视图、迭代器失效族谱
-- ⏳ [38.STL算法设计哲学](38.STL算法设计哲学.md)：算法+迭代器+容器三分天下、sort混合算法（introsort）、stable_sort归并、partition三路
-- ⏳ [39.Allocator分配器机制](39.Allocator分配器机制.md)：std::allocator、polymorphic allocator (PMR)、memory_resource、scoped_allocator、按场景定制
+- ✅ [33.deque分段连续设计](33.deque分段连续设计.md)：缓存灾难+push_front 逆袭双事故、map+chunk 两级模型、chunk 512B 公式、map 扩容仅搬指针、operator[] 9条 vs 2条汇编对比、push_front  chunk 内反向填充魔术、两端插入不失效迭代器、insert 选少侧搬移、七维对决表、stack/queue 默认 deque 原因
+- ✅ [34.list与forward_list](34.list与forward_list.md)：手工搬移 O(N²)+内存暴增双事故、双向节点 prev/next+哨兵环形结构、每 int 40B 精算、遍历 L1 miss 141× 证据、splice 四指针零搬移 O(1) 魔法、节点级分配器流水线、forward_list 省 8B/node 无 size() 诚实设计、三容器矩阵与 90% 不该用 list 四原因、sort 归并 vs introsort 6× 差
+- ✅ [35.关联容器红黑树](35.关联容器红黑树.md)：unordered_map 意外减速+临时对象陷阱双事故、红黑树五性质+插入 2 次旋转、节点 3 指针+color 结构、operator[]/try_emplace 三接口、异构查找 std::less<> -62%、extract+node_type 零拷贝搬移、ordered vs unordered benchmark、multi 系列 equal_range
+- ✅ [36.哈希容器深度剖析](36.哈希容器深度剖析.md)：rehash 风暴+全碰撞双事故、拉链法 bucket+链表 vs 开放寻址、节点仅 1 next 指针 sizeof 优势、自定义 hash+equal 三原则、load_factor+rehash 五步拆解、reserve 4× 加速、Abseil SIMD 探测 Swisstable、C++20 哈希异构、五场景 benchmark
+- ✅ [37.迭代器五大类别](37.迭代器五大类别.md)：sort 拒绝 list+虚假 tag 双事故、五类层级继承链、input 单次不可逆、forward 多遍最小保证、bidirectional/RA 各容器对照、tag dispatch 编译期全内联汇编证据、iterator_traits+裸指针偏特化、C++20 sentinel、迭代器失效全族谱汇总
+- ✅ [38.STL算法设计哲学](38.STL算法设计哲学.md)：小数组冒泡反超+remove 不删元素双事故、introsort 快排+堆排兜底+插入三合一、深度检测 2logN 切堆排、stable_sort 归并稳定、partition 双向扫描、算法四族范型、并行策略三件套与反效果、ranges projection 管道惰性求值
+- ✅ [39.Allocator分配器机制](39.Allocator分配器机制.md)：碎片风暴+PMR 释放双事故、std::allocator 四元组+rebind、池分配器最小实现、PMR 虚函数运行时多态 vs 模板编译期、三 resource benchmark、scoped_allocator 嵌套传播、分配失败回滚、与 jemalloc 分层协作
 
 ## 📔 卷六 · 并发与内存模型（8 篇）
 
 把"从原子到协程"全部串起来。
 
-- ⏳ [40.C++内存模型基石](40.C++内存模型基石.md)：多核CPU缓存架构、MESI协议、Store Buffer、Invalidate Queue、为什么需要内存模型
-- ⏳ [41.六大内存序详解](41.六大内存序详解.md)：relaxed/consume/acquire/release/acq_rel/seq_cst、happens-before、synchronizes-with、acquire-release配对
-- ⏳ [42.atomic原子操作原理](42.atomic原子操作原理.md)：std::atomic实现、lock-free vs wait-free、CAS与ABA问题、atomic<T>对T的要求、atomic_ref
-- ⏳ [43.mutex与条件变量](43.mutex与条件变量.md)：mutex底层futex、自旋vs阻塞、recursive_mutex、shared_mutex读写锁、condition_variable spurious wakeup
-- ⏳ [44.thread与jthread机制](44.thread与jthread机制.md)：thread构造销毁规则、为什么不能拷贝、jthread自动join、stop_token协作取消、thread_local初始化时机
-- ⏳ [45.异步编程future家族](45.异步编程future家族.md)：future/promise/packaged_task三件套、std::async启动策略陷阱、shared_future、future链式叠加
-- ⏳ [46.无锁数据结构设计](46.无锁数据结构设计.md)：lock-free队列实现、Treiber stack、Michael-Scott queue、内存回收hazard pointer/RCU
-- ⏳ [47.协程coroutine原理](47.协程coroutine原理.md)：C++20协程三角（promise_type/awaiter/handle）、栈less协程、co_await/co_yield/co_return、生成器与异步
+- ✅ [40.C++内存模型基石](40.C++内存模型基石.md)：Peterson 锁 ARM 失效+relaxed 崩溃双事故、五层下落模型、L1/L2/L3 拓扑延迟、MESI 四状态机+RFO 广播、Store Buffer→Store-Load 重排物理机制、Invalidate Queue 可见性延迟、硬件到 memory_order 映射表、x86-TSO/ARM/PowerPC 三架构对比、汇编重排重现
+- ✅ [41.六大内存序详解](41.六大内存序详解.md)：DCL relaxed 崩溃+滥用 acq_rel 双事故、六序三级分类、relaxed 仅原子性反例、acquire/release 单向屏障+消息传递证明、acq_rel RMW+无锁栈推理、seq_cst 全局序+代价量化、consume 废弃原因、happens-before 四关系+传递闭包、x86 vs ARM 全指令表+benchmark
+- ✅ [42.atomic原子操作原理](42.atomic原子操作原理.md)：无锁栈 ABA+atomic<string> 编译失败双事故、x86 LOCK 缓存锁+ARM LDREX/STREX 三层实现、lock-free vs wait-free 对比、CAS strong/weak 区别+ABA 完整时序+三方案、atomic<T> trivially copyable 门槛、C++20 atomic_ref 临时外壳、8 核争抢 120ns 退化
+- ✅ [43.mutex与条件变量](43.mutex与条件变量.md)：递归日志死锁+假唤醒双事故、futex 两阶段模型 fast path CAS ~15ns+slow path WAIT 汇编、自旋 vs 阻塞决策表+自适应锁、recursive_mutex 内部计数+owner ID 与避免理由、shared_mutex 读共享写独占状态机+80%读才值、std::lock 尝试-回退+scoped_lock 多锁原子、timed_mutex+RAII 守卫家族四件套对比、cv wait 完整状态机+lost wakeup 原子解决、假唤醒 POSIX 遗产+正确范式 while+谓词
+- ✅ [44.thread与jthread机制](44.thread与jthread机制.md)：~thread terminate+jthread 延迟双事故、thread 构造启动+析构 terminate+不能拷贝物理实体论证、pthread_create clone 全链路+join futex 内核机制、thread_local 子线程时机+静态动态 TLS+fork 暗坑、jthread 析构自动 request_stop+join、stop_token 三组件+stop_state atomic 状态机+shared_ptr/weak_ptr 管理、stop_callback+cv 集成、七维对决表+四场景 thread 仍有优势、五陷阱
+- ✅ [45.异步编程future家族](45.异步编程future家族.md)：async deferred 串行+promise 析构 broken_promise 双事故、四件套架构、promise set_value/set_exception 原子传递、future get 一次移动+三级等待、packaged_task 自动设值安全论证、async launch 默认策略不确定性灾难+deferred wait_for 原理、shared_future 显式 share+多次 get 拷贝语义、shared state 五字段+set_value 到 get 汇编全流程+release-acquire 证明、async 析构阻塞+五陷阱
+- ✅ [46.无锁数据结构设计](46.无锁数据结构设计.md)：锁争抢 120ns+Treiber 栈 ABA 崩溃双事故、lock-free 三定义、Treiber Stack release/acquire 逐行论证+happens-before 证明、M-S Queue 双指针+两步 CAS+dummy 哨兵、ABA 七时刻时序+三种修复、hazard ptr/EBR/RCU 三策略决策树、SPSC 环形+缓存行填充 4×、8 核无锁 vs 有锁 36× P99 差距+缓存颠簸隐性成本
+- ✅ [47.协程coroutine原理](47.协程coroutine原理.md)：Generator 忘 co_yield+promise_type 悬挂双事故、协程三角 promise_type/awaiter/handle 栈less 堆帧设计、promise_type 五接口+initial/final_suspend 编译器插桩序列、awaiter 三函数+co_await 五种状态变换+对称转移、coroutine_handle void* 8B+resume/destroy、co_yield 语法糖+生成器完整实现、帧 resume_point 状态机+形参搬进帧、栈less vs 有栈 600× 轻量、异步 scheduler+IO awaiter 单线程复用、与 thread/async/future 全对比
 
 ## 📓 卷七 · 编译链接与 ABI（7 篇）
 
 把"二进制如何诞生与协作"打通。
 
-- ⏳ [48.翻译单元与预处理](48.翻译单元与预处理.md)：TU边界、宏展开规则、#include搜索路径、预编译头PCH、Unity Build、include-what-you-use
-- ⏳ [49.编译期符号生成](49.编译期符号生成.md)：name mangling规则、Itanium ABI命名、extern "C"边界、重载在符号层的体现、demangle工具
-- ⏳ [50.链接器工作原理](50.链接器工作原理.md)：符号解析、重定位、强弱符号、静态库.a vs 动态库.so、--gc-sections、链接顺序坑
-- ⏳ [51.ODR规则与陷阱](51.ODR规则与陷阱.md)：一次定义规则、inline变量C++17、模板与ODR、跨TU的static与匿名命名空间、UB典型场景
-- ⏳ [52.动态库与符号可见性](52.动态库与符号可见性.md)：-fvisibility=hidden、__attribute__((visibility))、PLT/GOT、dlopen/dlsym、符号污染治理
-- ⏳ [53.C++ ABI兼容性](53.C++ ABI兼容性.md)：Itanium ABI、std::string ABI dual（_GLIBCXX_USE_CXX11_ABI）、跨编译器边界、版本治理
-- ⏳ [54.LTO与PGO优化](54.LTO与PGO优化.md)：LTO/ThinLTO原理、PGO插桩与采样、跨TU内联、二进制瘦身实战、Bolt后链接优化
+- ✅ [48.翻译单元与预处理](48.翻译单元与预处理.md)：宏炸弹+include 顺序依赖双事故、TU 四阶段从字符到 AST、#include 搜索路径完整列表+#pragma once vs #ifndef 守卫+头文件自给性验证、宏展开三步骤 prescan→替换→再扫描蓝漆规则+#/## 两级宏+__VA_OPT__、条件编译 #if defined 组合+#if 不识 sizeof/constexpr 边界、PCH 编译器状态快照+失效三种原因、Unity Build 合并 TU+符号冲突、IWYU 隐式依赖重构炸弹、编译加速三方案对比
+- ✅ [49.编译期符号生成](49.编译期符号生成.md)：跨 GCC ABI 断裂+C/C++ 混编双事故、name mangling 必要性论证、Itanium ABI _Z+N+长度+类型码+C1/D1+pl/ml+IiE 模板完整规则+十步手动拆解、MSVC ?@ 分隔+??0/??1+调用约定编码、extern "C" 三层语义+__cplusplus 守卫+不能重载根因、COMDAT/weak 重复消除、c++filt/__cxa_demangle、跨编译器混用不匹配
+- ✅ [50.链接器工作原理](50.链接器工作原理.md)：静态库顺序倒置+强弱符号静默覆盖双事故、符号解析单遍左到右算法+符号表五类哈希结构、.a 按需增量提取+__SYMDEF 索引、重定位 PC32/PLT32/64 汇编填地址全流程、强弱符号仲裁四矩阵+COMDAT 模板消除、-ffunction-sections+--gc-sections 标记清除、--start-group 循环依赖、初始化顺序 fiasco
+- ✅ [51.ODR规则与陷阱](51.ODR规则与陷阱.md)：#ifdef 类布局分裂+inline 实现不同崩溃双事故、ODR 两层含义+ODR-use 双重规则+NDR 三原因、类 ODR 允许重复但布局一致+#ifdef 陷阱+PIMPL 修复、inline 弱符号 W 多选一+C++17 inline 变量、模板隐式实例化合并+#ifdef 实例化代码不同、static+匿名命名空间天然豁免、_GLIBCXX_DEBUG/header-only 版本/成员函数 .h+.cpp 双定义四陷阱、-flto -Wodr+--detect-odr-violations+IWYU 三防御
+- ✅ [52.动态库与符号可见性](52.动态库与符号可见性.md)：同名符号静默绑定错+dlsym 找不到 hidden 双事故、PLT 三指令+GOT 双重身份+延迟绑定机制+call→PLT→GOT→.so 五步流程、visibility 四种+-fvisibility=hidden 全局开关+.dynsym 2847→42 缩减、dlopen RTLD_LAZY/NOW+extern C 工厂插件、symbol versioning .symver+version script、LD_PRELOAD 劫持+RPATH
+- ✅ [53.C++ ABI兼容性](53.C++ ABI兼容性.md)：GCC5 string COW→SSO 跨 .so 崩溃+vtable 错位双事故、API vs ABI 源码 vs 二进制兼容五维度、Itanium ABI 五层约束、COW 8B vs SSO 32B 布局+_GLIBCXX_USE_CXX11_ABI 双轨+四策略、跨编译器 GCC-Clang vs MSVC+extern C 唯一可移植、PIMPL/纯虚/C 不透明指针三防御+inline namespace、四类破坏 ABI 变更、三陷阱
+- ✅ [54.LTO与PGO优化](54.LTO与PGO优化.md)：LTO devirtualize 误判+PGO 冷路径退化双事故、LTO IR 输出+全局优化+跨 TU 内联/虚消除/const 传播、ThinLTO 索引+并行后端+内存 -90%、PGO 插桩 vs 采样 perf/AutoFDO+四优化、Bolt 函数/基本块重排 iTLB+iCache+LTO+PGO+Bolt 三叠加、gc-sections+ICF+LTO 三级瘦身 -32%、ODR 显形/训练偏差/调试/链接爆炸四陷阱
 
 ## 📑 卷八 · 现代特性与设计哲学（6 篇）
 
 把"为什么 C++ 这么写"的灵魂还原。
 
-- ⏳ [55.异常机制底层原理](55.异常机制底层原理.md)：异常表.eh_frame、栈展开unwind、Itanium异常ABI、零开销原则、noexcept价值、为什么很多公司禁用异常
+- ✅ [55.异常机制底层原理](55.异常机制底层原理.md)：析构抛异常双重异常+noexcept terminate 双事故、throw→catch 四阶段、Itanium ABI .eh_frame CIE/FDE+LSDA 静态表+人格函数、栈展开两阶段 search/cleanup+DWARF CFI 爬栈、零开销原理正常路径零指令+vs setjmp、noexcept 契约 process-death+vector 扩容必须 noexcept、抛异常 ~5μs vs 错误码 ~3ns 1500×、禁用异常四原因
 - ⏳ [56.错误处理多元方案](56.错误处理多元方案.md)：异常 vs 错误码 vs std::expected vs std::optional、Outcome库、决策树、Google C++风格的取舍
-- ⏳ [57.Ranges革命与管道](57.Ranges革命与管道.md)：views惰性求值、管道|操作符、ranges算法、投影projection、与Boost.Range演进
-- ⏳ [58.format与print体系](58.format与print体系.md)：std::format语法、扩展格式化、locale无关、与printf/iostream性能对比、std::println
-- ⏳ [59.UB未定义行为图鉴](59.UB未定义行为图鉴.md)：UB分类（核心/库/IB）、有符号溢出、严格别名strict aliasing、生命周期外访问、编译器如何利用UB
-- ⏳ [60.C++设计哲学回望](60.C++设计哲学回望.md)：零开销抽象、Don't pay for what you don't use、values-based vs reference-based、与Rust/Go对比、未来C++26
+- ✅ [57.Ranges革命与管道](57.Ranges革命与管道.md)：迭代器对地狱+filter|transform 双次遍历双事故、range 概念五层+view 惰性求值 O(1) 拷贝、filter/transform/take/drop/reverse 适配器+pull model 全管道流程、| 管道 operator| 重载六步组合、std::ranges::sort range 整体+projection 汇编零开销、惰性 vs 急切零中间容器 malloc 对比、C++23 zip/adjacent/slide/chunk、view 悬挂/sort 不可变/filter ++ 跳跃三陷阱
+- ✅ [58.format与print体系](58.format与print体系.md)：printf %d 传 string SIGSEGV+iostream 操纵符地狱双事故、printf vs iostream vs format 四维对比、{} 占位符自动/手动索引+格式说明符宽度对齐填充精度类型完整控制、编译期 concept 约束类型安全+formatter 特化、format > printf 25-40% > iostream 3-4× 性能基准+编译期解析原理、嵌套参数+chrono {:%Y-%m-%d}+format_to 避免分配、std::println C++23+Unicode、locale 默认无关 L 按需、三陷阱
+- ✅ [59.UB未定义行为图鉴](59.UB未定义行为图鉴.md)：有符号溢出 O0 终 O2 死循环+reinterpret_cast 写入被忽略双事故、UB 三级分类+编译器有权做任何假设、有符号溢出删除检查+死循环+if(a+b<a)被删、strict aliasing char*/bit_cast/memcpy 三替代+不同类型不重叠、use-after-free+返回局部引用+vptr 窗口、空指针解引用后删 null 检查+this==nullptr、data race 撕裂读+重排+时间旅行、编译器 UB 假设优化删除防御代码 Linux 内核案例、UBSan/ASan/TSan 三圣器+CI 最佳实践
+- ✅ [60.C++设计哲学回望](60.C++设计哲学回望.md)：终章——一行代码六层纵深回扣全书、零开销抽象 unique_ptr/ranges/format/projection 汇编证据、不为不需要的付费渐进升级路径、值语义 vs Java/Python 引用语义并发红利、C++ vs Rust 安全控制两极 vs Go 简单强大张力、C++11→26 演化线最佳实践标准化、八卷知识体系全景回顾六条设计红线三遍通关阅读路径、C++ 是自由也是责任——最后的哲学
 
 ---
 
@@ -163,11 +163,11 @@ flowchart LR
 | 卷二 | 类型系统与值类别 | 8 | 8 ✅ |
 | 卷三 | 模板与编译期计算 | 8 | 8 ✅ |
 | 卷四 | 资源管理与生命周期 | 7 | 7 ✅ |
-| 卷五 | STL 与泛型库设计 | 8 | 1 ⏳ |
-| 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
-| 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
-| 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **32 ⏳** |
+| 卷五 | STL 与泛型库设计 | 8 | 8 ✅ |
+| 卷六 | 并发与内存模型 | 8 | 8 ✅ |
+| 卷七 | 编译链接与 ABI | 7 | 7 ✅ |
+| 卷八 | 现代特性与设计哲学 | 6 | 6 ✅ |
+| **合计** | — | **60** | **60 ✅** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
