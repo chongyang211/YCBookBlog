@@ -1,9 +1,22 @@
-// import vue from 'vue/dist/vue.esm.browser'
 export default ({
-  Vue, // VuePress 正在使用的 Vue 构造函数
-  options, // 附加到根实例的一些选项
-  router, // 当前应用的路由实例
-  siteData // 站点元数据
+  Vue,
+  options,
+  router,
+  siteData
 }) => {
-  // window.Vue = vue // 使页面中可以使用Vue构造函数 （使页面中的vue demo生效）
+  // 限制复制最多100字
+  if (typeof document !== 'undefined') {
+    document.addEventListener('copy', (e) => {
+      const selection = window.getSelection()
+      if (!selection) return
+      const text = selection.toString()
+      if (text.length > 100) {
+        // 截取前100字 + 省略提示
+        const truncated = text.slice(0, 100) + '...'
+        // 阻止默认复制，替换为截断内容
+        e.preventDefault()
+        e.clipboardData.setData('text/plain', truncated)
+      }
+    })
+  }
 }
