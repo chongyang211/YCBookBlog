@@ -20,7 +20,7 @@ author:
 
 ---
 
-## 二、课程大纲（8 章，循序渐进）
+## 二、课程大纲（9 章，循序渐进）
 
 ### 第1章 · Git 是什么 & 为什么诞生 （约1小时）
 **目标**：理解版本控制的本质，知道 Git 解决了什么问题。
@@ -164,17 +164,128 @@ git log --oneline
 
 ---
 
+### 第9章 · 常见实操速查 （本章集成已有文章）
+**目标**：将分散的常用操作按"遇到什么场景 → 用什么命令"组织成速查地图。遇到问题不用翻遍文档，直接对号入座。
+
+#### 9.1 撤销类操作（来自 [03.代码撤销的操作](./03.代码撤销的操作.md)）
+
+| 场景 | 命令 | 关键说明 |
+|---|---|---|
+| 改乱了文件，还没 `add` | `git checkout -- <file>` | 一键还原到上次 commit 的状态 |
+| `add` 错了，想撤回暂存区 | `git reset HEAD <file>` | 文件回到已修改状态，不丢内容 |
+| `commit` 了但没 `push`，想撤销 | `git reset --soft HEAD^` | 修改回到暂存区，commit 消失 |
+| `commit` 想彻底丢弃 | `git reset --hard HEAD^` | ⚠️ 修改全部丢失，慎用 |
+| 已经 `push` 了，想撤销远程 | `git revert <commit-hash>` | 生成新 commit 反向抵消，不改历史 |
+| 提交信息写错了 | `git commit --amend -m "新信息"` | 仅改 message，不涉及代码 |
+| 漏了文件想补进上次提交 | `git add <file> && git commit --amend` | 追加文件到上一次 commit |
+| 正在 merge 中想放弃 | `git merge --abort` | 回到 merge 前的干净状态 |
+| 正在 rebase 中想放弃 | `git rebase --abort` | 回到 rebase 前的干净状态 |
+| stash 了想恢复 | `git stash pop` | 恢复并删除 stash；`apply` 不删除 |
+| 回到某个历史版本看看 | `git checkout <commit-hash>` | 进入 detached HEAD，看完切回来 |
+| 强制推送（万不得已） | `git push --force` | ⚠️ 覆盖远程历史，团队协作禁用 |
+
+#### 9.2 合并分支操作（来自 [04.合并分支的操作](./04.合并分支的操作.md)）
+
+| 场景 | 命令 | 关键说明 |
+|---|---|---|
+| 标准合并（feature → develop） | `git checkout develop && git merge feature` | 先切到目标分支再 merge |
+| 推荐：非快进合并 | `git merge --no-ff feature` | 保留功能分支完整历史 |
+| 合并前先同步 | `git pull origin develop` | 减少冲突，务必先拉最新 |
+| 查看分支差异 | `git diff develop..feature` | 合并前先看清楚改了啥 |
+| 解决冲突三步走 | `git status` → 手动修 → `git add` → `git commit` | 修完冲突记得 add + commit |
+| 合并后推送 | `git push origin develop` | 推送合并结果 |
+| 合并后清理 feature 分支 | `git branch -d feature && git push origin --delete feature` | 本地 + 远程一并删 |
+| 撤销已推送的合并 | `git revert -m 1 <merge-hash>` | 生成反向提交，安全撤销 |
+| 撤销未推送的合并 | `git reset --hard HEAD~1` | 直接回退一步 |
+
+**合并策略对比：**
+
+| 策略 | 命令 | 适用场景 | 效果 |
+|---|---|---|---|
+| 标准合并 | `git merge feature` | 小型功能 | 快但历史不清 |
+| `--no-ff` | `git merge --no-ff feature` | **推荐日常** | 保留完整分支历史 |
+| rebase | `git rebase develop` | 保持线性历史 | 整洁但可能丢分支信息 |
+| squash | `git merge --squash feature` | 简化历史 | 所有提交压成一个 |
+
+#### 9.3 cherry-pick 精准移植（来自 [05.选择性移植提交](./05.选择性移植提交.md)）
+
+| 场景 | 命令 | 关键说明 |
+|---|---|---|
+| 移植单个提交 | `git cherry-pick <hash>` | 把别的分支的某个 commit "摘"到当前分支 |
+| 移植连续多个 | `git cherry-pick <hashA>..<hashB>` | 范围移植 |
+| 移植不连续多个 | `git cherry-pick <hash1> <hash2>` | 空格分隔多个 hash |
+| 编辑提交信息 | `git cherry-pick -e <hash>` | 移植时顺便改 message |
+| 只取改动不自动提交 | `git cherry-pick -n <hash>` | 取过来先放着，手动改完再 commit |
+| 遇到冲突怎么办 | 手动解决 → `git cherry-pick --continue` | 同 merge 冲突处理 |
+| 放弃移植 | `git cherry-pick --abort` | 回到操作前状态 |
+
+> **什么时候用 cherry-pick 而不是 merge？** 单个 bug 修复想同步到多个分支（如 hotfix → main + develop），用 cherry-pick。整个功能完整合并用 merge。
+
+#### 9.4 分支重命名（来自 [06.分支常见的操作](./06.分支常见的操作.md)）
+
+| 场景 | 命令 |
+|---|---|
+| 重命名本地分支 | `git branch -m <旧名> <新名>` |
+| 删除远程旧分支 | `git push origin --delete <旧名>` |
+| 推送新分支到远程 | `git push origin <新名>` |
+| 更新本地追踪关系 | `git branch --set-upstream-to=origin/<新名> <新名>` |
+
+#### 9.5 删除分支（来自 [07.删除分支的操作](./07.删除分支的操作.md)）
+
+| 场景 | 命令 | 关键说明 |
+|---|---|---|
+| 删除本地分支 | `git branch -d <分支名>` | 已合并的才能删 |
+| 强制删除本地分支 | `git branch -D <分支名>` | ⚠️ 未合并也能删，内容丢失 |
+| 删除远程分支 | `git push origin --delete <分支名>` | 等效 `git push origin :<分支名>` |
+| 同步远程删除（其他人执行） | `git fetch --prune` | 清理本地已不存在的远程分支引用 |
+
+#### 9.6 标签操作（来自 [08.TAG标签的操作](./08.TAG标签的操作.md)）
+
+| 场景 | 命令 | 关键说明 |
+|---|---|---|
+| 创建轻量标签 | `git tag v1.0.0` | 只标记 commit，无额外信息 |
+| 创建附注标签（推荐） | `git tag -a v1.0.0 -m "发布 v1.0.0"` | 含作者、日期、message |
+| 查看所有标签 | `git tag` | `git tag -l "v1.*"` 按模式过滤 |
+| 查看标签详情 | `git show v1.0.0` | 显示标签指向的 commit 信息 |
+| 推送单个标签 | `git push origin v1.0.0` | push 默认不推送标签 |
+| 推送所有标签 | `git push origin --tags` | 一次性全推 |
+| 删除本地标签 | `git tag -d v1.0.0` | |
+| 删除远程标签 | `git push origin :refs/tags/v1.0.0` | 冒号语法 |
+| 切换到标签 | `git checkout v1.0.0` | 进入 detached HEAD |
+| 基于标签建分支 | `git checkout -b hotfix-v1 v1.0.0` | 从标签处开新分支修复 |
+
+> **标签 vs 分支**：标签是静态的"里程碑"，不会随提交移动；分支是动态的"线"，会不断前进。发布版本用标签，日常开发用分支。
+
+#### 9.7 高频场景组合拳
+
+| 日常场景 | 完整操作序列 |
+|---|---|
+| **早上来第一件事** | `git checkout develop && git pull origin develop` |
+| **开始一个新功能** | `git checkout -b feature/xxx develop` |
+| **开发中每天同步** | `git checkout feature/xxx && git merge develop` |
+| **功能完成提 PR** | `git push origin feature/xxx` → GitHub 提 PR → 审查 → merge |
+| **hotfix 紧急修复** | `git checkout -b hotfix/xxx main` → 修 bug → `git push` → PR 合并到 main + develop |
+| **发布新版本** | 合并到 main → `git tag -a v1.2.0 -m "v1.2.0"` → `git push origin main --tags` |
+| **合并完删分支** | `git branch -d feature/xxx && git push origin --delete feature/xxx` |
+| **改了一半被叫去修 bug** | `git stash` → 切分支修 → 修完提交 → 切回来 → `git stash pop` |
+| **提交错了想反悔** | 未 push：`git reset --soft HEAD^`；已 push：`git revert <hash>` |
+
+---
+
 ## 三、学习路线建议
 
 ```
 第1章（1h）→ 第2章（1.5h）→ 第3章（2h）→ 第4章（2.5h）
     ↓
 第5章（2h）→ 第6章（2h）→ 第7章（2h）→ 第8章（1.5h）
+    ↓
+第9章（速查，随时翻阅）
 ```
 
 - **零基础**：按顺序学，每章跟做实践任务。
 - **有基础**：从第4章（分支）开始，重点攻克第6章（高级技巧）和第7章（工作流）。
-- **查漏补缺**：直接跳第8章，场景速查。
+- **日常查漏**：直接翻第9章速查表，按场景找命令。
+- **遇到报错**：跳第8章，场景速查。
 
 ---
 
@@ -186,14 +297,16 @@ git log --oneline
 |---|---|---|
 | 01 | Git 实用技巧指南 | 第1-2章（基础速览） |
 | 02 | 代码提交和推送 | 第2-3、5章 |
-| 03 | 代码撤销的操作 | 第3章 |
-| 04 | 合并分支的操作 | 第4章 |
-| 05 | 选择性移植提交 | 第6章（cherry-pick） |
-| 06 | 分支常见的操作 | 第4章 |
-| 07 | 删除分支的操作 | 第4、8章 |
-| 08 | TAG 标签的操作 | 第5章 |
+| 03 | 代码撤销的操作 | 第3章、第9章 |
+| 04 | 合并分支的操作 | 第4章、第9章 |
+| 05 | 选择性移植提交 | 第6章、第9章 |
+| 06 | 分支常见的操作 | 第4章、第9章 |
+| 07 | 删除分支的操作 | 第4、8章、第9章 |
+| 08 | TAG 标签的操作 | 第5章、第9章 |
 | 09 | stash 暂存工作现场 | 第6章（待补充） |
 | 10 | Git 工作流实战 | 第7章（待补充） |
+
+> **第9章** 将 03-08 篇文章中的常用命令按"场景 → 命令 → 说明"整合为一张速查地图，适合日常开发时快速翻阅。
 
 ---
 
