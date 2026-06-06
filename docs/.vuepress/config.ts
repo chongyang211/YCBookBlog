@@ -38,7 +38,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
       {
-        text: '编程思想',
+        text: '编程',
         link: '/programming/',
         items: [
           { text: '面向对象', link: '/08.编程思想/1.面向对象设计/' },
