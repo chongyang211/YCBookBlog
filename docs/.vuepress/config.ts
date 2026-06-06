@@ -30,6 +30,49 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     nav: [
       { text: '首页', link: '/' },
       {
+        text: '计算机',
+        link: '/computer/',
+        items: [
+          { text: '计算机原理技术', link: '/book/00.通用技术的提升/11.计算机原理技术/' },
+        ],
+      },
+      {
+        text: '编程思想',
+        link: '/programming/',
+      },
+      {
+        text: '精品专栏',
+        link: '/column/',
+      },
+      {
+        text: 'C/C++',
+        link: '/cpp/',
+        items: [
+          { text: 'C语言入门精通', link: '/c/' },
+          { text: 'Cpp入门到精通', link: '/cpp/' },
+        ],
+      },
+      {
+        text: 'Java',
+        link: '/java/',
+      },
+      {
+        text: 'Web',
+        link: '/web-dev/',
+      },
+      {
+        text: 'Phone',
+        link: '/phone/',
+        items: [
+          { text: 'Android提升进阶', link: '/android/' },
+          { text: 'iOS开发和进阶', link: '/ios/' },
+        ],
+      },
+      {
+        text: 'Linux',
+        link: '/linux/',
+      },
+      {
         text: '前端',
         link: '/web/', //目录页链接，此处link是vdoing主题新增的配置项，有二级导航时，可以点击一级导航跳到目录页
         items: [
