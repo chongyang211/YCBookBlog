@@ -1,0 +1,90 @@
+/* 评论区颜色重置 */
+.gt-container .gt-ico-tip::after {
+  content: '。( Win + . ) 或 ( ⌃ + ⌘ + ␣ ) 打开表情';
+  color: #999;
+  font-size: 0.8rem;
+}
+.gt-container .gt-meta {
+  border-color: var(--borderColor) !important;
+}
+.gt-container .gt-comments-null {
+  color: var(--textColor);
+  opacity: 0.5;
+}
+.gt-container .gt-header-textarea {
+  color: var(--textColor);
+  background: rgba(180, 180, 180, 0.1) !important;
+}
+.gt-container .gt-btn {
+  border-color: var(--theme-color) !important;
+  background-color: var(--theme-color) !important;
+}
+.gt-container .gt-btn-preview {
+  background-color: rgba(255, 255, 255, 0) !important;
+  color: var(--theme-color) !important;
+}
+.gt-container a {
+  color: var(--theme-color) !important;
+}
+.gt-container .gt-svg svg {
+  fill: var(--theme-color) !important;
+}
+.gt-container .gt-comment-content,
+.gt-container .gt-comment-admin .gt-comment-content {
+  background-color: rgba(150, 150, 150, 0.1) !important;
+}
+.gt-container .gt-comment-content:hover,
+.gt-container .gt-comment-admin .gt-comment-content:hover {
+  box-shadow: 0 0 25px rgba(150, 150, 150, 0.5) !important;
+}
+.gt-container .gt-comment-content .gt-comment-body,
+.gt-container .gt-comment-admin .gt-comment-content .gt-comment-body {
+  color: var(--textColor) !important;
+}
+
+/* qq徽章 */
+.qq {
+  position: relative;
+}
+.qq::after {
+  content: "可撩";
+  background: var(--theme-color);
+  color: #fff;
+  padding: 0 5px;
+  border-radius: 10px;
+  font-size: 12px;
+  position: absolute;
+  top: -4px;
+  right: -35px;
+  transform: scale(0.85);
+}
+
+/* demo模块图标颜色 */
+body .vuepress-plugin-demo-block__wrapper,
+body .vuepress-plugin-demo-block__wrapper .vuepress-plugin-demo-block__display {
+  border-color: rgba(160, 160, 160, 0.3);
+}
+body .vuepress-plugin-demo-block__wrapper .vuepress-plugin-demo-block__footer:hover .vuepress-plugin-demo-block__expand::before {
+  border-top-color: var(--theme-color) !important;
+  border-bottom-color: var(--theme-color) !important;
+}
+body .vuepress-plugin-demo-block__wrapper .vuepress-plugin-demo-block__footer:hover svg {
+  fill: var(--theme-color) !important;
+}
+
+/* 全文搜索框 */
+.suggestions {
+  overflow: auto;
+  max-height: calc(100vh - 6rem);
+}
+@media (max-width: 719px) {
+  .suggestions {
+    width: 90vw;
+    min-width: 90vw !important;
+    margin-right: -20px;
+  }
+}
+.suggestions .highlight {
+  color: var(--theme-color);
+  font-weight: bold;
+}

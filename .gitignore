@@ -14,6 +14,7 @@ Thumbs.db
 
 # ===== 构建输出 =====
 docs/.vuepress/dist/
+docs/.vuepress/.temp/
 dist/
 
 # ===== 日志与缓存 =====
