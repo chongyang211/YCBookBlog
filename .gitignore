@@ -15,6 +15,7 @@ Thumbs.db
 # ===== 构建输出 =====
 docs/.vuepress/dist/
 docs/.vuepress/.temp/
+docs/.vuepress/config.bundled_*.mjs
 dist/
 
 # ===== 日志与缓存 =====
