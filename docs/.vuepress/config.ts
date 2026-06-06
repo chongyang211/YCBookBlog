@@ -112,8 +112,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
       {
-        text: 'Phone',
-        link: '/phone/',
+        text: 'App',
+        link: '/app/',
         items: [
           { text: 'Android库解读', link: '/pages/502baa/' },
           { text: 'Android专栏', link: '/pages/65f3a0/' },
