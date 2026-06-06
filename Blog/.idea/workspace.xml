@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="65499afc-c727-4483-86c4-ef144c7e8bc7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.MD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/baiduPush.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/config/baiduCode.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/config/htmlModules.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/config/sidebar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/enhanceApp.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/plugins/love-me/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/plugins/love-me/love-me.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/CNAME" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/Apifox-860x320.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/beian.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/bg.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/git.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/more.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/other.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/panda-waving.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/python.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/ui.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/public/img/web.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/styles/index.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/.vuepress/styles/palette.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/00.目录页/01.前端.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/00.目录页/02.页面.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/00.目录页/03.技术.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/00.目录页/04.更多.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/01.33个非常实用的JavaScript一行代码.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/02.new命令原理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/03.ES5面向对象.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/04.ES6面向对象.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/06.多种数组去重性能对比.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/100.比typeof运算符更准确的类型判断.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/1110.三级目录/00.四级文件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/50.js随机打乱数组.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/60.判断是否为移动端浏览器.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/70.将一维数组按指定长度转为二维数组.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/80.防抖与节流函数.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/25.JavaScript文章/90.JS获取和修改url参数.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/00.《JavaScript教程》笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/05.《JavaScript高级程序设计》笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/10.《ES6 教程》笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/20.《Vue》笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/25.《React》笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/30.《TypeScript 从零实现 axios》.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/33.《Git》学习笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/35.TypeScript笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/40.小程序笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/01.前端/40.学习笔记/50.JS设计模式总结笔记.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/10.HTML/10.常用meta整理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/00.CSS教程和技巧收藏.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/01.flex布局语法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/02.flex布局案例-基础.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/03.flex布局案例-骰子.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/04.flex布局案例-圣杯布局.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/05.flex布局案例-网格布局.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/06.flex布局案例-输入框布局.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/07.CSS3之transition过渡.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/08.CSS3之animation动画.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/20.「布局技巧」图片未加载前自动撑开元素高度.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/30.文字在一行或多行时超出显示省略号.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/35.从box-sizing属性入手，了解盒子模型.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/40.水平垂直居中的几种方式-案例.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/45.如何根据系统主题自动响应CSS深色模式.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/50.「css技巧」使用hover和attr()定制悬浮提示.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/60.CSS-function汇总.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/70.CSS给table的tbody添加滚动条.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/02.页面/20.CSS/80.网格布局中的动画.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/01.技术文档/01.Git使用手册.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/01.技术文档/02.Markdown使用教程.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/01.技术文档/03.npm常用命令.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/01.技术文档/10.npm packageJson属性详解.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/01.技术文档/15.yaml语言教程.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/01.技术文档/20.Git修改分支名.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/02.GitHub技巧/01.GitHub高级搜索技巧.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/02.GitHub技巧/02.GitHub Actions 实现自动部署静态博客.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/02.GitHub技巧/03.GitHub Actions 定时运行代码：每天定时百度链接推送.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/02.GitHub技巧/10.GitHub加速下载项目的方法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/03.Nodejs/01.nodejs递归读取所有文件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/04.博客搭建/01.解决百度无法收录搭建在GitHub上的个人博客的问题.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/04.博客搭建/02.使用Gitalk实现静态博客无后台评论系统.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/04.博客搭建/03.GitHub + jsDelivr + TinyPNG+ PicGo 打造稳定快速、高效免费图床.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/03.技术/04.博客搭建/10.vdoing主题效果图.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/01.学习/00.费曼学习法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/01.学习/01.笔记方法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/01.学习/02.提高学习效率的策略.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/01.学习/03.提高记忆的技巧.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/01.学习/04.自律小建议.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/01.学习/05.处理问题的思路.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/01.学习/10.搜索引擎使用技巧.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/03.面试/01.面试问题集锦.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/05.心情杂货/01.一个完美主义者的自我救赎.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/05.心情杂货/10.反向拆解让人上瘾的套路，找回自律.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/10.实用技巧/01.2分钟规则.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/10.实用技巧/10.一行代码“黑”掉任意网站.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/04.更多/99.友情链接.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/05.关于/01.关于.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/06.收藏夹/01.网站.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/06.收藏夹/02.常用的前端轮子.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/@pages/archivesPage.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/@pages/categoriesPage.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/@pages/tagsPage.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/_posts/随笔/你知道的越多，不知道的也就越多.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/_posts/随笔/我做了一个手写春联小网页，祝大家虎年暴富.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/_posts/随笔/我是如何发现临时邮箱的？一个真实的故事.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/_posts/随笔/拥抱生活，拥抱快乐.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/index.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/01.ECMAScript 6 简介.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/02.let 和 const 命令.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/03.变量的解构赋值.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/04.字符串的扩展.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/05.字符串的新增方法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/06.正则的扩展.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/07.数值的扩展.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/08.函数的扩展.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/09.数组的扩展.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/10.对象的扩展.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/11.对象的新增方法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/12.Symbol.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/13.Set 和 Map 数据结构.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/14.Proxy.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/15.Reflect.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/16.Promise 对象.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/17.Iterator 和 for-of 循环.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/18.Generator 函数的语法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/19.Generator 函数的异步应用.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/20.async 函数.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/21.Class 的基本语法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/22.Class 的继承.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/23.Module 的语法.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/24.Module 的加载实现.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/25.编程风格.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/26.读懂 ECMAScript 规格.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/27.异步遍历器.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/28.ArrayBuffer.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/29.最新提案.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/30.装饰器.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/31.函数式编程.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/32.Mixin.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/33.SIMD.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《ES6 教程》笔记/34.参考链接.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/10.手册/00.常用Git命令清单.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/10.手册/03.Git变基合并.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/10.手册/06.Git命令思维导图.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/10.Git基础与命令.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/100.Git工具-重写历史.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/110.Git工具-重置揭密.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/20.Git分支-分支原理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/30.Git分支的新建与合并-分支操作.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/40.Git分支管理-查看分支.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/50.Git分支开发工作流.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/60.Git分支-远程分支.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/70.Git分支-变基.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/80.Git工具-查看修订版本.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Git》学习笔记/20.文档笔记/90.Git工具-交互式暂存.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《JavaScript教程》笔记/01.基础.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《JavaScript教程》笔记/02.内置对象.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《JavaScript教程》笔记/03.面向对象.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《JavaScript教程》笔记/04.异步操作.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《JavaScript教程》笔记/05.DOM.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《JavaScript教程》笔记/06.事件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《JavaScript教程》笔记/07.浏览器模型.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/01.JSX简介.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/02.元素渲染.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/03.组件&amp;Props.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/04.State&amp;生命周期.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/05.事件处理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/06.条件渲染.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/07.列表&amp;Key.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/08.表单.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/09.状态提升.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/10.组合vs继承.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/01.核心概念/11.React哲学.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/02.高级指引/01.高级指引.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/03.Hook/01.Hook概述.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/03.Hook/02.使用State Hook.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/03.Hook/03.使用Effect Hook.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/03.Hook/04.Hook规则.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/03.Hook/05.自定义 Hook.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《React》笔记/04.案例演示/01.案例演示.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/01.初识 TypeScript/01.简介.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/01.初识 TypeScript/02.安装 TypeScript.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/01.初识 TypeScript/03.编写第一个 TypeScript 程序.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/01.基础类型.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/02.变量声明.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/03.接口.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/04.类.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/05.函数.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/06.泛型.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/07.类型推断.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/02.TypeScript 常用语法/08.高级类型.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/03.ts-axios 项目初始化/01.需求分析.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/03.ts-axios 项目初始化/02.初始化项目.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/03.ts-axios 项目初始化/03.编写基础请求代码.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/04.ts-axios 基础功能实现/01.处理请求 url 参数.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/04.ts-axios 基础功能实现/02.处理请求 body 数据.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/04.ts-axios 基础功能实现/03.处理请求 header.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/04.ts-axios 基础功能实现/04.获取响应数据.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/04.ts-axios 基础功能实现/05.处理响应 header.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/04.ts-axios 基础功能实现/06.处理响应 data.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/05.ts-axios 异常情况处理/01.错误处理.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/05.ts-axios 异常情况处理/02.错误信息增强.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/06.ts-axios 接口扩展/01.扩展接口.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/06.ts-axios 接口扩展/02.axios 函数重载.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/06.ts-axios 接口扩展/03.响应数据支持泛型.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/07.ts-axios 拦截器实现/01.拦截器设计与实现.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/08.ts-axios 配置化实现/01.合并配置的设计与实现.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/08.ts-axios 配置化实现/02.请求和响应配置化.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/08.ts-axios 配置化实现/03.扩展 create 静态接口.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/09.ts-axios 取消功能实现/01.取消功能的设计与实现.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/01.withCredentials.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/02.XSRF 防御.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/03.上传和下载的进度监控.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/04.HTTP 授权.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/05.自定义合法状态码.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/06.自定义参数序列化.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/07.baseURL.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/10.ts-axios 更多功能实现/08.静态方法扩展.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/01.前言.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/02.Jest 安装和配置.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/03.辅助模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/04.请求模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/05.headers 模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/06.Axios 实例模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/07.拦截器模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/08.mergeConfig 模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/09.请求取消模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/11.ts-axios 单元测试/10.剩余模块单元测试.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/12.ts-axios 部署与发布/01.ts-axios 编译与发布.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《TypeScript 从零实现 axios》/12.ts-axios 部署与发布/02.引用 ts-axios 库.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/01.基础/00.MVVM模式.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/01.基础/10.生命周期.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/01.基础/20.计算属性 vs 方法 vs 侦听属性.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/01.基础/30.v-if vs v-show.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/01.基础/35.列表渲染之数组、对象更新检测.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/36.使用组件的细节点.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/40.父组件给子组件传值.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/50.子组件派发事件和值给父组件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/52.Prop 验证 与 非 Prop 的 Attribute.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/55.自定义事件.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/60.兄弟组件传值.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/65.非父子组件传值.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/70.父组件调用子组件方法并传入值.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/75.插槽slot.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/80.动态组件与 v-once 指令.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/02.组件/90.vue父子组件的生命周期顺序.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/03.过渡&amp;动画/110.transition过渡&amp;动画.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/03.过渡&amp;动画/112.使用animate库.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/03.过渡&amp;动画/120.transition-group列表过渡.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/04.可复用性&amp;组合/01.Mixin混入.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/05.工具/10.Vue CLi v3 创建项目使用记录.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/06.规模化/100.vuex操作相关.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/06.规模化/140.路由懒加载.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/10.Vuex/01.Vuex.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/99.其他/80.Vue中的防抖函数封装和使用.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/《Vue》笔记/99.其他/90.操作本地缓存.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/baiduPush.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/check.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/config.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/editFrontmatter.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/modules/fn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/modules/readFileList.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/bin/checkVersion.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/AlgoliaSearchBox.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/ArchivesPage.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/ArticleInfo.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/BloggerBar.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/BodyBgImg.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Buttons.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Catalogue.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/CategoriesBar.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/CategoriesPage.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/DropdownLink.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/DropdownTransition.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Footer.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Home.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/MainLayout.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/NavLink.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/NavLinks.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Navbar.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Page.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/PageEdit.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/PageNav.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Pagination.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/PostList.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/RightMenu.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/Sidebar.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/SidebarButton.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/SidebarGroup.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/SidebarLink.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/SidebarLinks.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/TagsBar.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/TagsPage.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/components/UpdateArticle.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/enhanceApp.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/global-components/Badge.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/global-components/CodeBlock.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/global-components/CodeGroup.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/layouts/404.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/layouts/Layout.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/mixins/posts.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/mixins/titleBadge.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/node_utils/getSidebarData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/node_utils/handlePage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/node_utils/modules/fn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/node_utils/modules/readFileList.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/node_utils/setFrontmatter.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/noopModule.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/arrow.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/code-theme.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/code.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/config.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/custom-blocks.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/index.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/markdown-container.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/mobile.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/palette.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/toc.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/styles/wrapper.styl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/templates/dev.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/templates/ssr.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/types/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/util/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vdoing/util/postData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vercel.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/07.内存对齐与缓存行.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/07.内存对齐与缓存行.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/10.右值引用与移动语义.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/10.右值引用与移动语义.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/18.模板特化与偏特化.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/18.模板特化与偏特化.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/20.可变参数模板原理.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/20.可变参数模板原理.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/38.STL算法设计哲学.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/38.STL算法设计哲学.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/44.thread与jthread机制.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/44.thread与jthread机制.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/50.链接器工作原理.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/50.链接器工作原理.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/55.异常机制底层原理.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/55.异常机制底层原理.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/60.C++设计哲学回望.md" beforeDir="false" afterPath="$PROJECT_DIR$/../08.Cpp入门到精通/03.专栏博客/60.C++设计哲学回望.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第五卷：盛世的密码/5.1 开皇之治·盛世的根基是节俭与务实.md" beforeDir="false" afterPath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第五卷：盛世的密码/5.1 开皇之治·盛世的根基是节俭与务实.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第五卷：盛世的密码/5.2 大运河的功与过·长期价值与短期成本如何平衡.md" beforeDir="false" afterPath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第五卷：盛世的密码/5.2 大运河的功与过·长期价值与短期成本如何平衡.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.10 北魏孝文帝改革·主动汉化背后的深远眼光.md" beforeDir="false" afterPath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.10 北魏孝文帝改革·主动汉化背后的深远眼光.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.7 八王之乱·内斗是怎样把一手好牌打烂的.md" beforeDir="false" afterPath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.7 八王之乱·内斗是怎样把一手好牌打烂的.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.8 衣冠南渡·绝境中如何完成文明的迁移.md" beforeDir="false" afterPath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.8 衣冠南渡·绝境中如何完成文明的迁移.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.9 淝水之战·骄兵必败背后的组织病理.md" beforeDir="false" afterPath="$PROJECT_DIR$/../09.出版作品的书籍/05.中华历史故事/第四卷：动荡中坚守/4.9 淝水之战·骄兵必败背后的组织病理.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "chongyang211"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/chongyang211/YCBookBlog.git",
+    "accountId": "7764a5e3-f961-4461-a8b0-d4080d509406"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="3El18bWAyvsU9ZKHtaEVu6W9Saw" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/yc/YCBookBlog/Blog",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17890.13" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="65499afc-c727-4483-86c4-ef144c7e8bc7" name="Changes" comment="" />
+      <created>1780738184108</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1780738184108</updated>
+      <workItem from="1780738185322" duration="250000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
