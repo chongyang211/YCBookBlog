@@ -34,6 +34,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         link: '/computer/',
         items: [
           { text: '计算机原理技术', link: '/07.计算机/01.计算机原理技术/' },
+          { text: '网络协议理论', link: '/07.计算机/08.网络协议理论/' },
         ],
       },
       {
