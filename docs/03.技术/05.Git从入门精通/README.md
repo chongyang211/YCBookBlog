@@ -296,14 +296,14 @@ git log --oneline
 
 | 编号 | 文章 | 对应章节 |
 |---|---|---|
-| 00 | 版本控制诞生 | 第1章：Git 是什么 & 为什么诞生 |
-| 01 | 单人工作流 | 第2章：log/diff/restore/reset/reflog |
-| 02 | 分支的本质 | 第3章：merge/rebase/冲突/交互变基 |
-| 03 | 远程协作指南 | 第4章：push/pull/fetch/PR/标签 |
-| 04 | 特种作战手册 | 第5章：stash/cherry-pick/bisect/blame |
-| 05 | 团队工作流 | 第6章：Git Flow/GitHub Flow/保护分支/CI |
-| 06 | 故障排除手册 | 第7章：detached HEAD/误删/大文件/SSH |
-| 07 | 场景速查地图 | 第8章：按场景速查 + 一天工作流 + 卡片 |
+| 01 | 版本控制诞生 | 第1章：Git 是什么 & 为什么诞生 |
+| 02 | 单人工作流 | 第2章：log/diff/restore/reset/reflog |
+| 03 | 分支的本质 | 第3章：merge/rebase/冲突/交互变基 |
+| 04 | 远程协作指南 | 第4章：push/pull/fetch/PR/标签 |
+| 05 | 特种作战手册 | 第5章：stash/cherry-pick/bisect/blame |
+| 06 | 团队工作流 | 第6章：Git Flow/GitHub Flow/保护分支/CI |
+| 07 | 故障排除手册 | 第7章：detached HEAD/误删/大文件/SSH |
+| 08 | 场景速查地图 | 第8章：按场景速查 + 一天工作流 + 卡片 |
 
 > **第8章** 将全部命令按"场景 → 命令 → 说明"整合为一张速查地图，适合日常开发时快速翻阅。
 

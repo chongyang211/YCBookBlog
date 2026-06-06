@@ -2,12 +2,15 @@
 title: CloudBase 一键部署博客
 date: 2015-06-06 10:00:00
 permalink: /pages/cloudbase-deploy/
-categories:
+categories: 
   - 技术
   - 博客搭建
-tags:
+tags: 
   - CloudBase
   - 部署
+author: 
+  name: 杨充
+  link: https://github.com/yangchong211
 ---
 
 ## 为什么选择 CloudBase
