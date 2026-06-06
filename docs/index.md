@@ -3,7 +3,7 @@ home: true
 icon: home
 title: Evan's blog
 heroImage: /img/web.png
-heroText: Evan's blog
+heroText: 编程进阶网，你值得拥有！
 tagline: Web前端技术博客，积跬步以至千里，致敬每个爱学习的你。
 actions:
   - text: 开始阅读
