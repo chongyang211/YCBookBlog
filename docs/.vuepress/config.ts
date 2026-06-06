@@ -48,6 +48,11 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       {
         text: '精品专栏',
         link: '/column/',
+        items: [
+          { text: '性能优化实践', link: '/10.精品专栏/01.性能优化实践/' },
+          { text: '程序编程原理', link: '/10.精品专栏/02.程序编程原理/' },
+          { text: '方案设计思想', link: '/10.精品专栏/05.方案设计思想/' },
+        ],
       },
       {
         text: '算法',
