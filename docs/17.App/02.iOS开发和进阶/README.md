@@ -8,7 +8,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # iOS开发和实践论

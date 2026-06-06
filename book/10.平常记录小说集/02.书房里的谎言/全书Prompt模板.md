@@ -9,7 +9,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 《书房里的谎言》Prompt 模板（统一版·自包含·v1.0）

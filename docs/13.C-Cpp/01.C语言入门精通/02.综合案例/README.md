@@ -9,7 +9,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 ## C语言综合案例

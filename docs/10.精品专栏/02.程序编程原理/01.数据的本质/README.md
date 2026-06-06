@@ -10,7 +10,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 第 1 卷｜数据的本质

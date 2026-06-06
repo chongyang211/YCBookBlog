@@ -10,7 +10,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 面向对象设计 · 12 篇主线之旅

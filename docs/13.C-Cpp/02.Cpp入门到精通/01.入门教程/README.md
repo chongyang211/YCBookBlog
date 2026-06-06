@@ -9,7 +9,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 卷一《语法卷：现代 C++ 基础入门》总目录与导读

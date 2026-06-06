@@ -8,7 +8,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 《现代 C++ 由浅入深：从入门到工程精通》出版方案

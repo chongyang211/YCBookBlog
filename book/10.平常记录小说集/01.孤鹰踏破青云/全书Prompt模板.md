@@ -9,7 +9,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 《孤鹰踏破青云》Prompt 模板（统一版·自包含·v1.0）

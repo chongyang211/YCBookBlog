@@ -9,7 +9,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 《答题王的伤疤》Prompt 模板（统一版·自包含·v2.2 极简触发版）

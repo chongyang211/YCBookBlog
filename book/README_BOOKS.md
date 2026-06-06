@@ -7,7 +7,7 @@ categories:
 tags:
   - 
 author: 
-  name: xugaoyi
+  name: 杨充
   link: https://github.com/xugaoyi
 ---
 # 基于vuepress-theme-vdoing + Memberstack的专栏会员系统完整实现指南
