@@ -126,6 +126,11 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       {
         text: 'Linux',
         link: '/linux/',
+        items: [
+          { text: 'QML基础入门', link: '/pages/99d701/' },
+          { text: 'QT核心库实践', link: '/pages/7e9682/' },
+          { text: 'Linux实践开发', link: '/pages/c61feb/' },
+        ],
       },
       {
         text: '前端',
