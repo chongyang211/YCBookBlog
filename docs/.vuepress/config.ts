@@ -71,8 +71,14 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: 'C/C++',
         link: '/cpp/',
         items: [
-          { text: 'C语言入门精通', link: '/c/' },
-          { text: 'Cpp入门到精通', link: '/cpp/' },
+          { text: 'C语言入门教程', link: '/pages/ff9770/' },
+          { text: 'C语言综合案例', link: '/pages/c59e4f/' },
+          { text: 'C语言专栏博客', link: '/pages/15dc19/' },
+          { text: 'C语言标准集库', link: '/pages/1ad0be/' },
+          { text: 'C++入门教程', link: '/pages/2dd37b/' },
+          { text: 'C++综合案例', link: '/pages/c34dde/' },
+          { text: 'C++专栏博客', link: '/pages/53783a/' },
+          { text: 'C++开发技巧', link: '/pages/dcb4af/' },
         ],
       },
       {
