@@ -145,6 +145,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
       {
+        text: '工具',
+        link: '/tools/',
+      },
+      {
         text: '更多',
         link: '/more/',
         items: [
@@ -207,14 +211,14 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     // 文章默认的作者信息，(可在md文件中单独配置此信息) string | {name: string, link?: string}
     author: {
       name: '杨充', // 必需
-      link: 'https://github.com/杨充', // 可选的
+      link: 'https://github.com/yangchong211', // 可选的
     },
 
     // 博主信息 (显示在首页侧边栏)
     blogger: {
       avatar: 'https://jsd.cdn.zzko.cn/gh/杨充/image_store/blog/20200103123203.jpg',
       name: '杨充',
-      slogan: '前端界的小学生',
+      slogan: '努力编码中',
     },
 
     // 社交图标 (显示于博主信息栏和页脚栏。内置图标：https://doc.杨充.com/pages/a20ce8/#social)
@@ -224,7 +228,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         {
           iconClass: 'icon-youjian',
           title: '发邮件',
-          link: 'mailto:894072666@qq.com',
+          link: 'mailto:yangchong211@163.com',
         },
         {
           iconClass: 'icon-github',
@@ -250,7 +254,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     extendFrontmatter: {
       author: {
         name: '杨充',
-        link: 'https://github.com/杨充'
+        link: 'https://github.com/yangchong211'
       }
     },
 
