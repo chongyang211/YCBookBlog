@@ -84,6 +84,11 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       {
         text: 'Java',
         link: '/java/',
+        items: [
+          { text: '入门教程', link: '/pages/d62067/' },
+          { text: '综合案例', link: '/pages/607405/' },
+          { text: '专栏博客', link: '/pages/6c806c/' },
+        ],
       },
       {
         text: 'Go',
