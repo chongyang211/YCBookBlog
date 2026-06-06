@@ -71,10 +71,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: 'C/C++',
         link: '/c-cpp/',
         items: [
-          { text: 'C语言入门教程', link: '/pages/ff9770/' },
-          { text: 'C语言综合案例', link: '/pages/c59e4f/' },
-          { text: 'C语言专栏博客', link: '/pages/15dc19/' },
-          { text: 'C语言标准集库', link: '/pages/1ad0be/' },
+          { text: 'C语言入门', link: '/pages/ff9770/' },
+          { text: 'C综合案例', link: '/pages/c59e4f/' },
+          { text: 'C专栏博客', link: '/pages/15dc19/' },
+          { text: 'C标准集库', link: '/pages/1ad0be/' },
           { text: 'C++入门教程', link: '/pages/2dd37b/' },
           { text: 'C++综合案例', link: '/pages/c34dde/' },
           { text: 'C++专栏博客', link: '/pages/53783a/' },
@@ -86,14 +86,24 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         link: '/java/',
       },
       {
+        text: 'Go',
+        link: '/go/',
+        items: [
+          { text: '入门教程', link: '/pages/4040b2/' },
+          { text: '综合案例', link: '/pages/cf3286/' },
+          { text: '专栏博客', link: '/pages/291903/' },
+          { text: '开发技巧', link: '/pages/ebcc62/' },
+        ],
+      },
+      {
         text: 'Web',
         link: '/web-dev/',
         items: [
-          { text: 'HTML工具手册', link: '/pages/cfa178/' },
-          { text: 'JavaScript入门', link: '/pages/0f13b4/' },
-          { text: 'TypeScript入门', link: '/pages/85bb9e/' },
+          { text: 'HTML手册', link: '/pages/cfa178/' },
+          { text: 'JavaScript', link: '/pages/0f13b4/' },
+          { text: 'TypeScript', link: '/pages/85bb9e/' },
           { text: 'Vue高级进阶', link: '/pages/cc1d0b/' },
-          { text: '专栏博客', link: '/pages/850962/' },
+          { text: 'JavaScript高级', link: '/pages/850962/' },
         ],
       },
       {
