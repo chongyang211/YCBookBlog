@@ -28,3 +28,7 @@ yarn-error.log*
 # ===== 本地环境 =====
 .env.local
 .env.*.local
+
+# ===== vdoing 自动生成 =====
+docs/@pages/
+docs/_posts/
