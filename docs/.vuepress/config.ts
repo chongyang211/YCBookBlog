@@ -69,7 +69,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: 'C/C++',
-        link: '/cpp/',
+        link: '/c-cpp/',
         items: [
           { text: 'C语言入门教程', link: '/pages/ff9770/' },
           { text: 'C语言综合案例', link: '/pages/c59e4f/' },
