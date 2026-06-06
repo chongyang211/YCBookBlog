@@ -1,6 +1,6 @@
 ---
 title: CloudBase 一键部署博客
-date: 2025-06-06 10:00:00
+date: 2015-06-06 10:00:00
 permalink: /pages/cloudbase-deploy/
 categories:
   - 技术
