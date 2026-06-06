@@ -2,9 +2,9 @@
 
 > C++ 核心原理深度专栏，自下而上贯穿 **内存与对象 → 类型与值类别 → 模板与编译期 → 资源管理 → STL → 并发 → 编译链接 → 设计哲学** 八大原理域，共计 **60 篇**，体系化拆解 C++ 的每一根骨头与每一种设计哲学。
 >
-> 🚧 **全册 60 篇编排中** ⏳ 已完成 30/60（✅ 卷一 · ✅ 卷二 · ✅ 卷三 · 🚀 卷四 5/7）
+> 🚧 **全册 60 篇编排中** ⏳ 已完成 31/60（✅ 卷一 · ✅ 卷二 · ✅ 卷三 · ✅ 卷四）
 >
-> 📌 最新一篇：**第 30 篇《weak_ptr 与 this 增强》** ✅（IO 回调裸 this 幽灵崩溃 + shared_from_this 构造期抛异常双事故引入、回调四时效模型、裸 this→shared_ptr(this)→shared_from_this→weak_from_this 四层安全升级、enable_shared_from_this CRTP 源码逐行拆解与 mutable 设计意图、构造→shared_ptr→可用的三阶段流水线、weak_from_this vs shared_from_this 语义区分与汇编对比、二级指针失效本质与 weak_ptr::lock 唯一原子检测器、Observer 模式 weak_ptr 惰性清理完整实现、异步回调四层安全方案、多态与静态函数边界陷阱）
+> 📌 最新一篇：**第 31 篇《五种存储期管理》** ✅（单例多线程竞速崩溃 + thread_local fork 暗坑双事故引入、五存储期全景与地址空间映射、static 局部双重检查锁汇编全程（futex/guard/fast path 3ns）、thread_local 的 FS 寄存器+TLS 段实现、临时对象生命周期延长与 RVO 重叠、五存储期汇编全景对比+线程安全矩阵、跨语言跨平台对比、选择决策树）
 
 ## 📐 设计理念
 
@@ -65,7 +65,7 @@ C++ 与 Java 最大的不同在于：**它没有虚拟机这一层抽象**——
 - ✅ [28.unique_ptr原理剖析](28.unique_ptr原理剖析.md)：异常路径泄露+auto_ptr 亡故双事故、核心三行源码、sizeof=裸指针铁证、Deleter 无状态 EBO/有状态/函数指针三种代价、C++11 漏掉 make_unique 原因、异常安全 make_unique vs new、T[] 数组特化、解引用汇编 100% 一致
 - ✅ [29.shared_ptr底层剖析](29.shared_ptr底层剖析.md)：循环引用泄露+双控制块双事故、控制块五字段布局、双计数器与析构时机、make_shared 一次 vs 两次分配布局图、原子 LOCK 汇编+高竞争退化、weak_ptr::lock 的 CAS 快照、循环引用标准解法、enable_shared_from_this 初始化时机、性能全景对比表
 - ✅ [30.weak_ptr与this增强](30.weak_ptr与this增强.md)：IO 回调裸 this 幽灵+构造期 shared_from_this 抛异常双事故、回调四时效模型、enable_shared_from_this CRTP 源码拆解、weak_from_this vs shared_from_this 语义汇编对比、二级指针失效与 lock 原子检测、Observer 模式 weak_ptr 惰性清理、异步回调四层安全方案、多态边界陷阱
-- ⏳ [31.五种存储期管理](31.五种存储期管理.md)：static/thread/automatic/dynamic/temporary、static局部变量线程安全初始化、TLS实现
+- ✅ [31.五种存储期管理](31.五种存储期管理.md)：单例竞速+fork TLS 双事故、五存储期全景映射、static 局部双重检查锁汇编、thread_local FS 寄存器+TLS 段、临时对象生命周期延长、五存储期汇编对比+线程安全矩阵、跨语言跨平台对比、选择决策树
 
 ## 📒 卷五 · STL 与泛型库设计（8 篇）
 
@@ -162,12 +162,12 @@ flowchart LR
 | 卷一 | 内存模型与对象布局 | 8 | 8 ✅ |
 | 卷二 | 类型系统与值类别 | 8 | 8 ✅ |
 | 卷三 | 模板与编译期计算 | 8 | 8 ✅ |
-| 卷四 | 资源管理与生命周期 | 7 | 5 ⏳ |
+| 卷四 | 资源管理与生命周期 | 7 | 7 ✅ |
 | 卷五 | STL 与泛型库设计 | 8 | 0 ⏳ |
 | 卷六 | 并发与内存模型 | 8 | 0 ⏳ |
 | 卷七 | 编译链接与 ABI | 7 | 0 ⏳ |
 | 卷八 | 现代特性与设计哲学 | 6 | 0 ⏳ |
-| **合计** | — | **60** | **30 ⏳** |
+| **合计** | — | **60** | **31 ⏳** |
 
 > 📁 旧版 16 篇已归档至 [archive/](archive/)，作为新专栏写作参考。
 
