@@ -18,7 +18,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
   locales: {
     '/': {
       lang: 'zh-CN',
-      title: "Evan's blog",
+      title: "编程进阶网",
       description: 'web前端技术博客,专注web前端学习与总结。JavaScript,js,ES6,TypeScript,vue,React,python,css3,html5,Node,git,github等技术文章。',
     }
   },
@@ -33,7 +33,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: '计算机',
         link: '/computer/',
         items: [
-          { text: '计算机原理技术', link: '/book/00.通用技术的提升/11.计算机原理技术/' },
+          { text: '计算机原理技术', link: '/00.通用技术的提升/11.计算机原理技术/' },
         ],
       },
       {
