@@ -3,8 +3,12 @@
 
 ```bash
 # install dependency
-npm install # or yarn install
+npm install
+
+# 临时忽略 npm 漏洞问题
+npm install --no-audit
+
 
 # develop
-npm run dev # or yarn dev
+npm run dev
 ```
