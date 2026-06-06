@@ -2,7 +2,7 @@
 home: true
 icon: home
 title: 编程进阶，你值得拥有！
-heroImage: /img/web.png
+heroImage: /img/logo.png
 heroText: 编程进阶，你值得拥有！
 tagline: 从底层原理到工程实战，用代码丈量技术的深度。
 actions:
@@ -18,7 +18,7 @@ features:
     icon: /img/other.png
     details: 面向对象、设计原则、23种设计模式
     link: /programming/
-  - title: 精品专栏
+  - title: 专栏
     icon: /img/other.png
     details: 性能优化、程序编程原理、方案设计思想
     link: /column/
