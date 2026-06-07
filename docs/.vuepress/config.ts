@@ -147,7 +147,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '技术文档', link: '/pages/9a7ee40fc232253e/' },
           { text: '产品思考', link: '/pages/4c778760be26d8b3/' },
           { text: '软实力', link: '/pages/117708e0af7f0bd9/' },
-          { text: '博客搭建', link: '/pages/41f87d890d0a02af/' },
+          { text: '开发流程', link: '/pages/41f87d890d0a02af/' },
           { text: 'Git应用', link: '/pages/36ec62/' },
           { text: '技术模版', link: '/pages/tech-templates/' },
           { text: '技术规范', link: '/pages/code-style-guides/' },
