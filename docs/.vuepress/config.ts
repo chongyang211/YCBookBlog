@@ -139,6 +139,11 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: 'Nodejs', link: '/pages/117708e0af7f0bd9/' },
           { text: '博客搭建', link: '/pages/41f87d890d0a02af/' },
           { text: 'Git从入门精通', link: '/pages/89c2da/' },
+          { text: '设计文档模版', link: '/pages/tech-design-template/' },
+          { text: '复盘专项模版', link: '/pages/tech-review-template/' },
+          { text: '业务分享模版', link: '/pages/tech-share-template/' },
+          { text: '十分钟分享模版', link: '/pages/ten-min-share/' },
+          { text: '技术标准化实践', link: '/pages/e838e6/' },
         ],
       },
       {
