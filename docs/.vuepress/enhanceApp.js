@@ -4,7 +4,8 @@ export default ({
   router,
   siteData
 }) => {
-  // ========== 安全防护区 ==========
+  // ========== 安全防护区（仅客户端） ==========
+  if (typeof window !== 'undefined') {
 
   // 1. 控制台版权警告（震慑爬虫和F12抓取）
   if (typeof console !== 'undefined') {
@@ -102,6 +103,8 @@ export default ({
     `
     document.head.appendChild(style)
   }
+
+  } // end 安全防护区（仅客户端）
 
   // 注入分享悬浮按钮
   if (typeof window !== 'undefined') {
