@@ -261,11 +261,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           title: '发邮件',
           link: 'mailto:yangchong211@163.com',
         },
-        {
-          iconClass: 'icon-github',
-          title: 'GitHub',
-          link: 'https://github.com/杨充',
-        },
+        // { iconClass: 'icon-github', title: 'GitHub', link: 'https://github.com/杨充' },
         {
           iconClass: 'icon-erji',
           title: '听音乐',
