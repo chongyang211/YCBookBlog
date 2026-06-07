@@ -129,7 +129,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: 'Linux实践开发', link: '/pages/c61feb/' },
         ],
       },
-
+      {
+        text: 'ScriptHub',
+        link: '/scripthub/',
+      },
       {
         text: '技术',
         link: '/technology/',
