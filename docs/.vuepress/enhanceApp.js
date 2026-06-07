@@ -28,6 +28,66 @@ export default ({
     })
   }
 
+  // 3. DevTools 检测（打开 F12 时降低可读性）
+  if (typeof window !== 'undefined') {
+    const threshold = 160
+    let devOpen = false
+    const checkDevTools = () => {
+      const widthThreshold = window.outerWidth - window.innerWidth > threshold
+      const heightThreshold = window.outerHeight - window.innerHeight > threshold
+      const now = widthThreshold || heightThreshold
+      if (now && !devOpen) {
+        devOpen = true
+        document.body.style.filter = 'blur(2px)'
+        document.body.style.userSelect = 'none'
+      }
+      if (!now && devOpen) {
+        devOpen = false
+        document.body.style.filter = ''
+        document.body.style.userSelect = ''
+      }
+    }
+    setInterval(checkDevTools, 1000)
+
+    // 4. 快捷键拦截（仅拦截高危组合，不影响正常浏览）
+    document.addEventListener('keydown', (e) => {
+      const tag = (e.target || {}).tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return // 不拦截输入框
+      // 拦截：Ctrl+S 保存网页、Ctrl+U 查看源码、F12 DevTools
+      if ((e.ctrlKey && (e.key === 's' || e.key === 'u')) || e.key === 'F12') {
+        e.preventDefault()
+        return false
+      }
+    })
+
+    // 5. 注入零宽字符水印到文章内容（肉眼不可见，复制可见，用于追踪来源）
+    const injectWatermark = () => {
+      const content = document.querySelector('.theme-default-content')
+      if (!content || content.dataset.watermarked) return
+      // 零宽字符序列：编码域名，复制后可通过 Python 解码溯源
+      // 仅在长文本段落末尾注入，不影响可读性
+      const pTags = content.querySelectorAll('p, li, pre, blockquote')
+      pTags.forEach(p => {
+        if (p.textContent.length > 200) {
+          const marker = document.createTextNode('\u200B') // 零宽空格
+          p.appendChild(marker)
+        }
+      })
+      content.dataset.watermarked = '1'
+    }
+    router.afterEach(() => setTimeout(injectWatermark, 500))
+
+    // 6. CSS 注入：文章内容区禁止拖拽 + 限制选中（开发者模式自动解除）
+    const style = document.createElement('style')
+    style.id = 'security-protect-style'
+    style.textContent = `
+      .theme-default-content { -webkit-user-drag: none; }
+      .theme-default-content img { pointer-events: none; -webkit-user-drag: none; }
+      .theme-default-content pre, .theme-default-content code { -webkit-user-select: text; user-select: text; }
+    `
+    document.head.appendChild(style)
+  }
+
   // 注入分享悬浮按钮
   if (typeof window !== 'undefined') {
     router.afterEach(() => {
