@@ -53,6 +53,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '性能优化', link: '/pages/974deb/' },
           { text: '编程原理', link: '/pages/6adec7/' },
           { text: '方案设计', link: '/pages/a2fa2a/' },
+          { text: '稳定可靠', link: '/pages/stability-readme/' },
+          { text: '工程运维', link: '/pages/engineering-readme/' },
         ],
       },
       {
