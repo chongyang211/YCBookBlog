@@ -31,7 +31,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         link: '/computer/',
         items: [
           { text: '计算机原理', link: '/pages/a4c9df/' },
+          { text: '操作系统', link: '/pages/os-readme/' },
           { text: '网络协议', link: '/pages/a9fec0/' },
+          { text: '数据库原理', link: '/pages/db-readme/' },
         ],
       },
       {
@@ -41,6 +43,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '面向对象', link: '/pages/452dc5/' },
           { text: '设计原则', link: '/pages/759f12/' },
           { text: '设计模式', link: '/pages/6f8962/' },
+          { text: '系统架构', link: '/pages/arch-readme/' },
         ],
       },
       {
@@ -173,9 +176,13 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: '工具',
-        link: '/tools/',
+        link: '/pages/tools-readme/',
         items: [
           { text: 'JSON工具', link: '/tools/json/' },
+          { text: '文本工具', link: '/tools/text/' },
+          { text: '图片处理', link: '/tools/image/' },
+          { text: '文档转化', link: '/tools/doc/' },
+          { text: '代码压缩', link: '/tools/minify/' },
         ],
       },
       {
