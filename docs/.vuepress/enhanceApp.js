@@ -77,13 +77,28 @@ export default ({
     }
     router.afterEach(() => setTimeout(injectWatermark, 500))
 
-    // 6. CSS 注入：文章内容区禁止拖拽 + 限制选中（开发者模式自动解除）
+    // 6. 禁止右键（仅文章内容区，保留代码块可右键）
+    document.addEventListener('contextmenu', (e) => {
+      const content = document.querySelector('.theme-default-content')
+      if (!content || !content.contains(e.target)) return
+      // 允许代码块和输入框右键菜单（复制代码）
+      if (e.target.closest('pre, code, input, textarea')) return
+      e.preventDefault()
+    })
+
+    // 7. 防 iframe 嵌入（防止第三方网站套壳转载）
+    if (window.top !== window.self) {
+      window.top.location = window.self.location
+    }
+
+    // 8. CSS 注入：内容区防拖拽 + 限制选中 + 图片保护（代码块始终可选中）
     const style = document.createElement('style')
     style.id = 'security-protect-style'
     style.textContent = `
       .theme-default-content { -webkit-user-drag: none; }
-      .theme-default-content img { pointer-events: none; -webkit-user-drag: none; }
-      .theme-default-content pre, .theme-default-content code { -webkit-user-select: text; user-select: text; }
+      .theme-default-content p, .theme-default-content h1, .theme-default-content h2, .theme-default-content h3, .theme-default-content h4, .theme-default-content li, .theme-default-content blockquote { -webkit-user-select: none; user-select: none; }
+      .theme-default-content pre, .theme-default-content code { -webkit-user-select: text !important; user-select: text !important; }
+      .theme-default-content img { pointer-events: none; -webkit-user-drag: none; -webkit-user-select: none; user-select: none; }
     `
     document.head.appendChild(style)
   }
