@@ -62,7 +62,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '工业级实现', link: '/pages/430428/' },
           { text: '算法思想', link: '/pages/2e8a53/' },
           { text: '实战与综合', link: '/pages/af1a01/' },
-          { text: '算法考核', link: '/pages/algo200/' },
+          { text: '算法考核', link: '/pages/algo200-a001/' },
         ],
       },
       {
