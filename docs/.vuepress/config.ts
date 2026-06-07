@@ -38,9 +38,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: '编程',
         link: '/programming/',
         items: [
-          { text: '面向对象', link: '/08.编程/1.面向对象设计/' },
-          { text: '设计原则', link: '/08.编程/2.常见设计原则/' },
-          { text: '设计模式', link: '/08.编程/3.巧学设计模式/' },
+          { text: '面向对象', link: '/08.编程/面向对象设计/' },
+          { text: '设计原则', link: '/08.编程/常见设计原则/' },
+          { text: '设计模式', link: '/08.编程/巧学设计模式/' },
         ],
       },
       {
