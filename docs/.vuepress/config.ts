@@ -141,7 +141,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: 'Git应用', link: '/pages/36ec62/' },
           { text: '技术模版', link: '/pages/tech-templates/' },
           { text: '技术规范', link: '/pages/code-style-guides/' },
-          { text: 'Markdown', link: '/pages/markdown-basics/' },
+          { text: 'Markdown', link: '/pages/markdown-guide/' },
         ],
       },
       {
