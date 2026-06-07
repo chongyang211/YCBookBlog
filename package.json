@@ -2,13 +2,13 @@
   "name": "theme-vdoing-blog",
   "version": "1.0.0",
   "scripts": {
-    "dev": "export NODE_OPTIONS='--localstorage-file=/tmp/vuepress-localstorage.json' && node --max_old_space_size=4096 ./node_modules/.bin/vuepress dev docs",
-    "build": "export NODE_OPTIONS='--localstorage-file=/tmp/vuepress-localstorage.json' && node --max_old_space_size=4096 ./node_modules/.bin/vuepress build docs",
-    "dev:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=4096 ./node_modules/.bin/vuepress dev docs",
-    "build:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=4096 ./node_modules/.bin/vuepress build docs",
+    "dev": "export NODE_OPTIONS='--localstorage-file=/tmp/vuepress-localstorage.json' && node --max_old_space_size=8192 ./node_modules/.bin/vuepress dev docs",
+    "build": "export NODE_OPTIONS='--localstorage-file=/tmp/vuepress-localstorage.json' && node --max_old_space_size=8192 ./node_modules/.bin/vuepress build docs",
+    "dev:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress dev docs",
+    "build:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress build docs",
     "deploy": "bash deploy.sh",
     "editFm": "node utils/editFrontmatter.js",
-    "baiduPush": "node utils/baiduPush.js https://xugaoyi.com && bash baiduPush.sh"
+    "baiduPush": "node utils/baiduPush.js https://yccoding.com && bash baiduPush.sh"
   },
   "license": "MIT",
   "devDependencies": {
