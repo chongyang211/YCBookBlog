@@ -447,6 +447,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     if (isServer) {
       config.plugins.delete('vue-server-renderer-server-plugin')
     }
+    // 生产构建：关闭 SourceMap 省内存
+    config.devtool(false)
+    // 限制并行线程数，减少并发内存峰值
+    config.parallelism(2)
   },
 
   // 监听文件变化并重新构建
