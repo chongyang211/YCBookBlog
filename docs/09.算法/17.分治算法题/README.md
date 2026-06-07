@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/1cb4bf/
 ---
 # 分治 · 1题
 

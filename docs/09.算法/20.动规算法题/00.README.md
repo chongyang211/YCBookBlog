@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/4f7ae6/
 ---
 # 动态规划 · 19题
 

@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/5b293d/
 ---
 # 位运算 · 10题
 

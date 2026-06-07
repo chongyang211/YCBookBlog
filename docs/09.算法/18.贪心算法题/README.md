@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/656dd3/
 ---
 # 贪心 · 8题
 

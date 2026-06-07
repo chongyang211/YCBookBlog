@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/3af941/
 ---
 # 双指针与滑动窗口 · 4题
 

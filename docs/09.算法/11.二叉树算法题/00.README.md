@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/1b750d/
 ---
 # 树与二叉树 · 20题
 

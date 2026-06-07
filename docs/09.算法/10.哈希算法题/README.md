@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/330fdf/
 ---
 # 哈希表与查找 · 9题
 

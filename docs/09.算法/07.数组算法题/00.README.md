@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/4a8358/
 ---
 # 数组与字符串 · 20题
 

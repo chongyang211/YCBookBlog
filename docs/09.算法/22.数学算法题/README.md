@@ -13,7 +13,6 @@ tags:
 author: 
   name: 杨充
   link: https://github.com/yangchong211
-permalink: /pages/8e2814/
 ---
 # 数学与思维 · 10题
 
