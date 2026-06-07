@@ -151,7 +151,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         items: [
           { text: 'Python教程', link: '/pages/python-guide/' },
           { text: 'Shell&Bash教程', link: '/pages/shell-guide/' },
-          { text: '工具脚本', link: '/20.ScriptHub/04.工具脚本/' },
+          { text: '工具脚本', link: '/pages/tool-scripts/' },
           { text: '自动化脚本', link: '/20.ScriptHub/05.自动化脚本/' },
         ],
       },
