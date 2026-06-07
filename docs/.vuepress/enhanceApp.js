@@ -4,13 +4,27 @@ export default ({
   router,
   siteData
 }) => {
-  // 限制复制最多100字
+  // ========== 安全防护区 ==========
+
+  // 1. 控制台版权警告（震慑爬虫和F12抓取）
+  if (typeof console !== 'undefined') {
+    console.log(
+      '%c⚠️ 安全警告 %c请勿在此页面执行任何脚本。%c 如发现漏洞欢迎联系 yangchong211@163.com',
+      'color:#e74c3c;font-size:20px;font-weight:bold',
+      'color:#333;font-size:14px',
+      'color:#999;font-size:12px'
+    )
+  }
+
+  // 2. 复制限制：超过100字自动截断并附加来源
   if (typeof document !== 'undefined') {
     document.addEventListener('copy', (e) => {
       const selection = window.getSelection()
       if (!selection || selection.toString().length <= 100) return
+      const clipped = selection.toString().slice(0, 100) + 
+        `...\n\n— 原文来自 编程进阶网 yccoding.com —`
       e.preventDefault()
-      e.clipboardData.setData('text/plain', selection.toString().slice(0, 100) + '...')
+      e.clipboardData.setData('text/plain', clipped)
     })
   }
 
