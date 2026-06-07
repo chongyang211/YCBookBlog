@@ -439,6 +439,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     extractHeaders: ['h2', 'h3', 'h4', 'h5', 'h6'], // 提取标题到侧边栏的级别，默认['h2', 'h3']
   },
 
+  // 只编译到 ES2015+，大幅减少 bundle 体积（解决 SSR 包过大的 JSON.stringify 溢出）
+  evergreen: true,
+
   // 监听文件变化并重新构建
   extraWatchFiles: [
     '.vuepress/config.ts',
