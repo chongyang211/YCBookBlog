@@ -98,19 +98,19 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: 'Java',
         link: '/java/',
         items: [
-          { text: '入门教程', link: '/pages/d62067/' },
-          { text: '综合案例', link: '/pages/607405/' },
-          { text: '专栏博客', link: '/pages/6c806c/' },
+          { text: 'Java入门教程', link: '/pages/d62067/' },
+          { text: 'Java综合案例', link: '/pages/607405/' },
+          { text: 'Java专栏博客', link: '/pages/6c806c/' },
         ],
       },
       {
         text: 'Go',
         link: '/go/',
         items: [
-          { text: '入门教程', link: '/pages/4040b2/' },
-          { text: '综合案例', link: '/pages/cf3286/' },
-          { text: '专栏博客', link: '/pages/291903/' },
-          { text: '开发技巧', link: '/pages/ebcc62/' },
+          { text: 'Go入门教程', link: '/pages/4040b2/' },
+          { text: 'Go综合案例', link: '/pages/cf3286/' },
+          { text: 'Go专栏博客', link: '/pages/291903/' },
+          { text: 'Go开发技巧', link: '/pages/ebcc62/' },
         ],
       },
       {
@@ -149,7 +149,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: 'ScriptHub',
         link: '/scripthub/',
         items: [
-          { text: 'Python', link: '/20.ScriptHub/01.Python/' },
+          { text: 'Python教程', link: '/pages/python-guide/' },
           { text: 'Shell', link: '/20.ScriptHub/02.Shell/' },
           { text: 'Bash', link: '/20.ScriptHub/03.Bash/' },
           { text: '工具脚本', link: '/20.ScriptHub/04.工具脚本/' },
