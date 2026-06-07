@@ -152,6 +152,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '技术模版', link: '/pages/tech-templates/' },
           { text: '技术规范', link: '/pages/code-style-guides/' },
           { text: 'Markdown', link: '/pages/markdown-guide/' },
+          { text: 'Mermaid', link: '/pages/mermaid-guide/' },
+          { text: '开源协议', link: '/pages/license-guide/' },
         ],
       },
       {
