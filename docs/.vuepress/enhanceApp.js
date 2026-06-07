@@ -106,11 +106,12 @@ export default ({
   // 注入分享悬浮按钮
   if (typeof window !== 'undefined') {
     router.afterEach(() => {
-      if (document.getElementById('share-float-app')) return
-      const app = document.createElement('div')
-      app.id = 'share-float-app'
-      document.body.appendChild(app)
-      new Vue({
+      Vue.nextTick(() => {
+        if (document.getElementById('share-float-app')) return
+        const app = document.createElement('div')
+        app.id = 'share-float-app'
+        document.body.appendChild(app)
+        new Vue({
         data: { 
           show: false, copied: false, showQr: false
         },
@@ -244,6 +245,7 @@ export default ({
 
 </div>`
       }).$mount('#share-float-app')
+      })
     })
   }
 }
