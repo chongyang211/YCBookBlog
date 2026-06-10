@@ -1,0 +1,221 @@
+---
+title: HTTP调试
+date: 2025-06-07 10:00:00
+permalink: /pages/tool-http/
+categories:
+  - ScriptHub
+  - 工具脚本
+  - 网络工具
+tags:
+  - 工具
+  - 网络
+author:
+  name: 杨充
+  link: https://github.com/yangchong211
+---
+# HTTP调试
+
+> Python requests 快速调试、httpie 命令行 HTTP 客户端、重定向追踪、SSL 原理、下载进度条、异步并发。
+
+## 一、Python requests——脚本化 HTTP
+
+`requests` 封装了底层 `urllib3`，内置连接池、自动解压、Cookie 持久化。相比 curl，它在脚本中更易读、更易处理 JSON 响应。
+
+```bash
+pip install requests
+```
+
+### 1.1 基础请求
+
+HTTP 请求的核心四要素：**方法(GET/POST...)、URL、Headres(元数据)、Body(数据)**。`requests` 用参数名明确区分这四者：
+
+```python
+#!/usr/bin/env python3
+import requests
+
+# ---- GET ----
+resp = requests.get('https://api.github.com/repos/python/cpython')
+print(f"状态: {resp.status_code}")
+print(f"Star: {resp.json()['stargazers_count']}")
+
+# ---- POST JSON ----
+# json= 参数自动：① 序列化为 JSON ② 设 Content-Type: application/json
+resp = requests.post('https://httpbin.org/post',
+    json={"name": "Alice", "age": 30})
+print(resp.json()['json'])
+
+# ---- PUT / DELETE ----
+requests.put('https://httpbin.org/put', json={'key': 'value'})
+requests.delete('https://httpbin.org/delete')
+
+# ---- 自定义 Header ----
+resp = requests.get('https://api.example.com',
+    headers={'Authorization': 'Bearer token123', 'Accept': 'application/json'})
+```
+
+### 1.2 超时 / 重试 / Session
+
+**超时**是生产环境的第一道防线——没设超时的请求可能永远挂起。**Session** 复用底层 TCP 连接（HTTP Keep-Alive），避免重复握手。
+
+```python
+#!/usr/bin/env python3
+import requests
+from requests.adapters import HTTPAdapter, Retry
+
+# ---- 超时——连接超时 + 读取超时 ----
+# 连接超时 = TCP 握手时间上限；读取超时 = 等待响应数据的时间上限
+resp = requests.get('https://api.example.com', timeout=(3, 30))
+
+# ---- 自动重试——指数退避 ----
+# backoff_factor=0.5 含义：第一次重试等 0.5s，第二次 1s，第三次 2s...
+session = requests.Session()
+retries = Retry(total=3, backoff_factor=0.5,
+                status_forcelist=[500, 502, 503, 504])
+session.mount('https://', HTTPAdapter(max_retries=retries))
+
+# ---- Session——Cookie 自动持久化 ----
+# 底层 CookieJar 存储 Set-Cookie 响应头，后续请求自动附带
+s = requests.Session()
+s.post('https://api.example.com/login', json={'user': 'alice', 'pass': 'xxx'})
+resp = s.get('https://api.example.com/dashboard')  # ✅ 自动带 Cookie
+```
+
+> **连接池原理**：`Session` 内部维护一个 `urllib3.PoolManager`，对同一 host 复用已建立的 TCP 连接。HTTP/1.1 默认 Keep-Alive，连接池默认保持 10 个连接——省去了每次请求的 TCP+SSL 握手开销。
+
+### 1.3 文件上传 / 下载 / 进度条
+
+大文件下载用 `stream=True`：不一次性加载整个响应体到内存，而是**流式迭代**读取——这也是进度条能工作的前提。
+
+```python
+#!/usr/bin/env python3
+import requests
+from tqdm import tqdm
+
+# ---- 文件上传 ----
+with open('photo.jpg', 'rb') as f:
+    resp = requests.post('https://api.example.com/upload',
+        files={'file': ('photo.jpg', f, 'image/jpeg')})
+
+# ---- 带进度条的下载 ----
+# stream=True → resp 不立即下载 body，而是返回迭代器
+# iter_content 按 chunk 逐块读取——每个 chunk 更新进度条
+def download_with_progress(url, filepath):
+    resp = requests.get(url, stream=True)
+    total = int(resp.headers.get('content-length', 0))
+    with open(filepath, 'wb') as f, tqdm(
+        desc=filepath, total=total, unit='B', unit_scale=True
+    ) as bar:
+        for chunk in resp.iter_content(chunk_size=8192):
+            f.write(chunk)
+            bar.update(len(chunk))
+```
+
+### 1.4 SSL 忽略与重定向追踪
+
+重定向分**临时(302/307)**和**永久(301/308)**两种——区别在于：永久重定向会被浏览器缓存，后续直接跳到新 URL。`requests` 默认跟随重定向，最多 30 次防止死循环。
+
+```python
+#!/usr/bin/env python3
+import requests
+
+# ---- 忽略 SSL 证书（仅限测试！）----
+# verify=False 跳过证书链验证——等于不验证服务器身份
+# 同时需要 suppress InsecureRequestWarning
+resp = requests.get('https://self-signed.example.com', verify=False)
+
+# ---- 追踪重定向 ----
+resp = requests.get('http://short.link/abc', allow_redirects=True)
+print(f"最终 URL: {resp.url}")
+# resp.history 是重定向链——从原始请求到最终响应中间经过的每一步
+print(f"重定向历史: {[r.url for r in resp.history]}")
+
+# 禁止重定向——手动处理 3xx 状态码
+resp = requests.get('http://short.link/abc', allow_redirects=False)
+if resp.status_code in (301, 302, 307, 308):
+    redirect_url = resp.headers['Location']
+```
+
+### 1.5 异步并发请求
+
+**同步**一个请求阻塞直到响应返回，并发 N 个需要 N 个线程。**异步**用事件循环在单线程中管理多个请求——IO 等待时切换到下一个，不浪费 CPU。
+
+```python
+#!/usr/bin/env python3
+"""并发请求——比单线程快 10x，原理：事件循环 + 非阻塞 IO"""
+import asyncio, aiohttp
+
+async def fetch(session, url):
+    async with session.get(url) as resp:
+        return url, resp.status
+
+async def main():
+    urls = [
+        'https://api.github.com',
+        'https://api.github.com/repos/python/cpython',
+        'https://api.github.com/users/torvalds',
+    ]
+    # ClientSession 内部维护连接池，复用 TCP 连接
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch(session, u) for u in urls]
+        results = await asyncio.gather(*tasks)
+        for url, code in results:
+            print(f"  {code}  {url}")
+
+asyncio.run(main())
+```
+
+> **aiohttp vs requests**：后者底层用同步 socket（阻塞），前者用异步 socket（`select/epoll`）。对于大量并发的 IO 密集型请求，异步远优于多线程——1000 个并发请求只需 1 个线程。
+
+## 二、httpie——比 curl 更人性化
+
+`httpie` 设计哲学是"面向人类"，自动处理 JSON 编解码和语法高亮：
+
+```bash
+pip install httpie
+
+# ===== GET（自动高亮 JSON）=====
+http https://api.github.com
+
+# ===== POST JSON（自动设 Content-Type）=====
+http POST https://httpbin.org/post name=Alice age:=30
+# := 表示值是数字（不是字符串），= 表示字符串
+
+# ===== Header / 文件上传 / 下载 / 代理 =====
+http https://api.example.com Authorization:"Bearer token123"
+http -f POST https://httpbin.org/post file@photo.jpg
+http --download https://example.com/file.zip
+http --proxy=http:http://proxy:8080 https://api.example.com
+```
+
+## 三、综合调试脚本
+
+```python
+#!/usr/bin/env python3
+"""API 端点健康检查——批量检测 + 响应时间"""
+import requests, time, sys
+
+ENDPOINTS = [
+    ("首页", "https://api.example.com/"),
+    ("健康检查", "https://api.example.com/health"),
+    ("用户列表", "https://api.example.com/api/users"),
+]
+
+print(f"{'端点':<15} {'状态':<8} {'耗时':<10} {'大小'}")
+print("-" * 45)
+
+all_ok = True
+for name, url in ENDPOINTS:
+    try:
+        start = time.time()
+        resp = requests.get(url, timeout=5)
+        elapsed = time.time() - start
+        ok = resp.status_code == 200
+        if not ok: all_ok = False
+        print(f"{name:<15} {'✅' if ok else '❌'+str(resp.status_code):<8} "
+              f"{elapsed:.3f}s{'':<4} {len(resp.content)}B")
+    except Exception as e:
+        all_ok = False
+        print(f"{name:<15} ❌       {'-' :<10} {str(e)[:30]}")
+
+sys.exit(0 if all_ok else 1)
+```

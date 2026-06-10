@@ -1,0 +1,157 @@
+---
+title: Base64编码
+date: 2025-06-07 10:00:00
+permalink: /pages/tool-base64/
+categories:
+  - ScriptHub
+  - 工具脚本
+  - 加解密
+tags:
+  - 工具
+  - 加密
+author:
+  name: 杨充
+  link: https://github.com/yangchong211
+---
+# Base64编码
+
+> 把二进制数据转成纯文本——URL 安全传输、图片内嵌 HTML、JWT Header、配置文件编码。
+
+## 一、Python Base64 编码/解码
+
+### 1.1 字符串 ↔ Base64
+
+```python
+#!/usr/bin/env python3
+"""字符串与 Base64 互转"""
+import base64
+
+# ---- 编码：字符串 → Base64 ----
+text = "Hello, 你好世界"
+text_bytes = text.encode('utf-8')
+encoded = base64.b64encode(text_bytes).decode()
+print(f"Base64: {encoded}")   # SGVsbG8sIOS9oOWlveS4lueVjA==
+
+# ---- 解码：Base64 → 字符串 ----
+decoded_bytes = base64.b64decode(encoded)
+decoded = decoded_bytes.decode('utf-8')
+print(f"原始: {decoded}")      # Hello, 你好世界
+```
+
+### 1.2 文件 ↔ Base64
+
+```python
+#!/usr/bin/env python3
+"""文件与 Base64 互转——图片/PDF 等二进制文件"""
+import base64
+
+def file_to_base64(filepath):
+    """文件编码为 Base64 字符串"""
+    with open(filepath, 'rb') as f:
+        return base64.b64encode(f.read()).decode()
+
+def base64_to_file(b64_str, filepath):
+    """Base64 字符串解码为文件"""
+    with open(filepath, 'wb') as f:
+        f.write(base64.b64decode(b64_str))
+
+# ---- 示例 ----
+# b64 = file_to_base64("photo.jpg")
+# base64_to_file(b64, "photo_copy.jpg")
+```
+
+### 1.3 URL 安全 Base64（urlsafe_b64encode）
+
+标准 Base64 含 `+ / =` 在 URL 中是特殊字符。URL 安全版把它们换成 `- _` 并去掉 `=`：
+
+```python
+#!/usr/bin/env python3
+import base64
+
+data = b'\xfb\xff\x00\x12\x34'
+
+standard = base64.b64encode(data)          # b'+/8AEjQ='
+urlsafe  = base64.urlsafe_b64encode(data)  # b'-_8AEjQ'  ← 无 +/=，URL 安全
+
+print(f"标准:  {standard.decode()}")
+print(f"URL安全: {urlsafe.decode()}")
+
+# 解码——urlsafe 和标准都可以用 b64decode
+print(base64.b64decode(urlsafe))  # OK
+```
+
+### 1.4 实战：图片内嵌 HTML
+
+```python
+#!/usr/bin/env python3
+"""将图片嵌入 HTML 的 data:image 格式"""
+import base64, sys, os
+
+def image_to_data_uri(filepath):
+    """图片 → data:image/png;base64,..."""
+    ext = os.path.splitext(filepath)[1].lower()
+    mime_map = {'.png': 'png', '.jpg': 'jpeg', '.gif': 'gif', '.svg': 'svg+xml'}
+    mime = mime_map.get(ext, 'png')
+
+    with open(filepath, 'rb') as f:
+        b64 = base64.b64encode(f.read()).decode()
+
+    return f'data:image/{mime};base64,{b64}'
+
+# ---- 生成 HTML ----
+if __name__ == '__main__':
+    uri = image_to_data_uri(sys.argv[1])
+    print(f'<img src="{uri}" />')
+    # 复制这行到 HTML 即可直接显示图片——无需外部文件
+```
+
+## 二、Shell Base64
+
+```bash
+#!/bin/bash
+
+# ===== 字符串编码/解码 =====
+echo -n "hello" | base64                      # aGVsbG8=
+echo "aGVsbG8=" | base64 -d                   # hello
+
+# ===== 文件编码/解码 =====
+base64 photo.jpg > photo.txt                  # 文件编码
+base64 -d photo.txt > photo_copy.jpg          # 文件解码
+
+# macOS 注意：-d 用 -D 替代
+# echo "aGVsbG8=" | base64 -D
+```
+
+## 三、实战：配置文件敏感字段 Base64 处理
+
+```python
+#!/usr/bin/env python3
+"""配置文件中的敏感字段可逆编码——不是加密，只是避免明文泄露"""
+import base64, json
+
+# 原始数据
+config = {
+    "db_host": "192.168.1.100",
+    "db_password": "SuperSecret123"
+}
+
+# ---- 编码后写入 ----
+encoded_config = {
+    k: base64.b64encode(v.encode()).decode()
+    for k, v in config.items()
+}
+with open('config.json', 'w') as f:
+    json.dump(encoded_config, f, indent=2)
+print("已写入 config.json（Base64 编码）")
+
+# ---- 读取时解码 ----
+with open('config.json') as f:
+    loaded = json.load(f)
+decoded_config = {
+    k: base64.b64decode(v).decode()
+    for k, v in loaded.items()
+}
+print(f"解码后: {decoded_config}")
+```
+
+> ⚠️ **提醒**：Base64 是编码不是加密——任何人都能解码。生产环境请用 AES/RSA 或 Vault。
