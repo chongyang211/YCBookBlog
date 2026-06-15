@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "export NODE_OPTIONS='--localstorage-file=/tmp/vuepress-localstorage.json' && node --max_old_space_size=8192 ./node_modules/.bin/vuepress dev docs",
-    "build": "export NODE_OPTIONS='--localstorage-file=/tmp/vuepress-localstorage.json --optimize-for-size --max-semi-space-size=64' && node --max_old_space_size=12288 ./node_modules/.bin/vuepress build docs",
+    "build": "export NODE_OPTIONS='--localstorage-file=/tmp/vuepress-localstorage.json' && node --max_old_space_size=12288 --optimize-for-size --max-semi-space-size=64 ./node_modules/.bin/vuepress build docs",
     "dev:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress dev docs",
     "build:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress build docs",
     "deploy": "bash deploy.sh",

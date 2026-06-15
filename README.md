@@ -45,7 +45,8 @@ npm run dev:win
 ```bash
 # 生成静态文件 → docs/.vuepress/dist/
 npm run build
-npm run build:win    # Windows
+# Windows
+npm run build:win    
 
 # 推送至 gh-pages 分支
 npm run deploy
