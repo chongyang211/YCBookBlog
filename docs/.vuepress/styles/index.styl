@@ -71,8 +71,70 @@ body .vuepress-plugin-demo-block__wrapper
     color: $accentColor
     font-weight: bold
 
-// 博主头像大小
-.blogger-wrapper .avatar img
-  width: 50px !important
-  height: 50px !important
-  border-radius: 50%
+// ============ 博主信息模块美化 ============
+
+// 博主区域整体
+.blogger-wrapper
+  text-align center
+  margin-top 1.2rem
+  padding 1.8rem 1rem 1.5rem
+
+  // 头像
+  .avatar
+    margin 0 auto 0.8rem
+    img
+      width 80px !important
+      height 80px !important
+      border-radius 50%
+      border 3px solid var(--borderColor, #e8e8e8)
+      box-shadow 0 2px 12px rgba(100, 100, 100, 0.15)
+      transition all 0.3s ease
+      &:hover
+        transform scale(1.06)
+        box-shadow 0 4px 20px rgba(100, 100, 100, 0.25)
+
+  // 昵称
+  .blogger-name
+    font-size 1.1rem
+    font-weight 600
+    color var(--textColor, #2c3e50)
+    margin-bottom 0.35rem
+    letter-spacing 0.5px
+
+  // 个性签名
+  .slogan
+    font-size 0.82rem
+    color var(--textColor, #666)
+    opacity 0.65
+    margin-bottom 1rem
+    letter-spacing 0.25px
+
+// ============ 社交图标美化 ============
+
+// 社交图标容器
+.social-wrapper
+  display flex
+  justify-content center
+  gap 12px
+
+  a.social-item
+    display inline-flex
+    align-items center
+    justify-content center
+    width 36px
+    height 36px
+    border-radius 50%
+    background var(--bgColor, #f5f5f5)
+    color var(--textColor, #666)
+    font-size 1.05rem
+    transition all 0.25s ease
+
+    &:hover
+      background $accentColor
+      color #fff
+      transform translateY(-3px)
+      box-shadow 0 4px 12px rgba($accentColor, 0.35)
+      text-decoration none
+
+    .iconfont
+      font-size inherit

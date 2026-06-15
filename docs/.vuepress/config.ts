@@ -219,7 +219,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     blogger: {
       avatar: '/img/logo.png',
       name: '杨充',
-      slogan: '努力编码中',
+      slogan: '专注编程 · 终身学习者',
     },
 
     // 社交图标 (显示于博主信息栏和页脚栏。内置图标：https://doc.杨充.com/pages/a20ce8/#social)
@@ -227,11 +227,15 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       // iconfontCssFile: '//at.alicdn.com/t/xxx.css', // 可选，阿里图标库在线css文件地址，对于主题没有的图标可自己添加。阿里图片库：https://www.iconfont.cn/
       icons: [
         {
+          iconClass: 'icon-github',
+          title: 'GitHub',
+          link: 'https://github.com/yangchong211',
+        },
+        {
           iconClass: 'icon-youjian',
           title: '发邮件',
           link: 'mailto:yangchong211@163.com',
         },
-        // { iconClass: 'icon-github', title: 'GitHub', link: 'https://github.com/杨充' },
         {
           iconClass: 'icon-erji',
           title: '听音乐',
