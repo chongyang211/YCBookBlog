@@ -138,17 +138,6 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '开源协议', link: '/pages/b396e9/' },
         ],
       },
-      // {
-      //   text: '工具',
-      //   link: '/pages/tools-readme/',
-      //   items: [
-      //     { text: 'JSON工具', link: '/tools/json/' },
-      //     { text: '文本工具', link: '/tools/text/' },
-      //     { text: '图片处理', link: '/tools/image/' },
-      //     { text: '文档转化', link: '/tools/doc/' },
-      //     { text: '代码压缩', link: '/tools/minify/' },
-      //   ],
-      // },
       {
         text: '更多',
         link: '/more/',
