@@ -23,6 +23,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
 
   // 主题配置
   themeConfig: {
+    search: false, // 隐藏导航栏搜索框
     // 导航配置
     nav: [
       { text: '首页', link: '/' },
@@ -137,17 +138,17 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '开源协议', link: '/pages/license-guide/' },
         ],
       },
-      {
-        text: '工具',
-        link: '/pages/tools-readme/',
-        items: [
-          { text: 'JSON工具', link: '/tools/json/' },
-          { text: '文本工具', link: '/tools/text/' },
-          { text: '图片处理', link: '/tools/image/' },
-          { text: '文档转化', link: '/tools/doc/' },
-          { text: '代码压缩', link: '/tools/minify/' },
-        ],
-      },
+      // {
+      //   text: '工具',
+      //   link: '/pages/tools-readme/',
+      //   items: [
+      //     { text: 'JSON工具', link: '/tools/json/' },
+      //     { text: '文本工具', link: '/tools/text/' },
+      //     { text: '图片处理', link: '/tools/image/' },
+      //     { text: '文档转化', link: '/tools/doc/' },
+      //     { text: '代码压缩', link: '/tools/minify/' },
+      //   ],
+      // },
       {
         text: '更多',
         link: '/more/',
