@@ -238,7 +238,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     footer: {
       createYear: 2019, // 博客创建年份
       copyrightInfo:
-        '杨充 | <a href="https://github.com/杨充/vuepress-theme-vdoing/blob/master/LICENSE" target="_blank">MIT License</a> | <a href="https://beian.miit.gov.cn/" target="_blank">鄂ICP备2024073355号-1</a> | <img src="/img/beian.png" style="width: 15px; margin-bottom: -3px;" /> <a href="https://beian.mps.gov.cn/#/query/webSearch?code=45142202000030" rel="noreferrer" target="_blank">桂公网安备45142202000030</a>', // 博客版权信息、备案信息等，支持a标签或换行标签</br>
+        '杨充 | <a href="https://github.com/杨充/vuepress-theme-vdoing/blob/master/LICENSE" target="_blank">MIT License</a> | <a href="https://beian.miit.gov.cn/" target="_blank">鄂ICP备2024073355号-1</a> | <img src="/img/beian.png" style="width: 15px; margin-bottom: -3px;" /> <a href="https://beian.mps.gov.cn/#/query/webSearch?code=45142202000030" rel="noreferrer" target="_blank">鄂ICP备2024073355号</a>', // 博客版权信息、备案信息等，支持a标签或换行标签</br>
     },
 
     // 扩展自动生成frontmatter。（当md文件的frontmatter不存在相应的字段时将自动添加。不会覆盖已有的数据。）
@@ -264,7 +264,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
     ],
     ['meta', { name: 'baidu-site-verification', content: '7F55weZDDc' }], // 百度统计的站长验证
-    ['meta', { name: 'baidu_union_verify', content: '9372b0f53de424c0d66d982365aadf17' }], // 百度联盟验证
+    ['meta', { name: 'baidu_union_verify', content: '2ffff7eb91b677d40e2d6e5018ed2f93' }], // 百度联盟验证
     ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
   ],
 
