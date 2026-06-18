@@ -108,7 +108,7 @@ export default ({
 
   // 注入分享悬浮按钮
   if (typeof window !== 'undefined') {
-    router.afterEach(() => {
+    const injectShare = () => {
       Vue.nextTick(() => {
         if (document.getElementById('share-float-app')) return
         const app = document.createElement('div')
@@ -249,6 +249,8 @@ export default ({
 </div>`
       }).$mount('#share-float-app')
       })
-    })
+    }
+    router.afterEach(injectShare)
+    router.onReady(injectShare) // SSR 禁用时首次加载也需要触发
   }
 }
