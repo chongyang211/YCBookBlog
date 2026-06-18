@@ -1,4 +1,5 @@
 import { resolve } from 'path'
+import * as os from 'os'
 import { defineConfig4CustomTheme, UserPlugins } from 'vuepress/config'
 import { VdoingThemeConfig } from 'vuepress-theme-vdoing/types'
 import dayjs from 'dayjs'
@@ -383,8 +384,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
   ],
 
   markdown: {
-    lineNumbers: true,
-    extractHeaders: ['h2', 'h3', 'h4', 'h5', 'h6'], // 提取标题到侧边栏的级别，默认['h2', 'h3']
+    lineNumbers: false, // 关闭行号加速渲染
+    extractHeaders: ['h2', 'h3'], // 仅提取 h2/h3，减少处理开销
   },
 
   // 只编译到 ES2015+，大幅减少 bundle 体积
@@ -397,8 +398,16 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     }
     // 生产构建：关闭 SourceMap 省内存
     config.devtool(false)
-    // 限制并行线程数，减少并发内存峰值
-    config.parallelism(2)
+    // 并行线程数：使用 CPU 核心数（预留 1-2 核给系统）
+    const cpuCount = os.cpus().length
+    config.parallelism(Math.max(2, cpuCount - 1))
+    // 开启文件系统缓存，增量构建时复用上次结果
+    config.cache({
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename],
+      },
+    })
   },
 
   // 监听文件变化并重新构建
