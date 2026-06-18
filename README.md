@@ -45,6 +45,8 @@ npm run dev:win
 ```bash
 # 生成静态文件 → docs/.vuepress/dist/
 npm run build
+# 统计构建耗时
+npm run build:time
 # Windows
 npm run build:win    
 
