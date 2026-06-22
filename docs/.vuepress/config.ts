@@ -29,6 +29,17 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     nav: [
       { text: '首页', link: '/' },
       {
+        text: '工具',
+        link: '/pages/tools-readme/',
+        items: [
+          { text: 'JSON工具',  link: '/tools/json/' },
+          { text: '文本工具',  link: '/tools/text/' },
+          { text: '图片处理',  link: '/tools/image/' },
+          { text: '文档转化',  link: '/tools/doc/' },
+          { text: '代码压缩',  link: '/tools/minify/' },
+        ],
+      },
+      {
         text: '计算机',
         link: '/computer/',
         items: [
