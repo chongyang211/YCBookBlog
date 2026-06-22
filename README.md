@@ -147,3 +147,8 @@ npx vuepress dev docs --port 3000
 ## 许可证
 
 [MIT](LICENSE)
+
+
+模仿变现：
+
+https://juejin.cn/post/7641229739893932078
