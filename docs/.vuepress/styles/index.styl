@@ -138,3 +138,91 @@ body .vuepress-plugin-demo-block__wrapper
 
     .iconfont
       font-size inherit
+
+
+// ============================================================
+// 首页全屏击穿（最高优先级）
+//
+// HomePage.vue mounted 时会给 <html>/<body>/.theme-container
+// 注入 home-fullwidth* class，下面规则匹配后会：
+//   1. 把 .theme-container 自身宽度撑满（去掉主题的 max-width 限制）
+//   2. 清掉 vdoing mobile.styl 里
+//      .theme-container.sidebar-open .page { padding-left: $sidebarWidth + .8rem }
+//      这条没有 !important 的规则，让首页内容真正铺满视口
+//   3. 隐藏 sidebar / right-menu / page-edit / page-nav 等无关元素
+//   4. 让 footer 也铺满
+//
+// 注意：本规则放在主题级入口 index.styl 中，注入位置在
+// vdoing 主题样式之后，权威级最高，避免被覆盖。
+// ============================================================
+html.home-fullwidth, body.home-fullwidth
+  margin 0 !important
+  padding 0 !important
+
+.theme-container.home-fullwidth-container
+  max-width none !important
+  width 100% !important
+  padding 0 !important
+  margin 0 !important
+
+  // 强制 .page 全宽，覆盖 sidebar-open 的 padding-left
+  .page
+    padding-left 0 !important
+    padding-right 0 !important
+    padding-bottom 0 !important
+    padding-top 3.6rem !important
+    max-width none !important
+    width 100% !important
+    margin 0 !important
+    box-sizing border-box !important
+
+  // 即使带 sidebar-open / have-rightmenu / no-sidebar 等修饰也强制覆盖
+  &.sidebar-open .page,
+  &.have-rightmenu .page,
+  &.no-sidebar .page,
+  &.on-sidebar .page
+    padding-left 0 !important
+    padding-right 0 !important
+
+  // vdoing-wrapper：清掉限宽和内边距，但保留 margin: 0 auto（居中关键）
+  .page > .theme-vdoing-wrapper
+    max-width none !important
+    width 100% !important
+    margin 0 auto !important
+    padding 0 !important
+    background transparent !important
+    box-shadow none !important
+    border-radius 0 !important
+
+  // 屏蔽无关元素
+  .theme-vdoing-wrapper > .placeholder,
+  .theme-vdoing-wrapper > .content-wrapper,
+  .theme-vdoing-wrapper > .page-edit,
+  .theme-vdoing-wrapper > .page-nav,
+  .page > .update-bar,
+  .right-menu-wrapper,
+  .sidebar,
+  .sidebar-mask,
+  .sidebar-button,
+  .sidebar-hover-trigger
+    display none !important
+
+  // footer 铺满
+  .footer
+    max-width none !important
+    width 100% !important
+    margin 0 !important
+    padding-left 0 !important
+    padding-right 0 !important
+    border-radius 0 !important
+
+  &.have-rightmenu .footer,
+  &.no-sidebar .footer
+    max-width none !important
+    width 100% !important
+    margin 0 !important
+
+// 移动端导航栏高度兼容
+@media (max-width: 719px)
+  .theme-container.home-fullwidth-container .page
+    padding-top 3.6rem !important

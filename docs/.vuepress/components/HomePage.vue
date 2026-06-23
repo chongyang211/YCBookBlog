@@ -154,68 +154,14 @@ export default {
 }
 </script>
 
-<!-- ============================================================
- * 全屏击穿样式（非 scoped）
- *
- * 由 mounted -> applyFullWidth() 在 <body> / <html> / .theme-container
- * 上注入 home-fullwidth* class 后生效。
- * 仅作用于首页；离开首页时 beforeDestroy 会清理 class，
- * 这些规则自然失效，不会影响其他页面布局。
- * ============================================================ -->
-<style>
-.theme-container.home-fullwidth-container {
-  max-width: none !important;
-  width: 100% !important;
-}
-/* 清掉所有可能注入的 padding，让 .page 100% 撑满 */
-.theme-container.home-fullwidth-container .page,
-.theme-container.home-fullwidth-container.sidebar-open .page,
-.theme-container.home-fullwidth-container.have-rightmenu .page,
-.theme-container.home-fullwidth-container.no-sidebar .page {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  padding-bottom: 0 !important;
-  padding-top: 3.6rem !important;
-  max-width: none !important;
-  width: 100% !important;
-  margin: 0 !important;
-}
-/* vdoing-wrapper：清掉限宽和内边距，但务必保留 margin: 0 auto（居中关键） */
-.theme-container.home-fullwidth-container .page > .theme-vdoing-wrapper {
-  max-width: none !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-  padding: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-}
-/* 屏蔽无关元素 */
-.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .placeholder,
-.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .content-wrapper,
-.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .page-edit,
-.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .page-nav,
-.theme-container.home-fullwidth-container .page > .update-bar,
-.theme-container.home-fullwidth-container .right-menu-wrapper,
-.theme-container.home-fullwidth-container .sidebar,
-.theme-container.home-fullwidth-container .sidebar-mask,
-.theme-container.home-fullwidth-container .sidebar-button,
-.theme-container.home-fullwidth-container .sidebar-hover-trigger {
-  display: none !important;
-}
-/* footer 铺满 */
-.theme-container.home-fullwidth-container .footer,
-.theme-container.home-fullwidth-container.have-rightmenu .footer,
-.theme-container.home-fullwidth-container.no-sidebar .footer {
-  max-width: none !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  border-radius: 0 !important;
-}
-/* 移动端导航栏高度兼容 */
-@media (max-width: 719px) {
-  .theme-container.home-fullwidth-container .page { padding-top: 3.6rem !important; }
-}
-</style>
+<!--
+  全屏击穿样式已迁移至 docs/.vuepress/styles/index.styl
+  由 mounted -> applyFullWidth() 在 <html>/<body>/.theme-container
+  上注入 home-fullwidth* class 后生效；离开首页时 beforeDestroy
+  会清理 class，规则自然失效，不影响其他页面。
+
+  迁移原因：index.styl 是 vuepress 主题级样式入口，注入位置在
+  vdoing 主题样式之后，能可靠覆盖主题里
+    .theme-container.sidebar-open .page { padding-left: ($sidebarWidth + .8rem) }
+  这条没有 !important 的规则，避免首页"被侧栏推向左侧"的问题。
+-->
