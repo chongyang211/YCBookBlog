@@ -45,8 +45,6 @@ npm run dev:win
 ```bash
 # 生成静态文件 → docs/.vuepress/dist/
 npm run build
-# 快速打包（约 2 分钟）
-npm run build:fast
 # 统计构建耗时
 npm run build:time
 # Windows
