@@ -219,6 +219,53 @@
       </div>
     </section>
 
+    <!-- ==================== 屏 4.5：博主信息 + 二维码（原右侧栏内容） ==================== -->
+    <section class="hp-section hp-bloginfo">
+      <div class="hp-bi-grid">
+        <!-- 博主卡片 -->
+        <div class="hp-bi-card hp-bi-about">
+          <img class="hp-bi-avatar" :src="$withBase(blogInfo.avatar)" :alt="blogInfo.name" />
+          <div class="hp-bi-text">
+            <h4 class="hp-bi-name">{{ blogInfo.name }}</h4>
+            <p class="hp-bi-slogan">{{ blogInfo.slogan }}</p>
+          </div>
+          <div class="hp-bi-social">
+            <a
+              v-for="(s, i) in socialIcons"
+              :key="i"
+              :href="s.link"
+              :title="s.title"
+              target="_blank"
+              rel="noopener"
+              class="hp-bi-si"
+            >
+              <span v-if="s.iconClass" :class="['iconfont', s.iconClass]"></span>
+              <span v-else>{{ s.emoji }}</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 二维码卡片 -->
+        <div class="hp-bi-card hp-bi-qr">
+          <p class="hp-bi-qr-tip">创作不易，如果对你有帮助<br/>欢迎请我喝杯咖啡 ☕</p>
+          <img class="hp-bi-qr-img" src="/img/pay.webp" alt="赞赏码" />
+        </div>
+
+        <!-- 标签云（从 themeConfig 读取） -->
+        <div class="hp-bi-card hp-bi-tags" v-if="tagList.length">
+          <h4 class="hp-bi-tag-title">热门标签</h4>
+          <div class="hp-bi-tag-wrap">
+            <a
+              v-for="t in tagList"
+              :key="t.name"
+              :href="t.path"
+              class="hp-bi-tag"
+            >{{ t.name }}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ==================== 屏 5：站点哲学 ==================== -->
     <section class="hp-section hp-manifesto">
       <div class="hp-mf-inner">
@@ -375,6 +422,35 @@ export default {
     }
   },
   computed: {
+    blogInfo() {
+      const cfg = (this.$themeConfig && this.$themeConfig.blogger) || {}
+      return {
+        avatar: cfg.avatar || '/img/logo.png',
+        name: cfg.name || 'YC',
+        slogan: cfg.slogan || '专注编程 · 终身学习者',
+      }
+    },
+    socialIcons() {
+      const cfg = (this.$themeConfig && this.$themeConfig.social) || {}
+      const icons = cfg.icons || []
+      // 给 iconfont 图标补上 emoji 降级
+      const map = {
+        'icon-github': '🐙',
+        'icon-youjian': '📧',
+        'icon-erji': '🎵',
+      }
+      return icons.map(i => ({ ...i, emoji: map[i.iconClass] || '🔗' }))
+    },
+    tagList() {
+      // 尝试从 vdoing 的 $tags 读取，不可用时返回空数组
+      try {
+        const tags = this.$tags
+        if (tags && tags.list && tags.list.length) {
+          return tags.list.slice(0, 10).map(t => ({ name: t.name, path: t.path }))
+        }
+      } catch (e) { /* ignore */ }
+      return []
+    },
     statList() {
       return [
         { display: this.stats.articles, suffix: '+', label: '技术文章' },
@@ -385,6 +461,7 @@ export default {
     },
   },
   mounted() {
+    this.breakWrapper()
     this.startTyping()
     this.observeReveal()
   },
@@ -427,13 +504,67 @@ export default {
         io.observe(el)
       })
     },
+    breakWrapper() {
+      // 直接操作 style 属性挣脱 max-width/padding（JS 比 CSS class 更可靠，不受 cascade 影响）
+      const wrapper = this.$el.parentElement
+      if (wrapper) {
+        const s = wrapper.style
+        s.maxWidth = 'none'
+        s.padding = '0'
+        s.margin = '0'
+        s.background = 'transparent'
+        s.boxShadow = 'none'
+        s.borderRadius = '0'
+        s.marginBottom = '0'
+      }
+      if (wrapper && wrapper.parentElement) {
+        const page = wrapper.parentElement
+        page.style.paddingTop = '3.6rem'
+        page.style.paddingBottom = '0'
+        // 隐藏占位元素和页脚多余间距
+        const placeholder = wrapper.querySelector(':scope > .placeholder')
+        if (placeholder) placeholder.style.display = 'none'
+        const pageNav = wrapper.querySelector(':scope > .page-nav')
+        if (pageNav) pageNav.style.display = 'none'
+        const pageEdit = wrapper.querySelector(':scope > .page-edit')
+        if (pageEdit) pageEdit.style.display = 'none'
+      }
+    },
   },
 }
 </script>
 
 <!-- 非 scoped：用于"挣脱"主题 Page.vue 的 wrapper 限制，让首页全屏 -->
 <style>
-/* 仅作用于首页：通过外层 body class 或 page route 限定 */
+/* ===== 首页全屏：通过 JS 注入 class 后精准覆盖（兼容所有浏览器） ===== */
+.theme-vdoing-wrapper.hp-fullwidth {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin-bottom: 0 !important;
+}
+/* 首页 page 容器也去除约束 */
+.page.hp-fullwidth-page {
+  padding-top: 3.6rem !important;
+  padding-bottom: 0 !important;
+}
+/* 隐藏 Page.vue 的占位、编辑、翻页等无关元素 */
+.theme-vdoing-wrapper.hp-fullwidth > .placeholder,
+.theme-vdoing-wrapper.hp-fullwidth > .page-edit,
+.theme-vdoing-wrapper.hp-fullwidth > .page-nav,
+.theme-vdoing-wrapper.hp-fullwidth > .content-wrapper {
+  display: none !important;
+}
+/* footer 贴齐 */
+.page.hp-fullwidth-page + .footer,
+.page.hp-fullwidth-page .footer {
+  margin-top: 0 !important;
+}
+
+/* ===== 以下为 :has() 降级方案（现代浏览器直接匹配，无需等 JS） ===== */
 .page > .theme-vdoing-wrapper:has(.hp-wrapper),
 .page > .theme-vdoing-wrapper.has-homepage {
   max-width: none !important;
@@ -443,27 +574,23 @@ export default {
   box-shadow: none !important;
   border-radius: 0 !important;
 }
-/* 兼容不支持 :has() 的浏览器：直接判断子元素 */
 .theme-vdoing-wrapper:has(> .hp-wrapper),
-.theme-vdoing-wrapper:has(> .theme-vdoing-content > .hp-wrapper) {
+.theme-vdoing-wrapper:has(> .theme-vdoing-content.hp-wrapper) {
   max-width: none !important;
   padding: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
 }
-/* 隐藏 Page.vue 的占位、PageEdit、PageNav 等在首页的元素 */
 .theme-vdoing-wrapper:has(.hp-wrapper) > .placeholder,
 .theme-vdoing-wrapper:has(.hp-wrapper) > .page-edit,
 .theme-vdoing-wrapper:has(.hp-wrapper) > .page-nav,
 .theme-vdoing-wrapper:has(.hp-wrapper) > .content-wrapper {
   display: none !important;
 }
-/* 首页时主体直接顶到 navbar 下方 */
 .page:has(.hp-wrapper) {
   padding-top: 3.6rem !important;
   padding-bottom: 0 !important;
 }
-/* footer 与首页贴合 */
 .page:has(.hp-wrapper) + .footer,
 .page:has(.hp-wrapper) .footer { margin-top: 0 !important; }
 </style>
@@ -1149,6 +1276,113 @@ export default {
   border-top: 1px solid var(--hp-border);
 }
 
+/* ==================== 屏 4.5：博主信息 + 二维码（原右侧栏） ==================== */
+.hp-bloginfo {
+  background: #fff;
+  padding: 60px 24px 0;
+}
+.hp-bi-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+.hp-bi-card {
+  background: var(--hp-bg);
+  border: 1px solid var(--hp-border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+}
+/* 博主信息 */
+.hp-bi-about {
+  align-items: center;
+  text-align: center;
+}
+.hp-bi-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--hp-brand);
+  margin-bottom: 12px;
+}
+.hp-bi-text { margin-bottom: 14px; }
+.hp-bi-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--hp-text);
+}
+.hp-bi-slogan {
+  font-size: 13px;
+  color: var(--hp-text-light);
+  margin: 0;
+}
+.hp-bi-social {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.hp-bi-si {
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f0f2f8;
+  color: var(--hp-text-light);
+  text-decoration: none !important;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+.hp-bi-si:hover {
+  background: var(--hp-brand);
+  color: #fff;
+  transform: translateY(-2px);
+}
+/* 二维码 */
+.hp-bi-qr { align-items: center; text-align: center; }
+.hp-bi-qr-tip {
+  font-size: 14px;
+  color: var(--hp-text-light);
+  line-height: 1.8;
+  margin: 0 0 16px;
+}
+.hp-bi-qr-img {
+  width: 160px;
+  border-radius: 10px;
+}
+/* 标签云 */
+.hp-bi-tags { justify-content: flex-start; }
+.hp-bi-tag-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: var(--hp-text);
+}
+.hp-bi-tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hp-bi-tag {
+  display: inline-block;
+  padding: 5px 14px;
+  background: rgba(74, 144, 217, 0.08);
+  color: var(--hp-brand);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none !important;
+  transition: all 0.2s;
+}
+.hp-bi-tag:hover {
+  background: var(--hp-brand);
+  color: #fff;
+}
+
 /* ==================== 屏 5：站点哲学 ==================== */
 .hp-manifesto {
   background: #fff;
@@ -1238,7 +1472,11 @@ export default {
   .hp-fgrid { grid-template-columns: repeat(2, 1fr); }
   .hp-mf-pillars { grid-template-columns: 1fr; }
 }
+@media (max-width: 960px) {
+  .hp-bi-grid { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 768px) {
+  .hp-bi-grid { grid-template-columns: 1fr; }
   .hp-hero { padding: 60px 18px 40px; min-height: auto; }
   .hp-hero-title { font-size: 40px; letter-spacing: -1px; }
   .hp-hero-sub { font-size: 18px; }
@@ -1324,4 +1562,9 @@ export default {
 }
 .theme--dark .hp-fcard-meta { border-top-color: #2a2a3a; }
 .theme--dark .hp-featured { background: #11111b; }
+.theme--dark .hp-bloginfo { background: #181825; }
+.theme--dark .hp-bi-card { background: #1e1e2e; border-color: #2a2a3a; }
+.theme--dark .hp-bi-si { background: #2a2a3a; color: #888; }
+.theme--dark .hp-bi-si:hover { background: var(--hp-brand); color: #fff; }
+.theme--dark .hp-bi-tag { background: rgba(123, 95, 217, 0.15); }
 </style>

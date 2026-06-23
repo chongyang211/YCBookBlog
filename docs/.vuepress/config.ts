@@ -52,7 +52,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       { text: '首页', link: '/' },
       {
         text: '工具',
-        link: '/pages/tools-readme/',
+        link: '/tools/',
         items: [
           { text: 'JSON工具',  link: '/tools/json/' },
           { text: '文本工具',  link: '/tools/text/' },
@@ -130,7 +130,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: 'Apps',
-        link: '/apps/',
+        link: '/app/',
         items: [
           { text: 'Android库解读', link: '/pages/502baa/' },
           { text: 'Android专栏', link: '/pages/65f3a0/' },
@@ -148,7 +148,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: 'Script',
-        link: '/script/',
+        link: '/scripthub/',
         items: [
           { text: 'Python教程', link: '/pages/e7844c/' },
           { text: 'Shell&Bash教程', link: '/pages/cf8eba/' },
