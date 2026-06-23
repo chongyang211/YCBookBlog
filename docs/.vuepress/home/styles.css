@@ -1,0 +1,156 @@
+/* ============================================================
+ * HomePage 共享样式（非 scoped，全局生效）
+ *
+ * 内容：
+ *   1. CSS 变量（在 .hp-wrapper 上声明，所有子组件继承）
+ *   2. Reveal 动画（observeReveal 触发 .hp-in）
+ *   3. 通用 .hp-section / .hp-section-head / .hp-btn / .hp-cursor 等基类
+ *   4. 响应式断点
+ *   5. 暗色模式
+ *
+ * 不包含全屏击穿样式（.theme-container.home-fullwidth-container）
+ * 那部分仍留在 HomePage.vue 中，便于和 mounted 的 class 注入相邻维护
+ * ============================================================ */
+
+/* ============== 基础变量 ============== */
+.hp-wrapper {
+  --hp-brand: #4a90d9;
+  --hp-brand-2: #7b5fd9;
+  --hp-brand-3: #11a8cd;
+  --hp-text: #2c3e50;
+  --hp-text-light: #6a737d;
+  --hp-bg: #fafbfc;
+  --hp-card: #ffffff;
+  --hp-border: #e8ecf1;
+  margin: 0;
+  padding: 0;
+  color: var(--hp-text);
+  background: var(--hp-bg);
+  overflow-x: hidden;
+}
+.hp-wrapper *,
+.hp-wrapper *::before,
+.hp-wrapper *::after { box-sizing: border-box; }
+
+/* ============== Reveal Animation ============== */
+.hp-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hp-reveal.hp-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============== 通用 cursor 闪烁 ============== */
+.hp-cursor {
+  display: inline-block;
+  color: var(--hp-brand);
+  animation: hpBlink 1s steps(1) infinite;
+  margin-left: 2px;
+  font-weight: 300;
+}
+@keyframes hpBlink { 50% { opacity: 0; } }
+
+/* ============== 通用 section 头 ============== */
+.hp-section {
+  padding: 90px clamp(24px, 4vw, 64px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hp-section-head {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.hp-section-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--hp-brand-2);
+  background: rgba(123, 95, 217, 0.1);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+.hp-eyebrow-light {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+}
+.hp-section-title {
+  font-size: 42px;
+  font-weight: 800;
+  margin: 0 0 14px;
+  letter-spacing: -1px;
+  color: var(--hp-text);
+}
+.hp-section-sub {
+  font-size: 16px;
+  color: var(--hp-text-light);
+  margin: 0;
+}
+
+/* ============== 通用按钮 ============== */
+.hp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.2px;
+}
+.hp-btn-primary {
+  background: linear-gradient(135deg, var(--hp-brand) 0%, var(--hp-brand-2) 100%);
+  color: #fff !important;
+  box-shadow: 0 6px 18px rgba(74, 144, 217, 0.35);
+}
+.hp-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(74, 144, 217, 0.45);
+}
+.hp-btn-ghost {
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--hp-text) !important;
+  border: 1px solid var(--hp-border);
+  backdrop-filter: blur(6px);
+}
+.hp-btn-ghost:hover {
+  background: #fff;
+  border-color: var(--hp-brand);
+  color: var(--hp-brand) !important;
+  transform: translateY(-2px);
+}
+.hp-btn-lg {
+  padding: 16px 32px;
+  font-size: 16px;
+  border-radius: 14px;
+}
+
+/* ============== 响应式：跨 section 通用断点 ============== */
+@media (max-width: 768px) {
+  .hp-section { padding: 60px 18px; }
+  .hp-section-title { font-size: 32px; }
+}
+
+/* ============== 暗色模式（基础变量覆盖） ============== */
+.theme--dark .hp-wrapper {
+  --hp-text: #e0e0e0;
+  --hp-text-light: #9aa0a6;
+  --hp-bg: #181825;
+  --hp-card: #1e1e2e;
+  --hp-border: #2a2a3a;
+}
+.theme--dark .hp-section-title { color: #e0e0e0; }
+.theme--dark .hp-btn-ghost {
+  background: rgba(30, 30, 46, 0.8);
+  color: #ddd !important;
+  border-color: #2a2a3a;
+}
+.theme--dark .hp-btn-ghost:hover { background: #1e1e2e; }
