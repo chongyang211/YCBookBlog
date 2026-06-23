@@ -581,11 +581,16 @@ export default {
   width: 100% !important;
   margin: 0 !important;
 }
-/* vdoing wrapper 的 860px 限宽 */
+/* ==========================================================================
+ * vdoing-wrapper：主题默认有 max-width:860 + margin:0 auto + padding:1rem 2.5rem
+ * 这里清掉限宽和内边距，但 *** 务必保留 margin: 0 auto ***
+ *   ↑ 这是"居中"的关键！之前误写成 margin: 0 → 内容贴左
+ * 同时清掉文章页的卡片背景/阴影/圆角（首页已有自带视觉容器）
+ * ========================================================================== */
 .theme-container.home-fullwidth-container .page > .theme-vdoing-wrapper {
   max-width: none !important;
   width: 100% !important;
-  margin: 0 !important;
+  margin: 0 auto !important;        /* ← 关键修复：保留 auto 居中 */
   padding: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -694,8 +699,8 @@ export default {
 
 .hp-hero-inner {
   position: relative;
-  /* 内容区居中限宽：1320px 卡片 + 自动外边距 */
-  max-width: 1320px;
+  /* 内容区居中限宽：1200px 卡片 + 自动外边距 */
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   display: grid;
@@ -947,8 +952,8 @@ export default {
 /* 数据带 */
 .hp-hero-stats {
   position: relative;
-  /* 与 .hp-hero-inner 对齐居中，统一 1320px 容器 */
-  max-width: 1320px;
+  /* 与 .hp-hero-inner 对齐居中，统一 1200px 容器 */
+  max-width: 1200px;
   width: 100%;
   margin: 64px auto 0;
   padding: 28px clamp(24px, 3vw, 40px);
@@ -983,7 +988,7 @@ export default {
 /* ==================== 通用 Section 头 ==================== */
 .hp-section {
   padding: 90px clamp(24px, 4vw, 64px);
-  max-width: 1320px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .hp-section-head {
@@ -1160,7 +1165,7 @@ export default {
 }
 .hp-tools-inner {
   position: relative;
-  max-width: 1320px;
+  max-width: 1200px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1355,7 +1360,7 @@ export default {
   padding: 60px 24px 0;
 }
 .hp-bi-grid {
-  max-width: 1320px;
+  max-width: 1200px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
