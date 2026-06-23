@@ -9,28 +9,6 @@ import htmlModules from './config/htmlModules' // 自定义插入的html块
 const DOMAIN_NAME = 'yccoding.com' // 域名 (不带https)
 const WEB_SITE = `https://${DOMAIN_NAME}` // 网址
 
-// ===== 快速构建模式 =====
-// 用法：FAST_BUILD=1 npm run build   （仅用于百度广告验证/紧急小改动等场景）
-// 该模式会跳过大目录的 md 编译，构建时间从数十分钟降到几分钟
-const FAST_BUILD = process.env.FAST_BUILD === '1' || process.env.FAST_BUILD === 'true'
-
-// 快速模式下排除的大目录（保留 工具/计算机/编程/算法/技术/更多/00.目录 等核心内容 + 首页）
-const FAST_EXCLUDE_DIRS = [
-  '10.专栏',
-  '11.CodeX',
-  '12.Apps',
-  '20.ScriptHub',
-]
-
-if (FAST_BUILD) {
-  // 醒目提示
-  console.log('\n\x1b[33m========================================\x1b[0m')
-  console.log('\x1b[33m  ⚡ FAST_BUILD 模式启用\x1b[0m')
-  console.log('\x1b[33m  已跳过以下目录的编译：\x1b[0m')
-  FAST_EXCLUDE_DIRS.forEach(d => console.log(`\x1b[33m    - ${d}\x1b[0m`))
-  console.log('\x1b[33m========================================\x1b[0m\n')
-}
-
 export default defineConfig4CustomTheme<VdoingThemeConfig>({
   theme: 'vdoing', // 使用npm主题包
   // theme: resolve(__dirname, '../../vdoing'), // 使用本地主题包
@@ -47,8 +25,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
   // 主题配置
   themeConfig: {
     search: false, // 隐藏导航栏搜索框
-    // 导航配置（FAST_BUILD 模式下会过滤掉指向被排除目录的入口，避免大量死链 warning）
-    nav: ([
+    // 导航配置
+    nav: [
       { text: '首页', link: '/' },
       {
         text: '工具',
@@ -185,12 +163,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
 
-    ] as any[]).filter((item: any) => {
-      if (!FAST_BUILD) return true
-      // 快速模式：剔除指向已排除目录的一级菜单
-      const fastExcludeNavText = ['专栏', 'CodeX', 'Apps', 'Script']
-      return !fastExcludeNavText.includes(item.text)
-    }),
+    ],
     sidebarDepth: 2, // 侧边栏显示深度，默认1，最大2（显示到h3标题）
     logo: '/img/logo.png', // 导航栏logo
     // repo: '杨充/vuepress-theme-vdoing', // 导航栏右侧生成Github链接
@@ -454,13 +427,6 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     '.vuepress/config/htmlModules.ts',
   ],
 
-  // 文件匹配模式：FAST_BUILD 模式下排除大目录，加速构建
-  // 默认值：['**/*.md', '**/*.vue']
-  patterns: FAST_BUILD
-    ? [
-        '**/*.md',
-        '**/*.vue',
-        ...FAST_EXCLUDE_DIRS.map(d => `!${d}/**`),
-      ]
-    : ['**/*.md', '**/*.vue'],
+  // 文件匹配模式（默认值）
+  patterns: ['**/*.md', '**/*.vue'],
 })
