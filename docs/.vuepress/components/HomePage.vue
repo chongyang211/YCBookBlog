@@ -14,7 +14,17 @@
         <div class="hp-hero-left">
           <div class="hp-hero-badge">
             <span class="hp-badge-dot"></span>
-            持续更新 · 已沉淀 {{ stats.articles }}+ 篇技术文章
+            <span class="hp-badge-text">持续更新中</span>
+            <span class="hp-badge-divider"></span>
+            <span class="hp-badge-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+            </span>
+            <span class="hp-badge-text">已沉淀</span>
+            <span class="hp-badge-num">{{ stats.articles }}+</span>
+            <span class="hp-badge-text">篇技术文章</span>
           </div>
 
           <h1 class="hp-hero-title">
@@ -461,14 +471,35 @@ export default {
     },
   },
   mounted() {
-    this.breakWrapper()
+    this.applyFullWidth()
     this.startTyping()
     this.observeReveal()
   },
   beforeDestroy() {
     if (this.typeTimer) clearTimeout(this.typeTimer)
+    // 离开首页：清理所有标记 class，让其他页面恢复主题默认行为
+    if (typeof document !== 'undefined') {
+      document.body.classList.remove('home-fullwidth')
+      document.documentElement.classList.remove('home-fullwidth')
+      const tcEl = document.querySelector('.theme-container')
+      if (tcEl) tcEl.classList.remove('home-fullwidth-container')
+    }
   },
   methods: {
+    applyFullWidth() {
+      // ================================================================
+      // 首页全屏方案（轻量、无副作用）：
+      // 仅添加 home-fullwidth* 标记 class，CSS 通过这些 class
+      // 命中 .theme-container.home-fullwidth-container 选择器，
+      // 用 !important 覆盖主题的 sidebar-open / have-rightmenu padding。
+      // 不再用 MutationObserver 摘 Vue 的响应式 class —— 避免污染其他页面。
+      // ================================================================
+      if (typeof document === 'undefined') return
+      document.body.classList.add('home-fullwidth')
+      document.documentElement.classList.add('home-fullwidth')
+      const tcEl = document.querySelector('.theme-container')
+      if (tcEl) tcEl.classList.add('home-fullwidth-container')
+    },
     startTyping() {
       const cur = this.typePhrases[this.typeIdx]
       if (this.typeDeleting) {
@@ -504,95 +535,90 @@ export default {
         io.observe(el)
       })
     },
-    breakWrapper() {
-      // 直接操作 style 属性挣脱 max-width/padding（JS 比 CSS class 更可靠，不受 cascade 影响）
-      const wrapper = this.$el.parentElement
-      if (wrapper) {
-        const s = wrapper.style
-        s.maxWidth = 'none'
-        s.padding = '0'
-        s.margin = '0'
-        s.background = 'transparent'
-        s.boxShadow = 'none'
-        s.borderRadius = '0'
-        s.marginBottom = '0'
-      }
-      if (wrapper && wrapper.parentElement) {
-        const page = wrapper.parentElement
-        page.style.paddingTop = '3.6rem'
-        page.style.paddingBottom = '0'
-        // 隐藏占位元素和页脚多余间距
-        const placeholder = wrapper.querySelector(':scope > .placeholder')
-        if (placeholder) placeholder.style.display = 'none'
-        const pageNav = wrapper.querySelector(':scope > .page-nav')
-        if (pageNav) pageNav.style.display = 'none'
-        const pageEdit = wrapper.querySelector(':scope > .page-edit')
-        if (pageEdit) pageEdit.style.display = 'none'
-      }
-    },
   },
 }
 </script>
 
-<!-- 非 scoped：用于"挣脱"主题 Page.vue 的 wrapper 限制，让首页全屏 -->
+<!-- 非 scoped：通过 body.home-fullwidth 锁定首页路径，强制铺满全屏 -->
 <style>
-/* ===== 首页全屏：通过 JS 注入 class 后精准覆盖（兼容所有浏览器） ===== */
-.theme-vdoing-wrapper.hp-fullwidth {
+/* ============================================================
+ * 首页全屏：body.home-fullwidth 由 HomePage.vue mounted 时注入
+ *
+ * 需要击穿的主题层级（自外向内）：
+ *  1. .theme-container.have-rightmenu .page  → padding-right 550px (mobile.styl:78-80)
+ *     —— 主题误以为首页是文章页，给页面留了右侧目录栏空间
+ *  2. .theme-container .page                 → 默认 padding-top: $navbarHeight
+ *  3. .page > .theme-vdoing-wrapper          → max-width: 860px + padding: 1rem 2.5rem 2rem
+ *  4. .theme-vdoing-wrapper > .placeholder/.content-wrapper/.page-edit/.page-nav 等无关元素
+ *
+ * 全部用 body.home-fullwidth + .theme-container[.have-rightmenu] 双 class 拉高特异性
+ * 配合 !important 兜底（覆盖 stylus 编译后的 760+ priority）
+ * ============================================================ */
+/* ============================================================
+ * 首页全屏：
+ *   1) JS 在 mounted 时给 <body> + <html> + .theme-container 打 home-fullwidth* class
+ *   2) JS 直接摘掉主题动态加的 sidebar-open / have-rightmenu（用 MutationObserver 持续清理）
+ *   3) 这里 CSS 是"双保险"——即使 class 漏摘，也强行把 .page padding 清零
+ *
+ * 关键选择器：.theme-container.home-fullwidth-container
+ *   ↑ 与主题原规则 .theme-container.sidebar-open 同级特异性 + !important
+ *   能稳定击穿 mobile.styl 中的 padding-left/right 注入
+ * ============================================================ */
+.theme-container.home-fullwidth-container {
   max-width: none !important;
-  padding: 0 !important;
+  width: 100% !important;
+}
+/* 核心：清掉所有可能注入的 padding，让 .page 100% 撑满 */
+.theme-container.home-fullwidth-container .page,
+.theme-container.home-fullwidth-container.sidebar-open .page,
+.theme-container.home-fullwidth-container.have-rightmenu .page,
+.theme-container.home-fullwidth-container.no-sidebar .page {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  padding-top: 3.6rem !important;
+  max-width: none !important;
+  width: 100% !important;
   margin: 0 !important;
+}
+/* vdoing wrapper 的 860px 限宽 */
+.theme-container.home-fullwidth-container .page > .theme-vdoing-wrapper {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-  margin-bottom: 0 !important;
 }
-/* 首页 page 容器也去除约束 */
-.page.hp-fullwidth-page {
-  padding-top: 3.6rem !important;
-  padding-bottom: 0 !important;
-}
-/* 隐藏 Page.vue 的占位、编辑、翻页等无关元素 */
-.theme-vdoing-wrapper.hp-fullwidth > .placeholder,
-.theme-vdoing-wrapper.hp-fullwidth > .page-edit,
-.theme-vdoing-wrapper.hp-fullwidth > .page-nav,
-.theme-vdoing-wrapper.hp-fullwidth > .content-wrapper {
+/* 屏蔽无关元素（兜底 placeholder、空 content-wrapper、文章编辑/翻页/更新栏、右侧目录） */
+.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .placeholder,
+.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .content-wrapper,
+.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .page-edit,
+.theme-container.home-fullwidth-container .theme-vdoing-wrapper > .page-nav,
+.theme-container.home-fullwidth-container .page > .update-bar,
+.theme-container.home-fullwidth-container .right-menu-wrapper,
+.theme-container.home-fullwidth-container .sidebar,
+.theme-container.home-fullwidth-container .sidebar-mask,
+.theme-container.home-fullwidth-container .sidebar-button,
+.theme-container.home-fullwidth-container .sidebar-hover-trigger {
   display: none !important;
 }
-/* footer 贴齐 */
-.page.hp-fullwidth-page + .footer,
-.page.hp-fullwidth-page .footer {
-  margin-top: 0 !important;
-}
-
-/* ===== 以下为 :has() 降级方案（现代浏览器直接匹配，无需等 JS） ===== */
-.page > .theme-vdoing-wrapper:has(.hp-wrapper),
-.page > .theme-vdoing-wrapper.has-homepage {
+/* footer 铺满 */
+.theme-container.home-fullwidth-container .footer,
+.theme-container.home-fullwidth-container.have-rightmenu .footer,
+.theme-container.home-fullwidth-container.no-sidebar .footer {
   max-width: none !important;
-  padding: 0 !important;
+  width: 100% !important;
   margin: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   border-radius: 0 !important;
 }
-.theme-vdoing-wrapper:has(> .hp-wrapper),
-.theme-vdoing-wrapper:has(> .theme-vdoing-content.hp-wrapper) {
-  max-width: none !important;
-  padding: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
+/* 移动端：导航栏高度兼容 */
+@media (max-width: 719px) {
+  .theme-container.home-fullwidth-container .page { padding-top: 3.6rem !important; }
 }
-.theme-vdoing-wrapper:has(.hp-wrapper) > .placeholder,
-.theme-vdoing-wrapper:has(.hp-wrapper) > .page-edit,
-.theme-vdoing-wrapper:has(.hp-wrapper) > .page-nav,
-.theme-vdoing-wrapper:has(.hp-wrapper) > .content-wrapper {
-  display: none !important;
-}
-.page:has(.hp-wrapper) {
-  padding-top: 3.6rem !important;
-  padding-bottom: 0 !important;
-}
-.page:has(.hp-wrapper) + .footer,
-.page:has(.hp-wrapper) .footer { margin-top: 0 !important; }
 </style>
 
 <style scoped>
@@ -631,7 +657,8 @@ export default {
 .hp-hero {
   position: relative;
   min-height: 660px;
-  padding: 80px 24px 60px;
+  /* 背景渐变铺满全屏，内容由 .hp-hero-inner 居中限宽 */
+  padding: 80px clamp(24px, 4vw, 64px) 60px;
   overflow: hidden;
   background: linear-gradient(135deg, #f5f7fb 0%, #eef2f9 50%, #ebe9fc 100%);
 }
@@ -647,9 +674,9 @@ export default {
   opacity: 0.5;
   animation: hpFloat 14s ease-in-out infinite;
 }
-.hp-blob-1 { width: 420px; height: 420px; top: -100px; left: -80px;  background: #93c5fd; }
-.hp-blob-2 { width: 360px; height: 360px; top: 100px;  right: -60px; background: #c4b5fd; animation-delay: -4s; }
-.hp-blob-3 { width: 320px; height: 320px; bottom: -80px; left: 40%;  background: #a5f3fc; animation-delay: -8s; }
+.hp-blob-1 { width: 480px; height: 480px; top: -120px; left: -100px;  background: #93c5fd; }
+.hp-blob-2 { width: 460px; height: 460px; top: 60px;   right: -120px; background: #c4b5fd; animation-delay: -4s; }
+.hp-blob-3 { width: 360px; height: 360px; bottom: -100px; left: 45%;  background: #a5f3fc; animation-delay: -8s; }
 .hp-grid-bg {
   position: absolute; inset: 0;
   background-image:
@@ -667,27 +694,43 @@ export default {
 
 .hp-hero-inner {
   position: relative;
-  max-width: 1180px;
+  /* 内容区居中限宽：1320px 卡片 + 自动外边距 */
+  max-width: 1320px;
+  width: 100%;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 60px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, 520px);
+  gap: clamp(40px, 5vw, 80px);
   align-items: center;
 }
+.hp-hero-left { max-width: 640px; }
 
 /* 左侧 */
 .hp-hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(74, 144, 217, 0.18);
+  padding: 7px 16px 7px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  /* 渐变描边：用 border-image 实现彩色边 */
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+    linear-gradient(135deg, var(--hp-brand) 0%, var(--hp-brand-2) 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   border-radius: 999px;
   font-size: 13px;
+  font-weight: 500;
   color: var(--hp-text-light);
   margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(74, 144, 217, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hp-hero-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(74, 144, 217, 0.2);
 }
 .hp-badge-dot {
   width: 8px; height: 8px;
@@ -695,6 +738,34 @@ export default {
   border-radius: 50%;
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
   animation: hpPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.hp-badge-text {
+  color: var(--hp-text-light);
+}
+.hp-badge-divider {
+  width: 1px;
+  height: 12px;
+  background: linear-gradient(to bottom, transparent, rgba(74, 144, 217, 0.35), transparent);
+  margin: 0 2px;
+}
+.hp-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hp-brand);
+}
+.hp-badge-num {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: linear-gradient(135deg, var(--hp-brand) 0%, var(--hp-brand-2) 100%);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(74, 144, 217, 0.35);
 }
 @keyframes hpPulse {
   0%, 100% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2); }
@@ -803,7 +874,7 @@ export default {
 }
 .hp-terminal {
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
   background: #1e1e2e;
   border-radius: 14px;
   overflow: hidden;
@@ -876,9 +947,11 @@ export default {
 /* 数据带 */
 .hp-hero-stats {
   position: relative;
-  max-width: 1180px;
+  /* 与 .hp-hero-inner 对齐居中，统一 1320px 容器 */
+  max-width: 1320px;
+  width: 100%;
   margin: 64px auto 0;
-  padding: 28px 24px;
+  padding: 28px clamp(24px, 3vw, 40px);
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.8);
@@ -909,8 +982,8 @@ export default {
 
 /* ==================== 通用 Section 头 ==================== */
 .hp-section {
-  padding: 90px 24px;
-  max-width: 1180px;
+  padding: 90px clamp(24px, 4vw, 64px);
+  max-width: 1320px;
   margin: 0 auto;
 }
 .hp-section-head {
@@ -1087,7 +1160,7 @@ export default {
 }
 .hp-tools-inner {
   position: relative;
-  max-width: 1180px;
+  max-width: 1320px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1282,7 +1355,7 @@ export default {
   padding: 60px 24px 0;
 }
 .hp-bi-grid {
-  max-width: 1180px;
+  max-width: 1320px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -1463,8 +1536,15 @@ export default {
 .hp-mf-link:hover { color: var(--hp-brand) !important; }
 
 /* ==================== 响应式 ==================== */
+/* 中宽屏（1024-1280）：终端略收窄，避免挤压文案 */
+@media (max-width: 1280px) and (min-width: 961px) {
+  .hp-hero-inner { grid-template-columns: minmax(0, 1fr) 440px; gap: 50px; }
+  .hp-terminal { max-width: 440px; }
+  .hp-hero-title { font-size: 56px; }
+}
 @media (max-width: 960px) {
   .hp-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hp-hero-left { max-width: none; }
   .hp-hero-right { display: none; }
   .hp-hero-title { font-size: 48px; }
   .hp-tools-inner { grid-template-columns: 1fr; gap: 40px; }
@@ -1500,6 +1580,13 @@ export default {
   .hp-btn { justify-content: center; }
   .hp-blob { opacity: 0.3; }
   .hp-grid-bg { opacity: 0.5; }
+  /* badge：窄屏隐藏次要信息，只保留核心 */
+  .hp-hero-badge {
+    flex-wrap: wrap;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .hp-badge-divider, .hp-badge-icon { display: none; }
 }
 
 /* ==================== 暗色模式 ==================== */
@@ -1520,9 +1607,16 @@ export default {
     linear-gradient(90deg, rgba(123, 95, 217, 0.08) 1px, transparent 1px);
 }
 .theme--dark .hp-hero-badge {
-  background: rgba(30, 30, 46, 0.7);
-  border-color: rgba(123, 95, 217, 0.3);
+  /* 暗色：内层底色换成深色，渐变描边保留 */
+  background-image:
+    linear-gradient(rgba(30, 30, 46, 0.85), rgba(30, 30, 46, 0.85)),
+    linear-gradient(135deg, var(--hp-brand) 0%, var(--hp-brand-2) 100%);
   color: #aaa;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+.theme--dark .hp-badge-text { color: #bbb; }
+.theme--dark .hp-badge-divider {
+  background: linear-gradient(to bottom, transparent, rgba(123, 95, 217, 0.45), transparent);
 }
 .theme--dark .hp-title-line-1 {
   background: linear-gradient(135deg, #f0f0f0 0%, #b0b0b0 100%);
