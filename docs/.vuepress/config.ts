@@ -29,14 +29,21 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     nav: [
       { text: '首页', link: '/' },
       {
-        text: '工具',
-        link: '/tools/',
+        text: '工具箱',
+        link: '/pages/tools-readme/',
         items: [
+          { text: '在线工具',  link: '/pages/tools-readme/' },
           { text: 'JSON工具',  link: '/tools/json/' },
           { text: '文本工具',  link: '/tools/text/' },
           { text: '图片处理',  link: '/tools/image/' },
           { text: '文档转化',  link: '/tools/doc/' },
           { text: '代码压缩',  link: '/tools/minify/' },
+          { text: '加解密',    link: '/tools/crypto/' },
+          { text: '时间日期',  link: '/tools/time/' },
+          { text: '网络工具',  link: '/tools/network/' },
+          { text: '颜色设计',  link: '/tools/color/' },
+          { text: '二维码',    link: '/tools/qrcode/' },
+          { text: '开发实用',  link: '/tools/dev/' },
         ],
       },
       {

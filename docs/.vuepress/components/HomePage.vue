@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import HeroSection from '../home/HeroSection.vue'
-import KnowledgeSection from '../home/KnowledgeSection.vue'
-import ToolsSection from '../home/ToolsSection.vue'
-import FeaturedSection from '../home/FeaturedSection.vue'
-import BlogInfoSection from '../home/BlogInfoSection.vue'
-import ManifestoSection from '../home/ManifestoSection.vue'
-import '../home/styles.css'
+import HeroSection from './home/HeroSection.vue'
+import KnowledgeSection from './home/KnowledgeSection.vue'
+import ToolsSection from './home/ToolsSection.vue'
+import FeaturedSection from './home/FeaturedSection.vue'
+import BlogInfoSection from './home/BlogInfoSection.vue'
+import ManifestoSection from './home/ManifestoSection.vue'
+import './home/styles.css'
 import {
   typePhrases,
   stats,
@@ -28,7 +28,7 @@ import {
   groups,
   featured,
   socialIconFallback,
-} from '../home/data.js'
+} from './home/data.js'
 
 export default {
   name: 'HomePage',

@@ -1,0 +1,317 @@
+/* ============================================================
+ * TimeToolbox 共享样式（非 scoped，前缀 .tm- 避免污染）
+ * ============================================================ */
+
+.tm-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0 40px;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.tm-header { text-align: center; margin-bottom: 20px; }
+.tm-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  background: linear-gradient(90deg, #16a085, #4a90d9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.tm-desc { font-size: 13px; color: #888; margin: 0; }
+
+.tm-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 8px;
+}
+.tm-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: #f5f7fa;
+  color: #666;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tm-tab:hover { color: #16a085; background: #ecf9f5; }
+.tm-tab.active {
+  background: linear-gradient(90deg, #16a085, #4a90d9);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(22, 160, 133, 0.25);
+}
+
+.tm-panel { display: flex; flex-direction: column; gap: 14px; }
+
+.tm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fafbfc;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+}
+.tm-toolbar-label { font-size: 12px; color: #888; margin-right: 4px; }
+
+.tm-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fff;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tm-btn:hover {
+  border-color: #16a085;
+  color: #16a085;
+  background: #ecf9f5;
+}
+.tm-btn-primary {
+  background: linear-gradient(90deg, #16a085, #4a90d9);
+  color: #fff;
+  border-color: transparent;
+}
+.tm-btn-primary:hover {
+  color: #fff;
+  background: linear-gradient(90deg, #4a90d9, #16a085);
+  box-shadow: 0 4px 10px rgba(22, 160, 133, 0.3);
+}
+
+.tm-input, .tm-select {
+  padding: 7px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.tm-input:focus, .tm-select:focus {
+  border-color: #16a085;
+  box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.08);
+}
+.tm-input-mono { font-family: 'JetBrains Mono', Menlo, Consolas, monospace; }
+
+/* Hero 时钟 */
+.tm-hero-clock {
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #ecf9f5, #e8f0f9);
+  border: 1px solid #d4ecdf;
+  border-radius: 12px;
+}
+.tm-hero-clock-time {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 38px;
+  font-weight: 700;
+  color: #16a085;
+  letter-spacing: 1px;
+}
+.tm-hero-clock-ts {
+  font-size: 14px;
+  color: #666;
+  margin-top: 6px;
+}
+
+.tm-result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+.tm-result-card {
+  padding: 12px 14px;
+  background: #fafbfc;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+}
+.tm-result-label {
+  font-size: 11px;
+  color: #888;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.tm-result-val {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 15px;
+  color: #333;
+  word-break: break-all;
+}
+
+/* 世界时钟卡片 */
+.tm-clocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.tm-clock-card {
+  position: relative;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  transition: transform 0.2s;
+}
+.tm-clock-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(22, 160, 133, 0.1);
+}
+.tm-clock-card-day { background: linear-gradient(135deg, #fffce8, #fff7d6); border-color: #f5e6a8; }
+.tm-clock-card-night { background: linear-gradient(135deg, #1e2745, #2a3656); color: #fff; border-color: #2a3656; }
+
+.tm-clock-city {
+  font-size: 14px;
+  font-weight: 600;
+}
+.tm-clock-tz {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.tm-clock-time {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+.tm-clock-date {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.tm-clock-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.06);
+  color: #666;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.tm-clock-card-night .tm-clock-remove { background: rgba(255,255,255,0.15); color: #fff; }
+.tm-clock-remove:hover { background: #e74c3c; color: #fff; }
+
+/* Cron 表格 */
+.tm-cron-fields {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 10px;
+  background: #fafbfc;
+  border: 1px solid #ececec;
+  border-radius: 8px;
+}
+.tm-cron-field {
+  text-align: center;
+}
+.tm-cron-field-label {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 4px;
+}
+.tm-cron-field-val {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: #16a085;
+}
+
+.tm-next-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tm-next-item {
+  padding: 8px 12px;
+  background: #fafbfc;
+  border: 1px solid #ececec;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+}
+.tm-next-item-no {
+  color: #16a085;
+  font-weight: 700;
+  margin-right: 12px;
+}
+
+.tm-msg {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.tm-msg-err { background: #fdecea; color: #c0392b; border: 1px solid #f5b7b1; }
+
+/* 倒计时大数字 */
+.tm-cd-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px;
+  background: linear-gradient(135deg, #16a085, #4a90d9);
+  border-radius: 12px;
+  color: #fff;
+  text-align: center;
+}
+.tm-cd-num {
+  font-family: 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+}
+.tm-cd-label {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 6px;
+  letter-spacing: 2px;
+}
+
+/* Dark */
+.theme--dark .tm-tab { background: #1e1e2e; color: #aaa; }
+.theme--dark .tm-tab:hover { background: #15291f; color: #4ecdc4; }
+.theme--dark .tm-tabs { border-bottom-color: #3a3a4a; }
+.theme--dark .tm-toolbar { background: #1e1e2e; border-color: #3a3a4a; }
+.theme--dark .tm-btn { background: #1e1e2e; border-color: #3a3a4a; color: #ccc; }
+.theme--dark .tm-btn:hover { background: #15291f; color: #4ecdc4; }
+.theme--dark .tm-input, .theme--dark .tm-select {
+  background: #181825; border-color: #3a3a4a; color: #ddd;
+}
+.theme--dark .tm-result-card, .theme--dark .tm-next-item, .theme--dark .tm-cron-fields {
+  background: #1e1e2e; border-color: #3a3a4a;
+}
+.theme--dark .tm-result-val, .theme--dark .tm-next-item { color: #ddd; }
+.theme--dark .tm-clock-card { background: #1e1e2e; border-color: #3a3a4a; }
+.theme--dark .tm-hero-clock {
+  background: linear-gradient(135deg, #15291f, #1a2a3a);
+  border-color: #2d5a4a;
+}
+.theme--dark .tm-msg-err { background: #2a1717; border-color: #5a2828; color: #ff6e6e; }
+
+@media (max-width: 640px) {
+  .tm-cd-grid { grid-template-columns: repeat(2, 1fr); }
+  .tm-cron-fields { grid-template-columns: repeat(5, 1fr); font-size: 12px; }
+}
