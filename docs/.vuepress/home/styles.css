@@ -24,6 +24,10 @@
   --hp-border: #e8ecf1;
   margin: 0;
   padding: 0;
+  /* 自身先天 100% 宽度，避免被父级 max-width:860px 压缩成左半屏 */
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
   color: var(--hp-text);
   background: var(--hp-bg);
   overflow-x: hidden;

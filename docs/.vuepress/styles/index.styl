@@ -143,17 +143,30 @@ body .vuepress-plugin-demo-block__wrapper
 // ============================================================
 // 首页全屏击穿（最高优先级）
 //
-// HomePage.vue mounted 时会给 <html>/<body>/.theme-container
-// 注入 home-fullwidth* class，下面规则匹配后会：
-//   1. 把 .theme-container 自身宽度撑满（去掉主题的 max-width 限制）
-//   2. 清掉 vdoing mobile.styl 里
-//      .theme-container.sidebar-open .page { padding-left: $sidebarWidth + .8rem }
-//      这条没有 !important 的规则，让首页内容真正铺满视口
-//   3. 隐藏 sidebar / right-menu / page-edit / page-nav 等无关元素
-//   4. 让 footer 也铺满
+// 触发条件：.theme-container 上带有 home-fullwidth-container class
+// 注入方式（双保险）：
+//   主路径：docs/index.md frontmatter.pageClass: home-fullwidth-container
+//          → vdoing Layout.vue 第 195 行 pageClasses() 读取并绑到
+//            .theme-container 上，SSR 阶段就生效（首屏即铺满，无抖动）
+//   兜底：HomePage.vue mounted -> applyFullWidth() 也会再追加一次，
+//         覆盖任何客户端路由切换的边界情况
 //
-// 注意：本规则放在主题级入口 index.styl 中，注入位置在
-// vdoing 主题样式之后，权威级最高，避免被覆盖。
+// 击穿做的事：
+//   1. .theme-container 自身去掉主题 max-width 限制
+//   2. 覆盖 vdoing mobile.styl
+//      .theme-container.sidebar-open .page { padding-left: $sidebarWidth + .8rem }
+//      让 .page 真正铺满视口
+//   3. **关键**：覆盖 vdoing/components/Page.vue 中
+//      .page > * { @extend $vdoing-wrapper }  // → max-width: 860px
+//      把 .theme-vdoing-wrapper / .theme-vdoing-content / .hp-wrapper
+//      整条祖先链都强制 width:100%（之前只覆盖 .theme-vdoing-wrapper
+//      一层，结果内层 .theme-vdoing-content 仍受限，HomePage 被压成左半屏）
+//   4. 隐藏 sidebar / right-menu / page-edit / page-nav 等无关元素
+//   5. footer 也铺满
+//
+// 注意：本规则放在主题级入口 docs/.vuepress/styles/index.styl，
+// 这是 vuepress 用户级样式入口，注入位置在 vdoing 主题样式之后，
+// 权威级最高，避免被主题覆盖。
 // ============================================================
 html.home-fullwidth, body.home-fullwidth
   margin 0 !important
@@ -184,15 +197,40 @@ html.home-fullwidth, body.home-fullwidth
     padding-left 0 !important
     padding-right 0 !important
 
-  // vdoing-wrapper：清掉限宽和内边距，但保留 margin: 0 auto（居中关键）
-  .page > .theme-vdoing-wrapper
+  // ----------------------------------------------------------
+  // 祖先链全宽（关键修复）：
+  // vdoing 的 Page.vue 用 stylus 写了
+  //   .page > * { @extend $vdoing-wrapper }   // → max-width: 860px
+  // 受影响的就是 .theme-vdoing-wrapper。我们**必须**把祖先链上
+  // 每一层可能被限宽的元素都强制 100%，包括 vdoing 用 v-if/v-else
+  // 包出来的 .theme-vdoing-content 以及 HomePage 自己的 .hp-wrapper。
+  // 任何一层漏掉，子元素就会被父级 max-width 兜住，看起来"偏左"。
+  // ----------------------------------------------------------
+
+  // 1. .page 的所有直接子元素（包括 .theme-vdoing-wrapper、UpdateArticle 等）
+  .page > *
     max-width none !important
     width 100% !important
-    margin 0 auto !important
+    margin 0 !important
     padding 0 !important
     background transparent !important
     box-shadow none !important
     border-radius 0 !important
+
+  // 2. theme-vdoing-wrapper 内层（HomePage 通过 <component :is> 渲染在这一层）
+  .theme-vdoing-wrapper,
+  .theme-vdoing-wrapper > .theme-vdoing-content
+    max-width none !important
+    width 100% !important
+    margin 0 !important
+    padding 0 !important
+    background transparent !important
+
+  // 3. HomePage 自己的根（.hp-wrapper）也强制全宽，避免被任何隐性 inline-block / shrink-to-fit 影响
+  .hp-wrapper
+    max-width none !important
+    width 100% !important
+    margin 0 !important
 
   // 屏蔽无关元素
   .theme-vdoing-wrapper > .placeholder,
