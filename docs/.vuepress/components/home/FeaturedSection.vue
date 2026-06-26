@@ -56,7 +56,7 @@ export default {
   text-decoration: none !important;
   color: inherit !important;
   box-shadow: 0 2px 8px rgba(31, 38, 135, 0.04);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 .hp-fcard:hover {
   transform: translateY(-8px);

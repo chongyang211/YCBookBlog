@@ -1,6 +1,6 @@
 <template>
   <div class="hp-wrapper">
-    <HeroSection :stats="stats" :typed="typed" />
+    <HeroSection :stats="stats" />
     <KnowledgeSection :groups="groups" />
     <ToolsSection :tool-cloud="toolCloud" />
     <FeaturedSection :featured="featured" />
@@ -22,7 +22,6 @@ import BlogInfoSection from './home/BlogInfoSection.vue'
 import ManifestoSection from './home/ManifestoSection.vue'
 import './home/styles.css'
 import {
-  typePhrases,
   stats,
   toolCloud,
   groups,
@@ -42,15 +41,6 @@ export default {
   },
   data() {
     return {
-      // 打字机状态
-      typed: '',
-      typeIdx: 0,
-      typeSubIdx: 0,
-      typeDeleting: false,
-      typePhrases,
-      typeTimer: null,
-
-      // 静态数据（来自 home/data.js）
       stats,
       toolCloud,
       groups,
@@ -69,30 +59,21 @@ export default {
     socialIcons() {
       const cfg = (this.$themeConfig && this.$themeConfig.social) || {}
       const icons = cfg.icons || []
-      return icons.map(i => ({
-        ...i,
-        emoji: socialIconFallback[i.iconClass] || '🔗',
-      }))
+      return icons.map(i => ({ ...i, emoji: socialIconFallback[i.iconClass] || '🔗' }))
     },
     tagList() {
-      // 尝试从 vdoing 的 $tags 读取，不可用时返回空数组
       try {
         const tags = this.$tags
-        if (tags && tags.list && tags.list.length) {
+        if (tags && tags.list && tags.list.length)
           return tags.list.slice(0, 10).map(t => ({ name: t.name, path: t.path }))
-        }
       } catch (e) { /* ignore */ }
       return []
     },
   },
   mounted() {
     this.applyFullWidth()
-    this.startTyping()
-    this.observeReveal()
   },
   beforeDestroy() {
-    if (this.typeTimer) clearTimeout(this.typeTimer)
-    // 离开首页：清理所有标记 class，让其他页面恢复主题默认行为
     if (typeof document !== 'undefined') {
       document.body.classList.remove('home-fullwidth')
       document.documentElement.classList.remove('home-fullwidth')
@@ -102,53 +83,11 @@ export default {
   },
   methods: {
     applyFullWidth() {
-      // ================================================================
-      // 首页全屏方案（轻量、无副作用）：
-      // 仅添加 home-fullwidth* 标记 class，CSS 通过这些 class
-      // 命中 .theme-container.home-fullwidth-container 选择器，
-      // 用 !important 覆盖主题的 sidebar-open / have-rightmenu padding。
-      // 不再用 MutationObserver 摘 Vue 的响应式 class —— 避免污染其他页面。
-      // ================================================================
       if (typeof document === 'undefined') return
       document.body.classList.add('home-fullwidth')
       document.documentElement.classList.add('home-fullwidth')
       const tcEl = document.querySelector('.theme-container')
       if (tcEl) tcEl.classList.add('home-fullwidth-container')
-    },
-    startTyping() {
-      const cur = this.typePhrases[this.typeIdx]
-      if (this.typeDeleting) {
-        this.typed = cur.substring(0, this.typeSubIdx - 1)
-        this.typeSubIdx--
-      } else {
-        this.typed = cur.substring(0, this.typeSubIdx + 1)
-        this.typeSubIdx++
-      }
-      let delay = this.typeDeleting ? 40 : 90
-      if (!this.typeDeleting && this.typeSubIdx === cur.length) {
-        delay = 1800
-        this.typeDeleting = true
-      } else if (this.typeDeleting && this.typeSubIdx === 0) {
-        this.typeDeleting = false
-        this.typeIdx = (this.typeIdx + 1) % this.typePhrases.length
-        delay = 400
-      }
-      this.typeTimer = setTimeout(this.startTyping, delay)
-    },
-    observeReveal() {
-      if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('hp-in')
-            io.unobserve(e.target)
-          }
-        })
-      }, { threshold: 0.12 })
-      this.$el.querySelectorAll('.hp-section, .hp-kcard, .hp-fcard, .hp-mf-pillar').forEach(el => {
-        el.classList.add('hp-reveal')
-        io.observe(el)
-      })
     },
   },
 }

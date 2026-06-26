@@ -95,7 +95,7 @@ export default {
   overflow: hidden;
   text-decoration: none !important;
   color: inherit !important;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .hp-kcard:hover {
   transform: translateY(-6px);

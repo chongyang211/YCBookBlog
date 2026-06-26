@@ -1,12 +1,5 @@
 <template>
   <section class="hp-hero">
-    <div class="hp-hero-bg">
-      <span class="hp-blob hp-blob-1"></span>
-      <span class="hp-blob hp-blob-2"></span>
-      <span class="hp-blob hp-blob-3"></span>
-      <span class="hp-grid-bg"></span>
-    </div>
-
     <div class="hp-hero-inner">
       <!-- 左侧：标题区 -->
       <div class="hp-hero-left">
@@ -31,8 +24,7 @@
         </h1>
 
         <p class="hp-hero-sub">
-          <span class="hp-typewriter">{{ typed }}</span>
-          <span class="hp-cursor">|</span>
+          用代码丈量技术的深度，从底层原理到工程实战
         </p>
 
         <p class="hp-hero-desc">
@@ -71,12 +63,9 @@
             <div class="hp-tl hp-tl-out">&nbsp;&nbsp;"belief": "<span class="hp-tl-str">原理 &gt; 工具 &gt; 调包</span>",</div>
             <div class="hp-tl hp-tl-out">&nbsp;&nbsp;"stack": [<span class="hp-tl-str">"C/C++"</span>, <span class="hp-tl-str">"Java"</span>, <span class="hp-tl-str">"Go"</span>, <span class="hp-tl-str">"Web"</span>]</div>
             <div class="hp-tl hp-tl-out">}</div>
-            <div class="hp-tl"><span class="hp-tl-prompt">$</span> <span class="hp-tl-cmd">npm run start</span> <span class="hp-cursor hp-cursor-term">▊</span></div>
+            <div class="hp-tl"><span class="hp-tl-prompt">$</span> <span class="hp-tl-cmd">npm run start</span></div>
           </div>
         </div>
-        <span class="hp-float-tag hp-tag-1">{ JSON }</span>
-        <span class="hp-float-tag hp-tag-2">&lt;/&gt;</span>
-        <span class="hp-float-tag hp-tag-3">⚡ async</span>
       </div>
     </div>
 
@@ -97,7 +86,6 @@ export default {
   name: 'HeroSection',
   props: {
     stats: { type: Object, required: true },
-    typed: { type: String, default: '' },
   },
   computed: {
     statList() {
@@ -120,35 +108,6 @@ export default {
   overflow: hidden;
   background: linear-gradient(135deg, #f5f7fb 0%, #eef2f9 50%, #ebe9fc 100%);
 }
-.hp-hero-bg {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.hp-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.5;
-  animation: hpFloat 14s ease-in-out infinite;
-}
-.hp-blob-1 { width: 480px; height: 480px; top: -120px; left: -100px;  background: #93c5fd; }
-.hp-blob-2 { width: 460px; height: 460px; top: 60px;   right: -120px; background: #c4b5fd; animation-delay: -4s; }
-.hp-blob-3 { width: 360px; height: 360px; bottom: -100px; left: 45%;  background: #a5f3fc; animation-delay: -8s; }
-.hp-grid-bg {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(74, 144, 217, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74, 144, 217, 0.06) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-}
-@keyframes hpFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -20px) scale(1.05); }
-  66% { transform: translate(-20px, 30px) scale(0.95); }
-}
 
 .hp-hero-inner {
   position: relative;
@@ -167,11 +126,10 @@ export default {
   align-items: center;
   gap: 8px;
   padding: 7px 16px 7px 12px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid transparent;
   background-image:
-    linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+    linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)),
     linear-gradient(135deg, var(--hp-brand) 0%, var(--hp-brand-2) 100%);
   background-origin: border-box;
   background-clip: padding-box, border-box;
@@ -181,18 +139,12 @@ export default {
   color: var(--hp-text-light);
   margin-bottom: 24px;
   box-shadow: 0 4px 16px rgba(74, 144, 217, 0.12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.hp-hero-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(74, 144, 217, 0.2);
 }
 .hp-badge-dot {
   width: 8px; height: 8px;
   background: #22c55e;
   border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
-  animation: hpPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
   flex-shrink: 0;
 }
 .hp-badge-text { color: var(--hp-text-light); }
@@ -220,10 +172,6 @@ export default {
   letter-spacing: 0.3px;
   box-shadow: 0 2px 8px rgba(74, 144, 217, 0.35);
 }
-@keyframes hpPulse {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2); }
-  50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.05); }
-}
 
 .hp-hero-title {
   font-size: 64px;
@@ -234,29 +182,19 @@ export default {
 }
 .hp-title-line-1 {
   display: block;
-  background: linear-gradient(135deg, #1a202c 0%, #4a5568 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #1a202c;
 }
 .hp-title-line-2 {
   display: block;
-  background: linear-gradient(135deg, var(--hp-brand) 0%, var(--hp-brand-2) 60%, #ec4899 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--hp-brand-2);
 }
 
 .hp-hero-sub {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 500;
   color: var(--hp-text);
   margin: 0 0 16px;
-  min-height: 32px;
-  display: flex;
-  align-items: center;
 }
-.hp-typewriter { color: var(--hp-brand-2); }
 
 .hp-hero-desc {
   font-size: 15px;
@@ -287,10 +225,7 @@ export default {
     0 20px 50px rgba(31, 38, 135, 0.25),
     0 8px 16px rgba(0, 0, 0, 0.08);
   font-family: 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-  transform: rotate(-1deg);
-  transition: transform 0.4s ease;
 }
-.hp-terminal:hover { transform: rotate(0deg) scale(1.02); }
 .hp-terminal-bar {
   display: flex;
   align-items: center;
@@ -322,30 +257,6 @@ export default {
 .hp-tl-cmd { color: #89b4fa; }
 .hp-tl-out { color: #bac2de; opacity: 0.85; }
 .hp-tl-str { color: #f9e2af; }
-.hp-cursor-term {
-  color: #cdd6f4;
-  margin-left: 4px;
-}
-
-/* 浮动小标签 */
-.hp-float-tag {
-  position: absolute;
-  padding: 8px 14px;
-  background: #fff;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: 'SF Mono', Menlo, Consolas, monospace;
-  box-shadow: 0 8px 20px rgba(31, 38, 135, 0.15);
-  animation: hpFloatTag 4s ease-in-out infinite;
-}
-.hp-tag-1 { top: 10%; left: -20px; color: var(--hp-brand-2); animation-delay: 0s; }
-.hp-tag-2 { top: 50%; right: -30px; color: #ef6c00; animation-delay: -1.3s; }
-.hp-tag-3 { bottom: 8%; left: 8%;  color: #00897b; animation-delay: -2.6s; }
-@keyframes hpFloatTag {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
 
 /* 数据带 */
 .hp-hero-stats {
@@ -354,8 +265,7 @@ export default {
   width: 100%;
   margin: 64px auto 0;
   padding: 28px clamp(24px, 3vw, 40px);
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 20px;
   display: grid;
@@ -367,10 +277,7 @@ export default {
 .hp-stat-num {
   font-size: 38px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--hp-brand) 0%, var(--hp-brand-2) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--hp-brand-2);
   line-height: 1;
   letter-spacing: -1px;
 }
@@ -409,8 +316,6 @@ export default {
   .hp-hero-title { font-size: 34px; }
   .hp-hero-actions { flex-direction: column; align-items: stretch; }
   .hp-hero-actions .hp-btn { justify-content: center; }
-  .hp-blob { opacity: 0.3; }
-  .hp-grid-bg { opacity: 0.5; }
   .hp-hero-badge {
     flex-wrap: wrap;
     padding: 6px 12px;
@@ -423,12 +328,6 @@ export default {
 .theme--dark .hp-hero {
   background: linear-gradient(135deg, #11111b 0%, #1a1a2e 50%, #1f1a3a 100%);
 }
-.theme--dark .hp-blob { opacity: 0.25; }
-.theme--dark .hp-grid-bg {
-  background-image:
-    linear-gradient(rgba(123, 95, 217, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(123, 95, 217, 0.08) 1px, transparent 1px);
-}
 .theme--dark .hp-hero-badge {
   background-image:
     linear-gradient(rgba(30, 30, 46, 0.85), rgba(30, 30, 46, 0.85)),
@@ -440,15 +339,10 @@ export default {
 .theme--dark .hp-badge-divider {
   background: linear-gradient(to bottom, transparent, rgba(123, 95, 217, 0.45), transparent);
 }
-.theme--dark .hp-title-line-1 {
-  background: linear-gradient(135deg, #f0f0f0 0%, #b0b0b0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+.theme--dark .hp-title-line-1 { color: #f0f0f0; }
 .theme--dark .hp-hero-sub { color: #ddd; }
 .theme--dark .hp-hero-stats {
-  background: rgba(30, 30, 46, 0.6);
+  background: rgba(30, 30, 46, 0.85);
   border-color: rgba(123, 95, 217, 0.2);
 }
 </style>

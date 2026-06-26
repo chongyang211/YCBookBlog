@@ -36,27 +36,6 @@
 .hp-wrapper *::before,
 .hp-wrapper *::after { box-sizing: border-box; }
 
-/* ============== Reveal Animation ============== */
-.hp-reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.hp-reveal.hp-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ============== 通用 cursor 闪烁 ============== */
-.hp-cursor {
-  display: inline-block;
-  color: var(--hp-brand);
-  animation: hpBlink 1s steps(1) infinite;
-  margin-left: 2px;
-  font-weight: 300;
-}
-@keyframes hpBlink { 50% { opacity: 0; } }
-
 /* ============== 通用 section 头 ============== */
 .hp-section {
   padding: 90px clamp(24px, 4vw, 64px);
@@ -120,10 +99,9 @@
   box-shadow: 0 10px 24px rgba(74, 144, 217, 0.45);
 }
 .hp-btn-ghost {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--hp-text) !important;
   border: 1px solid var(--hp-border);
-  backdrop-filter: blur(6px);
 }
 .hp-btn-ghost:hover {
   background: #fff;

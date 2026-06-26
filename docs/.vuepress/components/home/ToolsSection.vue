@@ -44,11 +44,9 @@
       <div class="hp-tools-right">
         <div class="hp-tools-cloud">
           <div
-            v-for="(t, i) in toolCloud"
+            v-for="t in toolCloud"
             :key="t.name"
             class="hp-tcloud"
-            :class="'hp-tcloud-' + (i % 3 + 1)"
-            :style="{ '--d': (i * 0.15) + 's' }"
           >
             <span class="hp-tcloud-icon">{{ t.icon }}</span>
             <span class="hp-tcloud-name">{{ t.name }}</span>
@@ -119,11 +117,10 @@ export default {
   gap: 14px;
   align-items: flex-start;
   padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  backdrop-filter: blur(6px);
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, transform 0.25s ease;
 }
 .hp-tf:hover {
   background: rgba(255, 255, 255, 0.18);
@@ -173,27 +170,14 @@ export default {
   align-items: center;
   gap: 6px;
   padding: 18px 8px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.16);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 14px;
-  backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
-  animation: hpTcFloat 4s ease-in-out infinite;
-  animation-delay: var(--d);
+  transition: background 0.2s ease;
 }
-.hp-tcloud:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-4px) scale(1.05);
-}
+.hp-tcloud:hover { background: rgba(255, 255, 255, 0.25); }
 .hp-tcloud-icon { font-size: 28px; }
 .hp-tcloud-name { font-size: 12.5px; color: #fff; font-weight: 500; }
-.hp-tcloud-1 { transform: translateY(0); }
-.hp-tcloud-2 { transform: translateY(-10px); }
-.hp-tcloud-3 { transform: translateY(10px); }
-@keyframes hpTcFloat {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-6px) scale(1.02); }
-}
 
 /* 响应式 */
 @media (max-width: 960px) {

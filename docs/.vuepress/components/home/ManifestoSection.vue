@@ -42,10 +42,7 @@ export default {
 </script>
 
 <style scoped>
-.hp-manifesto {
-  background: #fff;
-  text-align: center;
-}
+.hp-manifesto { background: #fff; text-align: center; }
 .hp-mf-inner { max-width: 880px; margin: 0 auto; }
 .hp-mf-quote {
   font-family: Georgia, serif;
@@ -81,7 +78,7 @@ export default {
   background: var(--hp-bg);
   border-radius: 16px;
   border: 1px solid var(--hp-border);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .hp-mf-pillar:hover {
   transform: translateY(-4px);
