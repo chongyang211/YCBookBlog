@@ -1,9 +1,13 @@
+import CpsAd from './components/CpsAd.vue'
+
 export default ({
   Vue,
   options,
   router,
   siteData
 }) => {
+  // 注册全局组件 — markdown 中可直接使用 <CpsAd .../>
+  Vue.component('CpsAd', CpsAd)
   // ========== 安全防护区（仅客户端） ==========
   if (typeof window !== 'undefined') {
 

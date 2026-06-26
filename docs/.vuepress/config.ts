@@ -283,6 +283,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     ['meta', { name: 'baidu-site-verification', content: '7F55weZDDc' }], // 百度统计的站长验证
     ['meta', { name: 'baidu_union_verify', content: '42d5e897c251a660a5bedd8f01cbefa0' }], // 百度联盟验证
     ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
+    // Google AdSense（异步加载，不阻塞首屏）
+    ['script', { async: true, src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7828333725993554', crossorigin: 'anonymous' }],
   ],
 
 

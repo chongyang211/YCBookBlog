@@ -31,6 +31,38 @@ const htmlModule: VdoingThemeConfig['htmlModules'] = {
     ">创作不易，如果对你有帮助，欢迎请我喝杯咖啡！</p>
     <img src="/img/pay.webp" style="width:80%; border-radius: 8px;" />
     </div>`,
+  // 文章底部广告（仅文章页，懒加载，固定高度防 CLS）
+  pageB:
+    `<div id="ad-page-bottom" style="min-height:90px;margin:32px 0;text-align:center">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-7828333725993554"
+           data-ad-slot="6620245489"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>`,
+  pageBshowMode: 'article',
+  // 文章顶部广告（仅文章页）
+  pageT:
+    `<div style="min-height:90px;margin-bottom:24px;text-align:center">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-7828333725993554"
+           data-ad-slot="6625304284"
+           data-ad-format="auto"
+           data-ad-full-width-responsive="true"></ins>
+    </div>`,
+  pageTshowMode: 'article',
+  // 侧边栏底部广告
+  sidebarB:
+    `<div style="min-height:250px;text-align:center">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-7828333725993554"
+           data-ad-slot="3508773082"
+           data-ad-format="auto"
+           data-ad-full-width-responsive="true"></ins>
+    </div>`,
   // `<!-- 纵向自适应 -->
   // <ins class="adsbygoogle"
   //     style="display:block;padding: 0.95rem;"
