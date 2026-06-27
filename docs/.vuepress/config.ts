@@ -83,10 +83,11 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         link: '/column/',
         items: [
           { text: '体系建设', link: '/pages/system/' },
-          { text: '性能优化', link: '/pages/perf/' },
+          { text: '代码品质', link: '/pages/quality/' },
           { text: '方案设计', link: '/pages/solution/' },
           { text: '稳定可靠', link: '/pages/stability/' },
           { text: '工程运维', link: '/pages/devops/' },
+          { text: '性能优化', link: '/pages/perf/' },
         ],
       },
       {
@@ -122,6 +123,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: 'Go专栏博客', link: '/pages/goblog/' },
           { text: 'Go开发技巧', link: '/pages/gotips/' },
           { text: 'JavaScript入门', link: '/pages/js/' },
+          { text: 'JavaScript案例', link: '/pages/jscases/' },
           { text: 'JavaScript高级', link: '/pages/jsadv/' },
         ],
       },
