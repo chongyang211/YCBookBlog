@@ -57,6 +57,18 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
       {
+        text: '内功',
+        link: '/pages/runtime/',
+        items: [
+          { text: '序卷导读', link: '/pages/runtime/' },
+          { text: '数据本质', link: '/pages/27269c/' },
+          { text: '运行模型', link: '/pages/74953e/' },
+          { text: '并发设计', link: '/pages/0554f8/' },
+          { text: '内存真相', link: '/pages/a606b7/' },
+          { text: '交互系统', link: '/pages/2f009c/' },
+        ],
+      },
+      {
         text: '编程',
         link: '/programming/',
         items: [
@@ -67,11 +79,11 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
       {
-        text: '专栏',
+        text: '真经',
         link: '/column/',
         items: [
+          { text: '体系建设', link: '/pages/system/' },
           { text: '性能优化', link: '/pages/perf/' },
-          { text: '编程原理', link: '/pages/runtime/' },
           { text: '方案设计', link: '/pages/solution/' },
           { text: '稳定可靠', link: '/pages/stability/' },
           { text: '工程运维', link: '/pages/devops/' },
@@ -130,7 +142,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
       {
-        text: 'Script',
+        text: 'ScriptHub',
         link: '/scripthub/',
         items: [
           { text: 'Python教程', link: '/pages/python/' },
