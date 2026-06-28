@@ -8,7 +8,7 @@ tags:
   - 
 author: 
   name: 杨充
-  link: https://github.com/yangchong211
+  link: https://yccoding.com/
 ---
 # 基于vuepress-theme-vdoing + Memberstack的专栏会员系统完整实现指南
 
@@ -40,7 +40,7 @@ author:
 ### 1. 克隆官方模板（推荐）
 直接克隆作者的完整项目模板，避免手动配置的麻烦：
 ```bash
-git clone https://github.com/yangchong211/vuepress-theme-vdoing-template.git my-blog
+git clone https://yccoding.com//vuepress-theme-vdoing-template.git my-blog
 cd my-blog
 pnpm install
 ```

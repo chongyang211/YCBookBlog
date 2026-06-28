@@ -114,7 +114,7 @@
       </p>
       <p class="tg-footer-tip">
         🚀 工具持续开发中，
-        <a href="https://github.com/yangchong211/YCBookBlog/issues" target="_blank" rel="noopener">
+        <a href="https://yccoding.com//YCBookBlog/issues" target="_blank" rel="noopener">
           欢迎提需求 / Issue
         </a>
       </p>

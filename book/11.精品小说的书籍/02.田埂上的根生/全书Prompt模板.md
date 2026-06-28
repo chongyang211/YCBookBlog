@@ -10,7 +10,7 @@ tags:
   - 
 author: 
   name: 杨充
-  link: https://github.com/yangchong211
+  link: https://yccoding.com/
 ---
 # 《田埂根生》Prompt 模板（统一版·自包含·v1.0）
 
