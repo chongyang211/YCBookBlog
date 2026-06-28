@@ -452,8 +452,28 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     if (isServer) {
       config.plugins.delete('vue-server-renderer-server-plugin')
     }
-    // 强制 mermaid 解析到 10.x，否则 vuepress-plugin-mermaidjs 会拉到自带的 8.x
+    // 强制 mermaid 解析到根目录的版本，否则 vuepress-plugin-mermaidjs 会用自带的 8.x
     config.resolve.alias.set('mermaid', resolve(__dirname, '../../node_modules/mermaid'))
+
+    // mermaid 9.x 的 dist 使用了 ES2020 语法（??、?.），webpack 4 的 acorn 6 解析不了
+    // 需要用 babel-loader 转换它（默认 babel 规则 exclude 了 node_modules，这里单独配置）
+    config.module
+      .rule('mermaid-babel')
+      .test(/\.m?js$/)
+      .include
+        .add(resolve(__dirname, '../../node_modules/mermaid'))
+        .end()
+      .use('babel-loader')
+        .loader('babel-loader')
+        .options({
+          babelrc: false,
+          configFile: false,
+          presets: [
+            [resolve(__dirname, '../../node_modules/@babel/preset-env'), { targets: { esmodules: true } }],
+          ],
+          cacheDirectory: true,
+        })
+
     // 生产构建：关闭 SourceMap 省内存
     config.devtool(false)
     // 并行线程数：使用 CPU 核心数（预留 1-2 核给系统）
