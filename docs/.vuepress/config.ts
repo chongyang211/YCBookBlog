@@ -452,6 +452,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     if (isServer) {
       config.plugins.delete('vue-server-renderer-server-plugin')
     }
+    // 强制 mermaid 解析到 10.x，否则 vuepress-plugin-mermaidjs 会拉到自带的 8.x
+    config.resolve.alias.set('mermaid', resolve(__dirname, '../../node_modules/mermaid'))
     // 生产构建：关闭 SourceMap 省内存
     config.devtool(false)
     // 并行线程数：使用 CPU 核心数（预留 1-2 核给系统）
