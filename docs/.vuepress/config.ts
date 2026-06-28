@@ -313,6 +313,22 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
   // 插件配置
   plugins: <UserPlugins>[
     [
+      'vuepress-plugin-mermaidjs', // mermaid 流程图渲染（GitHub 风格 ```mermaid 代码块）
+      {
+        // mermaid 配置项参考：https://mermaid.js.org/config/schema-docs/config.html
+        theme: 'default',
+        themeVariables: {
+          fontFamily: 'inherit',
+        },
+        flowchart: {
+          htmlLabels: true,
+          curve: 'basis',
+        },
+        securityLevel: 'loose',
+      },
+    ],
+
+    [
       "sitemap", // 网站地图
       {
         hostname: WEB_SITE,

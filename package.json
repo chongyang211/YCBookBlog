@@ -17,6 +17,7 @@
     "inquirer": "^7.1.0",
     "json2yaml": "^1.1.0",
     "vuepress": "^1.9.9",
+    "vuepress-plugin-mermaidjs": "^1.9.1",
     "vuepress-theme-vdoing": "^1.12.9",
     "yamljs": "^0.3.0"
   }
