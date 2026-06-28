@@ -7,8 +7,6 @@
     "build:time": "echo '⏱ 开始构建...' && date '+开始时间: %Y-%m-%d %H:%M:%S' && time node --max_old_space_size=8192 ./node_modules/.bin/vuepress build docs && echo '' && date '+结束时间: %Y-%m-%d %H:%M:%S'",
     "dev:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress dev docs",
     "build:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress build docs",
-    "dev:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress dev docs",
-    "build:win": "set NODE_OPTIONS=--localstorage-file=C:\\temp\\vuepress-localstorage.json && node --max_old_space_size=8192 ./node_modules/.bin/vuepress build docs",
     "deploy": "bash deploy.sh",
     "editFm": "node utils/editFrontmatter.js",
     "baiduPush": "node utils/baiduPush.js https://yccoding.com && bash baiduPush.sh"
