@@ -174,7 +174,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         link: '/pages/3775fa/',
         items: [
           { text: '毛选解读', link: '/pages/3775fa/' },
-          { text: '小人物进修', link: '/pages/63bdb8/' },
+          { text: '自我精进', link: '/pages/63bdb8/' },
         ],
       },
       {
