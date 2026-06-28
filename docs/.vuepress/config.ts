@@ -171,9 +171,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: '书籍',
-        link: '/pages/3775fa/',
+        link: '/pages/5eeccd/',
         items: [
-          { text: '毛选解读', link: '/pages/3775fa/' },
+          { text: '毛选解读', link: '/pages/5eeccd/' },
           { text: '自我精进', link: '/pages/63bdb8/' },
         ],
       },
