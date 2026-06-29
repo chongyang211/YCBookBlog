@@ -28,8 +28,8 @@
         </p>
 
         <p class="hp-hero-desc">
-          从底层原理到工程实战 · 用代码丈量技术的深度<br/>
-          涵盖 计算机基础 · 编程语言 · 算法 · 框架 · 工具效率 全栈知识体系
+          日访问量3000+，持续迭代8年，匠心打造<br/>
+          涵盖 计算机基础 · 编程语言 · 算法 · 设计模式 · 框架 · 工具 · 效率 全栈知识体系
         </p>
 
         <div class="hp-hero-actions">
@@ -90,8 +90,9 @@ export default {
   computed: {
     statList() {
       return [
+        { display: '3000', suffix: '+', label: '日访问量' },
         { display: this.stats.articles, suffix: '+', label: '技术文章' },
-        { display: this.stats.categories, suffix: '', label: '知识分类' },
+        // { display: this.stats.categories, suffix: '', label: '知识分类' },
         { display: this.stats.tools, suffix: '+', label: '在线工具' },
         { display: this.stats.days, suffix: '+', label: '建站天数' },
       ]
