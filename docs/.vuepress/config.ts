@@ -104,7 +104,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         ],
       },
       {
-        text: 'CodeX',
+        text: 'Code',
         link: '/codex/',
         items: [
           { text: 'C语言入门', link: '/pages/c/' },
