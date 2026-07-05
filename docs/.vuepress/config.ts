@@ -131,6 +131,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: 'Apps',
         link: '/app/',
         items: [
+          { text: 'Kotlin精通', link: '/pages/6314d5/' },
           { text: 'Android库解读', link: '/pages/android/' },
           { text: 'Android专栏', link: '/pages/androidblog/' },
           { text: 'iOS ObjC入门', link: '/pages/ios/' },
