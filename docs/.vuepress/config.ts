@@ -48,9 +48,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: '计算机',
-        link: '/computer/',
+        link: '/pages/computer/',
         items: [
-          { text: '计算机组成原理', link: '/pages/computer/' },
+          { text: '计算机组成原理', link: '/pages/arch/' },
           { text: '操作系统原理', link: '/pages/os/' },
           { text: '网络协议原理', link: '/pages/network/' },
           { text: '数据库系统原理', link: '/pages/database/' },
@@ -58,9 +58,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: '内功',
-        link: '/pages/runtime/',
+        link: '/pages/27cbb6/',
         items: [
-          { text: '序卷导读', link: '/pages/runtime/' },
+          { text: '序卷导读', link: '/pages/27cbb6/' },
           { text: '数据本质', link: '/pages/27269c/' },
           { text: '运行模型', link: '/pages/74953e/' },
           { text: '并发设计', link: '/pages/0554f8/' },
