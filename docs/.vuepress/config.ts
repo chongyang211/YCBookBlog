@@ -50,10 +50,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: '计算机',
         link: '/pages/computer/',
         items: [
-          { text: '计算机组成原理', link: '/pages/arch/' },
+          { text: '计算机的原理', link: '/pages/arch/' },
           { text: '操作系统原理', link: '/pages/os/' },
           { text: '网络协议原理', link: '/pages/network/' },
-          { text: '数据库系统原理', link: '/pages/database/' },
+          { text: '数据库的原理', link: '/pages/database/' },
         ],
       },
       {
