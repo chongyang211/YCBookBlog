@@ -76,6 +76,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '设计原则', link: '/pages/principles/' },
           { text: '设计模式', link: '/pages/patterns/' },
           { text: '系统架构', link: '/pages/architecture/' },
+          { text: '技能之旅', link: '/pages/growth/' },
         ],
       },
       {
