@@ -72,7 +72,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: '编程',
         link: '/programming/',
         items: [
-          { text: '面向对象', link: '/pages/oop/' },
+          { text: '面向对象', link: '/pages/object/' },
           { text: '设计原则', link: '/pages/principles/' },
           { text: '设计模式', link: '/pages/patterns/' },
           { text: '系统架构', link: '/pages/architecture/' },
