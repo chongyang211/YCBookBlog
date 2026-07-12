@@ -1,7 +1,7 @@
 ---
 title: JS语法基础
 date: 2026-06-23 00:00:00
-permalink: /pages/js-basics/
+permalink: /pages/scripting/
 categories:
   - book
   - Web开发和进阶
