@@ -173,10 +173,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
       {
         text: '书籍',
-        link: '/pages/5eeccd/',
+        link: '/pages/maoism/',
         items: [
-          { text: '毛选解读', link: '/pages/5eeccd/' },
-          { text: '自我精进', link: '/pages/63bdb8/' },
+          { text: '毛选解读', link: '/pages/maoism/' },
+          { text: '自我精进', link: '/pages/nobody/' },
         ],
       },
       {
