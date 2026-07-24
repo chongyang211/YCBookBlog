@@ -12,3 +12,5 @@ showFooter: true
 # 这样 SSR 阶段就能输出，不需要等 mounted 钩子，避免初始渲染抖动
 pageClass: home-fullwidth-container
 ---
+
+
