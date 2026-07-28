@@ -1,0 +1,114 @@
+/* ========== 全局样式 ========== */
+
+page {
+  background: #0f0f1a;
+  color: #e0e0e0;
+  font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+  line-height: 1.8;
+}
+
+/* ========== 通用容器 ========== */
+.container {
+  padding: 32rpx;
+  min-height: 100vh;
+}
+
+/* ========== 卡片 ========== */
+.card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16rpx;
+  padding: 28rpx 32rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.06);
+}
+
+.card:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+/* ========== 文字 ========== */
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 24rpx;
+  color: #8b8ba7;
+}
+
+.text-primary { color: #6c5ce7; }
+.text-accent { color: #ff6b6b; }
+.text-muted { color: #8b8ba7; }
+
+/* ========== 标签 ========== */
+.tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  margin-right: 12rpx;
+  margin-bottom: 8rpx;
+}
+.tag-purple { background: rgba(108, 92, 231, 0.2); color: #6c5ce7; }
+.tag-pink   { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+.tag-blue   { background: rgba(0, 206, 209, 0.2); color: #00ced1; }
+.tag-green  { background: rgba(0, 230, 118, 0.2); color: #00e676; }
+
+/* ========== 章节头部信息 ========== */
+.chapter-header {
+  padding: 40rpx 32rpx 24rpx;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 32rpx;
+}
+
+.chapter-title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+}
+
+/* ========== 搜索栏 ========== */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 40rpx;
+  padding: 16rpx 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.search-bar input {
+  flex: 1;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+/* ========== 目录行 ========== */
+.catalog-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.catalog-count {
+  font-size: 24rpx;
+  color: #6c5ce7;
+  background: rgba(108, 92, 231, 0.12);
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* ========== Markdown 正文渲染 ========== */
+.rich-content {
+  padding: 0 32rpx 32rpx;
+  line-height: 2;
+  font-size: 30rpx;
+  color: #d0d0d0;
+}

@@ -1,0 +1,86 @@
+<!-- 首页：分类树 + 搜索 -->
+<scroll-view class="container" scroll-y>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <text style="margin-right:12rpx;">🔍</text>
+    <input
+      placeholder="搜索 1081 篇文章…"
+      placeholder-style="color:#8b8ba7"
+      value="{{searchQuery}}"
+      bindinput="onSearchInput"
+    />
+    <text
+      wx:if="{{searchQuery}}"
+      style="color:#8b8ba7;font-size:24rpx;"
+      bindtap="onClearSearch"
+    >✕</text>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view wx:if="{{showSearch}}">
+    <block wx:if="{{searchResults.length > 0}}">
+      <text class="text-muted" style="margin-bottom:16rpx;display:block;">
+        找到 {{searchResults.length}} 篇
+      </text>
+      <view
+        class="card"
+        wx:for="{{searchResults}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        data-title="{{item.title}}"
+        bindtap="onSelectResult"
+      >
+        <view class="card-title">{{item.title}}</view>
+        <view class="card-meta">{{item.summary}}</view>
+      </view>
+    </block>
+    <view wx:else style="text-align:center;padding:60rpx 0;color:#8b8ba7;">
+      未找到相关内容
+    </view>
+  </view>
+
+  <!-- 分类列表（非搜索状态下显示） -->
+  <view wx:if="{{!showSearch}}">
+    <!-- 最近阅读 -->
+    <view wx:if="{{history.length > 0}}" style="margin-bottom:32rpx;">
+      <text style="font-size:26rpx;color:#8b8ba7;margin-bottom:16rpx;display:block;">最近阅读</text>
+      <scroll-view scroll-x style="white-space:nowrap;">
+        <view
+          class="card"
+          style="display:inline-block;width:240rpx;margin-right:16rpx;white-space:normal;"
+          wx:for="{{history}}"
+          wx:key="id"
+          wx:for-item="item"
+          data-id="{{item.id}}"
+          data-title="{{item.title}}"
+          bindtap="onTapArticle"
+        >
+          <view class="card-title" style="font-size:26rpx; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.title}}</view>
+          <view class="card-meta" style="font-size:20rpx;">{{item.summary}}</view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 全部分类 -->
+    <view
+      wx:for="{{categoryTree}}"
+      wx:key="name"
+      data-name="{{item.name}}"
+      bindtap="onTapCategory"
+    >
+      <view class="card">
+        <view class="catalog-row">
+          <view>
+            <view class="card-title">{{item.name}}</view>
+            <view class="card-meta">
+              {{item.children.length}} 个子目录
+            </view>
+          </view>
+          <view class="catalog-count">{{item.count}} 篇</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</scroll-view>

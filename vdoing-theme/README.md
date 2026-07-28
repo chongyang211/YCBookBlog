@@ -1,3 +1,14 @@
+---
+title: README
+date: 2026-07-07 10:35:22
+permalink: /pages/c00cb9/
+categories:
+tags:
+  - 
+author: 
+  name: 杨充
+  link: https://yccoding.com/
+---
 # vuepress-theme-vdoing
 
 vuepress-theme-vdoing for vuepress

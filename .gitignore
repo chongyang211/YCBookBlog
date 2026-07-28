@@ -13,10 +13,13 @@ Thumbs.db
 *~
 
 # ===== 构建输出 =====
-docs/.vuepress/dist/
-docs/.vuepress/.temp/
-docs/.vuepress/config.bundled_*.mjs
+packages/website/.vuepress/dist/
+packages/website/.vuepress/.temp/
+packages/website/.vuepress/config.bundled_*.mjs
 dist/
+
+# ===== 小程序生成数据 =====
+packages/miniapp/static/chapters/
 
 # ===== 日志与缓存 =====
 *.log
@@ -30,5 +33,5 @@ yarn-error.log*
 .env.*.local
 
 # ===== vdoing 自动生成 =====
-docs/@pages/
-docs/_posts/
+packages/website/@pages/
+packages/website/_posts/

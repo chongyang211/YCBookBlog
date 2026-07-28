@@ -1,0 +1,16 @@
+/* 首页样式继承全局 app.wxss */
+
+.catalog-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.catalog-count {
+  font-size: 24rpx;
+  color: #6c5ce7;
+  background: rgba(108, 92, 231, 0.12);
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}

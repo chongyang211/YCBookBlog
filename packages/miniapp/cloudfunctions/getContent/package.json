@@ -1,0 +1,6 @@
+{
+  "name": "getContent",
+  "version": "1.0.0",
+  "description": "按 ID 获取章节全文",
+  "main": "index.js"
+}

@@ -1,0 +1,8 @@
+# 小程序构建产物
+miniapp/static/chapters/
+
+# 云函数 node_modules（云端安装）
+miniapp/cloudfunctions/*/node_modules/
+
+# 微信开发者工具本地缓存
+.miniprogram/

@@ -1,0 +1,53 @@
+<!-- 目录页 -->
+<scroll-view class="container" scroll-y>
+
+  <!-- 返回子目录按钮 -->
+  <view wx:if="{{!showSubs}}" style="margin-bottom:24rpx;">
+    <view class="tag tag-purple" bindtap="onBackToSubs">← 返回目录</view>
+  </view>
+
+  <!-- 子目录列表 -->
+  <view wx:if="{{showSubs && subCategories.length > 0}}">
+    <text style="font-size:26rpx;color:#8b8ba7;margin-bottom:16rpx;display:block;">
+      共 {{subCategories.length}} 个子目录
+    </text>
+    <view
+      class="card"
+      wx:for="{{subCategories}}"
+      wx:key="name"
+      data-name="{{item.name}}"
+      bindtap="onTapSub"
+    >
+      <view class="catalog-row">
+        <view>
+          <view class="card-title">{{item.name}}</view>
+        </view>
+        <view class="catalog-count">{{item.count}} 篇</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 文章列表 -->
+  <view wx:if="{{!showSubs && articles.length > 0}}">
+    <text style="font-size:26rpx;color:#8b8ba7;margin-bottom:16rpx;display:block;">
+      共 {{articles.length}} 篇
+    </text>
+    <view
+      class="card"
+      wx:for="{{articles}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      data-title="{{item.title}}"
+      bindtap="onTapArticle"
+    >
+      <view class="card-title">{{item.title}}</view>
+      <view class="card-meta" style="margin-top:4rpx;">{{item.summary}}</view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!showSubs && articles.length === 0}}" style="text-align:center;padding:100rpx 0;color:#8b8ba7;">
+    暂无文章
+  </view>
+
+</scroll-view>
