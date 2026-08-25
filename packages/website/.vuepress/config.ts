@@ -159,6 +159,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         text: '技术',
         link: '/technology/',
         items: [
+          { text: '关于我', link: '/pages/about/' },
           { text: '质量保障', link: '/pages/biz/' },
           { text: '产品思考', link: '/pages/product/' },
           { text: '软实力', link: '/pages/soft/' },
@@ -179,19 +180,6 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '自我精进', link: '/pages/nobody/' },
         ],
       },
-      {
-        text: '更多',
-        link: '/more/',
-        items: [
-          { text: '关于我', link: '/pages/about/' },
-          { text: '自我精进', link: '/pages/improve/' },
-          { text: '职场管理', link: '/pages/work/' },
-          { text: '职场面试', link: '/pages/interview/' },
-          { text: '心情杂货', link: '/pages/mood/' },
-          { text: '友情链接', link: '/pages/about/' },
-        ],
-      },
-
     ],
     sidebarDepth: 2, // 侧边栏显示深度，默认1，最大2（显示到h3标题）
     logo: '/img/logo.png', // 导航栏logo
