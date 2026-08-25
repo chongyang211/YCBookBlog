@@ -170,6 +170,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: 'Markdown', link: '/pages/md/' },
           { text: 'Mermaid', link: '/pages/mermaid/' },
           { text: '开源协议', link: '/pages/license/' },
+          { text: '博客部署', link: '/pages/cloudbase-deploy/' },
+          { text: '技术招聘', link: '/pages/interview/' },
+          { text: '晋级问题', link: '/pages/ld-mgmt01/' },
+          { text: '经典问题', link: '/pages/b3a01c/' },
         ],
       },
       {
