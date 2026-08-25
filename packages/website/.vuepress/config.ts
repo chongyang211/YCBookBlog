@@ -65,6 +65,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           { text: '并发设计', link: '/pages/0554f8/' },
           { text: '内存真相', link: '/pages/a606b7/' },
           { text: '交互系统', link: '/pages/2f009c/' },
+          { text: '编译链接', link: '/pages/c07r00/' },
         ],
       },
       {
