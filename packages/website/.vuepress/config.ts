@@ -488,6 +488,6 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     '.vuepress/config/htmlModules.ts',
   ],
 
-  // 文件匹配模式（默认值）
-  patterns: ['**/*.md', '**/*.vue'],
+  // 文件匹配模式（默认值）。!02.AI/** 表示不编译 02.AI 目录
+  patterns: ['**/*.md', '**/*.vue', '!02.AI/**'],
 })
