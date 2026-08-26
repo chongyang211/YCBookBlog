@@ -6,3 +6,6 @@ miniapp/cloudfunctions/*/node_modules/
 
 # 微信开发者工具本地缓存
 .miniprogram/
+
+# 本地私有配置（appid / 云环境 ID）
+config.js

@@ -2,8 +2,10 @@
  * cloud.js — CloudBase 初始化和内容拉取
  *
  * 使用前需在 project.config.json 中填写真实 appid，
- * 并在微信开发者工具中开通云开发。
+ * 并在 config.js 中填写云环境 ID（cloudEnvId）。
  */
+
+const { cloudEnvId } = require('../config');
 
 /** 初始化云环境 */
 function initCloud() {
@@ -12,7 +14,7 @@ function initCloud() {
     return;
   }
   wx.cloud.init({
-    env: 'your-env-id',  // TODO: 替换为你的 CloudBase 环境 ID
+    env: cloudEnvId,
     traceUser: true,
   });
 }
@@ -24,7 +26,7 @@ function initCloud() {
 async function fetchChapter(id) {
   try {
     const res = await wx.cloud.downloadFile({
-      fileID: `cloud://your-env-id.chapters/${id}.json`,
+      fileID: `cloud://${cloudEnvId}.chapters/${id}.json`,
     });
     if (res.statusCode !== 200) return null;
 

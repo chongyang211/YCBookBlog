@@ -39,8 +39,17 @@
     <!-- 正文 -->
     <rich-text nodes="{{htmlContent}}" class="rich-content" />
 
+    <!-- 底部翻页导航 -->
+    <view style="display:flex;justify-content:space-between;align-items:center;padding:40rpx 32rpx 24rpx;border-top:1rpx solid rgba(255,255,255,0.06);margin:0 32rpx;">
+      <view wx:if="{{prev}}" class="tag tag-purple" bindtap="onPrev" style="margin-right:0;">← 上一篇</view>
+      <view wx:else style="width:160rpx;"></view>
+
+      <view wx:if="{{next}}" class="tag tag-purple" bindtap="onNext" style="margin-right:0;">下一篇 →</view>
+      <view wx:else style="width:160rpx;"></view>
+    </view>
+
     <!-- 底部操作 -->
-    <view style="text-align:center;padding:60rpx 0;border-top:1rpx solid rgba(255,255,255,0.06);margin:0 32rpx;">
+    <view style="text-align:center;padding:8rpx 0 60rpx;margin:0 32rpx;">
       <text class="tag tag-purple" bindtap="onOpenInBrowser">在浏览器中打开原文</text>
     </view>
   </view>

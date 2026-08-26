@@ -1,4 +1,5 @@
 const { mdToHtml } = require('../../utils/markdown');
+const { siteUrl } = require('../../config');
 
 Page({
   data: {
@@ -11,6 +12,8 @@ Page({
     author: {},
     date: '',
     categories: [],
+    prev: null,
+    next: null,
   },
 
   async onLoad(options) {
@@ -62,6 +65,14 @@ Page({
         summary: chapter.summary || '',
       });
 
+      // 计算上一篇 / 下一篇（按全局 catalog 顺序）
+      const catalog = app.catalog || [];
+      const idx = catalog.findIndex(c => c.id === chapter.id);
+      this.setData({
+        prev: idx > 0 ? { id: catalog[idx - 1].id, title: catalog[idx - 1].title } : null,
+        next: idx >= 0 && idx < catalog.length - 1 ? { id: catalog[idx + 1].id, title: catalog[idx + 1].title } : null,
+      });
+
       wx.setNavigationBarTitle({ title: chapter.title || '阅读' });
     } catch (err) {
       console.error('加载章节失败:', err);
@@ -71,7 +82,6 @@ Page({
 
   /** 分享 */
   onShareAppMessage() {
-    const url = `https://yccoding.com${this.data.permalink || ''}`;
     return {
       title: this.data.title,
       path: `/pages/reader/reader?id=${encodeURIComponent(this.data.chapterId)}&title=${encodeURIComponent(this.data.title)}`,
@@ -90,11 +100,29 @@ Page({
     const item = app.catalog.find(c => c.id === this.data.chapterId);
     if (item && item.permalink) {
       wx.setClipboardData({
-        data: `https://yccoding.com${item.permalink}`,
+        data: `${siteUrl}${item.permalink}`,
         success() {
           wx.showToast({ title: '链接已复制', icon: 'success' });
         },
       });
     }
+  },
+
+  /** 上一篇 */
+  onPrev() {
+    const { prev } = this.data;
+    if (!prev) return;
+    wx.redirectTo({
+      url: `/pages/reader/reader?id=${encodeURIComponent(prev.id)}&title=${encodeURIComponent(prev.title)}`,
+    });
+  },
+
+  /** 下一篇 */
+  onNext() {
+    const { next } = this.data;
+    if (!next) return;
+    wx.redirectTo({
+      url: `/pages/reader/reader?id=${encodeURIComponent(next.id)}&title=${encodeURIComponent(next.title)}`,
+    });
   },
 });

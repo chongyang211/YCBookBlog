@@ -43,6 +43,17 @@ function mdToHtml(md) {
     // 空行
     if (!line.trim()) continue;
 
+    // 表格：连续以 | 开头的行
+    if (line.trim().startsWith('|')) {
+      const tableLines = [line];
+      while (i + 1 < lines.length && lines[i + 1].trim().startsWith('|')) {
+        tableLines.push(lines[++i]);
+      }
+      const tableHtml = renderTable(tableLines);
+      html.push(tableHtml || `<p style="margin:8rpx 0;">${inlineMd(line.trim())}</p>`);
+      continue;
+    }
+
     // H1 - H3
     if (/^###\s/.test(line)) {
       html.push(`<h3 style="color:#6c5ce7;margin:32rpx 0 12rpx;font-size:34rpx;">${escapeHtml(line.replace(/^###\s*/, ''))}</h3>`);
@@ -109,6 +120,34 @@ function inlineMd(text) {
 function renderCodeBlock(code, lang) {
   const escaped = escapeHtml(code);
   return `<pre style="background:rgba(0,0,0,0.3);border-radius:8rpx;padding:24rpx;margin:16rpx 0;overflow-x:scroll;font-size:24rpx;line-height:1.6;color:#a0a0b8;">${escaped}</pre>`;
+}
+
+/** 表格渲染（GitHub 风格 | a | b | 表格） */
+function renderTable(lines) {
+  if (lines.length < 2) return null;
+
+  const rows = lines.map(parseTableRow);
+  // 第二行必须是分隔行 |---|---|
+  const sep = rows[1];
+  if (!sep.every(c => /^:?-{1,}:?$/.test(c.trim()))) return null;
+
+  const headerHtml = rows[0]
+    .map(c => `<th style="color:#fff;font-weight:600;text-align:left;padding:12rpx 16rpx;border-bottom:1rpx solid rgba(255,255,255,0.15);">${inlineMd(c.trim())}</th>`)
+    .join('');
+
+  const bodyHtml = rows.slice(2)
+    .map(row => `<tr>${row.map(c => `<td style="color:#d0d0d0;padding:12rpx 16rpx;border-bottom:1rpx solid rgba(255,255,255,0.06);">${inlineMd(c.trim())}</td>`).join('')}</tr>`)
+    .join('');
+
+  return `<table style="width:100%;border-collapse:collapse;margin:20rpx 0;font-size:26rpx;"><thead><tr>${headerHtml}</tr></thead><tbody>${bodyHtml}</tbody></table>`;
+}
+
+/** 解析表格行：把 "| a | b |" 拆成 ["a", "b"] */
+function parseTableRow(line) {
+  let l = line.trim();
+  if (l.startsWith('|')) l = l.slice(1);
+  if (l.endsWith('|')) l = l.slice(0, -1);
+  return l.split('|');
 }
 
 /** HTML 转义 */

@@ -20,11 +20,12 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+const { cloudEnvId } = require('../config');
+
 const CHAPTERS_DIR = path.resolve(__dirname, '../static/chapters');
 const CLOUD_PREFIX = 'chapters';
 
-// ===== 配置：改成你的 CloudBase 环境 ID =====
-const ENV_ID = 'your-env-id'; // ← 改这里
+const ENV_ID = cloudEnvId;
 
 const files = fs.readdirSync(CHAPTERS_DIR).filter(f => f.endsWith('.json'));
 
