@@ -1,0 +1,3 @@
+/Users/yc/newgit/YCCoding/BankSystem/cmake-build-debug/CMakeFiles/BankSystem.dir
+/Users/yc/newgit/YCCoding/BankSystem/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yc/newgit/YCCoding/BankSystem/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,3 @@
+/Users/yc/newgit/YCCoding/Cpp/JsonManager/cmake-build-debug/CMakeFiles/JsonManager.dir
+/Users/yc/newgit/YCCoding/Cpp/JsonManager/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yc/newgit/YCCoding/Cpp/JsonManager/cmake-build-debug/CMakeFiles/rebuild_cache.dir

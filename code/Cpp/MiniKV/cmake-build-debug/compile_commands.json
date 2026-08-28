@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/github/YCCoding/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/main.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/main.cpp",
+  "file": "/Users/github/YCCoding/Cpp/MiniKV/src/main.cpp",
+  "output": "CMakeFiles/MiniKV.dir/src/main.cpp.o"
+},
+{
+  "directory": "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/github/YCCoding/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/command.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/command.cpp",
+  "file": "/Users/github/YCCoding/Cpp/MiniKV/src/command.cpp",
+  "output": "CMakeFiles/MiniKV.dir/src/command.cpp.o"
+},
+{
+  "directory": "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/github/YCCoding/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/entry.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/entry.cpp",
+  "file": "/Users/github/YCCoding/Cpp/MiniKV/src/entry.cpp",
+  "output": "CMakeFiles/MiniKV.dir/src/entry.cpp.o"
+},
+{
+  "directory": "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/github/YCCoding/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/value.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/value.cpp",
+  "file": "/Users/github/YCCoding/Cpp/MiniKV/src/value.cpp",
+  "output": "CMakeFiles/MiniKV.dir/src/value.cpp.o"
+},
+{
+  "directory": "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/github/YCCoding/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/tests/test_value.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/tests/test_value.cpp",
+  "file": "/Users/github/YCCoding/Cpp/MiniKV/tests/test_value.cpp",
+  "output": "CMakeFiles/MiniKV.dir/tests/test_value.cpp.o"
+}
+]

@@ -1,0 +1,3 @@
+/Users/yc/newgit/YCCoding/SchoolManager/cmake-build-debug/CMakeFiles/SchoolManager.dir
+/Users/yc/newgit/YCCoding/SchoolManager/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/yc/newgit/YCCoding/SchoolManager/cmake-build-debug/CMakeFiles/rebuild_cache.dir

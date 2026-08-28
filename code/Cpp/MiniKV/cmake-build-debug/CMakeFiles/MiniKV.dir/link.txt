@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/MiniKV.dir/src/main.cpp.o CMakeFiles/MiniKV.dir/src/command.cpp.o CMakeFiles/MiniKV.dir/src/entry.cpp.o CMakeFiles/MiniKV.dir/src/value.cpp.o CMakeFiles/MiniKV.dir/tests/test_value.cpp.o -o MiniKV

@@ -1,0 +1,3 @@
+/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/MiniKV.dir
+/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/rebuild_cache.dir
