@@ -1,0 +1,218 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": {
+    "id": 6593,
+    "name": "cospec-probe-xzh-1783928207",
+    "hashName": "7jawpjbngz5rl",
+    "type": "vt",
+    "desc": "cospec skill probe，可随时删除",
+    "projectID": 71,
+    "endTime": "2026-07-13T08:36:47.686Z",
+    "creator": "kennyzhxu",
+    "prevent": false,
+    "status": 0,
+    "updatedAt": "2026-07-13T07:36:48.676Z",
+    "createdAt": "2026-07-13T07:36:48.676Z",
+    "serviceInstanceList": [
+      {
+        "id": 15276,
+        "envID": 6593,
+        "serviceID": 711,
+        "serviceMetaID": 1394,
+        "name": "palmdiagnosis",
+        "status": "BUILD_WAIT",
+        "type": "vt",
+        "buildInfo": {
+          "type": "bk",
+          "base": null,
+          "bk": {
+            "projectID": "",
+            "pipelineID": "",
+            "pipelineVersion": 0,
+            "pipelineStatus": "",
+            "buildID": "",
+            "params": [
+              {
+                "id": "BK_CI_BUILD_MSG",
+                "required": true,
+                "type": "STRING",
+                "defaultValue": "[cospec-probe] create env for develop",
+                "desc": "构建信息描述",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "RAINBOW_APPID",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "a70f7b49-155d-4031-98d1-fb86de4e22dd",
+                "desc": "RAINBOW_APPID",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "TKE_CLUSTER_NAME",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "kubeconfig_qcloud_palm_gz_test",
+                "desc": "TKE 集群凭证名",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "IMAGE_TICKET",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "bk_docker_repo",
+                "desc": "镜像仓库凭证",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "RAINBOW_ENV",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "test-gz",
+                "desc": "七彩石配置环境",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "TKE_NAMESPACE",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "default",
+                "desc": "TKE 命名空间",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "TARGET_IMAGE_REPO",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "ccr.ccs.tencentyun.com/wecard-palm",
+                "desc": "目标镜像仓库地址",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "TARGET_IMAGE_TICKET",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "tcr_ccr_hawaii",
+                "desc": "目标镜像仓库凭证",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "GIT_BRANCH_PROJECT",
+                "required": true,
+                "type": "STRING",
+                "defaultValue": "develop",
+                "desc": "",
+                "elementAtomCode": "gitCodeRepo",
+                "repositoryHashID": "brgMx",
+                "aliasName": "palm/weixin/device_manage",
+                "url": "https://git.woa.com/palm/weixin/device_manage.git",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "INIT_PIPELINE",
+                "required": false,
+                "type": "SUB_PIPELINE",
+                "defaultValue": "[CONFIG] palmdiagnosis",
+                "desc": "关联构建流水线",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "ZERUS",
+                "required": false,
+                "type": "STRING",
+                "defaultValue": "",
+                "desc": "泽鲁斯多环境管理标识，默认为空，为空时走默认的发布逻辑；不为空，走泽鲁斯逻辑",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              },
+              {
+                "id": "GIT_REPO_ALIAS",
+                "required": false,
+                "type": "CODE_LIB",
+                "defaultValue": "palm/weixin/device_manage",
+                "desc": "代码仓库",
+                "elementAtomCode": "",
+                "repositoryHashID": "",
+                "aliasName": "",
+                "url": "",
+                "auto": false,
+                "listenPath": ""
+              }
+            ],
+            "triggerMode": "",
+            "triggerUser": ""
+          }
+        },
+        "releaseInfo": {
+          "type": "direct",
+          "direct": {
+            "clusterArea": "",
+            "namespace": "",
+            "cloneDeploymentName": "",
+            "cloneServiceName": "",
+            "selectorServiceName": "",
+            "containerName": "",
+            "msg": ""
+          }
+        },
+        "creator": "kennyzhxu",
+        "createdAt": "2026-07-13T07:36:49Z",
+        "updatedAt": "2026-07-13T07:36:49Z"
+      }
+    ],
+    "envCustom": {
+      "additionEnvVars": []
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": {
+    "id": 713,
+    "name": "palmdevicemanage",
+    "desc": "",
+    "projectID": 71,
+    "enable": true,
+    "creator": "kennyzhxu",
+    "createdAt": "2026-07-02T03:26:00Z",
+    "updatedAt": "2026-07-02T03:26:00Z",
+    "serviceMetas": [
+      {
+        "id": 1396,
+        "projectID": 71,
+        "serviceID": 713,
+        "type": "vt",
+        "name": "蓝盾流水线构建镜像",
+        "desc": "",
+        "headerDomain": "",
+        "extend": "{\"customHeaders\":[]}",
+        "buildSystemMeta": {
+          "id": 1396,
+          "buildSystemID": 74,
+          "serviceID": 713,
+          "serviceMetaID": 1396,
+          "type": "bk",
+          "base": null,
+          "bk": {
+            "bkPipelineID": "p-bd32a4f7504e4753aa1cca0faae0b843"
+          }
+        },
+        "releaseSystemMeta": {
+          "id": 1396,
+          "releaseSystemID": 45,
+          "serviceID": 713,
+          "serviceMetaID": 1396,
+          "type": "direct",
+          "direct": {
+            "namespace": "default",
+            "cloneDeploymentName": "palmdevicemanage",
+            "cloneServiceName": "",
+            "selectorServiceName": "palmdevicemanage",
+            "containerName": "palmdevicemanage",
+            "timeout": 600
+          }
+        }
+      }
+    ],
+    "requireServices": []
+  }
+}
