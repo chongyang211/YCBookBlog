@@ -181,7 +181,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         link: '/pages/maoism/',
         items: [
           { text: '毛选解读', link: '/pages/maoism/' },
-          { text: '自我精进', link: '/pages/nobody/' },
+          { text: '自我精进·总览', link: '/pages/nobody/' },
+          { text: '卷一·学习', link: '/pages/cb5c75/' },
+          { text: '卷二·成事', link: '/pages/470a4d/' },
+          { text: '卷三·立言', link: '/pages/c3d95f/' },
         ],
       },
     ],
