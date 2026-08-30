@@ -75,6 +75,7 @@
 ## 3. 逐模块实现讲解  [25min · 业务意图先行]
 
 ### 3.1 SDK 侧 `ErrorCode.java`（常量表 + 文案体系）　`palm_manager/.../constant/ErrorCode.java`
+
 - **业务意图**：让上位机拿到错误码后能取到人类可读文案，而非一串英文常量名。
 - **代码落点**：`CODE_MAP`（364-525）、`getMessage()`（547-550）、`isServerError()`（616-632）。
 - **关键片段**：
