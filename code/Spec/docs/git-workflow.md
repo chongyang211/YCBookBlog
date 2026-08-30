@@ -14,7 +14,7 @@
 
 | 本地目录（`src/`） | Git 地址 | 基线分支 |
 |------|---------|---------|
-| `<迁移工具仓库>` | <GIT-HOST>/palm/<迁移工具仓库> | `[TBD]` |
+| `<迁移工具仓库>` | <GIT-HOST>/<ORG>/<迁移工具仓库> | `[TBD]` |
 | `<业务主仓库>` | <GIT-HOST>/<ORG>/<业务主仓库> | `develop` |
 | `<协议仓库>` | <GIT-HOST>/<ORG>/<协议仓库> | `master` |
 | `<前端仓库>` | <GIT-HOST>/<ORG>/<子组>/<前端仓库> | `develop` |
@@ -29,7 +29,7 @@
 | `<IoT 服务仓库>` | <GIT-HOST>/<ORG>/O1/<IoT 服务仓库> | `develop` |
 | `<IoT 服务仓库>` | <GIT-HOST>/<ORG>/<IoT 服务仓库> | `develop` |
 | `<SDK 仓库>` | <GIT-HOST>/<ORG>/<SDK 仓库> | `master` |
-| `<示例仓库>` | <GIT-HOST>/palm/<示例仓库> | `master` |
+| `<示例仓库>` | <GIT-HOST>/<ORG>/<示例仓库> | `master` |
 
 > ⚠️ **识别侧仓库归并**：`<ORG>/<算法组>` 原有的 `<业务主仓库>` / `proto` 逻辑**已合并进** `<ORG>/<子组>` 的 `<业务主仓库>` / `proto`（`src/<业务主仓库>`、`src/proto`），原 `src/<旧流水线目录>/` 分组已废弃删除。识别算法仓 `algorithm-repo`（`<ORG>/<算法组>/algorithm-repo`）平铺在 `src/algorithm-repo`。
 >

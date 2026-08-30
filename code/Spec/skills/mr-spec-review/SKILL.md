@@ -299,7 +299,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
    | `paymax_device` / `<支付仓库>` | <ORG>/… | `develop` |
    | `<激活服务仓库>` / `<IoT 服务仓库>` / `<IoT 服务仓库>` | <ORG>/… | `develop` |
    | `<SDK 仓库>` | <ORG>/<SDK 仓库> | `master` |
-   | `<示例仓库>` | palm/<示例仓库> | `master` |
+   | `<示例仓库>` | <ORG>/<示例仓库> | `master` |
 
    > ⚠️ **识别算法仓平铺**：`algorithm-repo` 来自 `<ORG>/<算法组>`，直接平铺在 `src/algorithm-repo`。`<ORG>/<算法组>` 原有的 `<业务主仓库>`/`proto` 逻辑**已合并进** `<ORG>/<子组>` 的 `<业务主仓库>`/`proto`（`src/<业务主仓库>`、`src/proto`），原 `src/<旧流水线目录>/` 分组已废弃删除；spec 引用识别侧 <业务主仓库>/proto 时直接用 `src/<业务主仓库>`、`src/proto`。
 
@@ -700,7 +700,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 **② 入库门禁（沉淀候选时，EVAL-SPEC §5）**
 1. **筛候选**：本轮新 TP → 候选；被拒 FP → **负样本**（不丢，用于淘汰）。
    - ✅ 值得沉淀（TP）："application 层硬编码设备类型判断，未复用 domain hook"（通用反模式）
-   - ❌ 不值得（一次性笔误）："第 5 行拼写把 palm 写成 exammple"
+   - ❌ 不值得（一次性笔误）："第 5 行拼写把 example 写成 exammple"
 2. **归一化四元组 + 去硬编码**：写成 `trigger / probe / assertion / fix`，把来源 MR 的具体符号抽象成变量占位（否则规则只对来源 MR 有效）。
 3. **过自我评测门禁**（在 eval 语料库上跑）：
    - **回测**：Precision = TP/(TP+FP) ≥ 0.8？（样本 <3 条 → 判"数据不足"）
