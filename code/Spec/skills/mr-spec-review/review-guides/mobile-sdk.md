@@ -1,8 +1,8 @@
 # 移动端 · 接入 SDK 评审依据（Mobile & Integration SDK Review Guide）
 
-> 适用：被商户 App / 收银端集成的刷掌 SDK 与移动应用。
-> - `PaymaxPalmSdk`：`android`（Kotlin）、`ios`（Swift）、`web`（JS/TS SDK）—— 对外发布的接入 SDK。
-> - `palm-wepay/Android`：刷掌收银 Android App（Java）。
+> 适用：被商户 App / 收银端集成的业务 SDK 与移动应用。
+> - `<SDK 仓库>`：`android`（Kotlin）、`ios`（Swift）、`web`（JS/TS SDK）—— 对外发布的接入 SDK。
+> - `<支付仓库>/Android`：业务收银 Android App（Java）。
 > 加载时机：MR 命中上述目录时，Step 4.1 / 4.5 / 4.6 前读完本文件。（其 `web` 部分同时参照 [`frontend.md`](./frontend.md)。）
 
 ---
@@ -71,7 +71,7 @@ SDK 是**被第三方集成**的，评审第一性原理：
 ## 4. 跨端联调契约（移动端视角）
 
 - 与**后台**：appgateway/opengateway 的签名、token、字段、错误码契约，见 [`backend.md`](./backend.md) 与 [`contract.md`](./contract.md)。
-- 与**设备端**：若 SDK 与设备协同（如收银端联动刷掌设备），协议对齐见 [`device.md`](./device.md)。
+- 与**设备端**：若 SDK 与设备协同（如收银端联动业务设备），协议对齐见 [`device.md`](./device.md)。
 
 ---
 

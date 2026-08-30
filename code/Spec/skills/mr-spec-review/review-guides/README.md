@@ -15,16 +15,16 @@ skill 在 **Step 4.0 端识别** 时，依据 spec/design 里引用/影响的 `s
 
 | 端 | 评审依据 | 命中的 `src/` 目录（路径前缀） | 语言 / 栈 |
 |----|---------|------------------------------|-----------|
-| **后台服务端** | [`backend.md`](./backend.md) | `device_manage`、`palm_global`、`palm_local`、`cloud_palm_activation`、`cloud_IoTService`（云侧部分）、`infrastructure` | Go 1.23+ / gRPC + grpc-gateway / DDD |
-| **识别 · 算法端** | [`algorithm.md`](./algorithm.md) | `palm_algorithm`、识别侧 `palm_global`/`proto`（逻辑已合并入 palm/weixin） | Go / 算法编排 gRPC |
-| **前端** | [`frontend.md`](./frontend.md) | `palm_saas_fe`、`palm-wepay/web`、`PaymaxPalmSdk/web` | Vue3 / Vite / TS |
-| **设备端（固件 · 边缘）** | [`device.md`](./device.md) | `iotservice_linux`、`paymax_device`（`palm_app_linux`/`pos_link`/`palm_manager`）、`cloud_IoTService`（设备侧 Android 框架） | C++ / CMake、Android(Java/Kotlin) |
-| **移动端 · 接入 SDK** | [`mobile-sdk.md`](./mobile-sdk.md) | `PaymaxPalmSdk`（`android`/`ios`）、`palm-wepay/Android` | Kotlin / Swift / JS |
-| **跨端协议契约**（横切） | [`contract.md`](./contract.md) | `proto`、`palm_proto`；以及任意端改到 `*.proto` / 接口 / 错误码 / 字段号 | protobuf / IDL |
+| **后台服务端** | [`backend.md`](./backend.md) | `<设备管理仓库>`、`<业务主仓库>`、`<业务主仓库>`、`<激活服务仓库>`、`<IoT 服务仓库>`（云侧部分）、`infrastructure` | Go 1.23+ / gRPC + grpc-gateway / DDD |
+| **识别 · 算法端** | [`algorithm.md`](./algorithm.md) | `algorithm-repo`、识别侧 `<业务主仓库>`/`proto`（逻辑已合并入 <ORG>/<子组>） | Go / 算法编排 gRPC |
+| **前端** | [`frontend.md`](./frontend.md) | `<前端仓库>`、`<支付仓库>/web`、`<SDK 仓库>/web` | Vue3 / Vite / TS |
+| **设备端（固件 · 边缘）** | [`device.md`](./device.md) | `<IoT 服务仓库>`、`paymax_device`（`<终端应用仓库>`/`<设备接入仓库>`/`<管理后台仓库>`）、`<IoT 服务仓库>`（设备侧 Android 框架） | C++ / CMake、Android(Java/Kotlin) |
+| **移动端 · 接入 SDK** | [`mobile-sdk.md`](./mobile-sdk.md) | `<SDK 仓库>`（`android`/`ios`）、`<支付仓库>/Android` | Kotlin / Swift / JS |
+| **跨端协议契约**（横切） | [`contract.md`](./contract.md) | `proto`、`<协议仓库>`；以及任意端改到 `*.proto` / 接口 / 错误码 / 字段号 | protobuf / IDL |
 
 > ⚠️ **契约端是横切的**：只要 MR 涉及跨端联调的字段/接口/错误码/proto 变更，**无论主端是谁，都要额外加载 `contract.md`**（对应 code-patterns#4 兄弟 spec 字段号一致）。
 >
-> ⚠️ **识别侧仓库归并**：`mmpay_palm_recognition` 原有的 `palm_global`/`proto` 逻辑已合并进 `palm/weixin` 的 `palm_global`/`proto`（`src/palm_global`、`src/proto`），原 `src/palm_pipeline/` 分组已废弃删除；识别算法仓 `palm_algorithm` 平铺在 `src/palm_algorithm`。路由识别侧 palm_global/proto 时直接用 `palm_global`/`proto` 目录。
+> ⚠️ **识别侧仓库归并**：`<ORG>/<算法组>` 原有的 `<业务主仓库>`/`proto` 逻辑已合并进 `<ORG>/<子组>` 的 `<业务主仓库>`/`proto`（`src/<业务主仓库>`、`src/proto`），原 `src/<旧流水线目录>/` 分组已废弃删除；识别算法仓 `algorithm-repo` 平铺在 `src/algorithm-repo`。路由识别侧 <业务主仓库>/proto 时直接用 `<业务主仓库>`/`proto` 目录。
 
 ### 端识别兜底
 

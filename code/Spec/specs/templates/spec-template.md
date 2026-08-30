@@ -1,6 +1,6 @@
 # [标题：简洁描述这个功能]
 
-> **Story ID**: [需求单号，如 134029304；无对应 story 则填 `0`]  
+> **Story ID**: [需求单号，如 10086；无对应 story 则填 `0`]  
 > **Status**: draft | ready | in-progress | implemented | deprecated  
 > **Author**: [作者]  
 > **Created**: [日期]  
@@ -9,14 +9,14 @@
 > **Branch**: `feature/<spec-name>` 或 `hotfix/<spec-name>`（实施阶段在所有相关仓库使用此分支名）  
 
 > 📁 **文件命名规范**：`specs/<VERSION>/<STORYID>-<slug>.md`（同版本内唯一）  
-> 例：`specs/v1.6.0/134029305-payment-retry.md`  
+> 例：`specs/v1.6.0/10088-payment-retry.md`  
 > 大需求拆分时同 Story 多 spec 示例：  
-> - `specs/v1.6.0/134029304-gateway-changes.md`  
-> - `specs/v1.6.0/134029304-controller-impl.md`  
-> - `specs/v1.6.0/134029304-passvendor-channel.md`
+> - `specs/v1.6.0/10086-example-gateway.md`  
+> - `specs/v1.6.0/10086-example-controller.md`  
+> - `specs/v1.6.0/10086-example-channel.md`
 
 > 🌿 **分支命名规范**：`{feature|hotfix}/{spec-name}`  
-> 例：`feature/134029305-payment-retry`、`hotfix/0-fix-payment-timeout`  
+> 例：`feature/10088-payment-retry`、`hotfix/0-fix-payment-timeout`  
 > 多仓库使用同一分支名，便于追溯。
 
 ## 背景

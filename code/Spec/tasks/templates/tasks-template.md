@@ -2,13 +2,13 @@
 
 > **关联 Spec**: `specs/<VERSION>/<STORYID>-<slug>.md`  
 > **关联 Plan**: `plans/<VERSION>/<STORYID>-<slug>-plan.md`  
-> **Story ID**: [与 spec 一致的需求单号，如 134029304]  
+> **Story ID**: [与 spec 一致的需求单号，如 10086]  
 > **Owner**: [负责人]  
 > **Created**: YYYY-MM-DD  
 > **Updated**: YYYY-MM-DD  
 
 > 📁 **文件命名规范**：`tasks/<VERSION>/<STORYID>-<slug>-tasks.md`  
-> 例：`tasks/v1.6.0/134029305-payment-retry-tasks.md`
+> 例：`tasks/v1.6.0/10088-payment-retry-tasks.md`
 
 ## 进度概览
 

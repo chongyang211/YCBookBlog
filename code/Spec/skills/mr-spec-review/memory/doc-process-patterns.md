@@ -15,7 +15,7 @@
 
 ## Pattern D1: `Sibling Specs` frontmatter 未列全
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#2）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#2）
 
 **表现**：同一 Story 拆多个 spec（后端 + 前端 + 设备端），但子 spec 的 frontmatter `Sibling Specs: —` 空着，或只列了其中一部分。
 
@@ -29,7 +29,7 @@
 
 ## Pattern D2: Status 与实际流程/文档不匹配
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#5 + tasks 状态）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#5 + tasks 状态）
 
 **表现**：
 - spec `Status: ready` 但修订记录显示 ready 之后又新增了 FR（应回落 `in-progress` / `draft`）
@@ -44,9 +44,9 @@
 
 ## Pattern D3: 兄弟 spec / 三件套之间命名/字段/取值不一致
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#20）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#20）
 
-**表现**：spec/plan/tasks 三份文档对同一个东西命名/取值不一致（如 spec 前文 `O4PalmAppId` 后文 `O4PalmAppAppId`；spec 用小写 `isO4Device` plan 用大写 `IsO4Device`）。**这是 doc 层症状；根因见 code-patterns#1**。
+**表现**：spec/plan/tasks 三份文档对同一个东西命名/取值不一致（如 spec 前文 `ExampleAppId` 后文 `ExampleAppAppId`；spec 用小写 `isExampleDevice` plan 用大写 `IsExampleDevice`）。**这是 doc 层症状；根因见 code-patterns#1**。
 
 **验证动作**：对每个高频出现（≥3 次）的类/方法/常量名，跨三份文档 grep 一遍，看拼写是否一致。
 
@@ -56,7 +56,7 @@
 
 ## Pattern D4: TBD / FR / 修订记录编号跳号或缺失
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#11）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#11）
 
 **表现**：spec「风险与未决问题」表格只保留 `TBD-3~6`，`TBD-1/2` 编号缺失；或 FR 编号跳过；或修订记录条目在中间缺一条。
 
@@ -68,7 +68,7 @@
 
 ## Pattern D5: `Updated` 日期与修订记录最新日期不同步
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#10）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#10）
 
 **表现**：frontmatter `Updated: 2026-07-07` 与文档末尾修订记录 `2026-07-14 新增 FR-4` 不同步。
 
@@ -80,7 +80,7 @@
 
 ## Pattern D6: plan 「文件改动清单」缺配套注册
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#9）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#9）
 
 **表现**：新增错误码只列了「定义常量」这一行，忘了同步注册：
 - 错误码 → HTTP status 映射
@@ -97,7 +97,7 @@
 
 ## Pattern D7: MR 内三件套（spec/plan/tasks）颗粒度不匹配
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77
 
 **表现**：
 - spec 说"FR-4 全量指令 MQTT 推送"，plan 却只描述 `remoteDoorOpen` 的推送步骤（覆盖不全）
@@ -124,4 +124,4 @@
 
 | 日期 | 变更 | 操作人 |
 |------|-----|--------|
-| 2026-07-15 | 初始版本，从 MR palm/palmpay/CoSpec!77 沉淀 8 个 doc/process Pattern（D1-D8） | evanye |
+| 2026-07-15 | 初始版本，从 MR <ORG>/CoSpec!77 沉淀 8 个 doc/process Pattern（D1-D8） | evanye |

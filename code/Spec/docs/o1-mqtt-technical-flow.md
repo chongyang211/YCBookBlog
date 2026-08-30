@@ -36,7 +36,7 @@
        │
        ▼
   ShadowModuleApi.Listener
-  → 刷掌识别 / 其他业务模块
+  → 业务识别 / 其他业务模块
 ```
 
 **6 个模块，1 个连接**：Shadow（C++）、OTA（Java）、CMD（Java）三个消费者共用同一个 `PaasMqtt` 实例，通过 `msgType` 路由分发。
@@ -113,7 +113,7 @@ IoTServiceApp 启动
 [ShadowManager]  遍历所有注册的 ShadowModuleApi.Listener
        │  listener.onCloudSidePropertyChanged(identifier, scope, scopeValue, version, property)
        ▼
-[业务模块]  刷掌识别 / 设备行为 / 其他业务
+[业务模块]  业务识别 / 设备行为 / 其他业务
 ```
 
 ### 3.2 轮询兜底（副链路）

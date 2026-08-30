@@ -44,10 +44,10 @@
    `/spec-draft` 是 Story ID 的**录入点**，后续所有命令都从 spec 文件名沿用。这一步**强制**确定 Story ID，不允许跳过。
 
    **来源优先级**：
-   1. 用户对话中明确提供（如 "story id 是 134029305"）
+   1. 用户对话中明确提供（如 "story id 是 10088"）
    2. `docs/intake/xxx.md` frontmatter 的 `Story ID` 字段
    3. 以上都没有 → AI **必须主动询问**：
-      > "请提供本需求的 Story ID（纯数字，例 134029305）。如果暂无对应 story，回复 `0` 占位。"
+      > "请提供本需求的 Story ID（纯数字，例 10088）。如果暂无对应 story，回复 `0` 占位。"
 
    **校验规则**：
    - 必须为纯数字（含 `0`）
@@ -60,12 +60,12 @@
 
    - 扫描 `specs/` 目录，看是否已有相同 Story ID 的 spec 文件
    - 如果**有**，AI 必须主动询问用户：
-     > "已检测到 Story 134029305 下已存在以下 spec：
-     >   - specs/v1.6.0/134029305-gateway-changes.md（张三）
-     >   - specs/v1.6.0/134029305-controller-impl.md（李四）
+     > "已检测到 Story 10088 下已存在以下 spec：
+     >   - specs/v1.6.0/10088-gateway-changes.md（张三）
+     >   - specs/v1.6.0/10088-controller-impl.md（李四）
      >
      > 本次是要：
-     >   a) 新建一个**子 spec**（slug 区分，比如 `134029305-passvendor-channel.md`）
+     >   a) 新建一个**子 spec**（slug 区分，比如 `10088-example-channel.md`）
      >   b) 修改已有的某个 spec
      >   c) 这是独立任务，需更换 Story ID"
    - 用户选 a → 继续；slug 必须与已有 spec 不重复，AI 在起草时引用兄弟 spec
@@ -96,8 +96,8 @@
    - 路径：`specs/<VERSION>/<STORYID>-<slug>.md`
      - `STORYID`：Step 0 已确定的 Story ID（**多个 spec 可共享**）
      - `<slug>`：kebab-case 小写描述（**同 Story 内必须唯一**，是真正的 spec 区分键）
-     - 例：`specs/v1.6.0/134029305-payment-retry.md`
-     - 子 spec 例：`specs/v1.6.0/134029305-gateway-changes.md`、`specs/v1.6.0/134029305-controller-impl.md`
+     - 例：`specs/v1.6.0/10088-payment-retry.md`
+     - 子 spec 例：`specs/v1.6.0/10088-gateway-changes.md`、`specs/v1.6.0/10088-controller-impl.md`
    - frontmatter 必须包含 `Story ID` 字段（与文件名一致）
    - `Status: draft`（**强制**，不可改）
    - `Created` / `Updated` 自动填当前日期

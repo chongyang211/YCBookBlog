@@ -18,7 +18,7 @@
 **触发方式**：
 
 ```
-请根据 specs/v1.6.0/134029304-online-palm-registration.md 执行 spec-tasks
+请根据 specs/v1.6.0/10086-example-user-login.md 执行 spec-tasks
 ```
 
 或：

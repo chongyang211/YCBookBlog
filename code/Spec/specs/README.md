@@ -1,6 +1,6 @@
 # Specs 目录
 
-> 📋 **全队 Spec 索引 / 当前迭代需求一览** → iWiki：<https://iwiki.woa.com/p/4022732388>（含每个 spec 的版本号、Status、Owner、Spec/Plan/Tasks 链接）
+> 📋 **全队 Spec 索引 / 当前迭代需求一览** → 团队 Wiki：<TEAM-WIKI-URL>（含每个 spec 的版本号、Status、Owner、Spec/Plan/Tasks 链接）
 
 ## 作用
 
@@ -21,11 +21,11 @@ AI 在执行任何功能开发任务时，**必须首先查找并阅读相关 sp
 specs/<VERSION>/<STORYID>-<kebab-case-slug>.md
 ```
 
-> 📂 **版本目录层级**：spec 文件按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；`templates/`、`README.md` 保留在 `specs/` 根。聚合索引由 `/spec-index` 命令生成并完整覆盖同步到 iWiki（<https://iwiki.woa.com/p/4022732388>），仓库内不再维护 `INDEX.md`。
+> 📂 **版本目录层级**：spec 文件按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；`templates/`、`README.md` 保留在 `specs/` 根。聚合索引由 `/spec-index` 命令生成并完整覆盖同步到 团队 Wiki（<TEAM-WIKI-URL>），仓库内不再维护 `INDEX.md`。
 
 - `<VERSION>`：迭代版本号（如 `v1.6.0`）
 - `STORYID`：纯数字 Story ID（与需求单号关联，便于追溯）
-  - 来自工蜂 / JIRA / 其他需求管理系统
+  - 来自Git 平台（GitHub / GitLab / 工蜂） / JIRA / 其他需求管理系统
   - 如该 Spec 无对应 story（纯内部任务），用 `0` 占位
   - **不强制唯一**——一个大需求可拆为多个 spec 共享同一 Story ID
 - `<kebab-case-slug>`：小写字母 + 连字符的简短描述
@@ -35,13 +35,13 @@ specs/<VERSION>/<STORYID>-<kebab-case-slug>.md
 
 示例：
 - `specs/v1.6.0/0-example-feature.md`（示例 spec，无 story id）
-- `specs/v1.6.0/134029304-online-palm-registration.md`（单 spec）
-- `specs/v1.6.0/134029305-payment-retry.md`（单 spec）
+- `specs/v1.6.0/10086-example-user-login.md`（单 spec）
+- `specs/v1.6.0/10088-payment-retry.md`（单 spec）
 
 **大需求拆分示例（同 Story 多 spec）**：
-- `specs/v1.6.0/134000001-gateway-changes.md`（张三：网关层）
-- `specs/v1.6.0/134000001-controller-impl.md`（李四：控制器层）
-- `specs/v1.6.0/134000001-passvendor-channel.md`（王五：通道层）
+- `specs/v1.6.0/10088-gateway-changes.md`（张三：网关层）
+- `specs/v1.6.0/10088-controller-impl.md`（李四：控制器层）
+- `specs/v1.6.0/10088-example-channel.md`（<owner>：通道层）
 
 ## 分支命名规范
 
@@ -49,8 +49,8 @@ specs/<VERSION>/<STORYID>-<kebab-case-slug>.md
 
 | spec | 分支名 |
 |------|-------|
-| `specs/v1.6.0/134029304-online-palm-registration.md` | `feature/134029304-online-palm-registration` |
-| `specs/v1.6.0/134000001-gateway-changes.md` | `feature/134000001-gateway-changes` |
+| `specs/v1.6.0/10086-example-user-login.md` | `feature/10086-example-user-login` |
+| `specs/v1.6.0/10088-gateway-changes.md` | `feature/10088-gateway-changes` |
 | `specs/v1.6.0/0-fix-payment-timeout.md`（紧急 bug） | `hotfix/0-fix-payment-timeout` |
 
 > 💡 与 `plans/` 与 `tasks/` 文件名保持**完全一致的 STORYID + slug**，仅各自加 `-plan` / `-tasks` 后缀。

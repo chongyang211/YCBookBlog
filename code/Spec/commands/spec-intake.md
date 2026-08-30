@@ -19,7 +19,7 @@
 | 参数 | 必选 | 说明 |
 |------|------|------|
 | 需求来源 | 是 | PM 需求文档路径（`.md`/`.docx` 等）或自然语言描述 |
-| Story ID | 否 | 需求单号（如 `134029305`）；尚未分配填 `0` 占位，分配后再重命名 |
+| Story ID | 否 | 需求单号（如 `10088`）；尚未分配填 `0` 占位，分配后再重命名 |
 | 版本 | 否 | 归档版本目录（如 `v1.6.0`）；缺失时 AI 主动询问 |
 | slug | 否 | kebab-case 短描述，不指定则 AI 依需求标题生成 |
 | 优先级 | 否 | 高 / 中 / 低，默认 `[TBD]` |
@@ -39,7 +39,7 @@
 或：
 
 ```
-这是 PM 的需求文档（已粘贴在下），story id 134029305，请执行 spec-intake 生成草稿
+这是 PM 的需求文档（已粘贴在下），story id 10088，请执行 spec-intake 生成草稿
 ```
 
 ## 执行步骤
@@ -74,7 +74,7 @@
    - 路径：`docs/intake/<VERSION>/<STORYID>-<slug>.md`
      - `STORYID`：已分配则用之，未分配用 `0` 占位
      - `<slug>`：kebab-case 小写短描述
-     - 例：`docs/intake/v1.6.0/134029305-payment-retry.md`、占位例 `docs/intake/v1.6.0/0-payment-retry.md`
+     - 例：`docs/intake/v1.6.0/10088-payment-retry.md`、占位例 `docs/intake/v1.6.0/0-payment-retry.md`
    - frontmatter/头部包含：来源、日期、Story ID、优先级、目标 Spec（如已分配编号）。
    - `日期` 自动填当前日期。
 

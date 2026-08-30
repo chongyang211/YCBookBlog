@@ -34,7 +34,7 @@
    - **解析 `<VERSION>`，定位同版本目录下的 spec / plan / tasks 进行符合性检查**
    - 校验 spec / plan / tasks 三件套文件名 STORYID 段一致
    - 校验 spec frontmatter 的 `Story ID` 字段与文件名一致
-   - Review 报告抬头必须含 Story ID（便于在工蜂等系统反向关联）
+   - Review 报告抬头必须含 Story ID（便于在Git 平台（GitHub / GitLab / 工蜂）等系统反向关联）
 
 1. **Spec 符合性检查**
    - 逐条对照 spec 的验收标准

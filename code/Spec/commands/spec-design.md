@@ -36,7 +36,7 @@
 **触发方式**：
 
 ```
-请基于 docs/intake/v1.6.0/134389917-dashboard-online-palm-statistics.md 执行 spec-design
+请基于 docs/intake/v1.6.0/10086-example-user-login.md 执行 spec-design
 ```
 
 或：

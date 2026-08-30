@@ -53,7 +53,7 @@
 
    - **基线分支**：从 plan「涉及仓库」表的「基线分支」列读取（详见 `docs/git-workflow.md` 第 1 章）
    - **分支前缀**：默认 `feature/`；紧急 bug 修复用 `hotfix/`（须显式声明）
-   - **分支名**：spec 文件名去 `.md` 后缀，如 `134389917-dashboard-online-palm-statistics`
+   - **分支名**：spec 文件名去 `.md` 后缀，如 `10086-example-user-login`
    - **多仓库**：所有相关仓库使用**同一分支名**
    - 如 feature 分支已存在（多人协作 / 恢复实施）→ 切到该分支即可，不重新创建
    - 拉分支前**必须**确认 working tree 干净，避免污染

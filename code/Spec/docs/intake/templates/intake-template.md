@@ -2,12 +2,12 @@
 
 > **来源**：[谁提的，邮件/IM/会议]  
 > **日期**：YYYY-MM-DD  
-> **Story ID**：[需求单号，如 134029304；尚未分配则填 `0`]  
+> **Story ID**：[需求单号，如 10086；尚未分配则填 `0`]  
 > **优先级**：高 / 中 / 低  
 > **目标 Spec**：[如已分配编号填 NNNN，否则留空]  
 
 > 📁 **文件命名规范**：`docs/intake/<VERSION>/<STORYID>-<slug>.md`  
-> 例：`docs/intake/v1.6.0/134029305-payment-retry.md`  
+> 例：`docs/intake/v1.6.0/10088-payment-retry.md`  
 > 如 Story ID 尚未分配，可暂用 `0` 占位：`docs/intake/v1.6.0/0-payment-retry.md`，分配后再重命名
 
 ---

@@ -1,14 +1,14 @@
 # Implementation Plan — [简短标题]
 
 > **关联 Spec**: `specs/<VERSION>/<STORYID>-<slug>.md`  
-> **Story ID**: [与 spec 一致的需求单号，如 134029304]  
+> **Story ID**: [与 spec 一致的需求单号，如 10086]  
 > **Author**: [作者]  
 > **Created**: YYYY-MM-DD  
 > **Updated**: YYYY-MM-DD  
 > **Status**: draft | confirmed | obsolete  
 
 > 📁 **文件命名规范**：`plans/<VERSION>/<STORYID>-<slug>-plan.md`  
-> 例：`plans/v1.6.0/134029305-payment-retry-plan.md`
+> 例：`plans/v1.6.0/10088-payment-retry-plan.md`
 
 ## 设计概述
 

@@ -1,9 +1,9 @@
 # Spec Coding 流程概要（一眼看懂版 · 给人看的）
 
-> 本项目是「刷掌支付」团队的 **Spec 驱动 AI 协作开发工作空间**：不写"AI 自由发挥"的代码，每个改动都从一份 Spec 开始，**人审 + AI 执行 + 人合并**。
+> 本项目是你的团队的 **Spec 驱动 AI 协作开发工作空间**：不写"AI 自由发挥"的代码，每个改动都从一份 Spec 开始，**人审 + AI 执行 + 人合并**。
 > 本文只讲 **「人」要关注什么、要遵守什么**；AI 的执行细节由 `commands/` `skills/` `rules/` 约束，不在此重复。
 
-> 📋 **想查全队 Spec 索引 / 了解当前迭代有哪些需求？** 直接看 iWiki：<https://iwiki.woa.com/p/4022732388>（包含每个 spec 的版本、Status、Owner、Spec/Plan/Tasks 链接）。仓库内不再维护本地聚合的 INDEX 文件。
+> 📋 **想查全队 Spec 索引 / 了解当前迭代有哪些需求？** 直接看 团队 Wiki：<TEAM-WIKI-URL>（包含每个 spec 的版本、Status、Owner、Spec/Plan/Tasks 链接）。仓库内不再维护本地聚合的 INDEX 文件。
 
 ---
 
@@ -80,6 +80,6 @@ flowchart TD
 ## 四、新人最快上手
 
 1. clone 本仓库并用 IDE 打开；按当前 spec 的 plan「涉及仓库」表把业务代码 clone 到 `src/<repo>/`（`src/` 不入仓）。
-2. 打开 iWiki Spec 索引 <https://iwiki.woa.com/p/4022732388>，扫一眼当前迭代有哪些 spec、谁在做、状态如何。
+2. 打开 团队 Wiki Spec 索引 <TEAM-WIKI-URL>，扫一眼当前迭代有哪些 spec、谁在做、状态如何。
 3. 读 [`docs/spec-coding-handbook.md`](./spec-coding-handbook.md)（一页纸，5 分钟）。
 4. 跟着上面的流程图走：**起草 → 个人 review → 提交 spec → 等同事评审通过 → 再往下**。

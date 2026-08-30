@@ -3,7 +3,7 @@
 > 一页纸版本，给团队 onboarding 用。  
 > 完整规则见 `rules/`，详细工作流见 `rules/10-spec-workflow.md`。
 
-> 📋 **全队 Spec 索引 / 当前迭代需求一览** → iWiki：<https://iwiki.woa.com/p/4022732388>（含版本号、Status、Owner、Spec/Plan/Tasks 链接）
+> 📋 **全队 Spec 索引 / 当前迭代需求一览** → 团队 Wiki：<TEAM-WIKI-URL>（含版本号、Status、Owner、Spec/Plan/Tasks 链接）
 
 ---
 
@@ -106,7 +106,7 @@ specs/(draft→ready)
 ### 第 1 步：读三个文件
 1. 这份 handbook
 2. `rules/10-spec-workflow.md`（最核心）
-3. 任意一个完成度高的样板：`specs/<VERSION>/<STORYID>-<slug>.md` + 同名 `plans/...-plan.md` + `tasks/...-tasks.md`（在 iWiki 索引 <https://iwiki.woa.com/p/4022732388> 中找 status 为 `implemented` 的就是好样板）
+3. 任意一个完成度高的样板：`specs/<VERSION>/<STORYID>-<slug>.md` + 同名 `plans/...-plan.md` + `tasks/...-tasks.md`（在 团队 Wiki 索引 <TEAM-WIKI-URL> 中找 status 为 `implemented` 的就是好样板）
 
 ### 第 2 步：跑通一次完整链路（用示例 spec `0-example-feature`）
 
@@ -119,7 +119,7 @@ specs/(draft→ready)
 /spec-test      specs/v1.6.0/0-example-feature.md
 /spec-review    specs/v1.6.0/0-example-feature.md
 /spec-push      specs/v1.6.0/0-example-feature.md     ← commit + 安全 rebase + push
-（在工蜂创建 MR、合并）
+（在Git 平台（GitHub / GitLab / 工蜂）创建 MR、合并）
 /spec-sync      specs/v1.6.0/0-example-feature.md
 ```
 
@@ -129,7 +129,7 @@ specs/(draft→ready)
 - 让 Agent 起 Plan（`/spec-plan`），自己审
 - 让 Agent 拆 Tasks（`/spec-tasks`），自己审
 - 让 Agent 实施（`/spec-implement`），自己看每个 commit
-- 写测试（`/spec-test`） → Review（`/spec-review`） → Push（`/spec-push`） → 在工蜂提 MR → 合并 → Sync（`/spec-sync`）
+- 写测试（`/spec-test`） → Review（`/spec-review`） → Push（`/spec-push`） → 在Git 平台（GitHub / GitLab / 工蜂）提 MR → 合并 → Sync（`/spec-sync`）
 
 ---
 
@@ -156,7 +156,7 @@ specs/(draft→ready)
 | `rules/` | 5 条核心规则（00 原则 / 10 工作流 / 20 编码 / 30 测试 / 40 文档） |
 | `skills/` | 8 个 SKILL（technical-design / spec-drafting / spec-analysis / codebase-survey / implementation-planning / feature-implementation / test-writing / change-summary） |
 | `commands/` | 10 个斜杠命令（intake / design / draft / plan / tasks / implement / test / review / push / sync） |
-| `specs/` | Spec 文件 + 模板（聚合索引发布到 iWiki：<https://iwiki.woa.com/p/4022732388>） |
+| `specs/` | Spec 文件 + 模板（聚合索引发布到 团队 Wiki：<TEAM-WIKI-URL>） |
 | `designs/` | 技术方案文件 + 模板（可选前置环节，需求大时用） |
 | `plans/` | Plan 文件 + 模板 |
 | `tasks/` | Tasks 文件 + 模板 |
@@ -165,7 +165,7 @@ specs/(draft→ready)
 | `docs/git-workflow.md` | Git 流程操作手册（基线分支映射、commit 规范、安全 rebase） |
 | `docs/onboarding-codebuddy.md` | 新人完整使用手册 |
 | `tests/` | 测试代码（按 spec 验收标准对齐） |
-| `.gitlab/` | MR 模板（工蜂） |
+| `.gitlab/` | MR 模板（Git 平台（GitHub / GitLab / 工蜂）） |
 | `.codebuddy/` | CodeBuddy IDE 协作配置（commands/rules 通过软链共享根目录同一份内容） |
 | `src/` | 业务代码仓库（**已 gitignore**，团队自行 clone 子仓库到 `src/<repo>/`） |
 

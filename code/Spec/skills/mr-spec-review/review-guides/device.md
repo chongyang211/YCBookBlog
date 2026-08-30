@@ -1,10 +1,10 @@
 # 设备端（固件 · 边缘）评审依据（Device / Edge Review Guide）
 
-> 适用：跑在刷掌设备上的固件/边缘服务。
-> - `iotservice_linux`：C++ / CMake，设备侧 Linux IoT 服务。
-> - `paymax_device`：`palm_app_linux`（C++ 设备应用）、`pos_link`（C++ POS 对接）、`palm_manager`（Android 设备管家）。
-> - `cloud_IoTService`：Android(Java/Kotlin) 设备侧 IoT 框架/SDK（IoTSdk、module-ota、module-device、module-cmd、module-activate、module-recovery…）。
-> 加载时机：MR 命中上述目录，或涉及 `devicegateway`/`wecarddevicegateway`/`palmdevicegateway` 接口时，Step 4.1 / 4.3 / 4.5 / 4.6 前读完本文件。
+> 适用：跑在业务设备上的固件/边缘服务。
+> - `<IoT 服务仓库>`：C++ / CMake，设备侧 Linux IoT 服务。
+> - `paymax_device`：`<终端应用仓库>`（C++ 设备应用）、`<设备接入仓库>`（C++ POS 对接）、`<管理后台仓库>`（Android 设备管家）。
+> - `<IoT 服务仓库>`：Android(Java/Kotlin) 设备侧 IoT 框架/SDK（IoTSdk、module-ota、module-device、module-cmd、module-activate、module-recovery…）。
+> 加载时机：MR 命中上述目录，或涉及 `devicegateway`/`wecarddevicegateway`/`<设备网关>` 接口时，Step 4.1 / 4.3 / 4.5 / 4.6 前读完本文件。
 
 ---
 
@@ -31,16 +31,16 @@
 - [ ] 升级包完整性校验（签名/hash）、版本比对、断点续传/失败重试。
 - [ ] **升级失败可回滚**（`module-recovery` / A-B 分区 / 恢复出厂前的保护），不留砖机路径。
 - [ ] 灰度策略：按设备批次/机型灰度，不一次全量推。
-- [ ] 升级过程对业务的影响（升级中能否刷掌？重启时机是否避开高峰？）。
+- [ ] 升级过程对业务的影响（升级中能否业务？重启时机是否避开高峰？）。
 
-### 2.3 C++ 稳定性与资源（`iotservice_linux` / `palm_app_linux` / `pos_link`）
+### 2.3 C++ 稳定性与资源（`<IoT 服务仓库>` / `<终端应用仓库>` / `<设备接入仓库>`）
 - [ ] **内存**：new/delete、智能指针配对，无泄漏/野指针/double free；缓冲区边界检查（防溢出）。
 - [ ] **并发**：多线程共享数据有锁保护、无死锁；条件变量/信号量用法正确。
 - [ ] **异常/错误**：系统调用、IO、网络返回值都检查；不因单点异常整进程崩溃。
 - [ ] **资源**：文件句柄/socket/定时器有释放；长跑服务无句柄泄漏。
 - [ ] 遵循 `CPPLINT.cfg`；无注释死代码、无 TODO 遗留在关键路径。
 
-### 2.4 Android 设备框架（`cloud_IoTService` / `palm_manager`）
+### 2.4 Android 设备框架（`<IoT 服务仓库>` / `<管理后台仓库>`）
 - [ ] AIDL/进程间通信（`*.aidl`）兼容：接口方法只加不改签名；跨进程数据序列化兼容。
 - [ ] 生命周期/线程：主线程不做耗时 IO；Service/广播注销防泄漏。
 - [ ] 指令下发（`module-cmd`）幂等：重复指令不产生双份物理副作用（开门/重启）。
@@ -53,7 +53,7 @@
 
 ### 2.6 网络与弱网
 - [ ] MQTT/长连接：断线重连、心跳、离线缓存与补传。
-- [ ] 弱网/断网降级：核心刷掌能力（如离线本地识别）不完全依赖云端在线。
+- [ ] 弱网/断网降级：核心业务能力（如离线本地识别）不完全依赖云端在线。
 - [ ] 超时/重试不放大写副作用；服务端限流时端侧退避。
 
 ---
@@ -67,17 +67,17 @@
 | C++ 内存问题 | 泄漏/越界/野指针 | 长跑崩溃、可被攻击 | 智能指针 + 边界检查 + 静态扫描 |
 | 指令不幂等 | 重复指令重复开门 | 物理安全事故 | RequestId + 单指令锁 |
 | 密钥明文 | 证书/密钥落盘或进日志 | 密钥泄露 | 安全存储 + 脱敏 |
-| 强依赖在线 | 断网就不能刷掌 | 可用性差 | 离线识别兜底 |
+| 强依赖在线 | 断网就不能业务 | 可用性差 | 离线识别兜底 |
 
 ---
 
 ## 4. 本项目真实代码约定与专项检查（带代码依据）
 
-> 以下是从设备端真实代码（`iotservice_linux` C++、`cloud_IoTService` Android）提炼的专业检查项，**含已在代码里发现的高危写法**。评审时逐条对照；括号内为可 grep 的真实文件/符号。
+> 以下是从设备端真实代码（`<IoT 服务仓库>` C++、`<IoT 服务仓库>` Android）提炼的专业检查项，**含已在代码里发现的高危写法**。评审时逐条对照；括号内为可 grep 的真实文件/符号。
 
 ### 4.1 通信链路：iLink 长连 + HTTPS 短链（认清走哪条）
 - [ ] C++ 侧 `network/network.h` 的 `DualLinkTdiRequest`（iLink+HTTPS 双链路）**当前是未实现的空壳**，实际 `static use_shortlink_=true`（`network.cpp`）走 **HTTPS 短链**；Android 侧长连接走 `lib-ilink/…/IoTIlinkApiManager.sendCommonRequest`。评审跨端消息/新指令时先确认它实际走哪条链路，别假设长连可用。
-- [ ] 🟠 `IoTApiManager` 有 "hardcode ip" 拉取 iplist 的逻辑——涉及此处改动要盯**硬编码 IP + 是否绕过证书校验**（`cloud_IoTService/lib-ilink`）。
+- [ ] 🟠 `IoTApiManager` 有 "hardcode ip" 拉取 iplist 的逻辑——涉及此处改动要盯**硬编码 IP + 是否绕过证书校验**（`<IoT 服务仓库>/lib-ilink`）。
 - [ ] 心跳 `service/heart_service.cpp DoHeartAction()`：周期由服务端下发 `heartbeat_interval_sec` 动态调整、带 `RandomOffset()` 抖动防惊群。⚠️ 注意 `need_config_sync` 与 `server_time` 校准分支仍是 **TODO 未落地**——若 spec 依赖这两个能力要先确认是否已实现。
 
 ### 4.2 OTA 升级（🔴 本端最高风险，已发现真实缺陷）
@@ -88,22 +88,22 @@ C++ 侧 `service/upgrade/upgrade_schd.cpp` + `service/download_service.cpp`：
 - [ ] 后置动作 `UpgradePostAction{kRestartApp/kRestartDevice/kRestartDeviceImmediately}`；⚠️ `DoInvokeUpgrade` 的 `post_action` 标注 "还没用上"，实际走 `ExecuteUpgradePostLogic` 的 `max_finish_action` 另一套——改重启逻辑要保证两处一致。
 - [ ] Android 侧 `module-ota`（`OTAManager.kt` + Flow 架构）与 C++ 侧是**两套实现**，评审时别张冠李戴；`module-recovery` 是恢复兜底，涉及升级失败要联动看。
 
-### 4.3 指令下发（command 模式，`iotservice_linux/src/cmds/`）
+### 4.3 指令下发（command 模式，`<IoT 服务仓库>/src/cmds/`）
 指令是 command 模式：`base_cmd.h` + 每指令一个类。
 - [ ] 🔴 **高危不可撤销指令**已有：`reset_factory.h`（恢复出厂）、`reboot_device.h`（重启）、`restart_app.h`——评审这类指令：是否**独立权限/二次确认**（对照 backend code-patterns#10）？是否**幂等**（重复下发不重复执行物理副作用）、有无 `RequestId`/去重？
 - [ ] 新增指令继承 `base_cmd`、按现有模式注册；执行结果要有回执与失败上报，不静默吞错。
 - [ ] MQTT/长连 + 轮询双通道下发时，端侧必须去重（防同一指令两条通道各执行一次）。
 
 ### 4.4 设备密钥与安全
-- [ ] 🔴 设备密钥走 **SE 芯片 keystore**（`iotservice_linux/src/keystore/sekeystore.h`）——密钥/证书**不落普通文件、不进日志**。评审密钥相关改动确认经 `sekeystore`，别引入明文存储；`certs/` 证书、`lib-tid` 设备身份同理。
+- [ ] 🔴 设备密钥走 **SE 芯片 keystore**（`<IoT 服务仓库>/src/keystore/sekeystore.h`）——密钥/证书**不落普通文件、不进日志**。评审密钥相关改动确认经 `sekeystore`，别引入明文存储；`certs/` 证书、`lib-tid` 设备身份同理。
 - [ ] 设备鉴权：SN 签名 + 过期校验 + nonce 防重放（与后台 devicegateway 对齐）；`module-activate` 激活流程防重放。
 
-### 4.5 C++ 工程规范（`iotservice_linux`）
+### 4.5 C++ 工程规范（`<IoT 服务仓库>`）
 - [ ] 保持现有惯例：广泛使用 `shared_ptr/unique_ptr` + `std::mutex/lock_guard`（见 `thread/`、`scheduler/base_frequency_scheduler`）——新增 C++ 代码**别裸 `new/delete`、别无锁访问共享态**。
 - [ ] 长跑逻辑注意崩溃恢复（`system/crash_manager`）；跨进程走 `dbus/`（`iot_dbus_server`）要保证接口兼容。
 - [ ] 遵循 `CPPLINT.cfg`；系统调用/IO/网络返回值必检，单点异常不拖垮整进程。
 
-### 4.6 Android 设备框架（`cloud_IoTService`）
+### 4.6 Android 设备框架（`<IoT 服务仓库>`）
 - [ ] AIDL 跨进程接口（`*.aidl`，如 `module-ota`/`IoTSdk`）**只加方法不改已有签名**；跨进程数据序列化保持兼容。
 - [ ] 设备侧模块（`module-device`/`module-shadow`/`module-config`）改属性上报/影子逻辑，期望态 vs 上报态收敛要与后台一致。
 - [ ] OkHttp 超时当前硬编码 10s（`IoTApiManager`）——评审新网络调用别各处再散落硬编码超时。
@@ -112,7 +112,7 @@ C++ 侧 `service/upgrade/upgrade_schd.cpp` + `service/download_service.cpp`：
 
 ## 5. 跨端联调契约（设备端视角）
 
-- 与**后台**：设备网关（`devicegateway`/`wecarddevicegateway`/`palmdevicegateway`）的接口/字段/错误码/proto，**是老设备兼容性的高发区**，任何变更强制对照 [`contract.md`](./contract.md)，并让后端与设备端 spec 作者双向确认（对应 code-patterns#4 兄弟 spec 字段号一致）。
+- 与**后台**：设备网关（`devicegateway`/`wecarddevicegateway`/`<设备网关>`）的接口/字段/错误码/proto，**是老设备兼容性的高发区**，任何变更强制对照 [`contract.md`](./contract.md)，并让后端与设备端 spec 作者双向确认（对应 code-patterns#4 兄弟 spec 字段号一致）。
 - 与**识别端**：离线本地识别的特征格式/版本要与云端下发对齐（[`algorithm.md`](./algorithm.md)）。
 - 与**前端**：设备状态/OTA 进度/属性上报的枚举语义与前端展示一致。
 

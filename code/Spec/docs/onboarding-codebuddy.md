@@ -12,7 +12,7 @@
 
 > **我们不写"AI 自由发挥"的代码。每个改动都从一份 Spec 开始，经过 Plan、Tasks 三件套沉淀，由人审 + AI 执行 + 人合并。**
 
-> 📋 **想先看全队 Spec 一览 / 当前迭代有哪些需求？** 打开 iWiki：<https://iwiki.woa.com/p/4022732388>。这是团队 Spec 索引的唯一发布出口，含每个 spec 的迭代版本、Status、Owner、Spec/Plan/Tasks 链接。
+> 📋 **想先看全队 Spec 一览 / 当前迭代有哪些需求？** 打开 团队 Wiki：<TEAM-WIKI-URL>。这是团队 Spec 索引的唯一发布出口，含每个 spec 的迭代版本、Status、Owner、Spec/Plan/Tasks 链接。
 
 ### 0.2 三件套 + 六阶段全景
 
@@ -58,7 +58,7 @@ CodeBuddy 是团队使用的 AI 协作 IDE，特点：
 #### Step A：拉本仓库（spec 工作空间）
 
 ```bash
-git clone git@git.woa.com:palm/palmpay/CoSpec.git spec
+git clone <GIT-HOST>:<ORG>/CoSpec.git spec
 cd spec
 ```
 
@@ -73,9 +73,9 @@ cd spec
 ```bash
 mkdir -p src && cd src
 # 业务代码主仓库（基线 develop）
-git clone git@git.woa.com:palm/palmpay/palm_local.git
+git clone <GIT-HOST>:<ORG>/<业务主仓库>.git
 # proto 定义仓库（基线 master）
-git clone git@git.woa.com:palm/palmpay/palm_proto.git
+git clone <GIT-HOST>:<ORG>/<协议仓库>.git
 # 其他仓库按需 clone
 ```
 
@@ -97,7 +97,7 @@ git pull -r origin <baseline>    # rebase 模式同步最新代码
 | 2 | `docs/spec-coding-handbook.md` | 团队手册（一页纸 + 10 条铁律） | 5 分钟 |
 | 3 | `rules/10-spec-workflow.md` | 六阶段工作流（最核心） | 10 分钟 |
 | 4 | `docs/git-workflow.md` | 基线分支映射 + commit + 安全 rebase | 5 分钟 |
-| 5 | 任意一个 `status: implemented` 的 spec 三件套（去 iWiki 索引找：<https://iwiki.woa.com/p/4022732388>） | 一个真实 Spec/Plan/Tasks 长什么样 | 7 分钟 |
+| 5 | 任意一个 `status: implemented` 的 spec 三件套（去 团队 Wiki 索引找：<TEAM-WIKI-URL>） | 一个真实 Spec/Plan/Tasks 长什么样 | 7 分钟 |
 
 读完这 5 个文件，你已经理解 70%。
 
@@ -140,8 +140,8 @@ spec/
 │   ├── spec-review.md         # 阶段 5
 │   ├── spec-push.md           # 阶段 6（可选）
 │   ├── spec-sync.md           # 阶段 6 后
-│   └── spec-index.md          # 带外工具 — 由专人按需运行，把索引覆盖发布到 iWiki
-├── specs/                     # ⭐ Spec 文件（聚合索引发布到 iWiki: https://iwiki.woa.com/p/4022732388）
+│   └── spec-index.md          # 带外工具 — 由专人按需运行，把索引覆盖发布到 团队 Wiki
+├── specs/                     # ⭐ Spec 文件（聚合索引发布到 团队 Wiki: <TEAM-WIKI-URL>）
 │   ├── templates/spec-template.md
 │   └── <VERSION>/<STORYID>-<slug>.md    # 命名：Story ID + slug
 ├── plans/                     # ⭐ Plan 文件
@@ -219,7 +219,7 @@ Skills 不需要你手动调用，AI 在执行命令时会自动 reference。但
 | `test-writing` | 根据 spec 编写测试 | 测试代码 + 覆盖映射 |
 | `change-summary` | 完成后输出变更摘要 | 摘要 + 影响范围 + 风险 |
 
-> 💡 **codebase-survey** 比较特殊：它是**被其他 skill 调用**的工具型 skill。`spec-drafting`（阶段零）会自动调用它的 light 模式；`implementation-planning`（阶段二）会自动调用它的 deep 模式。新人**不需要**手动触发，但可以独立用："帮我看下 wecardpalmapp 现状"。
+> 💡 **codebase-survey** 比较特殊：它是**被其他 skill 调用**的工具型 skill。`spec-drafting`（阶段零）会自动调用它的 light 模式；`implementation-planning`（阶段二）会自动调用它的 deep 模式。新人**不需要**手动触发，但可以独立用："帮我看下 wecardexample-app 现状"。
 
 > 这 8 个 Skill 是项目本身的工作流技能，AI 在执行 commands 时会自动调用，新人**不需要**手动触发。
 
@@ -381,8 +381,8 @@ Skills 不需要你手动调用，AI 在执行命令时会自动 reference。但
 
 | spec | 分支名 |
 |------|-------|
-| `specs/v1.6.0/134029304-online-palm-registration.md` | `feature/134029304-online-palm-registration` |
-| `specs/v1.6.0/134029304-gateway-changes.md`（子 spec） | `feature/134029304-gateway-changes` |
+| `specs/v1.6.0/10086-example-user-login.md` | `feature/10086-example-user-login` |
+| `specs/v1.6.0/10086-example-gateway.md`（子 spec） | `feature/10086-example-gateway` |
 | `specs/v1.6.0/0-fix-payment-timeout.md`（紧急修复） | `hotfix/0-fix-payment-timeout` |
 
 > ⚠️ 跨仓库的所有 PR 必须使用同一分支名，便于追溯关联。
@@ -475,7 +475,7 @@ AI：[Phase 2: 存储接口]
    git commit -m "feat: implement Spec 0001 - Todo list management"
    git push -u origin feature/0001-todo-list
    ```
-2. 在 GitLab/工蜂创建 MR/PR
+2. 在 GitLab/Git 平台（GitHub / GitLab / 工蜂）创建 MR/PR
 3. **PR 描述自动套用** `.gitlab/merge_request_templates/Default.md` 的三段式：
    - 关联 Spec / Plan / Tasks
    - 偏离说明（无则写"无"）
@@ -508,7 +508,7 @@ AI 会调用 `change-summary` Skill，输出：
    - 更新 `Updated` 日期
    - 勾选 spec 中的「验收标准」checkbox
 
-> 💡 Spec 索引发布到 iWiki（<https://iwiki.woa.com/p/4022732388>）由专人/工具按需运行 `/spec-index` 覆盖发布，**不在个人 onboarding 流程中执行**。
+> 💡 Spec 索引发布到 团队 Wiki（<TEAM-WIKI-URL>）由专人/工具按需运行 `/spec-index` 覆盖发布，**不在个人 onboarding 流程中执行**。
 
 **用了什么**：
 - Rules：`40-documentation-rules.md`
@@ -538,12 +538,12 @@ AI 会调用 `change-summary` Skill，输出：
 /spec-test                →   test-writing                           →   tests/*
 /spec-review              →   spec-analysis + change-summary         →   review 报告（对话中）
 /spec-push                →   change-summary                         →   commit + 安全 rebase + push -f + MR 提示
-[人在工蜂创建 MR]         →   （无）                                 →   MR
+[人在Git 平台（GitHub / GitLab / 工蜂）创建 MR]         →   （无）                                 →   MR
 [MR 合并完成]             →   （无）                                 →   远端 develop/master
 /spec-sync                →   （无 Skill）                           →   spec 状态
 ```
 
-> Spec 索引（iWiki）由专人/工具按需 `/spec-index` 覆盖发布，**不出现在个人开发流程中**。
+> Spec 索引（团队 Wiki）由专人/工具按需 `/spec-index` 覆盖发布，**不出现在个人开发流程中**。
 
 ---
 
@@ -754,7 +754,7 @@ AI 会调用 `change-summary` Skill，输出：
 
 5. 全部 Phase 完成后，**强制**执行 `/spec-sync`：
    ```
-   请对 specs/v1.6.0/134029304-online-palm-registration.md 执行 spec-sync
+   请对 specs/v1.6.0/10086-example-user-login.md 执行 spec-sync
    ```
    AI 会检查 spec / plan / tasks / 代码是否四方一致，输出同步报告。
 
@@ -809,7 +809,7 @@ PR 描述模板里有「偏离说明」段落，这时候不能写"无"：
                        → /spec-test → tests/
                        → /spec-review→ 报告
                        → /spec-push → commit + safe rebase + push -f
-                       → 工蜂 MR (三段式)
+                       → Git 平台（GitHub / GitLab / 工蜂） MR (三段式)
                        → MR 合并
                        → /spec-sync → 状态同步
 ```
@@ -866,7 +866,7 @@ PR 描述模板里有「偏离说明」段落，这时候不能写"无"：
 
 - [ ] 读完 1.3 的 5 个文件
 - [ ] 跑通 `0-example-feature` 全流程，所有产出文件齐全
-- [ ] 完成第一个真实小任务并合并 MR（用 `/spec-push` + 工蜂 MR）
+- [ ] 完成第一个真实小任务并合并 MR（用 `/spec-push` + Git 平台（GitHub / GitLab / 工蜂） MR）
 - [ ] 能给同事讲清楚 Rules / Skills / Commands 的关系
 - [ ] 在 review 别人的 MR 时，能对照「十条铁律」给出建议
 - [ ] 第二周开始，写下了你自己的「容易踩坑点」笔记

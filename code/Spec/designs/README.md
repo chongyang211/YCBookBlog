@@ -32,7 +32,7 @@
 
 | 文件类型 | 命名格式 | 示例 |
 |---------|---------|------|
-| Design | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `designs/v1.6.0/134389917-dashboard-online-palm-statistics-design.md` |
+| Design | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `designs/v1.6.0/10086-example-user-login-design.md` |
 
 > 📂 **版本目录层级**：design 文件按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；`templates/`、`README.md` 保留在 `designs/` 根。
 

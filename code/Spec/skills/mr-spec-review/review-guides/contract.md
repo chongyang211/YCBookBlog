@@ -1,7 +1,7 @@
 # 跨端协议契约 评审依据（Cross-End Contract Review Guide）
 
 > **横切依据**：只要 MR 涉及**跨端联调的字段 / 接口 / 错误码 / proto 字段号**，无论主端是谁，都要额外加载本文件。
-> 适用仓：`proto`（palm/weixin，含原识别侧 proto 逻辑）、`palm_proto`（palm/palmpay）；以及任意端改到 `*.proto`、gRPC/HTTP 接口、错误码、序列化结构。
+> 适用仓：`proto`（<ORG>/<子组>，含原识别侧 proto 逻辑）、`<协议仓库>`（<ORG>）；以及任意端改到 `*.proto`、gRPC/HTTP 接口、错误码、序列化结构。
 > 加载时机：Step 4.0 端识别判定"涉及跨端契约"时，与主端 guide 一起加载。
 
 ---
@@ -14,10 +14,10 @@
 
 | proto 仓 | module | 服务对象 |
 |----------|--------|----------|
-| `proto` | `git.woa.com/palm/weixin/proto` | `device_manage` + `palm_global` + 识别侧（算法/palmrecognition/palmdevicegateway） |
-| `palm_proto` | `git.woa.com/palm/palmpay/palm_proto` | `palm_local` |
+| `proto` | `<GIT-HOST>/<ORG>/<子组>/proto` | `<设备管理仓库>` + `<业务主仓库>` + 识别侧（算法/<识别服务>/<设备网关>） |
+| `<协议仓库>` | `<GIT-HOST>/<ORG>/<协议仓库>` | `<业务主仓库>` |
 
-> ⚠️ 识别侧 `privaterecognition` 的接口定义原在 `mmpay_palm_recognition/proto`，**现已合并进 `palm/weixin/proto`**（本地 `src/proto`）——核对识别接口时直接查看该目录。
+> ⚠️ 识别侧 `privaterecognition` 的接口定义原在 `<ORG>/<算法组>/proto`，**现已合并进 `<ORG>/<子组>/proto`**（本地 `src/proto`）——核对识别接口时直接查看该目录。
 
 stub **不在本地生成**：proto 仓提交 MR → 流水线 `protoc` 生成 Go stub 回提 → 业务仓 `go get -u` 更新。评审要确认 **proto 先行**。
 
@@ -73,29 +73,29 @@ stub **不在本地生成**：proto 仓提交 MR → 流水线 `protoc` 生成 G
 > 从两套 proto 真实代码提炼，**含已发现的历史不一致痕迹**。评审契约变更逐条对照；括号内为可 grep 的真实文件/符号。
 
 ### 4.1 proto 与包命名（不统一，是 import 冲突高发点）
-- [ ] `go_package` 前缀不同：`palm/weixin/proto/*`（服务 device_manage+palm_global+识别侧）、`palm/palmpay/palm_proto/*`（palm_local）。改接口先定位到**正确的 proto 仓**。⚠️ 识别侧 proto 已合并进 `palm/weixin/proto`，但历史 `go_package` 可能仍带 `mmpay_palm_recognition/*` 前缀——改识别接口先 grep 确认实际前缀，别脑补。
-- [ ] 🟠 **同目录包名混用**：`proto/device_manage/comm/` 下有 `package device_manage.comm;`、`package comm;`、`package deviceaccess;`、`package instruction;` 并存——新增 proto 要跟**同目录已有**包名，别再引入新风格加剧冲突。
-- [ ] 🟠 **多个 package 复用同一 go_package**（如 palm_global 的 `palmcomm`/`palmdeviceinstruction`/`palmdevicemanage`/`palmupgrade` 都指向 `.../palm_global/comm`）——同一 Go 包内 message 重名会编译冲突，新增 message 全局查重名。
-- [ ] `go_package` 路径规范：曾出现少写 `/proto`（`device_sync_feature.proto` 指向 `palm_global/controller/...` 而非 `proto/palm_global/...`）——新文件对齐同层规范。
+- [ ] `go_package` 前缀不同：`<ORG>/<子组>/proto/*`（服务 <设备管理仓库>+<业务主仓库>+识别侧）、`<ORG>/<协议仓库>/*`（<业务主仓库>）。改接口先定位到**正确的 proto 仓**。⚠️ 识别侧 proto 已合并进 `<ORG>/<子组>/proto`，但历史 `go_package` 可能仍带 `<ORG>/<算法组>/*` 前缀——改识别接口先 grep 确认实际前缀，别脑补。
+- [ ] 🟠 **同目录包名混用**：`proto/<设备管理仓库>/comm/` 下有 `package <设备管理仓库>.comm;`、`package comm;`、`package deviceaccess;`、`package instruction;` 并存——新增 proto 要跟**同目录已有**包名，别再引入新风格加剧冲突。
+- [ ] 🟠 **多个 package 复用同一 go_package**（如 <业务主仓库> 的 `examplecomm`/`exampledeviceinstruction`/`exampledevicemanage`/`exampleupgrade` 都指向 `.../<业务主仓库>/comm`）——同一 Go 包内 message 重名会编译冲突，新增 message 全局查重名。
+- [ ] `go_package` 路径规范：曾出现少写 `/proto`（`device_sync_feature.proto` 指向 `<业务主仓库>/controller/...` 而非 `proto/<业务主仓库>/...`）——新文件对齐同层规范。
 
 ### 4.2 字段号 / enum / oneof（本项目强约定）
-- [ ] 🔴 **enum 0 值必须是 UNKNOWN/INVALID**（普遍遵守）：如 `INSTRUCTION_STATE_UNKNOWN=0`（`instruction.proto`）、`IMAGE_TYPE_INVALID=0`（`palmcomm.proto`）。新增 enum 别把有效值放 0。⚠️ 命名风格混用（A 全大写 `XXX_UNKNOWN` vs B PascalCase `Device_Key_State_UNKNOWN`）——跟所在 proto 的既有风格。
-- [ ] **枚举值业务分段**要延续：状态机按 10 递增（`instruction.proto` `DISTRIBUTING=10…CANCELED=90`），操作符/支付态按 100 分段（`deviceaccess.proto` `SearchDeviceOperator`、`palm_proto/comm` 支付态）——新增值插进正确段位，别打乱。
+- [ ] 🔴 **enum 0 值必须是 UNKNOWN/INVALID**（普遍遵守）：如 `INSTRUCTION_STATE_UNKNOWN=0`（`instruction.proto`）、`IMAGE_TYPE_INVALID=0`（`examplecomm.proto`）。新增 enum 别把有效值放 0。⚠️ 命名风格混用（A 全大写 `XXX_UNKNOWN` vs B PascalCase `Device_Key_State_UNKNOWN`）——跟所在 proto 的既有风格。
+- [ ] **枚举值业务分段**要延续：状态机按 10 递增（`instruction.proto` `DISTRIBUTING=10…CANCELED=90`），操作符/支付态按 100 分段（`deviceaccess.proto` `SearchDeviceOperator`、`<协议仓库>/comm` 支付态）——新增值插进正确段位，别打乱。
 - [ ] **reserved 预留是范本**：`SyncCursor`（`device_sync_feature.proto`）用 `reserved 6 to 9` + 注释预留未来字段号——**跨端同步游标类 message 必须保留 reserved 习惯**，删字段也要 `reserved` 号+名防复用。
-- [ ] **oneof 从高号段起**（为未来类型留低号）：`DeviceAuth{oneof auth_info{SeAuth se_auth=100;}}`（`deviceaccess.proto`）、`Accessory{oneof model_info{...}}`（`palmcomm.proto`）——扩展认证/型号走 oneof + 高起始号。
-- [ ] proto3 `optional`：`ResourceUsage`（`palmdiagnosis.proto`）注释明确"未设置 Go 端为 nil、JSON 序列化为 null"——用 optional 表达"可缺省"语义时，两端都要处理 nil/null。
+- [ ] **oneof 从高号段起**（为未来类型留低号）：`DeviceAuth{oneof auth_info{SeAuth se_auth=100;}}`（`deviceaccess.proto`）、`Accessory{oneof model_info{...}}`（`examplecomm.proto`）——扩展认证/型号走 oneof + 高起始号。
+- [ ] proto3 `optional`：`ResourceUsage`（`examplediagnosis.proto`）注释明确"未设置 Go 端为 nil、JSON 序列化为 null"——用 optional 表达"可缺省"语义时，两端都要处理 nil/null。
 
 ### 4.3 设备网关 message（🔴 老设备兼容 + 命名一致性高发区）
-- [ ] 🔴 **同一业务概念跨仓命名不一致**（真实痕迹）：指令关联消息在 `device_manage/comm` proto 叫 `InstructionLinkMsg`、设备侧 `CloudCmd.proto`（C++/Android）与 palm_global 侧又用 `Instruction`/`InstructionForDevice` 等——**兄弟 spec / 多端引用同一概念时，逐字段核对 proto 源**，别假设同名同结构（对照 code-patterns#4）。
-- [ ] 设备网关（`palmdevicegateway`/`devicegateway`/`wecarddevicegateway`）的 message 变更是**老设备兼容重灾区**：字段号只加不改、老字段默认值兼容、错误码只加不改（强制走 [`device.md`](./device.md) §2.1 + SKILL.md 4.3）。
+- [ ] 🔴 **同一业务概念跨仓命名不一致**（真实痕迹）：指令关联消息在 `<设备管理仓库>/comm` proto 叫 `InstructionLinkMsg`、设备侧 `CloudCmd.proto`（C++/Android）与 <业务主仓库> 侧又用 `Instruction`/`InstructionForDevice` 等——**兄弟 spec / 多端引用同一概念时，逐字段核对 proto 源**，别假设同名同结构（对照 code-patterns#4）。
+- [ ] 设备网关（`<设备网关>`/`devicegateway`/`wecarddevicegateway`）的 message 变更是**老设备兼容重灾区**：字段号只加不改、老字段默认值兼容、错误码只加不改（强制走 [`device.md`](./device.md) §2.1 + SKILL.md 4.3）。
 
 ### 4.4 HTTP 映射（grpc-gateway `google.api.http`）
-- [ ] RPC 用 `option (google.api.http)` 声明；写操作 `post + body:"*"`，读操作 `get` + 路径参数（`palmactivationgateway.proto` `/activation/devices/{device_sn}/...`）——新接口路径遵循现有 REST 风格 + 资源命名。
-- [ ] `additional_bindings` 用于多路径兼容（`palmdevicegateway.proto`）——改路径别直接删老 binding，加 `additional_bindings` 保留旧路径过渡。
+- [ ] RPC 用 `option (google.api.http)` 声明；写操作 `post + body:"*"`，读操作 `get` + 路径参数（`exampleactivationgateway.proto` `/activation/devices/{device_sn}/...`）——新接口路径遵循现有 REST 风格 + 资源命名。
+- [ ] `additional_bindings` 用于多路径兼容（`<设备网关>.proto`）——改路径别直接删老 binding，加 `additional_bindings` 保留旧路径过渡。
 
 ### 4.5 错误码与 stub 生成
-- [ ] 错误码是**纯 Go `errcodes`**（`infrastructure/errcodes`、`palm_local/common/errcodes`），不在 proto 里——契约评审错误码时联动 [`backend.md`](./backend.md) §5.3（iota 顺序铁律：只加不改、不动顺序）。
-- [ ] 🔴 **stub 由 proto 仓流水线 `protoc` 生成回提、业务仓 `go get -u` 更新**，本地不生成——评审确认 **proto MR 先行合入**，业务代码别抢跑用还没生成的字段（否则编译不过）。protoc 版本：palm/weixin·palm/palmpay 用 v5.27.1，识别侧 27.1。
+- [ ] 错误码是**纯 Go `errcodes`**（`infrastructure/errcodes`、`<业务主仓库>/common/errcodes`），不在 proto 里——契约评审错误码时联动 [`backend.md`](./backend.md) §5.3（iota 顺序铁律：只加不改、不动顺序）。
+- [ ] 🔴 **stub 由 proto 仓流水线 `protoc` 生成回提、业务仓 `go get -u` 更新**，本地不生成——评审确认 **proto MR 先行合入**，业务代码别抢跑用还没生成的字段（否则编译不过）。protoc 版本：<ORG>/<子组>·<ORG> 用 v5.27.1，识别侧 27.1。
 
 ---
 

@@ -43,7 +43,7 @@ description: Spec 起草技能。当用户提供原始需求（自然语言描�
 
 ### Step 2.5: 索引检查 + 多 spec 检测
 
-- 扫描 `specs/<VERSION>/` 目录了解现有 spec（必要时也可参考 iWiki 索引：<https://iwiki.woa.com/p/4022732388>）
+- 扫描 `specs/<VERSION>/` 目录了解现有 spec（必要时也可参考 团队 Wiki 索引：<TEAM-WIKI-URL>）
 - 检查是否有现有 spec 与新需求重叠 / 冲突（codebase-survey 已部分覆盖，此处再确认 spec 层）
 - 确认 Story ID（从 docs/intake 头部 / 用户提供 / 默认 `0` 占位）
 - **多 spec 检测**：扫描 `specs/` 目录看是否已有同 Story ID 的 spec 文件
@@ -87,8 +87,8 @@ description: Spec 起草技能。当用户提供原始需求（自然语言描�
 - 路径：`specs/<VERSION>/<STORYID>-<slug>.md`
   - `STORYID`：纯数字 Story ID（**不强制唯一**——大需求拆分时多个 spec 可共享）；如无对应 story 用 `0` 占位
   - `<slug>`：kebab-case 简短描述（**同 Story 下必须唯一**，是真正的 spec 区分键）
-  - 例：`specs/v1.6.0/134029305-payment-retry.md`
-  - 大需求拆分例：`specs/v1.6.0/134029304-gateway-changes.md`、`specs/v1.6.0/134029304-controller-impl.md`
+  - 例：`specs/v1.6.0/10088-payment-retry.md`
+  - 大需求拆分例：`specs/v1.6.0/10086-example-gateway.md`、`specs/v1.6.0/10086-example-controller.md`
 - frontmatter：
   - `Story ID: <数字>`（与文件名保持一致；**追溯线索，非唯一标识**）
   - `Sibling Specs: [...]`（可选；如本 spec 是子 spec，列出同 Story 下的兄弟 spec 路径）
@@ -146,7 +146,7 @@ description: Spec 起草技能。当用户提供原始需求（自然语言描�
 
 ## 输出格式参考
 
-参见 `specs/v1.6.0/0-example-feature.md` 与 `specs/v1.6.0/134029304-online-palm-registration.md` 的实际章节结构。
+参见 `specs/v1.6.0/0-example-feature.md` 与 `specs/v1.6.0/10086-example-user-login.md` 的实际章节结构。
 
 ## 关联资产
 

@@ -1,14 +1,14 @@
 # 前端 评审依据（Frontend Review Guide）
 
-> 适用：Web 前端（`palm_saas_fe` 管控管理端、`palm-wepay/web`、`PaymaxPalmSdk/web`）。
-> 技术栈：Vue3 SFC + `<script setup>` + Vite + pinia；`palm_saas_fe` 为**微前端**（pnpm + lerna monorepo，主应用 `packages/main` + 子应用 `packages/iot`/`packages/pay`）；`node >=18 <20`、`pnpm >=6 <10`。
+> 适用：Web 前端（`<前端仓库>` 管控管理端、`<支付仓库>/web`、`<SDK 仓库>/web`）。
+> 技术栈：Vue3 SFC + `<script setup>` + Vite + pinia；`<前端仓库>` 为**微前端**（pnpm + lerna monorepo，主应用 `packages/main` + 子应用 `packages/iot`/`packages/pay`）；`node >=18 <20`、`pnpm >=6 <10`。
 > 加载时机：MR 命中上述前端目录时，Step 4.1 / 4.5 / 4.6 前读完本文件。
 
 ---
 
 ## 1. 架构与约定（评审基准）
 
-`palm_saas_fe` 目录结构：
+`<前端仓库>` 目录结构：
 ```
 common/            跨应用公共资源/组件/hooks/utils/types/config
 packages/main/     微前端主应用（api / components / layouts / pages / router / store）
@@ -78,9 +78,9 @@ conf/              config.json、nginx-web.conf
 
 ## 5. 本项目真实代码约定与专项检查（带代码依据）
 
-> 从两套前端真实代码提炼。**先分清评审对象**：`palm_saas_fe`（PC 管控后台，Vue3 + Vite + pinia + **wujie 微前端** + **TDesign PC** + vue-i18n）与 `palm-wepay/web`（设备端 H5，**单体** + tdesign-mobile-vue + JSBridge，四语含繁体）——两者架构/i18n/状态完全不同，**不可套用同一规则**。
+> 从两套前端真实代码提炼。**先分清评审对象**：`<前端仓库>`（PC 管控后台，Vue3 + Vite + pinia + **wujie 微前端** + **TDesign PC** + vue-i18n）与 `<支付仓库>/web`（设备端 H5，**单体** + tdesign-mobile-vue + JSBridge，四语含繁体）——两者架构/i18n/状态完全不同，**不可套用同一规则**。
 
-### 5.1 微前端（wujie，非 qiankun；`palm_saas_fe/packages/main`）
+### 5.1 微前端（wujie，非 qiankun；`<前端仓库>/packages/main`）
 - [ ] 子应用（`MicroFeApp.IOT/SERVICE/OPERATION/PAY`，`constants.ts`）新增/改造要**同步三处**：`hostMap.ts`（URL 映射，开发域名硬编码）、`router/modules/micro-app.ts`（挂 Layout）、`scripts/generateViteConfig.ts` 的 `allowedHosts`——**极易漏改其一**。
 - [ ] 🟠 **主→子状态非响应式**：子应用 `useWujieStore()` 从 `global.$wujie.props` 取的是**快照**（`packages/iot/src/store/modules/wujie.ts`），主应用 `userInfo`/`settingStore` 变更**不会自动同步**；语言等要靠 `WujieVue.bus.$emit/$on` 单独广播（`IotView.vue`/`App.vue`）。评审依赖跨应用状态的改动，确认是否漏了 bus 事件。
 - [ ] `App.vue` 里 `bus.$on('language')` 每次挂载都注册、`$off` 移除全部监听——多实例/重复挂载场景要防重复注册。
@@ -88,7 +88,7 @@ conf/              config.json、nginx-web.conf
 
 ### 5.2 i18n（英文原文即 key，非 key 命名法）
 - [ ] 🔴 **key 就是英文句子**：`locales/{zh-CN,en-US,ja-JP}.json` 里如 `"Create User": "创建用户"`，代码 `t('Create User')`。**改文案 = 改 key = 三语文件全改**，极易漏翻/裂开——评审文案改动必查三语是否同步、有无残留旧 key。
-- [ ] 🔴 三语必须**全部具体**：`palm_saas_fe` 用 `zh/en/ja` 简写（默认 locale `'en'`）；`palm-wepay/web` 是**四语（含繁体）**。别漏语种、别留空。
+- [ ] 🔴 三语必须**全部具体**：`<前端仓库>` 用 `zh/en/ja` 简写（默认 locale `'en'`）；`<支付仓库>/web` 是**四语（含繁体）**。别漏语种、别留空。
 - [ ] 长句/带插值的 key（含 `!{'@'}` 等 vue-i18n 转义）改动风险高，核对插值占位在三语里都对齐。
 - [ ] 语言切换靠三个 `t-config-provider`（`v-if zh/ja/else`）强制重建 TDesign 组件（`App.vue` 顶部注释解释了这个 hack）——新页面别破坏这个结构。
 

@@ -98,13 +98,13 @@
 
 | 文件类型 | 命名 | 示例 |
 |---------|------|------|
-| Intake | `docs/intake/<VERSION>/<STORYID>-<slug>.md` | `docs/intake/v1.6.0/134389917-dashboard-online-palm-statistics.md` |
-| Design（可选） | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `designs/v1.6.0/134389917-dashboard-online-palm-statistics-design.md` |
-| Spec | `specs/<VERSION>/<STORYID>-<slug>.md` | `specs/v1.6.0/134029305-payment-retry.md` |
-| Plan | `plans/<VERSION>/<STORYID>-<slug>-plan.md` | `plans/v1.6.0/134029305-payment-retry-plan.md` |
-| Tasks | `tasks/<VERSION>/<STORYID>-<slug>-tasks.md` | `tasks/v1.6.0/134029305-payment-retry-tasks.md` |
+| Intake | `docs/intake/<VERSION>/<STORYID>-<slug>.md` | `docs/intake/v1.6.0/10086-example-user-login.md` |
+| Design（可选） | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `designs/v1.6.0/10086-example-user-login-design.md` |
+| Spec | `specs/<VERSION>/<STORYID>-<slug>.md` | `specs/v1.6.0/10088-payment-retry.md` |
+| Plan | `plans/<VERSION>/<STORYID>-<slug>-plan.md` | `plans/v1.6.0/10088-payment-retry-plan.md` |
+| Tasks | `tasks/<VERSION>/<STORYID>-<slug>-tasks.md` | `tasks/v1.6.0/10088-payment-retry-tasks.md` |
 
-> 📂 **版本目录层级（强制）**：所有产物按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）。`templates/`、`README.md` 是跨版本元文件，保留在各目录根。`<VERSION>` 由当前迭代决定，同一迭代的 intake / design / spec / plan / tasks 放进同名版本目录。聚合索引由 `/spec-index` 发布到 iWiki，不在仓库内维护。
+> 📂 **版本目录层级（强制）**：所有产物按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）。`templates/`、`README.md` 是跨版本元文件，保留在各目录根。`<VERSION>` 由当前迭代决定，同一迭代的 intake / design / spec / plan / tasks 放进同名版本目录。聚合索引由 `/spec-index` 发布到 团队 Wiki，不在仓库内维护。
 
 - `STORYID`：纯数字需求单号；无对应 story 用 `0` 占位
 - `<slug>`：kebab-case 简短描述
@@ -117,8 +117,8 @@
 
 | 场景 | 命名示例 |
 |------|---------|
-| 单 spec | `specs/v1.6.0/134029305-payment-retry.md` |
-| 大需求拆分（同 Story 多 spec） | `specs/v1.6.0/134029304-gateway-changes.md`<br>`specs/v1.6.0/134029304-controller-impl.md`<br>`specs/v1.6.0/134029304-passvendor-channel.md` |
+| 单 spec | `specs/v1.6.0/10088-payment-retry.md` |
+| 大需求拆分（同 Story 多 spec） | `specs/v1.6.0/10086-example-gateway.md`<br>`specs/v1.6.0/10086-example-controller.md`<br>`specs/v1.6.0/10086-example-channel.md` |
 
 - **真正的唯一标识**：`<STORYID>-<slug>` 整体（即文件路径）
 - **slug 的作用**：在同一 Story 内区分不同的子 spec，必须有业务区分度（按模块 / 子功能命名）
@@ -144,16 +144,16 @@
 
 | spec | 分支名 |
 |------|-------|
-| `specs/v1.6.0/134029304-online-palm-registration.md` | `feature/134029304-online-palm-registration` |
-| `specs/v1.6.0/134029304-gateway-changes.md`（子 spec） | `feature/134029304-gateway-changes` |
+| `specs/v1.6.0/10086-example-user-login.md` | `feature/10086-example-user-login` |
+| `specs/v1.6.0/10086-example-gateway.md`（子 spec） | `feature/10086-example-gateway` |
 | `specs/v1.6.0/0-fix-payment-timeout.md`（紧急修复） | `hotfix/0-fix-payment-timeout` |
 
 **跨仓库一致性**：
 
-- 一个 spec 可能涉及多个仓库（如 `palm_proto` + `palm_local`）
+- 一个 spec 可能涉及多个仓库（如 `<协议仓库>` + `<业务主仓库>`）
 - 所有相关仓库**必须使用同一分支名**，便于追溯关联
 - 仓库清单从 plan 的「涉及仓库」表读取
-- 多仓库 PR 在描述中相互引用（`相关 PR: palm_proto#123`）
+- 多仓库 PR 在描述中相互引用（`相关 PR: <协议仓库>#123`）
 
 > ⚠️ 设计取舍：早期版本曾使用 `NNNN-<STORYID>-<slug>` 格式（含顺序号 NNNN），但 NNNN 在多人并行开发时易冲突且难维护，**已废弃**。Story ID + slug 组合已足够定位，无需额外顺序号。
 
@@ -337,7 +337,7 @@ git checkout -b {feature|hotfix}/<spec-name>   # 拉出 feature 分支
 <type>(<scope>): <subject> --story=<STORYID> [#finish]
 ```
 
-例：`feat(palm): 首页面板新增空中录掌关联数据 --story=134389917`
+例：`feat(auth): 首页面板新增示例业务关联数据 --story=10087`
 
 - 中间过程的 commit **不要**加 `#finish`
 - 最后一笔（或唯一一笔）加 `#finish` 用于关闭 story
@@ -534,13 +534,13 @@ git commit -m "<type>(<scope>): <subject> --story=<STORYID> [#finish]"
 | `<scope>` | ✅ | 模块名（小写） |
 | `<subject>` | ✅ | 简洁中文描述 |
 | `--story=<STORYID>` | ✅ | 与 spec frontmatter Story ID 一致；无 story 用 `--story=0` |
-| `#finish` | 可选 | 仅在 Story 的**最后一笔** commit 加（合并 MR 时关闭工蜂 story） |
+| `#finish` | 可选 | 仅在 Story 的**最后一笔** commit 加（合并 MR 时关闭Git 平台（GitHub / GitLab / 工蜂） story） |
 
 **例**：
 
 ```
-feat(palm): 首页面板新增空中录掌关联数据&数据可配置 --story=134389917 #finish
-fix(gateway): 修复空中录掌鉴权超时问题 --story=134029304 #finish
+feat(auth): 首页面板新增示例业务关联数据&数据可配置 --story=10087 #finish
+fix(gateway): 修复示例业务鉴权超时问题 --story=10086 #finish
 ```
 
 ### Step 2: 安全 Rebase（每个改动仓库）
@@ -572,12 +572,12 @@ git push -f origin {feature|hotfix}/<spec-name>
 如有跨仓库依赖（如 proto + 业务代码）：
 
 ```
-被依赖仓库（如 palm_proto）→ 先 push + 合并 + 等流水线
+被依赖仓库（如 <协议仓库>）→ 先 push + 合并 + 等流水线
    ↓
-依赖仓库（如 palm_local）→ 更新依赖 → rebase → push + 合并
+依赖仓库（如 <业务主仓库>）→ 更新依赖 → rebase → push + 合并
 ```
 
-每个仓库的 MR 在描述中相互引用：`palm_proto!123`、`palm_local!456`。
+每个仓库的 MR 在描述中相互引用：`<协议仓库>!123`、`<业务主仓库>!456`。
 
 ### Step 5: 合并后 sync
 
@@ -585,7 +585,7 @@ git push -f origin {feature|hotfix}/<spec-name>
 - spec status 改为 `implemented`
 - 验证三件套 + 代码 + 测试一致
 
-> 仓库内不再维护聚合的 `specs/INDEX.md`（已移除，避免 MR 冲突）。Spec 索引以 iWiki 文档为单一发布出口，由专人/工具按需运行 `/spec-index` 覆盖发布，**不在个人开发流程中执行**。
+> 仓库内不再维护聚合的 `specs/INDEX.md`（已移除，避免 MR 冲突）。Spec 索引以 团队 Wiki 文档为单一发布出口，由专人/工具按需运行 `/spec-index` 覆盖发布，**不在个人开发流程中执行**。
 
 **禁止行为**：
 

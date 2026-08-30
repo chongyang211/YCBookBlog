@@ -1,3 +1,0 @@
-# PalmAI OpenAPI Skill 依赖
-# 安装: pip3 install -r requirements.txt
-cryptography>=3.2,<42.0

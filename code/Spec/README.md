@@ -1,10 +1,10 @@
 # Spec-Driven AI Collaborative Workspace
 
-「刷掌支付」团队的 **Spec 驱动 AI 协作开发工作空间**。
+你的团队的 **Spec 驱动 AI 协作开发工作空间**。
 
 > 一句话理念：**我们不写"AI 自由发挥"的代码——每个改动都从一份 Spec 开始，经 Plan、Tasks 三件套沉淀，由「人审 + AI 执行 + 人合并」。**
 
-> 📋 **全队 Spec 索引 / 当前迭代需求一览** → iWiki：<https://iwiki.woa.com/p/4022732388>（含每个 spec 的版本号、Status、Owner、Spec/Plan/Tasks 链接）
+> 📋 **全队 Spec 索引 / 当前迭代需求一览** → 团队 Wiki：<TEAM-WIKI-URL>（含每个 spec 的版本号、Status、Owner、Spec/Plan/Tasks 链接）
 
 ---
 
@@ -59,7 +59,7 @@ flowchart TD
 
 ### 命令清单（10 个工作流命令，其中 3 个可选）
 
-> 此外还有一个**带外工具** `/spec-index`：扫描 `specs/` 生成索引并完整覆盖同步到 iWiki（<https://iwiki.woa.com/p/4022732388>）。它**不属于个人开发流程**，由专人/工具按需运行，避免大家在自己分支上各自重生导致 iWiki 反复被半成品覆盖。
+> 此外还有一个**带外工具** `/spec-index`：扫描 `specs/` 生成索引并完整覆盖同步到 团队 Wiki（<TEAM-WIKI-URL>）。它**不属于个人开发流程**，由专人/工具按需运行，避免大家在自己分支上各自重生导致 团队 Wiki 反复被半成品覆盖。
 
 | 阶段 | 命令 | 输入 | 输出 |
 |------|------|------|------|
@@ -122,7 +122,7 @@ flowchart TD
 | `tests/` | 测试代码（与 spec 验收标准对齐） | ✅ |
 | `docs/` | 团队手册 / 流程概要 / git 工作流 / onboarding | ✅ |
 | `docs/intake/` | 原始需求草稿区（**不是** spec） | ✅ |
-| `.gitlab/` | MR 模板（工蜂） | ✅ |
+| `.gitlab/` | MR 模板（Git 平台（GitHub / GitLab / 工蜂）） | ✅ |
 | `.codebuddy/` | CodeBuddy IDE 协作配置（commands/rules 软链） | ✅ |
 | `src/` | 业务代码仓库（按 spec 涉及范围自行 clone） | ❌ gitignore |
 | `bin/` | 本地工具二进制（如 gopls） | ❌ gitignore |
@@ -130,7 +130,7 @@ flowchart TD
 
 > 📂 **版本目录层级**：`docs/intake/`、`designs/`、`specs/`、`plans/`、`tasks/` 下的文档均按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；各目录的 `templates/`、`README.md` 为跨版本元文件，保留在目录根。
 >
-> 🌐 **Spec 索引发布到 iWiki**：仓库内不再维护聚合的 `specs/INDEX.md`（避免 MR 冲突）。索引以 iWiki 文档为单一发布出口（<https://iwiki.woa.com/p/4022732388>），由专人/工具按需运行带外命令 `/spec-index` 完整覆盖发布，**不在个人开发流程中执行**。
+> 🌐 **Spec 索引发布到 团队 Wiki**：仓库内不再维护聚合的 `specs/INDEX.md`（避免 MR 冲突）。索引以 团队 Wiki 文档为单一发布出口（<TEAM-WIKI-URL>），由专人/工具按需运行带外命令 `/spec-index` 完整覆盖发布，**不在个人开发流程中执行**。
 
 ---
 
@@ -139,7 +139,7 @@ flowchart TD
 **Step 1 — 拉本仓库**
 
 ```bash
-git clone git@git.woa.com:palm/palmpay/CoSpec.git spec
+git clone <GIT-HOST>:<ORG>/CoSpec.git spec
 cd spec
 ```
 
@@ -149,8 +149,8 @@ cd spec
 
 ```bash
 mkdir -p src && cd src
-git clone git@git.woa.com:palm/palmpay/palm_local.git   # 业务主仓库（基线 develop）
-git clone git@git.woa.com:palm/palmpay/palm_proto.git   # proto 定义仓库（基线 master）
+git clone <GIT-HOST>:<ORG>/<业务主仓库>.git   # 业务主仓库（基线 develop）
+git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 定义仓库（基线 master）
 # 其他仓库按当前 spec 的 plan「涉及仓库」表按需 clone
 ```
 

@@ -24,13 +24,13 @@
 **触发方式**：
 
 ```
-请根据 specs/v1.6.0/134389917-dashboard-online-palm-statistics.md 执行 spec-push
+请根据 specs/v1.6.0/10086-example-user-login.md 执行 spec-push
 ```
 
 或：
 
 ```
-review 通过，请执行 spec-push（commit msg：feat(palm): 首页面板新增空中录掌关联数据&数据可配置）
+review 通过，请执行 spec-push（commit msg：feat(auth): 首页面板新增示例业务关联数据&数据可配置）
 ```
 
 ## 执行步骤
@@ -85,12 +85,12 @@ review 通过，请执行 spec-push（commit msg：feat(palm): 首页面板新�
 5. **创建 MR 提示**
    - AI 输出每个仓库的 MR 创建链接 / 命令模板：
      ```
-     # 工蜂 UI 创建 MR：
+     # Git 平台（GitHub / GitLab / 工蜂） UI 创建 MR：
      # 源分支：feature/<spec-name>
      # 目标分支：<baseline>
      # 描述自动套用：.gitlab/merge_request_templates/Default.md
      ```
-   - 提示用户：多仓库 MR 在描述中互相引用（`palm_proto!123`）
+   - 提示用户：多仓库 MR 在描述中互相引用（`<协议仓库>!123`）
    - 提示用户：被依赖的仓库（如 proto）需**先合并**，业务仓库再 rebase + push
 
 6. **更新 spec 状态**

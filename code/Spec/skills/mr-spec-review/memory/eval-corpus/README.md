@@ -16,7 +16,7 @@
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `mr` | string | MR 标识，如 `palm/palmpay/CoSpec!77` |
+| `mr` | string | MR 标识，如 `<ORG>/CoSpec!77` |
 | `round` | int | 评审轮次（1=初评，2/3…=复评） |
 | `date` | string | 该处置确定的日期 `YYYY-MM-DD` |
 | `file_anchor` | string | 问题定位的稳定锚点：`文件路径#章节或符号`（**不用行号**，避免漂移） |
@@ -30,8 +30,8 @@
 ### 示例
 
 ```json
-{"mr":"palm/palmpay/CoSpec!77","round":2,"date":"2026-07-16","file_anchor":"specs/v1.8.0/xxx.md#FR-6.2","category":"抽象/分层","pattern_id":"code#2","fingerprint":"a1b2c3","label":"TP","author_reply":"已下沉到 domain hook","commit_after":"9f3a1c2"}
-{"mr":"palm/palmpay/CoSpec!77","round":2,"date":"2026-07-16","file_anchor":"specs/v1.8.0/xxx.md#FR-4","category":"性能/连接","pattern_id":"code#6","fingerprint":"d4e5f6","label":"FP","author_reply":"该路径调用频率极低，无需连接池","commit_after":null}
+{"mr":"<ORG>/CoSpec!77","round":2,"date":"2026-07-16","file_anchor":"specs/v1.8.0/xxx.md#FR-6.2","category":"抽象/分层","pattern_id":"code#2","fingerprint":"a1b2c3","label":"TP","author_reply":"已下沉到 domain hook","commit_after":"9f3a1c2"}
+{"mr":"<ORG>/CoSpec!77","round":2,"date":"2026-07-16","file_anchor":"specs/v1.8.0/xxx.md#FR-4","category":"性能/连接","pattern_id":"code#6","fingerprint":"d4e5f6","label":"FP","author_reply":"该路径调用频率极低，无需连接池","commit_after":null}
 ```
 
 ## 如何维护（AI 执行）

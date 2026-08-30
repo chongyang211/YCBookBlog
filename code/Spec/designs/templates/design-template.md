@@ -1,7 +1,7 @@
 # Technical Design — [简短标题]
 
 > **关联 Intake**: `docs/intake/<VERSION>/<STORYID>-<slug>.md`  
-> **Story ID**: [需求单号，如 134389917；无对应 story 则填 `0`]  
+> **Story ID**: [需求单号，如 10087；无对应 story 则填 `0`]  
 > **Author**: [作者]  
 > **Reviewers**: [评审人，如 架构师 / Tech Lead，TBD]  
 > **Created**: YYYY-MM-DD  
@@ -9,7 +9,7 @@
 > **Status**: draft | reviewing | approved | obsolete  
 
 > 📁 **文件命名规范**：`designs/<VERSION>/<STORYID>-<slug>-design.md`  
-> 例：`designs/v1.6.0/134389917-dashboard-online-palm-statistics-design.md`  
+> 例：`designs/v1.6.0/10086-example-user-login-design.md`  
 > 评审通过（status: approved）后，由 `/spec-draft` 基于「intake + 本方案」起草 spec。
 
 ## 需求背景与目标

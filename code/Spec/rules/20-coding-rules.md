@@ -32,7 +32,7 @@ AI 在修改 `src/` 中的代码时，必须遵循以下规则。
 
 ## 状态机注释维护
 
-- 修改刷掌状态机（新增/删除/调整状态、转移、事件、Verdict、Action）时，**必须同步更新 `palm_flow_fsm_def.h` 顶部的状态流转图注释**
+- 修改业务状态机（新增/删除/调整状态、转移、事件、Verdict、Action）时，**必须同步更新 `<状态机定义文件>` 顶部的状态流转图注释**
 - 状态图需反映：状态层次（Composite/leaf）、所有转移（含重试循环、超时、abort）、关键 Verdict 分支、事件触发条件
 - 新增状态时在图中标明 enter/exit 行为（arm/disarm timer、emit event）与 completion_source 语义
 - 注释更新与代码改动同一 commit，不单独拆分

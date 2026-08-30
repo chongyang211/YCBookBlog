@@ -1,6 +1,6 @@
 # 后台服务端 评审依据（Backend Review Guide）
 
-> 适用：Go 后台服务（`device_manage`、`palm_global`、`palm_local`、`cloud_palm_activation`、`cloud_IoTService` 云侧、`infrastructure`）。
+> 适用：Go 后台服务（`<设备管理仓库>`、`<业务主仓库>`、`<业务主仓库>`、`<激活服务仓库>`、`<IoT 服务仓库>` 云侧、`infrastructure`）。
 > 技术栈：Go 1.23+ / gRPC + grpc-gateway（双端口）/ MySQL(gorm) + Redis / Kafka·pubsub / OpenTelemetry / 国密 SM2·SM4 + KMS。
 > 加载时机：MR 命中上述目录时，Step 4.1（文档层）与 Step 4.5（代码验证）前读完本文件。
 
@@ -24,9 +24,9 @@ common/        横切能力（crypto / auth / i18n / middleware / constant …�
 - ❌ domain 依赖 application/controller = 反向依赖。
 - ❌ controller 横向 import 另一个业务域的 controller。
 - ❌ application 层 import controller 层的 helper（如 `set_yyy.go` 里的 client 构造器）= 反向依赖（对照 code-patterns#7）。
-- ✅ 跨服务调用走 gRPC + proto stub（`palm_local` → `palm_global` 经 `palm/weixin/proto`）。
+- ✅ 跨服务调用走 gRPC + proto stub（`<业务主仓库>` → `<业务主仓库>` 经 `<ORG>/<子组>/proto`）。
 
-**多租户（仅 `palm_local`）**：仓储按租户 `OCode` 路由数据库；评审任何 repo/SQL 改动，确认 OCode 路由没被绕过、没跨租户串数据。
+**多租户（仅 `<业务主仓库>`）**：仓储按租户 `OCode` 路由数据库；评审任何 repo/SQL 改动，确认 OCode 路由没被绕过、没跨租户串数据。
 
 ---
 
@@ -35,7 +35,7 @@ common/        横切能力（crypto / auth / i18n / middleware / constant …�
 ### 2.1 分层与落点
 - [ ] 新增校验/逻辑是否放在了**正确的层**？（校验设备类型等应下沉到 domain 已有 hook，而非在 application 层硬编码 `if name=='xxx'`——对照 code-patterns#2）
 - [ ] 是否复用了 domain 层已有的 `check*`/`validate*`/`is*` 方法作为天然落点，而不是新造？
-- [ ] 新增方法命名/可见性是否与**同族方法**一致（`isO1Device` 私有 → 不该新增 `IsO4Device` 导出；对照 code-patterns#3）？
+- [ ] 新增方法命名/可见性是否与**同族方法**一致（`isO1Device` 私有 → 不该新增 `IsExampleDevice` 导出；对照 code-patterns#3）？
 
 ### 2.2 接口与契约（gRPC / proto）
 - [ ] 改 proto 的字段号是否**只加不改**？老字段语义/类型未变（对照 contract.md）？
@@ -87,7 +87,7 @@ common/        横切能力（crypto / auth / i18n / middleware / constant …�
 
 ## 4. 对外/跨端联调契约（后台视角）
 
-- 面向**设备端**的接口（`devicegateway`/`wecarddevicegateway`/`palmdevicegateway`）变更 → 强制走 SKILL.md Step 4.3 设备端兼容性 + [`device.md`](./device.md) + [`contract.md`](./contract.md)。
+- 面向**设备端**的接口（`devicegateway`/`wecarddevicegateway`/`<设备网关>`）变更 → 强制走 SKILL.md Step 4.3 设备端兼容性 + [`device.md`](./device.md) + [`contract.md`](./contract.md)。
 - 面向**前端**的 webgateway 接口 → 字段增删、错误码、分页契约要与 [`frontend.md`](./frontend.md) 对齐；返回给前端的枚举/文案考虑 i18n。
 - 面向**移动端 SDK**的 appgateway/opengateway 接口 → 签名/token 契约、字段兼容看 [`mobile-sdk.md`](./mobile-sdk.md)。
 
@@ -99,14 +99,14 @@ common/        横切能力（crypto / auth / i18n / middleware / constant …�
 
 ### 5.1 依赖注入与启动装配（`infrastructure/dig` + `common/bootstrap`）
 框架是 uber `dig`（`infrastructure/dig/dig.go`），靠**匿名 import 触发 `init()` 副作用注册**。
-- [ ] 新增 repo/domain 的 `RegisterInitFunc`/`Provide` **必须写在包 `init()` 里**，且承载包**被 main/server 匿名 import**（如 `server.go` 的 `_ "…/repo/palmstandard"`）——漏 import → 工厂为 nil、启动即空指针。
+- [ ] 新增 repo/domain 的 `RegisterInitFunc`/`Provide` **必须写在包 `init()` 里**，且承载包**被 main/server 匿名 import**（如 `server.go` 的 `_ "…/repo/examplestandard"`）——漏 import → 工厂为 nil、启动即空指针。
 - [ ] 🔴 **Gateway 默认不启用 DI**，依赖 DI 工厂的 gateway 必须显式 `WithGwDI()`（`common/bootstrap/runner.go`）；App 默认启用（`WithSkipDI` 才跳过）。
 - [ ] `RegisterInitFunc` 依赖的 `*XxxConfiguration` 必须有对应 `Provide`，否则 `MustInvokeInitFuncs` 启动报错。
 - [ ] 装配顺序 `SetConfig → InstallOpentelemetry → InvokeInitFuncs(DI) → AfterDI(pool.Init/subscriber.Register) → 拦截器`——新增需在 DI 后初始化的资源要挂 AfterDI，别在 init 里就用还没就绪的工厂。
 
 ### 5.2 DDD 充血模型与依赖反转（真实写法）
 - [ ] 领域实体内嵌 `*poHolder[XxxPo]`（`domain/domain.go` 泛型），getter/setter 读写 `po.XXX`；**状态变更要维护 Version 自增**（参考 `domain/common/organization/organization.go` 的 `SetIdleImageURL`/`mergePageStyleConfig` 用 `reflect.DeepEqual` 判变再升版本）。
-- [ ] 仓储走 **provider 反转**：domain 定义 `SetXxxRepoProvider` + `NewXxxRepository`，repo 在 `init()` 里 `SetXxxProvider`（`repo/palmstandard/*_repo.go`）——**domain 绝不能直接 import repo**（反向依赖）。
+- [ ] 仓储走 **provider 反转**：domain 定义 `SetXxxRepoProvider` + `NewXxxRepository`，repo 在 `init()` 里 `SetXxxProvider`（`repo/examplestandard/*_repo.go`）——**domain 绝不能直接 import repo**（反向依赖）。
 - [ ] 构造遵循三件套：`NewXxx`（新建）/`RebuildXxx`（repo load 重建）/`NewXxxRepository`（拿仓储）。
 
 ### 5.3 错误码 errcodes（`infrastructure/errcodes/errcodes.go` 头部注释即硬规范）
@@ -125,7 +125,7 @@ common/        横切能力（crypto / auth / i18n / middleware / constant …�
 - [ ] `insecure.NewCredentials()`（明文无 TLS）在内网可接受，但**跨网/传敏感数据要确认是否该 mTLS**。
 - [ ] 统一用 `option.ClientDialOptions()` 构造 dial 选项（含拦截器/超时），别裸 `grpc.Dial` 漏掉上下文透传与超时。
 
-### 5.6 核心领域：审批 / 属性变更 / 指令 / 设备影子（`device_manage`、`palm_global`）
+### 5.6 核心领域：审批 / 属性变更 / 指令 / 设备影子（`<设备管理仓库>`、`<业务主仓库>`）
 - [ ] 高危/敏感变更是否接**审批流**（`domain/approval_ticket.go`、`T_Approval_Ticket`）？新增高危操作别绕开审批。
 - [ ] 属性变更（PropertyChange）有**发布/上下线/回滚/灰度**全生命周期——改 PropertyChange 必须覆盖灰度与回滚路径。
 - [ ] 指令服务启动初始化默认配置（`InitDefaultInstructionConfig`）+ 有**超时置位巡检脚本**（`script/`）——新增指令要进默认配置，且强时效指令的超时兜底要与 SLA 对齐（对照 code-patterns#9）。

@@ -2,7 +2,7 @@
 
 > 一句话：**我们不写"AI 自由发挥"的代码**——每个改动都从一份 Spec 开始，经 Plan、Tasks 三件套沉淀，由「人审 + AI 执行 + 人合并」。
 >
-> 刷掌支付团队 · `git@git.woa.com:palm/palmpay/CoSpec.git` · 团队索引：iWiki 4022732388
+> 团队 · `<GIT-HOST>:<ORG>/CoSpec.git` · 团队索引：团队 Wiki 4022732388
 
 ---
 
@@ -10,11 +10,11 @@
 
 ### 定位
 
-「刷掌支付」团队的 **Spec 驱动 AI 协作开发工作空间**。
+你的团队的 **Spec 驱动 AI 协作开发工作空间**。
 
 **最反直觉的一点：这个仓库不存业务代码。** `src/` 在 `.gitignore` 里，各人按 spec 需要自行 clone 业务仓库进去。CoSpec 只管理「协作元数据」——Spec / Plan / Tasks / 规则 / 技能 / 命令 / 文档。
 
-这么设计是因为协作方式与业务代码的变更频率、审阅对象完全不同：规则改一次全队生效，业务代码则散落在 palm_local / palm_proto / pos_link 等多个仓库，靠统一的 Story ID 和分支名串联。
+这么设计是因为协作方式与业务代码的变更频率、审阅对象完全不同：规则改一次全队生效，业务代码则散落在 <业务主仓库> / <协议仓库> / <设备接入仓库> 等多个仓库，靠统一的 Story ID 和分支名串联。
 
 ### 三件套（骨架）
 
@@ -102,18 +102,18 @@ Design 在 spec 之前（方案级、可选），Plan 在 spec ready 之后（�
 | 6（可选） | `/spec-push` | commit + 安全 rebase + push |
 | 6 后 | `/spec-sync` | 状态同步 |
 
-> `/spec-index` 是**带外工具**：扫描 specs 生成索引并覆盖同步到 iWiki。**不属于个人流程**，由专人按需运行——人人都跑会把半成品状态覆盖上去。
+> `/spec-index` 是**带外工具**：扫描 specs 生成索引并覆盖同步到 团队 Wiki。**不属于个人流程**，由专人按需运行——人人都跑会把半成品状态覆盖上去。
 
 ### 快速开始
 
 ```bash
 # 1. 拉仓库
-git clone git@git.woa.com:palm/palmpay/CoSpec.git spec && cd spec
+git clone <GIT-HOST>:<ORG>/CoSpec.git spec && cd spec
 
 # 2. 按需 clone 业务代码（src/ 已 gitignore）
 mkdir -p src && cd src
-git clone git@git.woa.com:palm/palmpay/palm_local.git   # 业务主仓（基线 develop）
-git clone git@git.woa.com:palm/palmpay/palm_proto.git   # proto 仓（基线 master）
+git clone <GIT-HOST>:<ORG>/<业务主仓库>.git   # 业务主仓（基线 develop）
+git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 仓（基线 master）
 
 # 3. 走命令链
 /spec-draft      # 起草（AI 先做代码侦察，再澄清五类问题）
@@ -182,7 +182,7 @@ tasks/<VER>/<STORYID>-<slug>-tasks.md
 | `test-writing` | 编写测试 |
 | `change-summary` | 变更摘要（内部调用，非独立命令） |
 
-另有 6 个扩展技能（文档未同步）：`mr-spec-review`、`mr-review-resolve`、`create-zerus`、`analyze-log`、`palm-openapi`、`skill-review`。
+另有 6 个扩展技能（文档未同步）：`mr-spec-review`、`mr-review-resolve`、`<团队专属技能>`、`<团队专属技能>`、`<团队专属技能>`、`skill-review`。
 
 > `codebase-survey` 的存在理由写得很到位：**「AI 没看代码就起草 spec/plan，本质是另一种 vibe coding。」**
 
@@ -194,10 +194,10 @@ tasks/<VER>/<STORYID>-<slug>-tasks.md
 
 | 目录 | 真实实例 |
 |------|---------|
-| intake / designs / specs | 各 1 个（Story **137345399** O4 网络诊断措施） |
+| intake / designs / specs | 各 1 个（Story **10086** O4 网络诊断措施） |
 | plans / tasks | **0 个** |
 
-该 spec 状态为 `draft`（尚未评审到 ready，故 plan / tasks 未生成），涉及 palm_app_linux / palm_manager / pos_link 三仓。
+该 spec 状态为 `draft`（尚未评审到 ready，故 plan / tasks 未生成），涉及 <终端应用仓库> / <管理后台仓库> / <设备接入仓库> 三仓。
 
 **通读发现的 3 处不一致**：
 
@@ -235,5 +235,5 @@ tasks/<VER>/<STORYID>-<slug>-tasks.md
 分支      {feature|hotfix}/<spec-name>   跨仓库同名
 提交      <type>(<scope>): <subject> --story=<STORYID> [#finish]
 状态机    draft → ready → in-progress → implemented → deprecated
-索引      iWiki 4022732388（/spec-index 带外发布，个人勿跑）
+索引      团队 Wiki 4022732388（/spec-index 带外发布，个人勿跑）
 ```

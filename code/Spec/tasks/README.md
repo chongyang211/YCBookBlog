@@ -24,9 +24,9 @@ tasks/<VERSION>/<STORYID>-<slug>-tasks.md
 例：
 
 ```
-specs/v1.6.0/134029304-online-palm-registration.md
-plans/v1.6.0/134029304-online-palm-registration-plan.md
-tasks/v1.6.0/134029304-online-palm-registration-tasks.md
+specs/v1.6.0/10086-example-user-login.md
+plans/v1.6.0/10086-example-user-login-plan.md
+tasks/v1.6.0/10086-example-user-login-tasks.md
 ```
 
 ## 何时创建

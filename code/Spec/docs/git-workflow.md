@@ -14,24 +14,24 @@
 
 | 本地目录（`src/`） | Git 地址 | 基线分支 |
 |------|---------|---------|
-| `migrate-kit` | https://git.woa.com/palm/migrate-kit | `[TBD]` |
-| `palm_local` | https://git.woa.com/palm/palmpay/palm_local | `develop` |
-| `palm_proto` | https://git.woa.com/palm/palmpay/palm_proto | `master` |
-| `palm_saas_fe` | https://git.woa.com/palm/weixin/palm_saas_fe | `develop` |
-| `device_manage` | https://git.woa.com/palm/weixin/device_manage | `develop` |
-| `palm_global` | https://git.woa.com/palm/weixin/palm_global | `develop` |
-| `proto` | https://git.woa.com/palm/weixin/proto | `master` |
-| `infrastructure` | https://git.woa.com/palm/weixin/infrastructure | `develop` |
-| `palm_algorithm` | https://git.woa.com/mmpay_palm_recognition/palm_algorithm | `master` |
-| `paymax_device` | https://git.woa.com/wxPalmPaaS/O4/paymax_device | `develop` |
-| `palm-wepay` | https://git.woa.com/wxPalmPaaS/O1/palm-wepay | `develop` |
-| `cloud_palm_activation` | https://git.woa.com/wxPalmPaaS/O1/cloud_palm_activation | `develop` |
-| `cloud_IoTService` | https://git.woa.com/wxPalmPaaS/O1/cloud_IoTService | `develop` |
-| `iotservice_linux` | https://git.woa.com/wxPalmPaaS/iotservice_linux | `develop` |
-| `PaymaxPalmSdk` | https://git.woa.com/wxPalmPaaS/PaymaxPalmSdk | `master` |
-| `palm-register-demo` | https://git.woa.com/palm/palm-register-demo | `master` |
+| `<迁移工具仓库>` | <GIT-HOST>/palm/<迁移工具仓库> | `[TBD]` |
+| `<业务主仓库>` | <GIT-HOST>/<ORG>/<业务主仓库> | `develop` |
+| `<协议仓库>` | <GIT-HOST>/<ORG>/<协议仓库> | `master` |
+| `<前端仓库>` | <GIT-HOST>/<ORG>/<子组>/<前端仓库> | `develop` |
+| `<设备管理仓库>` | <GIT-HOST>/<ORG>/<子组>/<设备管理仓库> | `develop` |
+| `<业务主仓库>` | <GIT-HOST>/<ORG>/<子组>/<业务主仓库> | `develop` |
+| `proto` | <GIT-HOST>/<ORG>/<子组>/proto | `master` |
+| `infrastructure` | <GIT-HOST>/<ORG>/<子组>/infrastructure | `develop` |
+| `algorithm-repo` | <GIT-HOST>/<ORG>/<算法组>/algorithm-repo | `master` |
+| `paymax_device` | <GIT-HOST>/<ORG>/O4/paymax_device | `develop` |
+| `<支付仓库>` | <GIT-HOST>/<ORG>/O1/<支付仓库> | `develop` |
+| `<激活服务仓库>` | <GIT-HOST>/<ORG>/O1/<激活服务仓库> | `develop` |
+| `<IoT 服务仓库>` | <GIT-HOST>/<ORG>/O1/<IoT 服务仓库> | `develop` |
+| `<IoT 服务仓库>` | <GIT-HOST>/<ORG>/<IoT 服务仓库> | `develop` |
+| `<SDK 仓库>` | <GIT-HOST>/<ORG>/<SDK 仓库> | `master` |
+| `<示例仓库>` | <GIT-HOST>/palm/<示例仓库> | `master` |
 
-> ⚠️ **识别侧仓库归并**：`mmpay_palm_recognition` 原有的 `palm_global` / `proto` 逻辑**已合并进** `palm/weixin` 的 `palm_global` / `proto`（`src/palm_global`、`src/proto`），原 `src/palm_pipeline/` 分组已废弃删除。识别算法仓 `palm_algorithm`（`mmpay_palm_recognition/palm_algorithm`）平铺在 `src/palm_algorithm`。
+> ⚠️ **识别侧仓库归并**：`<ORG>/<算法组>` 原有的 `<业务主仓库>` / `proto` 逻辑**已合并进** `<ORG>/<子组>` 的 `<业务主仓库>` / `proto`（`src/<业务主仓库>`、`src/proto`），原 `src/<旧流水线目录>/` 分组已废弃删除。识别算法仓 `algorithm-repo`（`<ORG>/<算法组>/algorithm-repo`）平铺在 `src/algorithm-repo`。
 >
 > ⚠️ `[TBD]` 的仓库需要团队补全。补全规则：基线分支 = 团队约定、所有 feature 都基于它拉、合并目标也是它。补全后请同步更新 `prepare-src.sh` 的 `REPOS`。
 
@@ -57,23 +57,23 @@ git checkout -b {feature|hotfix}/<spec-name>
 **例**（spec 0003）：
 
 ```bash
-# palm_local
-cd src/palm_local
+# <业务主仓库>
+cd src/<业务主仓库>
 git checkout develop
 git pull -r origin develop
-git checkout -b feature/134389917-dashboard-online-palm-statistics
+git checkout -b feature/10086-example-user-login
 
-# palm_proto
-cd src/palm_proto
+# <协议仓库>
+cd src/<协议仓库>
 git checkout master
 git pull -r origin master
-git checkout -b feature/134389917-dashboard-online-palm-statistics
+git checkout -b feature/10086-example-user-login
 
-# migrate-kit（如改动）
-cd src/migrate-kit
+# <迁移工具仓库>（如改动）
+cd src/<迁移工具仓库>
 git checkout <baseline>
 git pull -r origin <baseline>
-git checkout -b feature/134389917-dashboard-online-palm-statistics
+git checkout -b feature/10086-example-user-login
 ```
 
 > 💡 多仓库使用**同一分支名**，便于追溯关联（详见 `rules/10-spec-workflow.md` 分支命名规范）
@@ -95,9 +95,9 @@ git checkout -b feature/134389917-dashboard-online-palm-statistics
 | 字段 | 必填 | 说明 |
 |------|------|------|
 | `<type>` | ✅ | 改动类型，见下表 |
-| `<scope>` | ✅ | 模块名（小写），如 `palm` / `dashboard` / `gateway` / `proto` |
+| `<scope>` | ✅ | 模块名（小写），如 `auth` / `dashboard` / `gateway` / `proto` |
 | `<subject>` | ✅ | 简洁的中文描述（&、/ 等符号可用） |
-| `--story=<STORYID>` | ✅ | 关联工蜂需求单号（与 spec frontmatter Story ID 一致；无 story 用 `--story=0`） |
+| `--story=<STORYID>` | ✅ | 关联Git 平台（GitHub / GitLab / 工蜂）需求单号（与 spec frontmatter Story ID 一致；无 story 用 `--story=0`） |
 | `#finish` | 可选 | 合并 MR 时关闭关联 story；只在**本 story 的最后一笔 commit** 上加 |
 
 **type 取值**（Conventional Commits 风格）：
@@ -116,8 +116,8 @@ git checkout -b feature/134389917-dashboard-online-palm-statistics
 **示例**：
 
 ```
-feat(palm): 首页面板新增空中录掌关联数据&数据可配置 --story=134389917 #finish
-fix(gateway): 修复空中录掌鉴权超时问题 --story=134029304 #finish
+feat(auth): 首页面板新增示例业务关联数据&数据可配置 --story=10087 #finish
+fix(gateway): 修复示例业务鉴权超时问题 --story=10086 #finish
 refactor(controller): 抽取 lic 配额预扣公共方法 --story=0
 docs(spec): 补充偏离回流流程说明 --story=0
 ```
@@ -130,7 +130,7 @@ docs(spec): 补充偏离回流流程说明 --story=0
 | 单 spec 多 commit | 仅最后一笔加 `#finish` |
 | 多 spec 共享 Story | 整个 Story 的最后一个 spec 的最后一笔加 `#finish`，其他不加 |
 
-> ⚠️ 不确定时，宁可不加 `#finish` —— 后续可在工蜂 UI 手动关闭 story；多加了反而会过早关闭。
+> ⚠️ 不确定时，宁可不加 `#finish` —— 后续可在Git 平台（GitHub / GitLab / 工蜂） UI 手动关闭 story；多加了反而会过早关闭。
 
 ---
 
@@ -161,7 +161,7 @@ git rebase <baseline>
 git push -u origin {feature|hotfix}/<spec-name>      # 首次
 git push -f origin {feature|hotfix}/<spec-name>       # rebase 后
 
-# 6. 在工蜂 UI 创建 MR
+# 6. 在Git 平台（GitHub / GitLab / 工蜂） UI 创建 MR
 #    源分支 → 基线分支
 #    描述自动套用 .gitlab/merge_request_templates/Default.md
 ```
@@ -180,18 +180,18 @@ git push -f origin {feature|hotfix}/<spec-name>       # rebase 后
 如有跨仓库依赖，按**被依赖优先**的顺序 push & 合并：
 
 ```
-proto 仓库（如 palm_proto）→ 业务代码（如 palm_local）
+proto 仓库（如 <协议仓库>）→ 业务代码（如 <业务主仓库>）
 ```
 
 每个仓库的 MR 在描述中互相引用：
 
 ```
 跨仓库 MR:
-  - palm_proto!123（先合）
-  - palm_local!456（后合）
+  - <协议仓库>!123（先合）
+  - <业务主仓库>!456（后合）
 ```
 
-> ⚠️ 在 palm_proto MR 合并、stub 流水线生成完成后，palm_local 才能 `go get -u` 更新依赖、再 rebase + push。
+> ⚠️ 在 <协议仓库> MR 合并、stub 流水线生成完成后，<业务主仓库> 才能 `go get -u` 更新依赖、再 rebase + push。
 
 ---
 
@@ -203,7 +203,7 @@ proto 仓库（如 palm_proto）→ 业务代码（如 palm_local）
 | rebase 时大量冲突 | 基线分支跑得太前 | 提前 rebase（实施期间也定期同步）；冲突解决后必须**重新跑测试** |
 | `push -f` 后队友报"分支被覆盖" | feature 分支非单人持有 | 沟通确认；如多人协作同一 spec，应拆为多个子 spec（每人独立分支） |
 | 忘记加 `--story=` | 不符合规范 | `git commit --amend` 修正最后一笔；已 push 的 → rebase 改 message 后 force push |
-| `#finish` 加错位置 | 过早关闭 story | 工蜂 UI 重新打开 story；下次注意只在最后一笔加 |
+| `#finish` 加错位置 | 过早关闭 story | Git 平台（GitHub / GitLab / 工蜂） UI 重新打开 story；下次注意只在最后一笔加 |
 | 多仓库 rebase 时间差导致 stub 缺失 | proto 仓库没先合 | 严格按"被依赖优先"顺序合并；用 `replace` 指令本地联调，提交前移除 |
 
 ---

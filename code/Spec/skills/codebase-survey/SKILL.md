@@ -20,14 +20,14 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 | **light** | spec-drafting（阶段零） | 模块级 | 接口 / 入口 / 注释 | spec 的「实施备注」+「关键代码参考」 |
 | **deep** | implementation-planning（阶段二） | 文件 / 函数级 | 实现细节 / 调用链 / 设计模式 | plan 的「改动范围」+「关键代码参考」+「实施步骤」参考字段 |
 
-> 用户也可以独立触发（如"帮我看下 wecardpalmapp 现状"），此时默认 light 模式。
+> 用户也可以独立触发（如"帮我看下 wecardexample-app 现状"），此时默认 light 模式。
 
 ## 执行步骤
 
 ### Step 1: 收集线索
 
 - 从需求/spec 中提取关键词（业务名词、模块名、接口名）
-- 列出潜在相关的目录（如 `src/wecardappgateway/`、`src/wecardpalmapp/`）
+- 列出潜在相关的目录（如 `src/example-gateway/`、`src/wecardexample-app/`）
 
 ### Step 2: 扫码侦察（按模式）
 
@@ -43,7 +43,7 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 - 在 light 基础上深入：
   - 阅读 controller / service 的具体实现
   - 跟踪关键调用链（A → B → C 全路径）
-  - 识别已有设计模式（如 enrollpalm 的 9 步流程）
+  - 识别已有设计模式（如 enroll-flow 的 9 步流程）
   - 评估接口变更的影响范围
 - 时间预算：< 20 分钟（约 15-30 个文件）
 
@@ -78,11 +78,11 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 **相关模块**：
 | 模块路径 | 作用 | 与本需求关系 |
 |---------|------|-------------|
-| `src/wecardappgateway/` | API 网关 | 需新增空中录掌 HTTP 接口 |
-| `src/wecardpalmapp/` | 掌纹应用层 | 需新增空中录掌 controller |
+| `src/example-gateway/` | API 网关 | 需新增示例业务 HTTP 接口 |
+| `src/wecardexample-app/` | 业务应用层 | 需新增示例业务 controller |
 
 **可复用资产**：
-- `utils.GenerateUint64FromUUID()` — `src/common/utils/uuid.go` — 用于生成 palm_id
+- `utils.GenerateUint64FromUUID()` — `src/common/utils/uuid.go` — 用于生成 biz_id
 - `middleware.GetUserIdFromContext()` — `src/.../middleware/path_based.go` — 用于获取 user_id
 
 **冲突 / 重叠**：
@@ -92,8 +92,8 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 **推荐参考的代码模式**：
 | 要做什么 | 参考文件 |
 |---------|---------|
-| Controller 9 步流程 | `controller/wecardpalm/enrollpalm/enroll_palm.go` |
-| passvendor channel 调用 | `common/passvendor/providers/wechat/register_palm.go` |
+| Controller 9 步流程 | `controller/example-module/enroll-flow/login.go` |
+| 示例通道 调用 | `common/example-vendor/providers/wechat/register.go` |
 
 **初步影响估计**：
 - 预计需要新增：N 个文件（粗估）
@@ -114,18 +114,18 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 **改动文件清单**（精确到文件 + 关联 FR）：
 | 操作 | 文件 | 关联 FR | 说明 |
 |------|------|---------|------|
-| 新增 | `src/.../online_register_palm.go` | FR-3 | gateway 服务方法 |
-| 修改 | `src/.../service.go` | FR-3 | 新增 GetWecardPalmAppClient |
-| 修改 | `src/.../config.yaml` | FR-3 | 新增 wecardpalmapp 服务地址 |
+| 新增 | `src/.../online_register.go` | FR-3 | gateway 服务方法 |
+| 修改 | `src/.../service.go` | FR-3 | 新增 GetExampleAppClient |
+| 修改 | `src/.../config.yaml` | FR-3 | 新增 wecardexample-app 服务地址 |
 
 **调用链分析**：
 ```
-HTTP POST /wepalm/sdk/online-register-palm
+HTTP POST /api/v1/example/online-register
   → PathBasedMiddleware → HTTPTokenMiddleware（取 user_id）
-  → wecardappgateway.OnlineRegisterPalm（透传）
-  → wecardpalmapp.OnlineRegisterPalm（业务逻辑）
-  → passvendor.wechat.OnlineRegisterPalm（远端调用）
-  → palm_global.PrivateRecognition.OnlineRegisterPalm
+  → example-gateway.OnlineRegister（透传）
+  → wecardexample-app.OnlineRegister（业务逻辑）
+  → example-vendor.wechat.OnlineRegister（远端调用）
+  → <业务主仓库>.PrivateRecognition.OnlineRegister
 ```
 
 **接口影响**：
@@ -136,14 +136,14 @@ HTTP POST /wepalm/sdk/online-register-palm
 **已有设计模式**（必须遵循）：
 | 模式 | 参考实现 | 关键约束 |
 |------|---------|---------|
-| Controller 9 步流程 | `enrollpalm/enroll_palm.go` | lic 预扣 → 失败回退；状态更新失败不回退 lic |
-| passvendor channel | `wechat/register_palm.go` | 30s 超时；TraceID 优先做 session_id |
+| Controller 9 步流程 | `enroll-flow/login.go` | 配额预扣 → 失败回退；状态更新失败不回退配额 |
+| 示例通道 | `wechat/register.go` | 30s 超时；TraceID 优先做 session_id |
 | 日志脱敏 | `sensitive.MaskSensitiveValue` | 禁用 `%+v` 打印请求结构体 |
 
 **影响范围风险**：
 | 风险 | 概率 | 应对 |
 |------|------|------|
-| Proto 改动需先合并 palm_proto | 高 | 本地用 replace 联调，提交前去掉 |
+| Proto 改动需先合并 <协议仓库> | 高 | 本地用 replace 联调，提交前去掉 |
 | 鉴权路径误命中其他中间件 | 低 | 已验证不命中 |
 
 **不确定项 / 需要人确认**：

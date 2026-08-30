@@ -23,7 +23,7 @@ description: MR 评审意见处理技能。当作者收到 MR 评审评论后，
 
 | 参数 | 必选 | 来源 | 说明 |
 |------|------|------|------|
-| MR 地址 | 是 | 用户提供 | 形如 `https://git.woa.com/<group>/<project>/-/merge_requests/<iid>` |
+| MR 地址 | 是 | 用户提供 | 形如 `<GIT-HOST>/<group>/<project>/-/merge_requests/<iid>` |
 | 处理范围 | 否 | 默认未解决 | 可指定"包含已解决"或"只看某文件" |
 
 ---
@@ -33,7 +33,7 @@ description: MR 评审意见处理技能。当作者收到 MR 评审评论后，
 ### Step 1: 拉取 MR 上下文与评论
 
 1. **解析 URL** 得到 `project_id` 和 `iid`。
-2. **调用工蜂 MCP**：
+2. **调用Git 平台（GitHub / GitLab / 工蜂） MCP**：
    - `search_merge_request(project_id, iid)` → 取 `merge_request_id`、`source_branch`、最新 `source_commit`、作者、状态、文件清单。
    - `search_merge_request_notes(project_id, merge_request_id, resolve_states=[1], system=false, sort=created_asc, per_page=50)` → 拉**未解决的非系统评论**（默认范围）。
    - 若用户要求看全部 → `resolve_states` 不传。

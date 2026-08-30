@@ -5,7 +5,7 @@
 >
 > 📌 定位：`memory/README.md` 讲"记忆库是什么、怎么用"；本文件讲"记忆库如何在 eval 门禁下**只进好规则、自动清坏规则**"，是让 skill "越用越准、而不是越用越噪"的核心机制。
 >
-> 🤖 **执行主体是 AI agent**（非独立 ML 管道）。下述所有 metric 计算、回测、冲突检测都设计为 **LLM + 工蜂 MCP 可执行**：数据来自 `search_merge_request_notes` 的 `resolve_state` 与作者回复，判定靠 agent 的语义对齐 + `grep` 锚点校验。
+> 🤖 **执行主体是 AI agent**（非独立 ML 管道）。下述所有 metric 计算、回测、冲突检测都设计为 **LLM + Git 平台（GitHub / GitLab / 工蜂） MCP 可执行**：数据来自 `search_merge_request_notes` 的 `resolve_state` 与作者回复，判定靠 agent 的语义对齐 + `grep` 锚点校验。
 
 ---
 
@@ -105,7 +105,7 @@ fix（建议方向）      ：命中后给作者的具体修改指引
 
 **去硬编码（泛化归一化，强制）**：把来源 MR 里的**具体符号**抽象成**变量占位**，否则规则只对来源 MR 有效。
 
-- ❌ 过拟合写法：`若 spec 说新增 IsO4Device() 但已有 isO4Device()`
+- ❌ 过拟合写法：`若 spec 说新增 IsExampleDevice() 但已有 isExampleDevice()`
 - ✅ 泛化写法：`若 spec 新增 is<X>Device()，先 grep 同族 is*Device() 的既有可见性/命名惯例，判断是否重复或不一致`
 
 **归一化后立即自检可回测性**：probe 必须是"AI 拿到 spec + 基线代码就能确定性执行"的动作；若 probe 依赖"人的经验直觉"而无法落到 grep/文件比对 → 该候选**不适合进 memory**，应转投 `review-guides/` 人工注意点。
@@ -156,7 +156,7 @@ Precision = TP / (TP + FP)
 ### 5.4 锚点有效性关（Anchor Validity）
 
 - 候选规则 probe 里引用的代码锚点（文件路径 / 函数名 / 字段 / 常量），在**当前基线**（Step 0.2 已同步）`grep` 验证真实存在。
-- 全部存在 → 通过；部分失效 → 要求把 probe 改成**语义锚点**（"同族 `is*Device` 方法"而非写死 `isO4Device`）后再评。
+- 全部存在 → 通过；部分失效 → 要求把 probe 改成**语义锚点**（"同族 `is*Device` 方法"而非写死 `isExampleDevice`）后再评。
 
 ### 5.5 门禁判定汇总
 
@@ -331,9 +331,9 @@ FOR 每条 Pattern P (active/shadow):
 
 > 🧩 **Knot 部署下的 logic/data 分离（前提，见 SKILL.md Step 0.3）**：skill 逻辑（SKILL.md/scripts）从 Knot **冻结包**执行；但 memory/eval-corpus/review-guides 是**数据**，**唯一真相在 CoSpec 仓**。因此本节的**读**与**写**都针对 CoSpec 仓的记忆分支，**绝不读/写 Knot 打包副本**（那是冻结快照，会让闭环反哺失效）。
 
-**读取（运行时拿最新经验）**：一律经工蜂 MCP `get_blob_content(project_id=<CoSpec>, sha=<chore/mr-review-memory>, file_path=skills/mr-spec-review/memory/...)` 读记忆分支 head，拿到**跨会话共享的最新**规则库（不受 Knot 冻结、也不受本地 master 基线滞后影响）。MCP 不可用 → 退回 `$COSPEC_ROOT` 本地副本并注明可能非最新；连 CoSpec 都定位不到 → 用 Knot 冻结种子且**本轮不写回**。
+**读取（运行时拿最新经验）**：一律经Git 平台（GitHub / GitLab / 工蜂） MCP `get_blob_content(project_id=<CoSpec>, sha=<chore/mr-review-memory>, file_path=skills/mr-spec-review/memory/...)` 读记忆分支 head，拿到**跨会话共享的最新**规则库（不受 Knot 冻结、也不受本地 master 基线滞后影响）。MCP 不可用 → 退回 `$COSPEC_ROOT` 本地副本并注明可能非最新；连 CoSpec 都定位不到 → 用 Knot 冻结种子且**本轮不写回**。
 
-**因此记忆回写走「工蜂 MCP 写 API 提交到专用分支」，零本地 git 副作用：**
+**因此记忆回写走「Git 平台（GitHub / GitLab / 工蜂） MCP 写 API 提交到专用分支」，零本地 git 副作用：**
 
 ```
 读远端最新 (get_blob_content, ref=记忆分支)

@@ -14,7 +14,7 @@
 ## 调用方式
 
 通常被其他 skill 自动调用。也可由用户独立触发：
-> 帮我看下 wecardpalmapp 模块的代码现状
+> 帮我看下 wecardexample-app 模块的代码现状
 
 ## 详细执行流程
 

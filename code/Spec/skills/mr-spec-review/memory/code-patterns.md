@@ -23,9 +23,9 @@
 
 ## Pattern 1: 引用了不存在/名字错的代码位置
 
-**首次沉淀**: 2026-07-15，来源 MR [palm/palmpay/CoSpec!77](https://git.woa.com/palm/palmpay/CoSpec/-/merge_requests/77)
+**首次沉淀**: 2026-07-15，来源 MR [<ORG>/CoSpec!77](<GIT-HOST>/<ORG>/CoSpec/-/merge_requests/77)
 
-**表现**：spec 说"复用 `xxx.go` L45 的 `YYY()`"，但真实文件里没有 `YYY`；或大小写不对；或常量少字多字（如 `O4PalmAppId` vs 真实 `O4PalmAppAppId`）；或三份文档（spec/plan/tasks）对同一个东西用了不同拼写。
+**表现**：spec 说"复用 `xxx.go` L45 的 `YYY()`"，但真实文件里没有 `YYY`；或大小写不对；或常量少字多字（如 `ExampleAppId` vs 真实 `ExampleAppAppId`）；或三份文档（spec/plan/tasks）对同一个东西用了不同拼写。
 
 **验证动作**：对 spec 里出现 ≥ 2 次的每个类/方法/常量名，全仓 `grep -rn` 一次，比对真实拼写。
 
@@ -37,7 +37,7 @@
 
 ## Pattern 2: 未复用现有天然抽象，在错误层次硬编码
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#16）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#16）
 
 **表现**：spec 说"在 application 层加 `if instructionName == 'xxx'` 校验"——但 domain 层其实已经有 `checkXxxDevice(config, device)` 这种为该场景设计的 hook 函数，同时拿到 config + device 上下文。
 
@@ -51,9 +51,9 @@
 
 ## Pattern 3: 新增方法与同族方法命名/可见性不一致
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#17）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#17）
 
-**表现**：现有 `isO1Device()`/`isO2Device()` 都私有（首字母小写），spec 新增却是 `IsO4Device()` 大写导出；或 spec 用小写、plan/tasks 用大写，三份文档互相冲突；或需要跨包调用所以强行改大写，破坏封装。
+**表现**：现有 `isO1Device()`/`isO2Device()` 都私有（首字母小写），spec 新增却是 `IsExampleDevice()` 大写导出；或 spec 用小写、plan/tasks 用大写，三份文档互相冲突；或需要跨包调用所以强行改大写，破坏封装。
 
 **验证动作**：对新增方法的**同族方法**（同 receiver、同前缀）全仓 grep，判断大小写惯例；判断跨包调用需求是否是因为"落点选错了"（结合 Pattern 2）。
 
@@ -63,7 +63,7 @@
 
 ## Pattern 4: 兄弟 spec 引用同 message 字段号不一致
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#1）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#1）
 
 **表现**：一个 Story 拆多个 spec（后端 + 设备端），两份都引用同一个 proto message（如 `InstructionLinkMsg`），但字段号/类型/字段列表定义不同。
 
@@ -80,13 +80,13 @@
 
 ## Pattern 5: "全量默认改造"影响面被低估
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#3）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#3）
 
 **表现**：spec 里一句"顺手对所有 X 都启用 Y"（如"所有指令都走 MQTT 推送"），描述短短一句，但影响面覆盖全部现有实例。plan 却把风险评为"低/低"。
 
 **验证动作**：
 - grep 现有实例总数（如现有指令 7 条？调用点 100 处？）
-- 每个实例的**下游**是否都能承接新行为？（如"MQTT 推送对所有指令生效" → 各机型 palmapp 是否都实现了对应 handler？）
+- 每个实例的**下游**是否都能承接新行为？（如"MQTT 推送对所有指令生效" → 各机型 example-app 是否都实现了对应 handler？）
 - 是否有幂等/去重机制防止双通道重复触发？
 
 **建议方向**：先只对本次涉及的**单点**启用（feature flag / 白名单），全量放独立需求做；或至少补设备端 handler 覆盖表 + 幂等去重设计。
@@ -95,7 +95,7 @@
 
 ## Pattern 6: 每次调用都创建新连接（gRPC/HTTP client 反模式）
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#3+#18 合并）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#3+#18 合并）
 
 **表现**：spec 建议"复用现有 `GetXxxClient()` + `defer conn.Close()` 模式"——真实实现每次 `grpc.Dial` + 三次握手 + TLS。spec 结论"best-effort 无副作用"忽略了连接层成本。
 
@@ -109,7 +109,7 @@
 
 ## Pattern 7: 私有 helper 跨包引用 = 反向分层依赖
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#22）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#22）
 
 **表现**：spec 说"引用 `controller/xxx/set_yyy.go` 的 `GetXxxClient`"——但调用方在 `application/aaa/service/` 层，从 application → controller 反向依赖。且该 helper 已在项目里被复制 2~3 次。
 
@@ -123,7 +123,7 @@
 
 ## Pattern 8: 新方法字段与已有方法 100% 相同 = 重造轮子
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#21）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#21）
 
 **表现**：spec 说"新增 `ToLinkDTO()` 方法，字段与 `ToDeviceDTO()` 一致"——两个方法字段完全相同，plan 却把整个字段列表重新写一遍并再调一次 `genSignature()`。
 
@@ -138,7 +138,7 @@
 
 ## Pattern 9: 强时效 vs 长过期 vs best-effort 三者组合失衡（物理安全）
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#7+#19 合并）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#7+#19 合并）
 
 **表现**：spec 承诺"秒级响应"（G5 目标），但组合了：
 - `ExpireDuration=86400s`（24h，与通用指令一致）
@@ -162,7 +162,7 @@
 
 ## Pattern 10: 高危操作复用低危权限点位
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#8）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#8）
 
 **表现**：物理世界或不可撤销操作（远程开门/扣款/删除/factoryReset）直接复用现有通用的 `CheckXxxPermission`，与 `syncNtp`/`restartDevice` 等无损/可恢复操作共用一颗权限。
 
@@ -180,7 +180,7 @@
 
 ## Pattern 12: 配置字段列表不完整
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#25，未投但已识别）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#25，未投但已识别）
 
 **表现**：`NewXxxParams` 结构体真实有 18 个字段，spec 只覆盖 13 个；漏掉的字段中可能有**语义相关**的（如 `SafeConfig` 关联安全策略、`RateLimitAmount` 与 `RateLimitUnit` 成对出现、`ExtraConfig` 关联扩展点）。
 
@@ -192,7 +192,7 @@
 
 ## Pattern 13: 兜底/参考路径依赖的代码本身有历史坏味道
 
-**首次沉淀**: 2026-07-15，来源 MR palm/palmpay/CoSpec!77（#26+#27，未投但已识别）
+**首次沉淀**: 2026-07-15，来源 MR <ORG>/CoSpec!77（#26+#27，未投但已识别）
 
 **表现**：spec 引用某个文件作为模式参考，但该文件其实不存在（可能已被重命名/合并），或该文件里包含大量长期注释掉的代码/半成品，或引用位置行号已过时。
 
@@ -206,4 +206,4 @@
 
 | 日期 | 变更 | 操作人 |
 |------|-----|--------|
-| 2026-07-15 | 初始版本，从 MR palm/palmpay/CoSpec!77 沉淀 11 个 Pattern（编号 1-10, 12, 13；11 移到 doc-process-patterns.md） | evanye |
+| 2026-07-15 | 初始版本，从 MR <ORG>/CoSpec!77 沉淀 11 个 Pattern（编号 1-10, 12, 13；11 移到 doc-process-patterns.md） | evanye |
