@@ -27,11 +27,18 @@
 - **签名四态**：`SIMPLE`（固定密钥 HMAC-SM3）/ `ACTIVATION`（会话密钥 HMAC-SM3）/ `DEVICE`（SE-SM2，`DeviceAuthSign`）/ `RECOGNIZE`（SE `SignPayAuth`，`DeviceRecogSign`）。
 - **trace 规则**：W3C `traceparent` = `00-{32hex trace}-{16hex span}-01`；调用方可 override 串联会话，否则网络层每次现起新 trace。
 
+
+【TODO：签名是什么，为什么要签名？】
+
+
+
 ### 1.4 改动范围
 - **[主干]** `network.h/.cpp`：`Network` 单例、`IotDeviceRequestImpl` 请求主干、四类签名、`ClassifyCprError` / `ParseIoTHttpResponse` / `BuildErrorNotification`。
 - **[传输层]** `http_request.h/.cpp`：cpr 封装、curl share 复用、内嵌加密压缩 CA、DNS 缓存 1h。
 - **[辅助]** `network_info.*`（状态/离线）、`network_stat.*`（上报过滤）、`server_errcode.h`（服务端码）、`palm_sign_package.proto`（签名包）。
 - **[近期演进]** TLS 证书错误从 20104 拆出独立 20105（story 137332527）；`BuildErrorNotification` 由模板函数改为 `ServerCodeMapper` 函数指针；trace 尾缀拼接点移至 `ParseIoTHttpResponse`。
+
+【TODO： cpr 封装 是什么意思，curl share 复用 这个又是什么意思？ 】
 
 ---
 
