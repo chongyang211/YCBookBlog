@@ -1,239 +1,193 @@
-# CoSpec：Spec 驱动 AI 协作开发工作空间
+# CoSpec｜Spec 驱动 AI 协作开发 · 通用方案
 
-> 一句话：**我们不写"AI 自由发挥"的代码**——每个改动都从一份 Spec 开始，经 Plan、Tasks 三件套沉淀，由「人审 + AI 执行 + 人合并」。
+> **一句话**：**不写"AI 自由发挥"的代码——每个改动都从一份 Spec 开始，走过 Plan、Tasks 三件套，由"人审 + AI 执行 + 人合并"完成。**
 >
-> 团队 · `<GIT-HOST>:<ORG>/CoSpec.git` · 团队索引：团队 Wiki 4022732388
+> 本 `read/` 目录是 CoSpec 的**通用化文档矩阵**（不绑定特定业务 / 语言 / Git 平台 / 团队）。如果你想把这套方法用到自己的项目上，从这里读起。
 
 ---
 
-## 一、是什么
+## 📚 文档矩阵
 
-### 定位
+按建议阅读顺序：
 
-你的团队的 **Spec 驱动 AI 协作开发工作空间**。
+| 顺序 | 文档                                          | 定位                                          | 阅读时长 |
+| ---- | --------------------------------------------- | --------------------------------------------- | -------- |
+| 1    | [`01-overview.md`](./01-overview.md)          | **全景总览**——是什么、为什么、四理念、十铁律 | 10 分钟  |
+| 2    | [`02-workflow.md`](./02-workflow.md)          | **工作流详解**——8 阶段命令链逐段拆解         | 15 分钟  |
+| 3    | [`03-principles.md`](./03-principles.md)      | **原理与思想**——每条规则背后的"为什么"       | 15 分钟  |
+| 4    | [`04-how-to-use.md`](./04-how-to-use.md)      | **使用手册**——三种规模场景 + FAQ            | 20 分钟  |
+| 5    | [`05-architecture.md`](./05-architecture.md)  | **目录与文件契约**——每份模板的详细字段       | 15 分钟  |
+| 6    | [`06-adaptation.md`](./06-adaptation.md)      | **落地你自己的项目**——克隆 / 清洗 / 定制 / CI | 20 分钟  |
+| 7    | [`07-case.md`](./07-case.md)                  | **完整案例导读**——五件套活样例的索引与教学要点 | 10 分钟 |
 
-**最反直觉的一点：这个仓库不存业务代码。** `src/` 在 `.gitignore` 里，各人按 spec 需要自行 clone 业务仓库进去。CoSpec 只管理「协作元数据」——Spec / Plan / Tasks / 规则 / 技能 / 命令 / 文档。
+**总计**：约 100 分钟通读全部，或按需选读。
 
-这么设计是因为协作方式与业务代码的变更频率、审阅对象完全不同：规则改一次全队生效，业务代码则散落在 <业务主仓库> / <协议仓库> / <设备接入仓库> 等多个仓库，靠统一的 Story ID 和分支名串联。
+### 📦 完整案例（照着写的活样例）
+
+[`07-case.md`](./07-case.md)——一个虚构但完整的「短链接服务」需求（Story 1001），从 Intake → Design → Spec → Plan → Tasks 走完全流程。五份样本文件**直接存放在各产物目录的真实位置**（`v1.0.0/`），导读见 [`07-case.md`](./07-case.md)：
+
+| 文件（真实位置） | 展示什么 |
+| ---------------- | -------- |
+| [`intake/v1.0.0/1001-short-url-service.md`](../intake/v1.0.0/1001-short-url-service.md) | 原话保留、待澄清点清单 |
+| [`designs/v1.0.0/1001-short-url-service-design.md`](../designs/v1.0.0/1001-short-url-service-design.md) | 3 方案对比、关键决策、**spec 拆分建议** |
+| [`specs/v1.0.0/1001-short-url-core.md`](../specs/v1.0.0/1001-short-url-core.md) | 完整 spec 实例、来源标注（📥🤖🔍❓）、Sibling Specs |
+| [`plans/v1.0.0/1001-short-url-core-plan.md`](../plans/v1.0.0/1001-short-url-core-plan.md) | 改动文件清单、Phase 拆分、验收覆盖矩阵 |
+| [`tasks/v1.0.0/1001-short-url-core-tasks.md`](../tasks/v1.0.0/1001-short-url-core-tasks.md) | 任务勾选终态、**偏离记录**（含 spec 修订回流） |
+
+**新手上手路径**：读本 README → 读 `01-overview.md` → 读 `07-case.md` 并通读其五件套样本（约 30 分钟）→ 挑一个真实小需求照着写。
+
+---
+
+## 🎯 三种典型读者的推荐路径
+
+### 想快速判断"值不值得用"
+
+**读**：01（10 分钟）→ 决定要不要深入。
+
+### 想上手做实事（最实用）
+
+**读**：01 → 04（30 分钟）→ 挑一个真实需求跑一遍。
+
+### 想把 CoSpec 引入自己的团队
+
+**读**：01 → 03 → 06（45 分钟）→ 按 06 的 Pilot 流程推广。
+
+---
+
+## 🧠 核心思想速记
 
 ### 三件套（骨架）
 
-| 类型 | 目录 | 回答什么 | 模板 |
-|------|------|---------|------|
-| **Spec** | `specs/` | 要做什么 | `specs/templates/spec-template.md` |
-| **Plan** | `plans/` | 怎么做、改哪些文件 | `plans/templates/plan-template.md` |
-| **Tasks** | `tasks/` | 分几步、做到哪了 | `tasks/templates/tasks-template.md` |
-| Design（可选） | `designs/` | 用什么方案、拆几个 spec | `designs/templates/design-template.md` |
+| 类型  | 目录     | 回答什么           |
+| ----- | -------- | ------------------ |
+| Spec  | `specs/` | 要做什么           |
+| Plan  | `plans/` | 怎么做、改哪些文件 |
+| Tasks | `tasks/` | 分几步、做到哪了   |
 
-**三件套必须落盘，不允许只存在于对话里**——AI 的上下文会丢、会换会话、会换人，只有磁盘文件能跨这些边界存活。
-
-**Design 与 Plan 的区别**（最易混淆的一对）：
-
-> **Design 决定「用什么方案、拆几个 spec」，Plan 决定「改哪些文件、按什么步骤」。**
-
-Design 在 spec 之前（方案级、可选），Plan 在 spec ready 之后（执行级、复杂改动必须）。
-
----
-
-## 二、为什么
-
-### 解决什么问题
-
-传统 vibe coding 的四个硬伤：
-
-| 问题 | 表现 |
-|------|------|
-| 结果不可复现 | 不同人 / 不同时间 / 不同 Agent 问，产出差异大 |
-| 改动范围漂移 | 一句"顺便优化"，可能顺手改十几个文件 |
-| 文档与代码脱节 | 代码改完了，需求文档还是三个月前的 |
-| 改动难追溯 | 半年后看 MR，说不清当初为什么这么改 |
-
-共同根源：**需求只存在于人的脑子里和 AI 的对话里**。
-
-解法：流程切段 → 每段产出磁盘文件 → 设人工卡口 → Story ID 全程串联。
-
-### 四条核心理念
+### 四理念（心法）
 
 1. **Spec 是单一事实来源** —— 需求不留在 IM / 邮件 / 脑子里
 2. **三件套必须落盘** —— 不允许只在对话中存在
-3. **执行权 ≠ 定义权** —— AI 只执行，不能改 Spec；有意见只能在 tasks「偏离记录」提建议，**由人决策**
-4. **全程靠 Story ID 串联** —— spec → 分支 → commit → MR
+3. **执行权 ≠ 定义权** —— AI 只执行，不改 Spec
+4. **全程用 Story ID 串联** —— spec → 分支 → commit → MR
 
-### 十铁律
+### 十铁律（可执行约束）
 
-无 spec 不写代码 · 三件套落盘 · AI 不改 spec · MR 带 StoryID · 变更摘要必写 · tasks 实时勾 · 偏离必记录 · 分支统一 · push 前 rebase · commit 规范
+无 spec 不写代码 · 三件套落盘 · AI 不改 spec · MR 带 Story ID · 变更摘要必写 · tasks 实时勾 · 偏离必记录 · 分支统一 · push 前 rebase · commit 规范
 
-### 价值对比
+### 8 阶段命令链
 
-| | 直接 vibe coding | CoSpec |
-|---|---|---|
-| 需求在哪 | 对话里，关掉就没 | spec 文件，可评审可追溯 |
-| 谁定需求 | AI 边写边猜 | 人写 spec，AI 只能提建议 |
-| 改动范围 | 取决于 AI | Plan 列明文件清单，超出即偏离 |
-| 进度 | "差不多做完了" | Tasks 实时勾选 |
-| 换人接手 | 基本重做 | 读三件套即可 |
+```txt
+(Intake) → (Design) → Draft → 【人工评审】 → Plan → Tasks
+      → Implement → Test → Review → (Push) → Sync
+```
 
-代价：多了文档工作量。因此做了分级——小需求可直接从 `/spec-draft` 起步，Intake / Design / Push 都是可选。
+**唯一强制人工卡口**：spec draft → 其他技术同事评审通过 → 才能进入 Plan / Implement。
 
 ---
 
-## 三、怎么用
-
-### 工作流
-
-```
-(Intake) → (Design) → Draft → 个人review → 提交+同事评审 → Plan → Tasks
-   → Implement → Test → Review → (Push) → 合并 → Sync
-```
-
-**唯一强制卡口**：spec 写完必须提交、由**其他技术同事**评审通过，才能进 plan / 实现。个人 review 不能代替同事评审。
-
-### 命令清单
-
-| 阶段 | 命令 | 输出 |
-|------|------|------|
-| 0 前置（可选） | `/spec-intake` | `docs/intake/<VER>/<ID>-<slug>.md` |
-| 0 前（可选） | `/spec-design` | `designs/<VER>/<ID>-<slug>-design.md` |
-| 0 | `/spec-draft` | `specs/<VER>/<ID>-<slug>.md`（status: draft） |
-| 1 | **（人工评审）** | status 改 `ready` |
-| 2 / 2.5 | `/spec-plan` `/spec-tasks` | plan / tasks 文件 |
-| 3 | `/spec-implement` | feature 分支 + `src/` 改动 |
-| 4 / 5 | `/spec-test` `/spec-review` | 测试 / review 报告 |
-| 6（可选） | `/spec-push` | commit + 安全 rebase + push |
-| 6 后 | `/spec-sync` | 状态同步 |
-
-> `/spec-index` 是**带外工具**：扫描 specs 生成索引并覆盖同步到 团队 Wiki。**不属于个人流程**，由专人按需运行——人人都跑会把半成品状态覆盖上去。
-
-### 快速开始
+## 🚀 60 秒快速上手
 
 ```bash
-# 1. 拉仓库
-git clone <GIT-HOST>:<ORG>/CoSpec.git spec && cd spec
+# 1. 克隆本仓（作为骨架）
+git clone <YOUR-COSPEC-REPO> my-project && cd my-project
 
-# 2. 按需 clone 业务代码（src/ 已 gitignore）
-mkdir -p src && cd src
-git clone <GIT-HOST>:<ORG>/<业务主仓库>.git   # 业务主仓（基线 develop）
-git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 仓（基线 master）
+# 2. 初始化空的元数据目录
+mkdir -p specs/v1.0.0 plans/v1.0.0 tasks/v1.0.0 \
+         intake/v1.0.0 designs/v1.0.0
 
-# 3. 走命令链
-/spec-draft      # 起草（AI 先做代码侦察，再澄清五类问题）
-# 个人 review → 提交 → 同事评审 → status: ready
-/spec-plan       # 实施计划
-/spec-tasks      # 任务清单
-/spec-implement  # 实现（tasks 实时勾选）
-/spec-test       # 测试
-/spec-review     # 评审报告
-/spec-push       # 可选：提交
+# 3. 让 AI 助手识别 rules（Cursor / Codebuddy / Continue 等）
+#    详见 06-adaptation.md § 二
+
+# 4. 起草第一个 spec
+/spec-draft 帮我起草一个 spec：<你的需求>
+
+# 5. 人审后进入实施
+/spec-plan → /spec-tasks → /spec-implement → /spec-sync
 ```
 
-起草时每个章节会标来源，便于判断需补哪些：📥 原始需求 / 🤖 AI 推断（需确认）/ ❓ TBD / 🔍 现有代码。
-
-### 命名与 Git
-
-```
-docs/intake/<VER>/<STORYID>-<slug>.md
-designs/<VER>/<STORYID>-<slug>-design.md
-specs/<VER>/<STORYID>-<slug>.md
-plans/<VER>/<STORYID>-<slug>-plan.md
-tasks/<VER>/<STORYID>-<slug>-tasks.md
-```
-
-- `STORYID` 纯数字，无 story 用 `0` 占位；`slug` 用 kebab-case
-- **三件套的 STORYID + slug 必须一致**（互相定位的依据）
-- 按迭代版本归档到 `<VER>/`（如 `v2.0.0/`）；`templates/`、`README.md` 是跨版本元文件，留在目录根
-- 早期 `NNNN-<STORYID>-<slug>` 顺序号形式**已废弃**（多人并行易冲突）
-
-| 项 | 规范 |
-|----|------|
-| 分支 | `{feature\|hotfix}/<spec-name>`（= spec 文件名去 `.md`），**跨仓库同名** |
-| Commit | `<type>(<scope>): <subject> --story=<STORYID> [#finish]`（`#finish` 仅加在最后一笔） |
-| Push 前 | 安全 rebase：基线 `git pull -r` → feature `git rebase 基线` → `git push -f` |
-| MR 模板 | `.gitlab/merge_request_templates/Default.md`（关联 Spec / 偏离说明 / 变更摘要） |
+**详细起步指南**：见 [`04-how-to-use.md`](./04-how-to-use.md) 的"上手起步的 15 分钟"章节。
 
 ---
 
-## 四、规则与技能
+## ✨ CoSpec 与传统开发的对比
 
-**规则**（常驻，经 `CLAUDE.md` 的 `@rules/...` 导入）：
+| 维度              | 直接 vibe coding      | CoSpec                                   |
+| ----------------- | --------------------- | ---------------------------------------- |
+| 需求存在哪里      | 对话里，关掉就没      | **磁盘 spec 文件**，可评审可追溯         |
+| 谁定需求          | AI 边写边猜           | **人写 spec，AI 只能提建议**             |
+| 改动范围可控性    | 取决于 AI 心情        | **Plan 列明文件清单，超出即偏离**        |
+| 进度追踪          | "差不多做完了"        | **Tasks 实时勾选，可 diff**              |
+| 换人接手成本      | 基本重做              | **读三件套即可**                         |
+| 半年后可追溯性    | 极差                  | **Story ID 一键回溯全部产物**            |
 
-| 文件 | 主题 |
-|------|------|
-| `00-project-principles.md` | 7 条原则（地基） |
-| `10-spec-workflow.md` | **核心工作流**（611 行，7 个阶段） |
-| `20-coding-rules.md` | 编码规则 |
-| `30-testing-rules.md` | 测试规则 |
-| `40-documentation-rules.md` | 文档规则 |
-
-`00` 里有两条直接对抗 AI「顺手改」倾向的原则，值得单独记：
-
-- **最小改动** —— 不做"顺手"的优化 / 重构 / 风格调整；发现其他问题**记录下来但本次不改**
-- **不做无关重构** —— 重构是**独立的 spec 主题**，不能夹带在功能需求里
-
-**技能**（按需调用）：
-
-| 核心 8 个 | 用途 |
-|-----------|------|
-| `technical-design` | 需求大时先出技术方案（含 spec 拆分建议） |
-| `spec-drafting` | 原始需求 → spec 草稿 |
-| `spec-analysis` | 分析已有 spec 完整性 |
-| `codebase-survey` | 扫描现有代码（light 给 drafting，deep 给 planning） |
-| `implementation-planning` | 制定实施计划 |
-| `feature-implementation` | 执行代码实现 |
-| `test-writing` | 编写测试 |
-| `change-summary` | 变更摘要（内部调用，非独立命令） |
-
-另有 6 个扩展技能（文档未同步）：`mr-spec-review`、`mr-review-resolve`、`<团队专属技能>`、`<团队专属技能>`、`<团队专属技能>`、`skill-review`。
-
-> `codebase-survey` 的存在理由写得很到位：**「AI 没看代码就起草 spec/plan，本质是另一种 vibe coding。」**
+**唯一代价**：多了文档工作量（15-30 分钟/需求）。**收益**：半年后省下的考古时间就足以覆盖。
 
 ---
 
-## 五、现状与待办
+## 🛠 CoSpec 里包含什么
 
-**模板完备，但只跑通了一条链路**：
+除了本 `read/` 下的通用化文档，仓库还提供：
 
-| 目录 | 真实实例 |
-|------|---------|
-| intake / designs / specs | 各 1 个（Story **10086** O4 网络诊断措施） |
-| plans / tasks | **0 个** |
+| 目录           | 内容                                     |
+| -------------- | ---------------------------------------- |
+| `rules/`       | 5 份常驻规则（AI 每次会话都加载）        |
+| `commands/`    | 10 份 Slash Command 定义                 |
+| `skills/`      | 8+ 份按需加载的技能                      |
+| `docs/`        | 流程概览、编码手册、Git 工作流等         |
+| `specs/`       | Spec 模板 + 实例                         |
+| `plans/`       | Plan 模板 + 实例                         |
+| `tasks/`       | Tasks 模板 + 实例                        |
+| `designs/`     | Design 模板 + 实例（可选前置）           |
 
-该 spec 状态为 `draft`（尚未评审到 ready，故 plan / tasks 未生成），涉及 <终端应用仓库> / <管理后台仓库> / <设备接入仓库> 三仓。
-
-**通读发现的 3 处不一致**：
-
-| # | 问题 |
-|---|------|
-| 1 | 技能数量三处打架：README 说 8 个、`CLAUDE.md` 列 10 个、磁盘实际 **14 个** |
-| 2 | `specs/templates/spec-template.md`「修订记录」章节被**重复粘贴两次**（126-133 / 135-142 行） |
-| 3 | 文档引用的历史 spec（v1.6.0 / v1.7.0）在工作副本上不存在 |
+**详细目录说明**：见 [`05-architecture.md`](./05-architecture.md)。
 
 ---
 
-## 延伸阅读
+## ❓ 常见问题
 
-| 顺序 | 文件 | 时间 |
-|------|------|------|
-| 1 | 本文（全局视图） | 10 分钟 |
-| 2 | `docs/spec-flow-overview.md`（流程图 + 每步关注点） | 5 分钟 |
-| 3 | `docs/spec-coding-handbook.md`（一页纸 10 铁律） | 5 分钟 |
-| — | `docs/onboarding-codebuddy.md`（新人完整手册，含实操与自救） | 30 分钟 |
-| — | `docs/git-workflow.md`（基线分支 / commit / rebase / 多仓库） | 按需 |
+### 这需要特定 AI 助手吗？
+
+**不需要**。任何支持"加载项目级规则文件 + 定义 slash command"的 AI 助手都能用（Cursor / Codebuddy / Continue / Cline / Cody 等）。见 [`06-adaptation.md`](./06-adaptation.md) § 二的适配说明。
+
+### 需要特定编程语言吗？
+
+**不需要**。CoSpec 是语言无关的——它约束的是"人 + AI 协作方式"，不约束具体代码写法。
+
+### 需要特定 Git 平台吗？
+
+**不需要**。GitHub / GitLab / Gitee / Bitbucket / 自建 Git 都可以。CI 校验示例在 [`06-adaptation.md`](./06-adaptation.md) 提供 GitHub Actions 版本，可移植到其他平台。
+
+### 小项目也能用吗？
+
+**能**。CoSpec 是分级使用的——小需求可只用 `/spec-draft` + `/spec-implement` + `/spec-sync`，跳过 intake / design / plan / tasks / push。详见 [`04-how-to-use.md`](./04-how-to-use.md) § 二的"场景 A：极简需求"。
+
+### 与 Jira / Trello 等冲突吗？
+
+**不冲突**——CoSpec 与需求管理系统互补：
+
+- Jira / Trello 管理需求生命周期
+- CoSpec 管理"从需求到代码"的执行契约
+- 用 Jira Story ID 作 CoSpec Story ID → 天然打通
 
 ---
 
-## 速查卡
+## 📖 延伸阅读
 
-```
-三件套    Spec 做什么 / Plan 怎么做 / Tasks 做到哪
-四理念    单一事实来源 · 必须落盘 · 执行权≠定义权 · Story ID 串联
-十铁律    无spec不写代码 · 三件套落盘 · AI不改spec · MR带StoryID · 变更摘要必写
-          tasks实时勾 · 偏离必记录 · 分支统一 · push前rebase · commit规范
+如果你熟悉后想更深入：
 
-命令链    intake? → design? → draft →【评审→ready】→ plan → tasks
-          → implement → test → review → push? → sync
+- 阅读 `rules/10-spec-workflow.md`（工作流的完整定义，611 行）
+- 阅读各 `commands/spec-*.md`（每个命令的详细执行步骤）
+- 阅读各 `skills/*/SKILL.md`（技能的执行逻辑）
 
-分支      {feature|hotfix}/<spec-name>   跨仓库同名
-提交      <type>(<scope>): <subject> --story=<STORYID> [#finish]
-状态机    draft → ready → in-progress → implemented → deprecated
-索引      团队 Wiki 4022732388（/spec-index 带外发布，个人勿跑）
-```
+**顺序建议**：先把本 `read/` 目录 6 篇文档读完，再看具体命令 / 技能——**先理解思想，再看细节**。
+
+---
+
+## 🎁 一份给自己的礼物
+
+**当你半年后回来看当初写的代码，只需 5 分钟就能找回全部上下文——这就是 CoSpec 送给未来自己的礼物。**
+
+---
+
+**开始阅读** → [`01-overview.md`](./01-overview.md)

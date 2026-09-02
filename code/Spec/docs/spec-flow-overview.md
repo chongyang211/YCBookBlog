@@ -11,7 +11,7 @@
 
 ```mermaid
 flowchart TD
-    pm["前置 · 阅读 PM 需求文档<br/>理解需求内容与边界"] --> intake["0前置(可选) · /spec-intake<br/>生成 intake 草稿 docs/intake/&lt;VER&gt;/<br/>(需求文档 或 对话描述 → AI 生成)"]
+    pm["前置 · 阅读 PM 需求文档<br/>理解需求内容与边界"] --> intake["0前置(可选) · /spec-intake<br/>生成 intake 草稿 intake/&lt;VER&gt;/<br/>(需求文档 或 对话描述 → AI 生成)"]
     intake --> D{需求大<br/>需评审方案?}
 
     D -- 是 --> design["0前 · /spec-design<br/>产出技术方案 → 人评审 approved"]
@@ -47,7 +47,7 @@ flowchart TD
 | 阶段 | 人的动作 | ⚠️ 人要关注的点 |
 |------|----------|------------------|
 | **前置 · 理解需求** | 阅读 **PM 输出的需求文档**，搞清这次到底要做什么、边界在哪 | 边界/验收口径要先在脑子里清楚，后面所有产物都依赖它 |
-| **0前置（可选）· `/spec-intake`** | 把需求文档（或简单需求直接在对话里描述）交给 AI，快速生成 `docs/intake/<VER>/` 草稿 | **生成前必须确认归属的迭代版本目录**（如 `v1.7.0`），后续 design/spec/plan/tasks 全程复用同一版本；**可选命令，视个人习惯使用**；intake 不是 spec，仅作为 `/spec-draft` 的输入，习惯直接起草的可跳过 |
+| **0前置（可选）· `/spec-intake`** | 把需求文档（或简单需求直接在对话里描述）交给 AI，快速生成 `intake/<VER>/` 草稿 | **生成前必须确认归属的迭代版本目录**（如 `v1.7.0`），后续 design/spec/plan/tasks 全程复用同一版本；**可选命令，视个人习惯使用**；intake 不是 spec，仅作为 `/spec-draft` 的输入，习惯直接起草的可跳过 |
 | **0前**（可选） | 大需求先跑 `/spec-design`，**评审技术方案** | 仅大/复杂需求需要；方案要评审到 `approved` 才往下 |
 | **0 Draft** | 跑 `/spec-draft` 生成草稿 | spec 只描述"要做什么"，不陷入实现细节 |
 | **1 个人 Review** | 自己先通读 spec 草稿 | 确认需求边界、验收标准清晰；这是你自己的把关，不能跳过 |

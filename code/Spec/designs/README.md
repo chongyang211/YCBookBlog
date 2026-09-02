@@ -2,12 +2,12 @@
 
 本目录存放**技术方案（Technical Design）**文档。技术方案是工作流中的**可选前置环节**，位于阶段零（Draft）之前。
 
-## 什么时候需要技术方案
+## 何时需要技术方案
 
 当需求**较大、较复杂、跨多个模块/仓库，或存在多种技术方案需要评审拍板**时，先做技术方案：
 
 ```
-原始需求 (docs/intake/<VERSION>/)
+原始需求 (intake/<VERSION>/)
   ↓
 /spec-design  →  designs/<VERSION>/<STORYID>-<slug>-design.md
   ↓ [团队评审 → status: approved]
@@ -26,17 +26,17 @@
 | 关注 | 架构、技术选型、方案对比、**spec 拆分建议** | 落地到具体文件的执行步骤 |
 | 颗粒度 | 方案级（怎么做、为什么） | 执行级（改哪些文件、按什么顺序） |
 
-> 一句话：**Design 决定「用什么方案、拆几个 spec」，Plan 决定「改哪些文件、按什么步骤」。**
+一句话：**Design 决定「用什么方案、拆几个 spec」，Plan 决定「改哪些文件、按什么步骤」。**
 
 ## 命名规范
 
 | 文件类型 | 命名格式 | 示例 |
 |---------|---------|------|
-| Design | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `designs/v1.6.0/10086-example-user-login-design.md` |
+| Design | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `designs/v1.0.0/10086-example-user-login-design.md` |
 
-> 📂 **版本目录层级**：design 文件按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；`templates/`、`README.md` 保留在 `designs/` 根。
+📂 **版本目录层级**：design 文件按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.0.0/`）；`templates/`、`README.md` 保留在 `designs/` 根。
 
-- `<VERSION>`：迭代版本号（如 `v1.6.0`）
+- `<VERSION>`：迭代版本号（如 `v1.0.0`）
 - `STORYID`：纯数字需求单号；无 story 用 `0` 占位
 - `<slug>`：kebab-case 小写描述，与后续 spec / plan / tasks 的 slug 对齐
 - 模板见 `designs/templates/design-template.md`

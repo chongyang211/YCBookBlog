@@ -6,7 +6,7 @@
 
 ## 作用
 
-把**产品经理输出的需求文档**（或对话中的自然语言描述）快速整理成一份符合 `docs/intake/templates/intake-template.md` 格式的 **intake 草稿**。intake 是「原始需求草稿区」，用于辅助人理解本次需求的内容与边界，作为 `/spec-draft` 的标准输入。
+把**产品经理输出的需求文档**（或对话中的自然语言描述）快速整理成一份符合 `intake/templates/intake-template.md` 格式的 **intake 草稿**。intake 是「原始需求草稿区」，用于辅助人理解本次需求的内容与边界，作为 `/spec-draft` 的标准输入。
 
 > 💡 **可选命令**：是否使用视个人习惯而定。
 > - 需求来自 PM 文档、内容较多/零散时，用它先结构化成 intake，再起草 spec；
@@ -27,7 +27,7 @@
 **触发方式**：
 
 ```
-请基于 docs/产品需求-空中支付.md 执行 spec-intake，版本 v1.6.0
+请基于 docs/产品需求-批量导入.md 执行 spec-intake，版本 v1.6.0
 ```
 
 或：
@@ -49,8 +49,8 @@
    intake 落在哪个 `<VERSION>/` 目录，决定了后续 design / spec / plan / tasks **全程复用同一版本目录**——它是整条链路的归档锚点，因此**必须在生成文件前与用户确认清楚**，不允许 AI 擅自假定。
 
    - **必须主动向用户确认归属版本**：即使触发时已给版本，也要复述确认（如："本次 intake 将归档到 `v1.7.0`，后续 spec/plan/tasks 也会放在该版本目录下，确认吗？"）。
-   - 用户未指定版本时**必须询问**，并列出当前可选版本目录供选择（如 `v1.7.0` / `v1.8.0` / `v1.9.0` / `v2.0.0`），**不要默认沿用上一个版本**。
-   - 确认后：目标目录 `docs/intake/<VERSION>/` 不存在则先 `mkdir -p` 再写入。
+   - 用户未指定版本时**必须询问**，并列出当前可选版本目录供选择（如 `v1.7.0` / `v1.8.0` / `v1.9.0`），**不要默认沿用上一个版本**。
+   - 确认后：目标目录 `intake/<VERSION>/` 不存在则先 `mkdir -p` 再写入。
    - Story ID **非必填**：有则用于文件名；没有则用 `0` 占位，并提示后续分配后重命名。
 
 1. **收集需求来源**
@@ -67,14 +67,14 @@
    - 这些会作为 `/spec-draft` 阶段 AI 主动提问的种子，**不在 intake 阶段强行补全**。
 
 4. **生成 intake 草稿**
-   - 按 `docs/intake/templates/intake-template.md` 模板章节填写。
+   - 按 `intake/templates/intake-template.md` 模板章节填写。
    - 区分信息来源：📥 来自需求文档原文 / 🤖 AI 归纳 / ❓ [TBD]。
 
 5. **写入文件**
-   - 路径：`docs/intake/<VERSION>/<STORYID>-<slug>.md`
+   - 路径：`intake/<VERSION>/<STORYID>-<slug>.md`
      - `STORYID`：已分配则用之，未分配用 `0` 占位
      - `<slug>`：kebab-case 小写短描述
-     - 例：`docs/intake/v1.6.0/10088-payment-retry.md`、占位例 `docs/intake/v1.6.0/0-payment-retry.md`
+     - 例：`intake/v1.6.0/10088-export-retry.md`、占位例 `intake/v1.6.0/0-export-retry.md`
    - frontmatter/头部包含：来源、日期、Story ID、优先级、目标 Spec（如已分配编号）。
    - `日期` 自动填当前日期。
 
@@ -86,7 +86,7 @@
 
 ## 输出结果
 
-- 一份磁盘文件：`docs/intake/<VERSION>/<STORYID>-<slug>.md`
+- 一份磁盘文件：`intake/<VERSION>/<STORYID>-<slug>.md`
 - intake 报告（chat 中输出）
 
 ## 后续动作
@@ -108,7 +108,7 @@
 ## 关联规则与技能
 
 - **规则**：`rules/10-spec-workflow.md`（**阶段零前置**）
-- **模板**：`docs/intake/templates/intake-template.md`
+- **模板**：`intake/templates/intake-template.md`
 - **下游命令**：`commands/spec-draft.md`
 
 ## 与其他命令的衔接
@@ -118,7 +118,7 @@ PM 需求文档 / 对话描述
   ↓
 /spec-intake        ← 你现在用的命令（可选）
   ↓
-docs/intake/<VERSION>/<STORYID>-<slug>.md（原始需求草稿）
+intake/<VERSION>/<STORYID>-<slug>.md（原始需求草稿）
   ↓ [人快速过目]
 （需求大时可选）/spec-design → designs/<VERSION>/<STORYID>-<slug>-design.md (approved)
   ↓

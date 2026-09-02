@@ -1,11 +1,11 @@
 ---
 name: mr-spec-review
-description: MR Spec 评审技能。当用户给出一个Git 平台（GitHub / GitLab / 工蜂） MR 地址（含 intake/design/spec/plan/tasks 任意组合的文档），要求评审他人提交的这些文档（必要时结合实施代码），并把问题作为评论回写到 MR 时使用。评审阶段**按端分流**：先识别 MR 涉及哪些端（前端/后台/识别算法/设备端/移动端SDK/跨端契约），再加载对应端的专业评审依据文档（`review-guides/`，每端含可人工追加的专业注意点专区），用各端准确视角评审、按端分组产出问题。既支持完整 spec/plan/tasks MR，也支持**只含 intake + design 的早期技术方案 MR**（结合当前代码逻辑评审 design 技术方案是否合理、给出整体评估与更优建议）。适用于跨成员 spec 评审、技术方案（design）评审、Code Review 前置的 spec 复核、迭代评审等场景。既可**本地手动执行**（人工确认后投递），也可放进**通用 AI agent / CI 流水线自主执行**（分支 push 触发、自动投递评论、多轮 loop 到无问题）。此外还提供**记忆经验提交功能**：当用户说"提交 spec review 的 memory / 推送评审经验 / 把 memory 改动提交上去"等，触发本 skill 定位工作区内的 CoSpec 仓、检测 `memory/` 是否有待提交改动，有则提交并推送到记忆分支、发起（或更新）合并到 master 的 MR（见 Step 9）。**不适用于**对自己刚完成的实施做规则回顾（那是 `/spec-review` 命令的范畴）。
+description: MR Spec 评审技能。当用户给出一个Git 平台 MR 地址（含 intake/design/spec/plan/tasks 任意组合的文档），要求评审他人提交的这些文档（必要时结合实施代码），并把问题作为评论回写到 MR 时使用。评审阶段**按端分流**：先识别 MR 涉及哪些端（前端/后台/识别算法/设备端/移动端SDK/跨端契约），再加载对应端的专业评审依据文档（`review-guides/`，每端含可人工追加的专业注意点专区），用各端准确视角评审、按端分组产出问题。既支持完整 spec/plan/tasks MR，也支持**只含 intake + design 的早期技术方案 MR**（结合当前代码逻辑评审 design 技术方案是否合理、给出整体评估与更优建议）。适用于跨成员 spec 评审、技术方案（design）评审、Code Review 前置的 spec 复核、迭代评审等场景。既可**本地手动执行**（人工确认后投递），也可放进**通用 AI agent / CI 流水线自主执行**（分支 push 触发、自动投递评论、多轮 loop 到无问题）。此外还提供**记忆经验提交功能**：当用户说"提交 spec review 的 memory / 推送评审经验 / 把 memory 改动提交上去"等，触发本 skill 定位工作区内的 CoSpec 仓、检测 `memory/` 是否有待提交改动，有则提交并推送到记忆分支、发起（或更新）合并到 master 的 MR（见 Step 9）。**不适用于**对自己刚完成的实施做规则回顾（那是 `/spec-review` 命令的范畴）。
 ---
 
 # MR Spec 评审（MR Spec Review）
 
-对**他人提交的 intake / design / spec / plan / tasks MR** 做结构化评审，必要时拉取实施代码联合评审，最终把问题以**总评 + 行内评论**形式回写到Git 平台（GitHub / GitLab / 工蜂） MR 上。
+对**他人提交的 intake / design / spec / plan / tasks MR** 做结构化评审，必要时拉取实施代码联合评审，最终把问题以**总评 + 行内评论**形式回写到Git 平台 MR 上。
 
 > 📌 **两类典型 MR 都要能评**：
 > 1. **完整 spec 类**：含 spec/plan/tasks（可能已实现，需联合代码评审）。
@@ -55,10 +55,10 @@ description: MR Spec 评审技能。当用户给出一个Git 平台（GitHub / G
 做成 CI / 通用 agent 自动化后，**同一工作区可能同时跑多个 MR 的 review 会话，共用同一份 CoSpec 仓和 `src/` 目录**。因此：
 
 1. **CoSpec 仓与 src 业务仓在共享工作区里都视为"只停在基线、只读"的共享资源**，**任何会话都不得把它们切到某个 MR 专属分支**（`git checkout <feature/source_branch>` / `reset` 到非基线 / 无独占路径的 `worktree` 都是会互相踩踏的全局副作用）。
-2. **要读某个分支/commit 上的文件** → 一律用Git 平台（GitHub / GitLab / 工蜂） MCP **按 ref 只读拉取**（`get_blob_content` / `get_repository_tree`），不动本地 git 状态。
+2. **要读某个分支/commit 上的文件** → 一律用Git 平台 MCP **按 ref 只读拉取**（`get_blob_content` / `get_repository_tree`），不动本地 git 状态。
 3. **确需大范围本地 grep 某分支代码** → 只能用**会话独占唯一路径 + detached commit 的 worktree**，用完即删；且仅在**确认无并发**的本地单会话下使用。
 4. 停在基线的共享仓被并发 `fetch + reset --hard origin/<baseline>` 是**幂等收敛**的，安全；偶发 `.git/index.lock` 短暂重试即可。
-5. **记忆回写同样不碰本地工作副本**：Step 8.2 产生的 `memory/` 变更通过Git 平台（GitHub / GitLab / 工蜂） MCP 写 API 提交到**专用记忆分支**（`chore/mr-review-memory`），不在共享 CoSpec 工作副本上 `commit/push`（详见 EVAL-SPEC §9.5）。
+5. **记忆回写同样不碰本地工作副本**：Step 8.2 产生的 `memory/` 变更通过Git 平台 MCP 写 API 提交到**专用记忆分支**（`chore/mr-review-memory`），不在共享 CoSpec 工作副本上 `commit/push`（详见 EVAL-SPEC §9.5）。
 
 ---
 
@@ -93,7 +93,7 @@ description: MR Spec 评审技能。当用户给出一个Git 平台（GitHub / G
    ```
 3. **仍找不到** → 停下来报告："当前工作区未定位到 CoSpec 仓，请提供 CoSpec 仓路径或先 clone。"**不要**在非 CoSpec 目录上瞎跑。
 
-> ⚠️ **Knot 部署歧义（重要）**：从 Knot 包运行时，**当前目录是 Knot 打包副本**——它虽含 `skills/mr-spec-review/` 子目录，但**不是 CoSpec 的 git checkout**（`git remote` 不指向 CoSpec），故第 1 步会落空，必须继续探测/clone 真正的 CoSpec 仓。**不能把 Knot 包目录误判成 `$COSPEC_ROOT`**。若运行环境无 CoSpec checkout（评审的 spec 与 memory 都需要它）→ 由流水线/agent 用 `GONGFENG_TOKEN` clone 后再继续。
+> ⚠️ **Knot 部署歧义（重要）**：从 Knot 包运行时，**当前目录是 Knot 打包副本**——它虽含 `skills/mr-spec-review/` 子目录，但**不是 CoSpec 的 git checkout**（`git remote` 不指向 CoSpec），故第 1 步会落空，必须继续探测/clone 真正的 CoSpec 仓。**不能把 Knot 包目录误判成 `$COSPEC_ROOT`**。若运行环境无 CoSpec checkout（评审的 spec 与 memory 都需要它）→ 由流水线/agent 用 `GIT_TOKEN` clone 后再继续。
 
 > 定位成功后，**评审数据（specs/plans/tasks/src/memory）的相对路径都以 `$COSPEC_ROOT` 为基准**（`$COSPEC_ROOT/specs/...`、`$COSPEC_ROOT/src/<repo>/...`）；**唯独执行逻辑（SKILL.md/scripts）来自 Knot 包**，见 Step 0.3。
 
@@ -103,29 +103,29 @@ description: MR Spec 评审技能。当用户给出一个Git 平台（GitHub / G
 
 > ⚡ **默认按端按需同步（省时关键）**：一个 MR 往往只涉及 1~3 个端的少数仓，**没必要每轮都全量同步 ~20 个仓**。因此本步**默认延后到"端识别"之后**执行（见 **Step 1.6**）——先从 spec/design 识别涉及端 → 映射到 `src/` 目录 → 只同步这些仓（脚本 `REPOS_FILTER`）。**全量同步仅作兜底**：端无法提前判定、或涉及跨端契约需广扫时才全量。
 
-skill 内置脚本（**推荐**，内含完整"目录↔基线分支↔Git 平台（GitHub / GitLab / 工蜂）地址"映射，已处理并发安全 / 缺失 clone / 密钥不落盘 / 并行同步）：
+skill 内置脚本（**推荐**，内含完整"目录↔基线分支↔Git 平台地址"映射，已处理并发安全 / 缺失 clone / 密钥不落盘 / 并行同步）：
 
 ```bash
 # 按需同步（默认）：只同步端识别命中的仓，目录名空格或逗号分隔
-COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
-  REPOS_FILTER="<设备管理仓库> proto" \
+COSPEC_ROOT="$COSPEC_ROOT" GIT_TOKEN="$GIT_TOKEN" \
+  REPOS_FILTER="backend proto" \
   bash "$COSPEC_ROOT/skills/mr-spec-review/scripts/prepare-src.sh"
 
 # 全量同步（兜底）：端不明确 / 跨端契约广扫时用，不传 REPOS_FILTER
-COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
+COSPEC_ROOT="$COSPEC_ROOT" GIT_TOKEN="$GIT_TOKEN" \
   bash "$COSPEC_ROOT/skills/mr-spec-review/scripts/prepare-src.sh"
 ```
 
 > ⚙️ 脚本已内置**并行同步**（并发度 `PREPARE_SRC_JOBS`，默认 8）：多个仓后台并发拉取，总耗时从「Σ(各仓)」降到「max(各仓)」。
 
-> 脚本维护点：新增业务仓 / 基线分支变动时，改 [`scripts/prepare-src.sh`](./scripts/prepare-src.sh) 里的 `REPOS` 映射即可（与 `docs/git-workflow.md` 保持一致）。**识别算法仓 `algorithm-repo`（来自 `<ORG>/<算法组>`）平铺在 `src/algorithm-repo`**；`<ORG>/<算法组>` 原有的 `<业务主仓库>`/`proto` 逻辑已合并进 `<ORG>/<子组>` 的 `src/<业务主仓库>`/`src/proto`，不再单独同步。
+> 脚本维护点：新增业务仓 / 基线分支变动时，改 [`scripts/prepare-src.sh`](./scripts/prepare-src.sh) 里的 `REPOS` 映射即可（与 `docs/git-workflow.md` 保持一致）。
 
 **边界与安全**（脚本已内置，理解即可）：
 
 - ✅ 只同步**基线分支**并**停在基线**——评审只读代码，业务仓不应有需保留的本地改动。
 - ⚠️ **共享工作区 + 并发会话（关键）**：多个 review 会话共用同一 `src/` 目录时，**所有会话都只把仓库停在同一基线**，`reset --hard origin/<baseline>` 是**幂等**的，并发执行都收敛到同一 commit → 安全。**绝不允许任何会话把共享的 src 仓切到某个 MR 的 feature 分支**（那会破坏其他会话的基线假设，见 Step 3）。
 - ⚠️ **模式 A（本地手动，独占工作区）**：若某仓有未提交改动 → **不要静默 `reset --hard`**，先提示用户，同意后再强制。**绝不丢用户工作区改动。**
-- ✅ **模式 B（CI / agent）**：工作副本无人依赖，可直接 `fetch + reset --hard`；`.git/index.lock` 等并发锁短暂重试即可。缺失私有仓靠 `GONGFENG_TOKEN` 走 HTTPS clone。
+- ✅ **模式 B（CI / agent）**：工作副本无人依赖，可直接 `fetch + reset --hard`；`.git/index.lock` 等并发锁短暂重试即可。缺失私有仓靠 `GIT_TOKEN` 走 HTTPS clone。
 - **同步失败**（网络/权限/无 token）→ 脚本 best-effort 记录并继续；模式 A 提示用户，模式 B 在总评注明"某仓未同步，代码验证可能不完整"。
 
 > 注意：Step 0.2 只把业务仓停在**基线**（保证"现状"最新，且并发安全）；**不**在共享仓上切 feature 分支。若确需看 MR feature 分支上的代码，见 Step 3 的并发安全读法。CoSpec 仓自身 MR 文件的加载见 Step 1.5（MCP 只读）。
@@ -139,11 +139,11 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 | 类别 | 内容 | 来源（运行时） | 可写? |
 |------|------|---------------|-------|
 | **执行逻辑** | `SKILL.md`、`scripts/prepare-src.sh` | **Knot 打包副本**（当前正在执行的这份），冻结、按发布版本走 | 只读 |
-| **经验数据** | `memory/`（含 `eval-corpus/`、`attic.md`）、`review-guides/` | **CoSpec 仓活副本**，经Git 平台（GitHub / GitLab / 工蜂） MCP 读**最新**（见下） | 读写（写走 §专用分支） |
+| **经验数据** | `memory/`（含 `eval-corpus/`、`attic.md`）、`review-guides/` | **CoSpec 仓活副本**，经Git 平台 MCP 读**最新**（见下） | 读写（写走 §专用分支） |
 
 **数据读取来源（唯一真相，按优先级）**：
 
-1. **首选**：经Git 平台（GitHub / GitLab / 工蜂） MCP `get_blob_content` / `get_repository_tree` 按 **记忆分支 `chore/mr-review-memory` 的 ref** 读 `skills/mr-spec-review/memory/**` 与 `review-guides/**`——拿到**跨会话共享的最新**经验（不受 Knot 冻结、也不受本地 master 基线滞后影响）。
+1. **首选**：经Git 平台 MCP `get_blob_content` / `get_repository_tree` 按 **记忆分支 `chore/mr-review-memory` 的 ref** 读 `skills/mr-spec-review/memory/**` 与 `review-guides/**`——拿到**跨会话共享的最新**经验（不受 Knot 冻结、也不受本地 master 基线滞后影响）。
 2. **兜底**：MCP 不可用时，退回读 `$COSPEC_ROOT/skills/mr-spec-review/`（Step 0.1 已定位）的本地副本，报告注明"经验数据可能非最新"。
 3. **冷启动种子**：连 `$COSPEC_ROOT` 都定位不到时，才用 **Knot 打包副本**里的 memory/review-guides 兜底，并**明确告警"使用冻结种子，本轮不写回"**。
 
@@ -155,12 +155,12 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 ### Step 1: 解析 MR 并拉取上下文
 
 1. **解析 URL** 得到 `project_id`（如 `<ORG>/CoSpec`）和 `iid`。
-2. **调用Git 平台（GitHub / GitLab / 工蜂） MCP**：
+2. **调用Git 平台 MCP**：
    - `search_merge_request(project_id, iid)` → 取 `merge_request_id`（注意不是 iid）、`source_branch`、`source_commit`、`target_branch`、作者、状态。
    - `get_merge_request_changes(project_id, merge_request_id)` → 取**全部 diff**（不要 `diff_file_only`，要拿到行号定位）。
    - `search_merge_request_notes(project_id, merge_request_id)` → 拉历史评论（含他人评审 + 作者修复说明）。
 3. **识别文件类型**（智能识别，按文件路径分类）：
-   - `docs/intake/<VERSION>/<STORYID>-<slug>.md` → intake（需求接收）
+   - `intake/<VERSION>/<STORYID>-<slug>.md` → intake（需求接收）
    - `designs/<VERSION>/<STORYID>-<slug>-design.md` → design（技术方案）
    - `specs/<VERSION>/<STORYID>-<slug>.md` → spec
    - `plans/<VERSION>/<STORYID>-<slug>-plan.md` → plan
@@ -179,7 +179,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 
 目的：拿到 MR 中修改的 intake/design/spec/plan/tasks **文件全文**（而非残缺的 diff 片段）做上下文完整的评审。
 
-> ⚠️ **并发安全（核心约束）**：CoSpec 仓在共享工作区里可能同时被多个 review 会话使用（尤其做成 CI 自动化后，多个 MR 的流水线并发跑、共用同一目录）。因此**默认不对 CoSpec 仓做任何 `checkout` / `reset` / `worktree`**（这些是全局副作用，会让并发会话互相踩踏），而是用Git 平台（GitHub / GitLab / 工蜂） MCP **按 `source_commit` 只读拉取文件内容**。
+> ⚠️ **并发安全（核心约束）**：CoSpec 仓在共享工作区里可能同时被多个 review 会话使用（尤其做成 CI 自动化后，多个 MR 的流水线并发跑、共用同一目录）。因此**默认不对 CoSpec 仓做任何 `checkout` / `reset` / `worktree`**（这些是全局副作用，会让并发会话互相踩踏），而是用Git 平台 MCP **按 `source_commit` 只读拉取文件内容**。
 
 #### 方式 A：MCP 只读拉取（**默认 · 并发安全 · 两种模式都用**）
 
@@ -284,24 +284,16 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 
    **默认基于基线（主干）现状评审**：Step 0.2 已把每个业务仓停在**基线并同步到 origin 最新**。方案合理性（现有抽象、命名、分层、复用点、字段/常量分布）几乎都靠**基线现状**判断——因此**默认直接在停于基线的共享仓上只读 grep / read**即可，无需切分支。
 
-   **各业务代码仓的基线分支对照**（**权威来源 = [`scripts/prepare-src.sh`](./scripts/prepare-src.sh) 的 `REPOS` 映射**；此处为速查，改动以脚本为准）：
+   **各业务代码仓的基线分支对照**（**权威来源 = [`scripts/prepare-src.sh`](./scripts/prepare-src.sh) 的 `REPOS` 映射**；脚本内为通用示例配置，落地时替换为你团队清单；此处为速查，改动以脚本为准）：
 
-   | 目录（相对 `src/`） | Git 平台（GitHub / GitLab / 工蜂）仓 | 基线分支 |
+   | 目录（相对 `src/`） | Git 平台仓 | 基线分支 |
    |------|------|---------|
-   | `<业务主仓库>` | <ORG>/<业务主仓库> | `develop` |
-   | `<协议仓库>` | <ORG>/<协议仓库> | `master` |
-   | `<前端仓库>` | <ORG>/<子组>/<前端仓库> | `develop` |
-   | `<设备管理仓库>` | <ORG>/<子组>/<设备管理仓库> | `develop` |
-   | `<业务主仓库>` | <ORG>/<子组>/<业务主仓库> | `develop` |
-   | `proto` | <ORG>/<子组>/proto | `master` |
-   | `infrastructure` | <ORG>/<子组>/infrastructure | `develop` |
-   | `algorithm-repo` | <ORG>/<算法组>/algorithm-repo | `master` |
-   | `paymax_device` / `<支付仓库>` | <ORG>/… | `develop` |
-   | `<激活服务仓库>` / `<IoT 服务仓库>` / `<IoT 服务仓库>` | <ORG>/… | `develop` |
-   | `<SDK 仓库>` | <ORG>/<SDK 仓库> | `master` |
-   | `<示例仓库>` | <ORG>/<示例仓库> | `master` |
-
-   > ⚠️ **识别算法仓平铺**：`algorithm-repo` 来自 `<ORG>/<算法组>`，直接平铺在 `src/algorithm-repo`。`<ORG>/<算法组>` 原有的 `<业务主仓库>`/`proto` 逻辑**已合并进** `<ORG>/<子组>` 的 `<业务主仓库>`/`proto`（`src/<业务主仓库>`、`src/proto`），原 `src/<旧流水线目录>/` 分组已废弃删除；spec 引用识别侧 <业务主仓库>/proto 时直接用 `src/<业务主仓库>`、`src/proto`。
+   | `backend` | <ORG>/<业务主仓库> | `develop` |
+   | `proto` | <ORG>/<协议仓库> | `master` |
+   | `infrastructure` | <ORG>/infrastructure | `develop` |
+   | `frontend` | <ORG>/<前端仓库> | `develop` |
+   | `device-app` | <ORG>/<设备应用仓库> | `develop` |
+   | `mobile-sdk` | <ORG>/<SDK 仓库> | `master` |
 
    > 如遇不在上表中的新仓库 → 优先查 `docs/git-workflow.md` 的《基线分支映射表》确认；仍不明确则**问用户**，不要瞎猜。
 
@@ -339,12 +331,12 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 
 | 端 | 命中的 `src/` 目录 | 评审依据 |
 |----|-------------------|---------|
-| **后台服务端** | `<设备管理仓库>`、`<业务主仓库>`、`<业务主仓库>`、`<激活服务仓库>`、`infrastructure` | [`review-guides/backend.md`](./review-guides/backend.md) |
-| **识别·算法端** | `algorithm-repo`、`<业务主仓库>`/`proto`（识别侧逻辑，已合并入 <ORG>/<子组>） | [`review-guides/algorithm.md`](./review-guides/algorithm.md) |
-| **前端** | `<前端仓库>`、`<支付仓库>/web`、`<SDK 仓库>/web` | [`review-guides/frontend.md`](./review-guides/frontend.md) |
-| **设备端** | `<IoT 服务仓库>`、`paymax_device`、`<IoT 服务仓库>` | [`review-guides/device.md`](./review-guides/device.md) |
-| **移动端·SDK** | `<SDK 仓库>`（android/ios）、`<支付仓库>/Android` | [`review-guides/mobile-sdk.md`](./review-guides/mobile-sdk.md) |
-| **跨端契约**（横切） | 任意端改到 `*.proto`/接口/错误码/字段号，或 `proto`/`<协议仓库>` | [`review-guides/contract.md`](./review-guides/contract.md) |
+| **后台服务端** | `backend`、`infrastructure` 及你团队的后端服务仓 | [`review-guides/backend.md`](./review-guides/backend.md) |
+| **识别·算法端** | 算法 / 推理编排类仓库（如有） | [`review-guides/algorithm.md`](./review-guides/algorithm.md) |
+| **前端** | `frontend`、`<SDK 仓库>/web` | [`review-guides/frontend.md`](./review-guides/frontend.md) |
+| **设备端** | `device-app` 及嵌入式 / 边缘设备仓 | [`review-guides/device.md`](./review-guides/device.md) |
+| **移动端·SDK** | `mobile-sdk`（android/ios） | [`review-guides/mobile-sdk.md`](./review-guides/mobile-sdk.md) |
+| **跨端契约**（横切） | 任意端改到 `*.proto`/接口/错误码/字段号，或 `proto` | [`review-guides/contract.md`](./review-guides/contract.md) |
 
 > 端归属不明确 → 从 Branch/影响表推断；仍不明确则在报告注明"按最相关端评审"，模式 A 可问用户。**权威路由表以 [`review-guides/README.md`](./review-guides/README.md) 为准。**
 
@@ -371,7 +363,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 | **安全（@security_rules）** | XSS / SQLi / 鉴权 / SSRF / 日志脱敏 / 危险 URL schema / 反序列化 |
 | **性能** | 超时设置、N+1、缓存策略、批量、限流、大数据量降级 |
 | **兼容性 / 灰度 / 回滚** | 老数据、老 URL、回滚路径、灰度策略 |
-| **设备端兼容性（重要！）** | **若涉及 `devicegateway` / `wecarddevicegateway` 接口**：是否破坏旧设备版本？是否需保留老字段？设备 OTA 时间窗口考虑了吗？详见 4.3 |
+| **设备端兼容性（重要！）** | **若涉及 `devicegateway` / `legacy-devicegateway` 接口**：是否破坏旧设备版本？是否需保留老字段？设备 OTA 时间窗口考虑了吗？详见 4.3 |
 | **可测试性** | 验收标准是否可验证、测试点是否覆盖关键路径与并发竞态、是否要求单测 |
 | **i18n 三语完整性** | 涉及前端时，zh-CN / en-US / ja-JP 三语词条**全部具体**给出，不可留空 / 写"按已有同步" |
 | **文档质量** | 注释、TODO 标记、修订记录 |
@@ -397,8 +389,8 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 
 只要 MR 涉及以下任一情况，必须**强制评审**兼容性：
 
-- spec 文档中提到 `devicegateway` / `wecarddevicegateway` / `<设备管理仓库>` 中的接口
-- 代码改动涉及 `src/<设备管理仓库>/`、`gateway/devicegateway/`、`gateway/wecarddevicegateway/`
+- spec 文档中提到 `devicegateway` / `legacy-devicegateway` 等设备网关接口
+- 代码改动涉及 `src/device-app/`、`gateway/devicegateway/`、`gateway/legacy-devicegateway/`
 - 字段名、错误码、协议格式变更
 
 **评审点**：
@@ -724,7 +716,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 
 **落盘模式差异**：
 - **模式 A**：门禁结论 + 各 metric 展示给用户，认可后写入本地工作副本。写入后可**随时用 Step 9 一键收口**（提交 memory 改动到记忆分支 + 发起/更新到 master 的 MR），无需手工拼 git 命令；也可走平时 spec MR 流程。
-- **模式 B（headless/CI）**：按门禁自动判定后，**通过Git 平台（GitHub / GitLab / 工蜂） MCP 写 API 把变更提交到专用记忆分支**（如 `chore/mr-review-memory`），**不改共享工作副本、不切分支**——否则会被 Step 0 的 `reset` 冲掉、且无法反哺其他会话（详见 EVAL-SPEC §9.5）。日志输出净化报告。
+- **模式 B（headless/CI）**：按门禁自动判定后，**通过Git 平台 MCP 写 API 把变更提交到专用记忆分支**（如 `chore/mr-review-memory`），**不改共享工作副本、不切分支**——否则会被 Step 0 的 `reset` 冲掉、且无法反哺其他会话（详见 EVAL-SPEC §9.5）。日志输出净化报告。
 
 **记录闭环结果**（附收尾汇报，格式见 EVAL-SPEC §10.3）：
 ```
@@ -794,7 +786,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
      git -C "$COSPEC_ROOT" commit -m "chore(mr-review-memory): 沉淀评审经验 <一句话摘要>"
      ```
      - commit message 摘要用 Step 8.2 的规则闭环报告要点（新增 active X / shadow Y / 淘汰 Z 等），无报告则据 diff 概括。
-  4. **push 前先安全 rebase master（关键 · 保证Git 平台（GitHub / GitLab / 工蜂） MR 可安全 rebase merge）**：commit 完成后**先不要直接 push**，按团队 git 工作流把 master 同步到最新、再让记忆分支 rebase 到 master。⚠️ **进入本步前必须已完成步骤3 的 commit、工作区干净**——否则 `checkout master` 会把未提交改动带到 master 工作区或因冲突阻塞，故先做前置校验：
+  4. **push 前先安全 rebase master（关键 · 保证Git 平台 MR 可安全 rebase merge）**：commit 完成后**先不要直接 push**，按团队 git 工作流把 master 同步到最新、再让记忆分支 rebase 到 master。⚠️ **进入本步前必须已完成步骤3 的 commit、工作区干净**——否则 `checkout master` 会把未提交改动带到 master 工作区或因冲突阻塞，故先做前置校验：
      ```bash
      # ⓪ 前置：确保工作区干净（步骤3 已 commit），否则停下
      git -C "$COSPEC_ROOT" diff --quiet && git -C "$COSPEC_ROOT" diff --cached --quiet \
@@ -807,7 +799,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
      git -C "$COSPEC_ROOT" rebase master
      ```
      - **rebase 冲突处理**：memory 是纯文档，冲突通常是同一 Pattern 文件被多方追加 → 手工合并保留双方条目（不要丢别人的沉淀），`git add` 后 `git rebase --continue`；实在理不清则 `git rebase --abort` 停下报告，交用户裁决，**绝不 `--skip` 丢改动**。
-     - 目的：让记忆分支线性领先于 master，Git 平台（GitHub / GitLab / 工蜂）上的 MR 就能走 **rebase merge**（快进、无 merge commit），避免落后 master 太多导致合并冲突。
+     - 目的：让记忆分支线性领先于 master，Git 平台上的 MR 就能走 **rebase merge**（快进、无 merge commit），避免落后 master 太多导致合并冲突。
   5. **push 到记忆分支**：据步骤2 `ls-remote` 的探测结果决定 push 策略——远端已有记忆分支（rebase 改写了历史）→ `--force-with-lease` 安全强推；远端全新分支 → 普通 `push -u`：
      ```bash
      if git -C "$COSPEC_ROOT" ls-remote --exit-code origin chore/mr-review-memory >/dev/null 2>&1; then
@@ -859,14 +851,14 @@ COSPEC_ROOT="$COSPEC_ROOT" GONGFENG_TOKEN="$GONGFENG_TOKEN" \
 - 无改动时：`ℹ️ memory 无待提交改动，未创建提交/ MR`。
 
 **安全与纪律（本步必守）**：
-- 🔒 **token env-only**：push / MCP 写 API 用的 `GONGFENG_TOKEN` 只从环境注入、掩码，绝不写进任何仓库文件或 remote URL（遵守 @security_rules）。
+- 🔒 **token env-only**：push / MCP 写 API 用的 `GIT_TOKEN` 只从环境注入、掩码，绝不写进任何仓库文件或 remote URL（遵守 @security_rules）。
 - 🔒 **只碰 memory/**：提交范围严格限定 `skills/mr-spec-review/memory/`，不夹带评审过程产生的 src / 其它改动。
 - 🔒 **并发安全**：共享/并发工作区**不切本地分支**，走 MCP 写 API 路径；仅独占工作区才允许本地 `checkout -B` 记忆分支。
-- 🔄 **push 前必 rebase master**（模式 A）：commit 后先 `master` `pull -r` 同步最新 → 记忆分支 `rebase master` → 再 `push --force-with-lease`，保证Git 平台（GitHub / GitLab / 工蜂） MR 能安全 rebase merge；rebase 冲突手工合并保留双方沉淀，理不清则 `--abort` 交用户裁决，绝不 `--skip` 丢改动。
+- 🔄 **push 前必 rebase master**（模式 A）：commit 后先 `master` `pull -r` 同步最新 → 记忆分支 `rebase master` → 再 `push --force-with-lease`，保证Git 平台 MR 能安全 rebase merge；rebase 冲突手工合并保留双方沉淀，理不清则 `--abort` 交用户裁决，绝不 `--skip` 丢改动。
 - 🚦 **不自动 merge**：默认保留人工 review + merge 闸门，除非用户显式要求直接合并。
 
 
-> 集成方式：**不在 CoSpec 仓内放 CI 配置**。由一条**外部流水线**监听 CoSpec 仓的 **MR push 事件**与 **MR 合并事件**（webhook），收到事件后取 MR 信息 → 调用 AI agent → 触发本 skill（模式 B）。因评审全程走Git 平台（GitHub / GitLab / 工蜂） MCP 只读（不切分支），**多个 MR 可安全并发**。
+> 集成方式：**不在 CoSpec 仓内放 CI 配置**。由一条**外部流水线**监听 CoSpec 仓的 **MR push 事件**与 **MR 合并事件**（webhook），收到事件后取 MR 信息 → 调用 AI agent → 触发本 skill（模式 B）。因评审全程走Git 平台 MCP 只读（不切分支），**多个 MR 可安全并发**。
 
 ```
                     ┌─ push 事件 ──→ 取 MR 信息 ─→ 调 AI agent ─→ 跑 skill（评审 + 直接投评论）
@@ -908,26 +900,26 @@ codebuddy run \
 
 skill 在 Step 0.2 运行内置脚本 [`scripts/prepare-src.sh`](./scripts/prepare-src.sh)：
 
-- 含**完整业务仓清单**（`目录 ↔ 基线分支 ↔ Git 平台（GitHub / GitLab / 工蜂）地址`）；识别算法仓 `algorithm-repo`（来自 <ORG>/<算法组>）平铺在 `src/algorithm-repo`；原 `<业务主仓库>`/`proto` 逻辑已合并进 <ORG>/<子组> 的 `src/<业务主仓库>`/`src/proto`。
-- 缺失的仓自动 HTTPS clone（需 `GONGFENG_TOKEN`）；已存在的 fetch 后**停在基线 `reset --hard`**（幂等、并发安全）。
+- 含**完整业务仓清单**（`目录 ↔ 基线分支 ↔ Git 平台地址`；脚本内置通用示例配置，落地时替换为你团队清单）。
+- 缺失的仓自动 HTTPS clone（需 `GIT_TOKEN`）；已存在的 fetch 后**停在基线 `reset --hard`**（幂等、并发安全）。
 - best-effort：单仓失败不中断，agent 在总评注明该仓代码验证可能不完整。
 
 ### 4. 密钥与权限（env-only，遵守 @security_rules）
 
 | 变量 | 用途 | 配置位置 |
 |------|------|---------|
-| `GONGFENG_TOKEN` | clone 私有业务仓 + 通过Git 平台（GitHub / GitLab / 工蜂） MCP **投递评论** + **回写记忆到专用分支/MR**（需对 CoSpec 仓有 write 权限） | 流水线/agent 运行环境的 secret，**掩码存储** |
+| `GIT_TOKEN` | clone 私有业务仓 + 通过Git 平台 MCP **投递评论** + **回写记忆到专用分支/MR**（需对 CoSpec 仓有 write 权限） | 流水线/agent 运行环境的 secret，**掩码存储** |
 | AI 模型凭证 | agent 调用大模型 | 同上，掩码 |
 
 - ❌ 绝不把 token 写进任何仓库文件；只从运行环境的 masked secret 注入。脚本用 `http.extraHeader` 注入，不写进 remote URL / `.git/config`。
-- MCP 配置里Git 平台（GitHub / GitLab / 工蜂） server 的鉴权同样读环境变量，不落盘明文。
+- MCP 配置里Git 平台 server 的鉴权同样读环境变量，不落盘明文。
 
 ### 5. loop 行为与可选门禁
 
 - **loop**：作者收到评论 → 本地改 → 再 push → push 事件再次触发评审。靠 **Step 2 指纹去重**只评增量、不重复投；直到无 🔴/🟠。
 - **记忆闭环**：MR 合并事件触发 **Step 8.2**（eval 门禁闭环）：TP 过门禁沉淀、FP 回灌统计、并净化淘汰过期/冲突/僵尸规则（EVAL-SPEC §7）。
-- **记忆持久化（headless 关键）**：agent 产生的记忆变更**不改共享工作副本**，而是通过Git 平台（GitHub / GitLab / 工蜂） MCP 写 API（`get_blob_content` 读最新 → `create_or_update_file`/`batch_modify_files` 提交）落到**专用记忆分支** `chore/mr-review-memory`；**推荐做成一条长期存在的 memory-curation MR 自动累积 commit**，人工侧**只需定期 review + merge 这条 MR**，无需登录 agent 手动提交。写入时机分离：每次 push 只 append `eval-corpus`，merge 事件才改 `memory/*.md`（降并发）。详见 EVAL-SPEC §9.5。
-- **可选门禁**：若希望"有 🔴 就卡住合并"，让 agent 发现 🔴 时返回**非 0 退出码**，配合Git 平台（GitHub / GitLab / 工蜂）"流水线通过才可合并"规则。
+- **记忆持久化（headless 关键）**：agent 产生的记忆变更**不改共享工作副本**，而是通过Git 平台 MCP 写 API（`get_blob_content` 读最新 → `create_or_update_file`/`batch_modify_files` 提交）落到**专用记忆分支** `chore/mr-review-memory`；**推荐做成一条长期存在的 memory-curation MR 自动累积 commit**，人工侧**只需定期 review + merge 这条 MR**，无需登录 agent 手动提交。写入时机分离：每次 push 只 append `eval-corpus`，merge 事件才改 `memory/*.md`（降并发）。详见 EVAL-SPEC §9.5。
+- **可选门禁**：若希望"有 🔴 就卡住合并"，让 agent 发现 🔴 时返回**非 0 退出码**，配合Git 平台"流水线通过才可合并"规则。
 - **防抖**：作者连续 push 时，让流水线**取消同一 MR 尚未跑完的旧评审任务**，避免浪费算力。
 
 ---
@@ -983,7 +975,7 @@ skill 在 Step 0.2 运行内置脚本 [`scripts/prepare-src.sh`](./scripts/prepa
 
 ## 关联资产
 
-- **依赖**：Git 平台（GitHub / GitLab / 工蜂） MCP
+- **依赖**：Git 平台 MCP
   - 评审上下文：`search_merge_request` / `get_merge_request_changes` / `search_merge_request_notes` / `get_commits_list`
   - **只读取文件（并发安全，替代切分支）**：`get_blob_content`（按 ref 取文件全文）/ `get_repository_tree`（按 ref 列目录）
   - 投递：`create_merge_request_note`
@@ -1014,7 +1006,7 @@ skill 在 Step 0.2 运行内置脚本 [`scripts/prepare-src.sh`](./scripts/prepa
 
 | 维度 | `/spec-review` 命令 | `mr-spec-review` skill |
 |------|---------------------|------------------------|
-| 输入 | 本地 spec 路径 | Git 平台（GitHub / GitLab / 工蜂） MR 地址 |
+| 输入 | 本地 spec 路径 | Git 平台 MR 地址 |
 | 对象 | **自己的实现** + 自己的 spec | **他人的 spec/plan/tasks**（可选含代码） |
 | 输出 | 对话报告 | 对话报告 + **投递到 MR 评论** |
 | 时机 | 实施完成后自评 | 团队互评 / 评审他人提交 |
@@ -1080,4 +1072,4 @@ skills/mr-spec-review/
 8. **模式纪律**：模式 A 未经确认不投评论 / 不写记忆并先展示报告供裁剪；模式 B 自动投递 + 自动沉淀。运行模式按 §执行环境与模式 自动识别。
 9. **记忆自净化**：只沉淀 TP 且过入库门禁（EVAL-SPEC §5：回测/泛化/冲突/锚点四关）；FP 不丢弃、回灌统计驱动淘汰（§7）；过期/冲突/僵尸规则不以正常置信度投递。见 [`memory/EVAL-SPEC.md`](./memory/EVAL-SPEC.md)。
 10. **收尾**：默认只读无需清理；用过独占 worktree 则 `git worktree remove <唯一路径>`；最后汇报未投递条目。
-11. **记忆提交按需触发**：用户说"提交 spec review 的 memory"等 → 走 Step 9，只提交 `memory/` 改动到 `chore/mr-review-memory` 分支；模式 A commit 后 **push 前先 rebase master**（`master` pull -r → 记忆分支 rebase → `push --force-with-lease`）保证Git 平台（GitHub / GitLab / 工蜂） MR 可安全 rebase merge，再发起/更新到 master 的 MR；无改动不空提交、默认不自动 merge（留人工闸门）；token env-only、共享区不切分支走 MCP 写 API。
+11. **记忆提交按需触发**：用户说"提交 spec review 的 memory"等 → 走 Step 9，只提交 `memory/` 改动到 `chore/mr-review-memory` 分支；模式 A commit 后 **push 前先 rebase master**（`master` pull -r → 记忆分支 rebase → `push --force-with-lease`）保证Git 平台 MR 可安全 rebase merge，再发起/更新到 master 的 MR；无改动不空提交、默认不自动 merge（留人工闸门）；token env-only、共享区不切分支走 MCP 写 API。

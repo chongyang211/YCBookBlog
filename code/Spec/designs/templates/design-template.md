@@ -1,6 +1,6 @@
 # Technical Design — [简短标题]
 
-> **关联 Intake**: `docs/intake/<VERSION>/<STORYID>-<slug>.md`  
+> **关联 Intake**: `intake/<VERSION>/<STORYID>-<slug>.md`  
 > **Story ID**: [需求单号，如 10087；无对应 story 则填 `0`]  
 > **Author**: [作者]  
 > **Reviewers**: [评审人，如 架构师 / Tech Lead，TBD]  

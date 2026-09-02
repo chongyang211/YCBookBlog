@@ -20,14 +20,14 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 | **light** | spec-drafting（阶段零） | 模块级 | 接口 / 入口 / 注释 | spec 的「实施备注」+「关键代码参考」 |
 | **deep** | implementation-planning（阶段二） | 文件 / 函数级 | 实现细节 / 调用链 / 设计模式 | plan 的「改动范围」+「关键代码参考」+「实施步骤」参考字段 |
 
-> 用户也可以独立触发（如"帮我看下 wecardexample-app 现状"），此时默认 light 模式。
+> 用户也可以独立触发（如"帮我看下 example-app 现状"），此时默认 light 模式。
 
 ## 执行步骤
 
 ### Step 1: 收集线索
 
 - 从需求/spec 中提取关键词（业务名词、模块名、接口名）
-- 列出潜在相关的目录（如 `src/example-gateway/`、`src/wecardexample-app/`）
+- 列出潜在相关的目录（如 `src/example-gateway/`、`src/example-app/`）
 
 ### Step 2: 扫码侦察（按模式）
 
@@ -79,7 +79,7 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 | 模块路径 | 作用 | 与本需求关系 |
 |---------|------|-------------|
 | `src/example-gateway/` | API 网关 | 需新增示例业务 HTTP 接口 |
-| `src/wecardexample-app/` | 业务应用层 | 需新增示例业务 controller |
+| `src/example-app/` | 业务应用层 | 需新增示例业务 controller |
 
 **可复用资产**：
 - `utils.GenerateUint64FromUUID()` — `src/common/utils/uuid.go` — 用于生成 biz_id
@@ -93,7 +93,7 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 | 要做什么 | 参考文件 |
 |---------|---------|
 | Controller 9 步流程 | `controller/example-module/enroll-flow/login.go` |
-| 示例通道 调用 | `common/example-vendor/providers/wechat/register.go` |
+| 示例通道 调用 | `common/example-vendor/providers/demo-provider/register.go` |
 
 **初步影响估计**：
 - 预计需要新增：N 个文件（粗估）
@@ -116,16 +116,16 @@ AI 没看代码就起草 spec/plan，本质上是另一种"vibe coding"。代码
 |------|------|---------|------|
 | 新增 | `src/.../online_register.go` | FR-3 | gateway 服务方法 |
 | 修改 | `src/.../service.go` | FR-3 | 新增 GetExampleAppClient |
-| 修改 | `src/.../config.yaml` | FR-3 | 新增 wecardexample-app 服务地址 |
+| 修改 | `src/.../config.yaml` | FR-3 | 新增 example-app 服务地址 |
 
 **调用链分析**：
 ```
 HTTP POST /api/v1/example/online-register
   → PathBasedMiddleware → HTTPTokenMiddleware（取 user_id）
   → example-gateway.OnlineRegister（透传）
-  → wecardexample-app.OnlineRegister（业务逻辑）
-  → example-vendor.wechat.OnlineRegister（远端调用）
-  → <业务主仓库>.PrivateRecognition.OnlineRegister
+  → example-app.OnlineRegister（业务逻辑）
+  → example-vendor.demo-provider.OnlineRegister（远端调用）
+  → <业务主仓库>.ExampleService.OnlineRegister
 ```
 
 **接口影响**：
@@ -137,7 +137,7 @@ HTTP POST /api/v1/example/online-register
 | 模式 | 参考实现 | 关键约束 |
 |------|---------|---------|
 | Controller 9 步流程 | `enroll-flow/login.go` | 配额预扣 → 失败回退；状态更新失败不回退配额 |
-| 示例通道 | `wechat/register.go` | 30s 超时；TraceID 优先做 session_id |
+| 示例通道 | `demo-provider/register.go` | 30s 超时；TraceID 优先做 session_id |
 | 日志脱敏 | `sensitive.MaskSensitiveValue` | 禁用 `%+v` 打印请求结构体 |
 
 **影响范围风险**：

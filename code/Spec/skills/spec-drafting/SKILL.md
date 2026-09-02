@@ -1,6 +1,6 @@
 ---
 name: spec-drafting
-description: Spec 起草技能。当用户提供原始需求（自然语言描述或 docs/intake/xxx.md 文件），需要将其转化为符合 spec-template 格式的 spec 文档时使用。适用于执行 /spec-draft 命令时触发，或用户直接说"帮我把这个需求写成 spec"时。
+description: Spec 起草技能。当用户提供原始需求（自然语言描述或 intake/xxx.md 文件），需要将其转化为符合 spec-template 格式的 spec 文档时使用。适用于执行 /spec-draft 命令时触发，或用户直接说"帮我把这个需求写成 spec"时。
 ---
 
 # Spec 起草
@@ -20,7 +20,7 @@ description: Spec 起草技能。当用户提供原始需求（自然语言描�
 
 ### Step 1: 收集原始需求
 
-- 用户给 `docs/intake/xxx.md` 路径 → 读取文件
+- 用户给 `intake/xxx.md` 路径 → 读取文件
 - 用户直接描述 → 先复述理解，确认无误后开始
 - 两者都有 → 以文件为主，对话为补充
 
@@ -45,7 +45,7 @@ description: Spec 起草技能。当用户提供原始需求（自然语言描�
 
 - 扫描 `specs/<VERSION>/` 目录了解现有 spec（必要时也可参考 团队 Wiki 索引：<TEAM-WIKI-URL>）
 - 检查是否有现有 spec 与新需求重叠 / 冲突（codebase-survey 已部分覆盖，此处再确认 spec 层）
-- 确认 Story ID（从 docs/intake 头部 / 用户提供 / 默认 `0` 占位）
+- 确认 Story ID（从 intake 头部 / 用户提供 / 默认 `0` 占位）
 - **多 spec 检测**：扫描 `specs/` 目录看是否已有同 Story ID 的 spec 文件
   - 如有，必须主动询问用户「新建子 spec / 修改已有 / 换 Story ID」三选一
   - 如确认新建子 spec，slug 必须与已有 spec 不重复，并在新 spec 的 `Sibling Specs` 字段引用兄弟 spec
@@ -87,7 +87,7 @@ description: Spec 起草技能。当用户提供原始需求（自然语言描�
 - 路径：`specs/<VERSION>/<STORYID>-<slug>.md`
   - `STORYID`：纯数字 Story ID（**不强制唯一**——大需求拆分时多个 spec 可共享）；如无对应 story 用 `0` 占位
   - `<slug>`：kebab-case 简短描述（**同 Story 下必须唯一**，是真正的 spec 区分键）
-  - 例：`specs/v1.6.0/10088-payment-retry.md`
+  - 例：`specs/v1.6.0/10088-export-retry.md`
   - 大需求拆分例：`specs/v1.6.0/10086-example-gateway.md`、`specs/v1.6.0/10086-example-controller.md`
 - frontmatter：
   - `Story ID: <数字>`（与文件名保持一致；**追溯线索，非唯一标识**）

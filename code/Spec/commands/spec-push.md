@@ -85,7 +85,7 @@ review 通过，请执行 spec-push（commit msg：feat(auth): 首页面板新�
 5. **创建 MR 提示**
    - AI 输出每个仓库的 MR 创建链接 / 命令模板：
      ```
-     # Git 平台（GitHub / GitLab / 工蜂） UI 创建 MR：
+     # Git 平台 UI 创建 MR：
      # 源分支：feature/<spec-name>
      # 目标分支：<baseline>
      # 描述自动套用：.gitlab/merge_request_templates/Default.md

@@ -6,9 +6,9 @@
 > **优先级**：高 / 中 / 低  
 > **目标 Spec**：[如已分配编号填 NNNN，否则留空]  
 
-> 📁 **文件命名规范**：`docs/intake/<VERSION>/<STORYID>-<slug>.md`  
-> 例：`docs/intake/v1.6.0/10088-payment-retry.md`  
-> 如 Story ID 尚未分配，可暂用 `0` 占位：`docs/intake/v1.6.0/0-payment-retry.md`，分配后再重命名
+> 📁 **文件命名规范**：`intake/<VERSION>/<STORYID>-<slug>.md`  
+> 例：`intake/v1.6.0/10088-export-retry.md`  
+> 如 Story ID 尚未分配，可暂用 `0` 占位：`intake/v1.6.0/0-export-retry.md`，分配后再重命名
 
 ---
 
@@ -52,7 +52,7 @@
 执行：
 
 ```
-请基于 docs/intake/<本文件名>.md 执行 spec-draft
+请基于 intake/<本文件名>.md 执行 spec-draft
 ```
 
 AI 会读取本文件，主动问澄清问题，然后写出 `specs/<VERSION>/<STORYID>-<slug>.md` 草稿。

@@ -27,7 +27,7 @@
 | 维度 | 技术方案 Design（阶段零前·可选） | 实施计划 Plan（阶段二） |
 |------|------|------|
 | 时机 | spec 之前（需求大 / 方案不确定时） | spec 已 ready 之后 |
-| 输入 | 原始需求 `docs/intake/` | 已 ready 的 spec |
+| 输入 | 原始需求 `intake/` | 已 ready 的 spec |
 | 关注点 | 架构、技术选型、方案对比、模块划分、**spec 拆分建议** | 落地到具体文件的改动清单、Phase 步骤 |
 | 颗粒度 | 方案级（怎么做、为什么） | 执行级（改哪些文件、按什么顺序） |
 | 产物 | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `plans/<VERSION>/<STORYID>-<slug>-plan.md` |
@@ -37,7 +37,7 @@
 
 **必须执行的步骤**：
 
-1. 调用 `/spec-design`，基于 `docs/intake/<VERSION>/<STORYID>-<slug>.md` 产出技术方案
+1. 调用 `/spec-design`，基于 `intake/<VERSION>/<STORYID>-<slug>.md` 产出技术方案
 2. **先澄清（不可跳过，可多轮）**：与用户确认①需求性质（全新 vs 增量）②涉及仓库及是否已 clone 到 `src/`（未 clone 先提示 clone）③现有实现定位④核心逻辑与边界⑤非功能约束⑥范围边界
 3. 对已 clone 的涉及仓库调用 `skills/codebase-survey`（架构视角：模块边界、调用链、跨系统交互，不深入函数实现）
 4. **先给 2-3 个候选方案让用户选**：在对话中输出候选方案对比表 + 推荐，**等用户选定后**再落盘，不允许只给单一方案或未经确认就写文件
@@ -74,7 +74,7 @@
 
 ## 阶段零：需求转 Spec（Draft）
 
-**触发条件**：收到原始需求（口头描述、邮件、IM、`docs/intake/xxx.md` 等），仓库中**尚无**对应 spec。
+**触发条件**：收到原始需求（口头描述、邮件、IM、`intake/xxx.md` 等），仓库中**尚无**对应 spec。
 
 **核心原则**：
 
@@ -84,7 +84,7 @@
 
 **必须执行的步骤**：
 
-1. 把原始需求落到 `docs/intake/<VERSION>/<STORYID>-<slug>.md`（保留出处与原话；如 story id 尚未分配用 `0` 占位，分配后再重命名）
+1. 把原始需求落到 `intake/<VERSION>/<STORYID>-<slug>.md`（保留出处与原话；如 story id 尚未分配用 `0` 占位，分配后再重命名）
 2. 调用 `/spec-draft` 起草 `specs/<VERSION>/<STORYID>-<slug>.md`
    - **如已走过「阶段零前·技术方案」**：起草必须同时读取 `designs/<VERSION>/<STORYID>-<slug>-design.md`（应为 `approved` 状态），把方案中的关键技术决策、spec 拆分建议作为起草输入；如建议拆多个子 spec，逐个起草
    - 起草前**必须先做轻量代码侦察**（调用 `skills/codebase-survey` light 模式）
@@ -98,11 +98,11 @@
 
 | 文件类型 | 命名 | 示例 |
 |---------|------|------|
-| Intake | `docs/intake/<VERSION>/<STORYID>-<slug>.md` | `docs/intake/v1.6.0/10086-example-user-login.md` |
+| Intake | `intake/<VERSION>/<STORYID>-<slug>.md` | `intake/v1.6.0/10086-example-user-login.md` |
 | Design（可选） | `designs/<VERSION>/<STORYID>-<slug>-design.md` | `designs/v1.6.0/10086-example-user-login-design.md` |
-| Spec | `specs/<VERSION>/<STORYID>-<slug>.md` | `specs/v1.6.0/10088-payment-retry.md` |
-| Plan | `plans/<VERSION>/<STORYID>-<slug>-plan.md` | `plans/v1.6.0/10088-payment-retry-plan.md` |
-| Tasks | `tasks/<VERSION>/<STORYID>-<slug>-tasks.md` | `tasks/v1.6.0/10088-payment-retry-tasks.md` |
+| Spec | `specs/<VERSION>/<STORYID>-<slug>.md` | `specs/v1.6.0/10088-export-retry.md` |
+| Plan | `plans/<VERSION>/<STORYID>-<slug>-plan.md` | `plans/v1.6.0/10088-export-retry-plan.md` |
+| Tasks | `tasks/<VERSION>/<STORYID>-<slug>-tasks.md` | `tasks/v1.6.0/10088-export-retry-tasks.md` |
 
 > 📂 **版本目录层级（强制）**：所有产物按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）。`templates/`、`README.md` 是跨版本元文件，保留在各目录根。`<VERSION>` 由当前迭代决定，同一迭代的 intake / design / spec / plan / tasks 放进同名版本目录。聚合索引由 `/spec-index` 发布到 团队 Wiki，不在仓库内维护。
 
@@ -117,7 +117,7 @@
 
 | 场景 | 命名示例 |
 |------|---------|
-| 单 spec | `specs/v1.6.0/10088-payment-retry.md` |
+| 单 spec | `specs/v1.6.0/10088-export-retry.md` |
 | 大需求拆分（同 Story 多 spec） | `specs/v1.6.0/10086-example-gateway.md`<br>`specs/v1.6.0/10086-example-controller.md`<br>`specs/v1.6.0/10086-example-channel.md` |
 
 - **真正的唯一标识**：`<STORYID>-<slug>` 整体（即文件路径）
@@ -146,7 +146,7 @@
 |------|-------|
 | `specs/v1.6.0/10086-example-user-login.md` | `feature/10086-example-user-login` |
 | `specs/v1.6.0/10086-example-gateway.md`（子 spec） | `feature/10086-example-gateway` |
-| `specs/v1.6.0/0-fix-payment-timeout.md`（紧急修复） | `hotfix/0-fix-payment-timeout` |
+| `specs/v1.6.0/0-fix-export-timeout.md`（紧急修复） | `hotfix/0-fix-export-timeout` |
 
 **跨仓库一致性**：
 
@@ -176,10 +176,10 @@
 
 > `<VERSION>`（迭代版本号，如 `v1.6.0`）是**全流程的归档维度**——在最起点（intake 创建时）确定，后续每个命令生成的文件都放进**同一版本目录**，全程不漂移。
 
-- **录入点**：用户在 `docs/intake/<VERSION>/<file>.md` 创建需求文档时，`<VERSION>` 即确定
+- **录入点**：用户在 `intake/<VERSION>/<file>.md` 创建需求文档时，`<VERSION>` 即确定
 - **沿用**：后续每个命令都**从输入文件路径解析出 `<VERSION>`**（`<dir>/<VERSION>/<file>` 的中间段），产物写入对应目录的**同名 `<VERSION>` 子目录**：
-  - `/spec-design` 读 `docs/intake/<VERSION>/…` → 写 `designs/<VERSION>/…`
-  - `/spec-draft` 读 `docs/intake/<VERSION>/…`(+`designs/<VERSION>/…`) → 写 `specs/<VERSION>/…`
+  - `/spec-design` 读 `intake/<VERSION>/…` → 写 `designs/<VERSION>/…`
+  - `/spec-draft` 读 `intake/<VERSION>/…`(+`designs/<VERSION>/…`) → 写 `specs/<VERSION>/…`
   - `/spec-plan` 读 `specs/<VERSION>/…` → 写 `plans/<VERSION>/…`
   - `/spec-tasks` 读 `specs/<VERSION>/…`+`plans/<VERSION>/…` → 写 `tasks/<VERSION>/…`
   - `/spec-implement` `/spec-test` `/spec-review` `/spec-push` `/spec-sync` → 从 spec 路径解析 `<VERSION>`，定位 / 写入同版本目录下的 plan / tasks / tests
@@ -534,7 +534,7 @@ git commit -m "<type>(<scope>): <subject> --story=<STORYID> [#finish]"
 | `<scope>` | ✅ | 模块名（小写） |
 | `<subject>` | ✅ | 简洁中文描述 |
 | `--story=<STORYID>` | ✅ | 与 spec frontmatter Story ID 一致；无 story 用 `--story=0` |
-| `#finish` | 可选 | 仅在 Story 的**最后一笔** commit 加（合并 MR 时关闭Git 平台（GitHub / GitLab / 工蜂） story） |
+| `#finish` | 可选 | 仅在 Story 的**最后一笔** commit 加（合并 MR 时关闭Git 平台 story） |
 
 **例**：
 

@@ -1,7 +1,7 @@
 # 前端 评审依据（Frontend Review Guide）
 
-> 适用：Web 前端（`<前端仓库>` 管控管理端、`<支付仓库>/web`、`<SDK 仓库>/web`）。
-> 技术栈：Vue3 SFC + `<script setup>` + Vite + pinia；`<前端仓库>` 为**微前端**（pnpm + lerna monorepo，主应用 `packages/main` + 子应用 `packages/iot`/`packages/pay`）；`node >=18 <20`、`pnpm >=6 <10`。
+> 适用：Web 前端（`frontend` 管理端、`<SDK 仓库>/web`）。
+> 技术栈（示例，按团队实际调整）：Vue3 SFC + `<script setup>` + Vite + pinia；管理端为**微前端**（pnpm monorepo，主应用 `packages/main` + 子应用 `packages/app` 等）；`node >=18 <20`、`pnpm >=6 <10`。
 > 加载时机：MR 命中上述前端目录时，Step 4.1 / 4.5 / 4.6 前读完本文件。
 
 ---
@@ -13,7 +13,7 @@
 common/            跨应用公共资源/组件/hooks/utils/types/config
 packages/main/     微前端主应用（api / components / layouts / pages / router / store）
 packages/iot/      IoT 设备管理子应用
-packages/pay/      支付子应用（主应用域名下自动加载）
+packages/app/      业务子应用（主应用域名下自动加载）
 scripts/           i18n 分析/提取、Vite 配置生成
 conf/              config.json、nginx-web.conf
 ```
@@ -53,7 +53,7 @@ conf/              config.json、nginx-web.conf
 - [ ] `npm run lint:all` / `build:all` 能过；无 `console.log` 遗留、无注释死代码。
 - [ ] 路由懒加载、组件按需引入；打包体积无明显劣化。
 - [ ] 兼容性：目标浏览器范围；子应用加载失败有降级。
-- [ ] 关键交互（表单校验、支付流程）有必要的用例或手测说明。
+- [ ] 关键交互（表单校验、关键业务流程）有必要的用例或手测说明。
 
 ---
 
@@ -78,7 +78,7 @@ conf/              config.json、nginx-web.conf
 
 ## 5. 本项目真实代码约定与专项检查（带代码依据）
 
-> 从两套前端真实代码提炼。**先分清评审对象**：`<前端仓库>`（PC 管控后台，Vue3 + Vite + pinia + **wujie 微前端** + **TDesign PC** + vue-i18n）与 `<支付仓库>/web`（设备端 H5，**单体** + tdesign-mobile-vue + JSBridge，四语含繁体）——两者架构/i18n/状态完全不同，**不可套用同一规则**。
+> 从两套前端真实代码提炼。**先分清评审对象**：`<前端仓库>`（PC 管控后台，Vue3 + Vite + pinia + **wujie 微前端** + **TDesign PC** + vue-i18n）与 `<业务 App 仓库>/web`（移动端 H5，**单体** + tdesign-mobile-vue + JSBridge，四语含繁体）——两者架构/i18n/状态完全不同，**不可套用同一规则**。
 
 ### 5.1 微前端（wujie，非 qiankun；`<前端仓库>/packages/main`）
 - [ ] 子应用（`MicroFeApp.IOT/SERVICE/OPERATION/PAY`，`constants.ts`）新增/改造要**同步三处**：`hostMap.ts`（URL 映射，开发域名硬编码）、`router/modules/micro-app.ts`（挂 Layout）、`scripts/generateViteConfig.ts` 的 `allowedHosts`——**极易漏改其一**。
@@ -88,7 +88,7 @@ conf/              config.json、nginx-web.conf
 
 ### 5.2 i18n（英文原文即 key，非 key 命名法）
 - [ ] 🔴 **key 就是英文句子**：`locales/{zh-CN,en-US,ja-JP}.json` 里如 `"Create User": "创建用户"`，代码 `t('Create User')`。**改文案 = 改 key = 三语文件全改**，极易漏翻/裂开——评审文案改动必查三语是否同步、有无残留旧 key。
-- [ ] 🔴 三语必须**全部具体**：`<前端仓库>` 用 `zh/en/ja` 简写（默认 locale `'en'`）；`<支付仓库>/web` 是**四语（含繁体）**。别漏语种、别留空。
+- [ ] 🔴 三语必须**全部具体**：`<前端仓库>` 用 `zh/en/ja` 简写（默认 locale `'en'`）；`<业务 App 仓库>/web` 是**四语（含繁体）**。别漏语种、别留空。
 - [ ] 长句/带插值的 key（含 `!{'@'}` 等 vue-i18n 转义）改动风险高，核对插值占位在三语里都对齐。
 - [ ] 语言切换靠三个 `t-config-provider`（`v-if zh/ja/else`）强制重建 TDesign 组件（`App.vue` 顶部注释解释了这个 hack）——新页面别破坏这个结构。
 

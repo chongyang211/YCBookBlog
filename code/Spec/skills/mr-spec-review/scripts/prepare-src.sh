@@ -24,11 +24,17 @@
 #     配合 skill 端识别只拉本次 MR 命中端的仓，进一步省时（不设=全量同步）。
 #
 # 环境变量（env-only）：
-#   GONGFENG_TOKEN  可选。工蜂访问令牌，用于 HTTPS clone 缺失的私有仓（如无人值守
-#                   CI 场景）。本地若仓库已存在且用 SSH remote，可不设（走 SSH key）。
+#   GIT_TOKEN        可选。Git 平台访问令牌，用于 HTTPS clone 缺失的私有仓（如
+#                    无人值守 CI 场景）。本地若仓库已存在且用 SSH remote，可不设
+#                    （走 SSH key）。
 #   CI_PROJECT_DIR / COSPEC_ROOT  可选。CoSpec 仓根目录；都没有则回退到 git 顶层。
 #   PREPARE_SRC_JOBS  可选。并行同步的最大并发数，默认 8。
 #   REPOS_FILTER      可选。只同步这些目录（空格或逗号分隔）；不设=全量。
+#
+# ---------------------------------------------------------------------------
+# ⚠️ REPOS 映射是「目录 ↔ 基线分支 ↔ Git 地址」的唯一机器可读来源，
+#    与 docs/git-workflow.md 的《基线分支映射表》保持一致，改动请同步两处。
+#    下表为**通用示例配置**——落地到你团队时，替换为你自己的仓库清单与基线分支。
 # ---------------------------------------------------------------------------
 
 set -uo pipefail
@@ -40,46 +46,33 @@ mkdir -p "$SRC_DIR"
 # 仅当提供了 token 时，构造命令级鉴权头（Basic base64("oauth2:<token>")）。
 # 不持久化到 remote URL；对 SSH remote 无影响（HTTP-only header）。
 GIT_AUTH=()
-if [ -n "${GONGFENG_TOKEN:-}" ]; then
-  AUTH_HEADER="Authorization: Basic $(printf 'oauth2:%s' "$GONGFENG_TOKEN" | base64 | tr -d '\n')"
+if [ -n "${GIT_TOKEN:-}" ]; then
+  AUTH_HEADER="Authorization: Basic $(printf 'oauth2:%s' "$GIT_TOKEN" | base64 | tr -d '\n')"
   GIT_AUTH=(-c "http.extraHeader=${AUTH_HEADER}")
 fi
 
 # ---------------------------------------------------------------------------
-# 本地目录名（相对 src/） => "基线分支|工蜂路径(不含 scheme，末尾 .git)"
-# 基线分支与地址应与 docs/git-workflow.md 保持一致。
+# 本地目录名（相对 src/） => "基线分支|Git 平台路径(不含 scheme，末尾 .git)"
+# 基线分支 = 团队约定的稳定主干（所有 feature 从它拉、最终合回它）。
 #
-# 目录约定：
-#   - mmpay_palm_recognition 的 palm_global / proto 逻辑已合并进 palm/weixin
-#     的 palm_global / proto（src/palm_global、src/proto），原 palm_pipeline 分组
-#     下的 palm_global / proto 已废弃删除。
-#   - palm_algorithm 仍来自 mmpay_palm_recognition，直接平铺到 src/palm_algorithm。
+# 真实形态的例子（acme-corp 是示例组织名，落地时整体替换为你团队的仓库）：
+#   - backend / infrastructure：后端服务仓，基线 develop
+#   - proto：跨端协议仓，基线 master（被依赖方，通常先合并）
+#   - frontend：Web 前端仓，基线 main
+#   - device-app / mobile-sdk：设备端 / 移动端 SDK 仓（如适用）
 # ---------------------------------------------------------------------------
 declare -A REPOS=(
-  # —— palm/palmpay ——
-  ["palm_local"]="develop|git.woa.com/palm/palmpay/palm_local.git"
-  ["palm_proto"]="master|git.woa.com/palm/palmpay/palm_proto.git"
+  # —— 后端服务 ——
+  ["backend"]="develop|gitlab.com/acme-corp/api-server.git"
+  ["proto"]="master|gitlab.com/acme-corp/proto.git"
+  ["infrastructure"]="main|gitlab.com/acme-corp/infra.git"
 
-  # —— palm/weixin ——
-  ["palm_saas_fe"]="develop|git.woa.com/palm/weixin/palm_saas_fe.git"
-  ["device_manage"]="develop|git.woa.com/palm/weixin/device_manage.git"
-  ["palm_global"]="develop|git.woa.com/palm/weixin/palm_global.git"
-  ["proto"]="master|git.woa.com/palm/weixin/proto.git"
-  ["infrastructure"]="develop|git.woa.com/palm/weixin/infrastructure.git"
+  # —— 前端 ——
+  ["frontend"]="main|github.com/acme-corp/web-console.git"
 
-  # —— mmpay_palm_recognition（算法仓，平铺到 src/palm_algorithm）——
-  ["palm_algorithm"]="master|git.woa.com/mmpay_palm_recognition/palm_algorithm.git"
-
-  # —— wxPalmPaaS ——
-  ["paymax_device"]="develop|git.woa.com/wxPalmPaaS/O4/paymax_device.git"
-  ["palm-wepay"]="develop|git.woa.com/wxPalmPaaS/O1/palm-wepay.git"
-  ["cloud_palm_activation"]="develop|git.woa.com/wxPalmPaaS/O1/cloud_palm_activation.git"
-  ["cloud_IoTService"]="develop|git.woa.com/wxPalmPaaS/O1/cloud_IoTService.git"
-  ["iotservice_linux"]="develop|git.woa.com/wxPalmPaaS/iotservice_linux.git"
-  ["PaymaxPalmSdk"]="master|git.woa.com/wxPalmPaaS/PaymaxPalmSdk.git"
-
-  # —— palm ——
-  ["palm-register-demo"]="master|git.woa.com/palm/palm-register-demo.git"
+  # —— 设备端 / 移动端（如适用）——
+  ["device-app"]="develop|gitlab.com/acme-corp/device-agent.git"
+  ["mobile-sdk"]="master|github.com/acme-corp/mobile-sdk.git"
 )
 
 sync_repo() {
@@ -92,7 +85,7 @@ sync_repo() {
   else
     # 缺失：HTTPS clone（需要 token）
     if [ ${#GIT_AUTH[@]} -eq 0 ]; then
-      echo "   跳过 clone（未设 GONGFENG_TOKEN，无法拉取私有仓 ${host_path}）" >&2
+      echo "   跳过 clone（未设 GIT_TOKEN，无法拉取私有仓 ${host_path}）" >&2
       return 1
     fi
     mkdir -p "$(dirname "$path")"

@@ -6,7 +6,7 @@
 
 ## 作用
 
-基于原始需求（`docs/intake/xxx.md` 文件 或 对话描述），起草一份符合 `specs/templates/spec-template.md` 格式的 spec 文档。这是工作流的**最起点**，所有后续阶段（plan / tasks / implement / test）都依赖这一步的产出。
+基于原始需求（`intake/xxx.md` 文件 或 对话描述），起草一份符合 `specs/templates/spec-template.md` 格式的 spec 文档。这是工作流的**最起点**，所有后续阶段（plan / tasks / implement / test）都依赖这一步的产出。
 
 > 💡 **可选上游**：如果需求较大、已先走过 `/spec-design` 产出技术方案，本命令应同时读取 `designs/<VERSION>/<STORYID>-<slug>-design.md`（应为 `approved` 状态），把方案中的关键技术决策、spec 拆分建议作为起草输入，使 spec 更准确。
 
@@ -14,7 +14,7 @@
 
 | 参数 | 必选 | 说明 |
 |------|------|------|
-| 原始需求来源 | 是 | `docs/intake/xxx.md` 文件路径 或 自然语言描述 |
+| 原始需求来源 | 是 | `intake/xxx.md` 文件路径 或 自然语言描述 |
 | 技术方案 | 否 | `designs/<VERSION>/<STORYID>-<slug>-design.md`（如已走 `/spec-design`，应为 approved） |
 | 编号 | 否 | Story ID；不指定则从 intake frontmatter 取，或主动询问 |
 | Author | 否 | 默认 `[TBD]`，建议指定 |
@@ -22,7 +22,7 @@
 **触发方式**：
 
 ```
-请基于 docs/intake/v1.6.0/2026-06-09-payment-retry.md 执行 spec-draft
+请基于 intake/v1.6.0/2026-06-09-export-retry.md 执行 spec-draft
 ```
 
 或：
@@ -34,7 +34,7 @@
 或：
 
 ```
-我有一个需求要做空中支付，docs/intake/ 下有原始描述，请执行 spec-draft 起草成 0003 spec
+我有一个需求要做批量导入，intake/ 下有原始描述，请执行 spec-draft 起草成 0003 spec
 ```
 
 ## 执行步骤
@@ -45,14 +45,14 @@
 
    **来源优先级**：
    1. 用户对话中明确提供（如 "story id 是 10088"）
-   2. `docs/intake/xxx.md` frontmatter 的 `Story ID` 字段
+   2. `intake/xxx.md` frontmatter 的 `Story ID` 字段
    3. 以上都没有 → AI **必须主动询问**：
       > "请提供本需求的 Story ID（纯数字，例 10088）。如果暂无对应 story，回复 `0` 占位。"
 
    **校验规则**：
    - 必须为纯数字（含 `0`）
    - 不允许跳过此步骤直接进入 Step 1
-   - **版本目录**：从 intake/design 路径解析 `<VERSION>`（`docs/intake/<VERSION>/…`）；spec 写入同名版本目录 `specs/<VERSION>/`，目录不存在则先 `mkdir -p` 再写入。如输入路径缺少版本目录段，主动询问归属版本（如 `v1.6.0`）
+   - **版本目录**：从 intake/design 路径解析 `<VERSION>`（`intake/<VERSION>/…`）；spec 写入同名版本目录 `specs/<VERSION>/`，目录不存在则先 `mkdir -p` 再写入。如输入路径缺少版本目录段，主动询问归属版本（如 `v1.6.0`）
 
    ⚠️ **多 spec 共享同一 Story ID 是合法的**（一个大需求拆给多人 → 多个 spec 共用一个 Story ID，靠 slug 区分）。本 Step 不强制 Story ID 唯一。
 
@@ -73,7 +73,7 @@
    - 用户选 c → 回到 Step 0 重新询问 Story ID
 
 1. **收集原始需求**
-   - 优先读取 `docs/intake/xxx.md`
+   - 优先读取 `intake/xxx.md`
    - 如果用户直接描述，先复述确认理解
    - **如已走过 `/spec-design`**：同时读取 `designs/<VERSION>/<STORYID>-<slug>-design.md`，校验其 `Status` 为 `approved`（否则提示先完成方案评审），把「关键技术决策」「建议的 spec 拆分」纳入起草输入
 
@@ -96,7 +96,7 @@
    - 路径：`specs/<VERSION>/<STORYID>-<slug>.md`
      - `STORYID`：Step 0 已确定的 Story ID（**多个 spec 可共享**）
      - `<slug>`：kebab-case 小写描述（**同 Story 内必须唯一**，是真正的 spec 区分键）
-     - 例：`specs/v1.6.0/10088-payment-retry.md`
+     - 例：`specs/v1.6.0/10088-export-retry.md`
      - 子 spec 例：`specs/v1.6.0/10088-gateway-changes.md`、`specs/v1.6.0/10088-controller-impl.md`
    - frontmatter 必须包含 `Story ID` 字段（与文件名一致）
    - `Status: draft`（**强制**，不可改）
@@ -125,7 +125,7 @@
 ## 适用时机
 
 - ✅ 接到口头/邮件/IM 形式的需求
-- ✅ `docs/intake/` 中已有原始需求草稿
+- ✅ `intake/` 中已有原始需求草稿
 - ✅ 既有需求需要拆成多个独立 spec
 - ❌ 已有 spec 文件，仅需修改局部 → 直接编辑 spec
 - ❌ 已有 spec 但需偏离回流 → 走 `/spec-sync`
@@ -139,7 +139,7 @@
 ## 与其他命令的衔接
 
 ```
-原始需求 (docs/intake/)
+原始需求 (intake/)
   ↓
 （需求大时可选）/spec-design → designs/<VERSION>/<STORYID>-<slug>-design.md (approved)
   ↓

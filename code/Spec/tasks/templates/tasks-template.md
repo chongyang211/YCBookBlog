@@ -8,7 +8,7 @@
 > **Updated**: YYYY-MM-DD  
 
 > 📁 **文件命名规范**：`tasks/<VERSION>/<STORYID>-<slug>-tasks.md`  
-> 例：`tasks/v1.6.0/10088-payment-retry-tasks.md`
+> 例：`tasks/v1.6.0/10088-export-retry-tasks.md`
 
 ## 进度概览
 

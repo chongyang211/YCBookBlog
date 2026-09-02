@@ -8,7 +8,7 @@
 > **Status**: draft | confirmed | obsolete  
 
 > 📁 **文件命名规范**：`plans/<VERSION>/<STORYID>-<slug>-plan.md`  
-> 例：`plans/v1.6.0/10088-payment-retry-plan.md`
+> 例：`plans/v1.6.0/10088-export-retry-plan.md`
 
 ## 设计概述
 

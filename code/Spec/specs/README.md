@@ -25,7 +25,7 @@ specs/<VERSION>/<STORYID>-<kebab-case-slug>.md
 
 - `<VERSION>`：迭代版本号（如 `v1.6.0`）
 - `STORYID`：纯数字 Story ID（与需求单号关联，便于追溯）
-  - 来自Git 平台（GitHub / GitLab / 工蜂） / JIRA / 其他需求管理系统
+  - 来自Git 平台 / JIRA / 其他需求管理系统
   - 如该 Spec 无对应 story（纯内部任务），用 `0` 占位
   - **不强制唯一**——一个大需求可拆为多个 spec 共享同一 Story ID
 - `<kebab-case-slug>`：小写字母 + 连字符的简短描述
@@ -36,7 +36,7 @@ specs/<VERSION>/<STORYID>-<kebab-case-slug>.md
 示例：
 - `specs/v1.6.0/0-example-feature.md`（示例 spec，无 story id）
 - `specs/v1.6.0/10086-example-user-login.md`（单 spec）
-- `specs/v1.6.0/10088-payment-retry.md`（单 spec）
+- `specs/v1.6.0/10088-export-retry.md`（单 spec）
 
 **大需求拆分示例（同 Story 多 spec）**：
 - `specs/v1.6.0/10088-gateway-changes.md`（张三：网关层）
@@ -51,7 +51,7 @@ specs/<VERSION>/<STORYID>-<kebab-case-slug>.md
 |------|-------|
 | `specs/v1.6.0/10086-example-user-login.md` | `feature/10086-example-user-login` |
 | `specs/v1.6.0/10088-gateway-changes.md` | `feature/10088-gateway-changes` |
-| `specs/v1.6.0/0-fix-payment-timeout.md`（紧急 bug） | `hotfix/0-fix-payment-timeout` |
+| `specs/v1.6.0/0-fix-export-timeout.md`（紧急 bug） | `hotfix/0-fix-export-timeout` |
 
 > 💡 与 `plans/` 与 `tasks/` 文件名保持**完全一致的 STORYID + slug**，仅各自加 `-plan` / `-tasks` 后缀。
 >

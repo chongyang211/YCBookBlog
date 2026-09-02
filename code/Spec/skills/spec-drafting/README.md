@@ -9,7 +9,7 @@
 ## 调用方式
 
 由 `/spec-draft` 命令自动触发，或用户直接说：
-> 帮我把 docs/intake/v1.6.0/2026-06-09-payment-retry.md 写成 spec
+> 帮我把 intake/v1.6.0/2026-06-09-export-retry.md 写成 spec
 
 ## 关键原则
 

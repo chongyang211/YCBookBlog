@@ -63,7 +63,7 @@
      - Spec 链接：`<GIT-HOST>/<ORG>/CoSpec/blob/<默认分支>/specs/<VERSION>/<STORYID>-<slug>.md`
      - Plan 链接：`<GIT-HOST>/<ORG>/CoSpec/blob/<默认分支>/plans/<VERSION>/<STORYID>-<slug>-plan.md`
      - Tasks 链接：`<GIT-HOST>/<ORG>/CoSpec/blob/<默认分支>/tasks/<VERSION>/<STORYID>-<slug>-tasks.md`
-   - **不要使用相对路径**：团队 Wiki 渲染后相对路径无法跳转，必须用 `<GIT-HOST>/...` 绝对 URL，让团队成员从 团队 Wiki 一键跳到Git 平台（GitHub / GitLab / 工蜂）仓库查看源文件。
+   - **不要使用相对路径**：团队 Wiki 渲染后相对路径无法跳转，必须用 `<GIT-HOST>/...` 绝对 URL，让团队成员从 团队 Wiki 一键跳到Git 平台仓库查看源文件。
    - 如未来 master 分支不再作为对外基线，仅在此处统一调整基底即可。
 
 3. **排序规则**
@@ -114,7 +114,7 @@
 ## Spec 列表
 
 > 同一 Story ID 下的多个子 spec 会连续显示。
-> Spec / Plan / Tasks 列均为**远程仓库绝对 URL**（基底 `<GIT-HOST>/<ORG>/CoSpec/blob/<默认分支>/`），点击可直接跳转到Git 平台（GitHub / GitLab / 工蜂）查看源文件。
+> Spec / Plan / Tasks 列均为**远程仓库绝对 URL**（基底 `<GIT-HOST>/<ORG>/CoSpec/blob/<默认分支>/`），点击可直接跳转到Git 平台查看源文件。
 
 ### v1.7.0
 
@@ -145,7 +145,7 @@
 
 | 文件类型 | 命名格式 |
 |---------|---------|
-| Intake | `docs/intake/<VERSION>/<STORYID>-<slug>.md` |
+| Intake | `intake/<VERSION>/<STORYID>-<slug>.md` |
 | Design（可选） | `designs/<VERSION>/<STORYID>-<slug>-design.md` |
 | Spec | `specs/<VERSION>/<STORYID>-<slug>.md` |
 | Plan | `plans/<VERSION>/<STORYID>-<slug>-plan.md` |
@@ -169,7 +169,7 @@
 2. **完整覆盖而非增量**：团队 Wiki 文档每次整篇重写，避免"半同步"留下旧条目；同名 spec 状态前后顺序一致。
 3. **单一事实来源**：spec frontmatter 是 source of truth，团队 Wiki 是 derived view；本命令是两者之间的唯一同步通道。
 4. **带外执行**：仅在 master 基线上由专人/工具运行，避免不同分支上的"半成品"互相覆盖。
-5. **链接到Git 平台（GitHub / GitLab / 工蜂）绝对 URL**：团队 Wiki 渲染时相对路径无法跳转，索引表里的 Spec / Plan / Tasks 一律使用 `<GIT-HOST>/<ORG>/CoSpec/blob/<默认分支>/...` 绝对地址，让团队成员从 团队 Wiki 一键跳到Git 平台（GitHub / GitLab / 工蜂）查看源文件。
+5. **链接到Git 平台绝对 URL**：团队 Wiki 渲染时相对路径无法跳转，索引表里的 Spec / Plan / Tasks 一律使用 `<GIT-HOST>/<ORG>/CoSpec/blob/<默认分支>/...` 绝对地址，让团队成员从 团队 Wiki 一键跳到Git 平台查看源文件。
 6. **列表带版本号列**：方便筛选/搜索/复制粘贴到其他文档时保留迭代上下文，不必依赖分组标题。
 
 ## 关联规则与技能

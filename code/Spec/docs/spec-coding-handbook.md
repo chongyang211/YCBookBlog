@@ -26,7 +26,7 @@
    │
    ▼ （可选，视个人习惯）
 ┌ ─ ─ ─ ─ ┐
-  Intake       /spec-intake → docs/intake/  （把 PM 需求/零散描述结构化成草稿）
+  Intake       /spec-intake → intake/  （把 PM 需求/零散描述结构化成草稿）
 └ ─ ─ ─ ─ ┘
    │
    ▼ （需求大/复杂时，可选）
@@ -40,13 +40,13 @@
 │ 起草草稿 │  │  怎么做  │  │ 步步执行 │  │  写代码  │  │ 写用例   │  │ 自查报告 │  │ commit + │
 │          │  │          │  │          │  │ + 切分支 │  │          │  │ + 摘要   │  │ rebase   │
 └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘
-docs/intake/   plans/         tasks/        src/(本地)    tests/        review 报告    远端 + MR
+intake/   plans/         tasks/        src/(本地)    tests/        review 报告    远端 + MR
 specs/(draft→ready)
 ```
 
 | 阶段 | 命令 | 产物 | 模板 |
 |------|------|------|------|
-| 0 前置 — Intake（可选） | `/spec-intake` | `docs/intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） | `docs/intake/templates/intake-template.md` |
+| 0 前置 — Intake（可选） | `/spec-intake` | `intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） | `intake/templates/intake-template.md` |
 | 0 前 — Design（可选） | `/spec-design` | `designs/<VERSION>/<STORYID>-<slug>-design.md`（draft → approved） | `designs/templates/design-template.md` |
 | 0 — Draft | `/spec-draft` | `specs/<VERSION>/<STORYID>-<slug>.md`（status: draft） | `specs/templates/spec-template.md` |
 | 1 — Spec Review | （直接审） | （同上，status 改 ready） | — |
@@ -69,7 +69,7 @@ specs/(draft→ready)
 | 任务 | 人 | Agent |
 |---|:---:|:---:|
 | 业务目标判断 | ✅ | — |
-| 把原始需求落到 docs/intake/（可选 /spec-intake） | ✅ | 🤝 整理 |
+| 把原始需求落到 intake/（可选 /spec-intake） | ✅ | 🤝 整理 |
 | 技术方案（/spec-design，需求大时） | ✅ 评审拍板 | ✅ 起草主力 |
 | Spec 起草（/spec-draft） | 🤝 审 + 补 [TBD] | ✅ 主力 |
 | 验收标准定义 | ✅ | 🤝 起草建议 |
@@ -86,7 +86,7 @@ specs/(draft→ready)
 
 ## 四、铁律（必须遵守）
 
-1. **没有 Spec，不写代码。** 原始需求草稿放 `docs/intake/`，不要污染 `specs/`。
+1. **没有 Spec，不写代码。** 原始需求草稿放 `intake/`，不要污染 `specs/`。
 2. **Plan 与 Tasks 必须沉淀为磁盘文件。** 不允许只在对话中存在。
 3. **执行权 ≠ 定义权。** Agent 不能改 Spec，只能在 tasks 文件的「偏离记录」中提建议。
 4. **PR 必须可追溯到 Story ID。** 用 `.gitlab/merge_request_templates/Default.md` 三段式。
@@ -119,17 +119,17 @@ specs/(draft→ready)
 /spec-test      specs/v1.6.0/0-example-feature.md
 /spec-review    specs/v1.6.0/0-example-feature.md
 /spec-push      specs/v1.6.0/0-example-feature.md     ← commit + 安全 rebase + push
-（在Git 平台（GitHub / GitLab / 工蜂）创建 MR、合并）
+（在Git 平台创建 MR、合并）
 /spec-sync      specs/v1.6.0/0-example-feature.md
 ```
 
 ### 第 3 步：第一个真实任务
-- 先和架构师 / Tech Lead 一起确认需求落到 `docs/intake/`
+- 先和架构师 / Tech Lead 一起确认需求落到 `intake/`
 - 让 Agent 起 Spec（`/spec-draft`），自己审 + 补 [TBD] → status 改 `ready`
 - 让 Agent 起 Plan（`/spec-plan`），自己审
 - 让 Agent 拆 Tasks（`/spec-tasks`），自己审
 - 让 Agent 实施（`/spec-implement`），自己看每个 commit
-- 写测试（`/spec-test`） → Review（`/spec-review`） → Push（`/spec-push`） → 在Git 平台（GitHub / GitLab / 工蜂）提 MR → 合并 → Sync（`/spec-sync`）
+- 写测试（`/spec-test`） → Review（`/spec-review`） → Push（`/spec-push`） → 在Git 平台提 MR → 合并 → Sync（`/spec-sync`）
 
 ---
 
@@ -141,7 +141,7 @@ specs/(draft→ready)
 | 「我看了一遍 plan，可以开干了」 | Plan 必须**写入** `plans/`；对话中的同意不算 |
 | 「Tasks 完成后再统一打 ✓」 | 必须实时勾选，否则中断后无法接续 |
 | 「Agent 觉得 spec 不合理就改了」 | 严禁。Agent 只能在 tasks 文件提偏离建议，由人决策 |
-| 「顺手优化一下相邻代码」 | 严禁。重构是独立 spec，记录到 docs/intake/ 待立项 |
+| 「顺手优化一下相邻代码」 | 严禁。重构是独立 spec，记录到 intake/ 待立项 |
 | 「测试只写 happy path」 | 必须覆盖 spec 的「边界情况」章节每一条 |
 | 「PR 描述写一句话」 | 必须三段式：关联 Spec / 偏离说明 / 变更摘要 |
 
@@ -161,11 +161,11 @@ specs/(draft→ready)
 | `plans/` | Plan 文件 + 模板 |
 | `tasks/` | Tasks 文件 + 模板 |
 | `docs/` | 架构 / 部署 / 接口文档 |
-| `docs/intake/` | 原始需求草稿区（**不是** Spec） |
+| `intake/` | 原始需求草稿区（**不是** Spec） |
 | `docs/git-workflow.md` | Git 流程操作手册（基线分支映射、commit 规范、安全 rebase） |
 | `docs/onboarding-codebuddy.md` | 新人完整使用手册 |
 | `tests/` | 测试代码（按 spec 验收标准对齐） |
-| `.gitlab/` | MR 模板（Git 平台（GitHub / GitLab / 工蜂）） |
+| `.gitlab/` | MR 模板（Git 平台） |
 | `.codebuddy/` | CodeBuddy IDE 协作配置（commands/rules 通过软链共享根目录同一份内容） |
 | `src/` | 业务代码仓库（**已 gitignore**，团队自行 clone 子仓库到 `src/<repo>/`） |
 

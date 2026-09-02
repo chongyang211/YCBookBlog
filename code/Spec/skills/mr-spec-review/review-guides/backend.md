@@ -1,7 +1,7 @@
 # 后台服务端 评审依据（Backend Review Guide）
 
-> 适用：Go 后台服务（`<设备管理仓库>`、`<业务主仓库>`、`<业务主仓库>`、`<激活服务仓库>`、`<IoT 服务仓库>` 云侧、`infrastructure`）。
-> 技术栈：Go 1.23+ / gRPC + grpc-gateway（双端口）/ MySQL(gorm) + Redis / Kafka·pubsub / OpenTelemetry / 国密 SM2·SM4 + KMS。
+> 适用：Go 后台服务（`backend`、`infrastructure` 及你团队的后端服务仓）。
+> 技术栈（示例，按团队实际调整）：Go / gRPC + grpc-gateway（双端口）/ MySQL(gorm) + Redis / Kafka / OpenTelemetry / KMS（按合规要求选配）。
 > 加载时机：MR 命中上述目录时，Step 4.1（文档层）与 Step 4.5（代码验证）前读完本文件。
 
 ---
@@ -87,7 +87,7 @@ common/        横切能力（crypto / auth / i18n / middleware / constant …�
 
 ## 4. 对外/跨端联调契约（后台视角）
 
-- 面向**设备端**的接口（`devicegateway`/`wecarddevicegateway`/`<设备网关>`）变更 → 强制走 SKILL.md Step 4.3 设备端兼容性 + [`device.md`](./device.md) + [`contract.md`](./contract.md)。
+- 面向**设备端**的接口（`devicegateway`/`legacy-devicegateway`/`<设备网关>`）变更 → 强制走 SKILL.md Step 4.3 设备端兼容性 + [`device.md`](./device.md) + [`contract.md`](./contract.md)。
 - 面向**前端**的 webgateway 接口 → 字段增删、错误码、分页契约要与 [`frontend.md`](./frontend.md) 对齐；返回给前端的枚举/文案考虑 i18n。
 - 面向**移动端 SDK**的 appgateway/opengateway 接口 → 签名/token 契约、字段兼容看 [`mobile-sdk.md`](./mobile-sdk.md)。
 

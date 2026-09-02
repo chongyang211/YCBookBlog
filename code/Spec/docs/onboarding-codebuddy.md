@@ -24,7 +24,7 @@
 │Draft │→ │ Plan │→ │Tasks │→ │Implement│→ │ Test │→ │Review│→ │ Push │→ Sync
 │      │  │      │  │      │  │+切分支  │  │      │  │+摘要 │  │+rebase│
 └──────┘  └──────┘  └──────┘  └─────────┘  └──────┘  └──────┘  └──────┘
-docs/intake/  plans/   tasks/    src/(本地)   tests/   报告      远端+MR
+intake/  plans/   tasks/    src/(本地)   tests/   报告      远端+MR
 specs/(draft→ready)
    阶段0       阶段2    阶段2.5   阶段3       阶段4    阶段5     阶段6   阶段6后
 ```
@@ -219,7 +219,7 @@ Skills 不需要你手动调用，AI 在执行命令时会自动 reference。但
 | `test-writing` | 根据 spec 编写测试 | 测试代码 + 覆盖映射 |
 | `change-summary` | 完成后输出变更摘要 | 摘要 + 影响范围 + 风险 |
 
-> 💡 **codebase-survey** 比较特殊：它是**被其他 skill 调用**的工具型 skill。`spec-drafting`（阶段零）会自动调用它的 light 模式；`implementation-planning`（阶段二）会自动调用它的 deep 模式。新人**不需要**手动触发，但可以独立用："帮我看下 wecardexample-app 现状"。
+> 💡 **codebase-survey** 比较特殊：它是**被其他 skill 调用**的工具型 skill。`spec-drafting`（阶段零）会自动调用它的 light 模式；`implementation-planning`（阶段二）会自动调用它的 deep 模式。新人**不需要**手动触发，但可以独立用："帮我看下 example-app 现状"。
 
 > 这 8 个 Skill 是项目本身的工作流技能，AI 在执行 commands 时会自动调用，新人**不需要**手动触发。
 
@@ -229,8 +229,8 @@ Skills 不需要你手动调用，AI 在执行命令时会自动 reference。但
 
 | 命令 | 阶段 | 输入 | 产出文件 |
 |------|------|------|---------|
-| `/spec-intake`（可选） | 阶段 0 前置 | PM 需求文档路径 或 描述 | `docs/intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） |
-| `/spec-draft` | 阶段 0 | docs/intake/xxx.md 或描述 | `specs/<VERSION>/<STORYID>-<slug>.md`（status: draft） |
+| `/spec-intake`（可选） | 阶段 0 前置 | PM 需求文档路径 或 描述 | `intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） |
+| `/spec-draft` | 阶段 0 | intake/xxx.md 或描述 | `specs/<VERSION>/<STORYID>-<slug>.md`（status: draft） |
 | `/spec-plan` | 阶段 2 | spec 路径 | `plans/<VERSION>/<STORYID>-<slug>-plan.md` |
 | `/spec-tasks` | 阶段 2.5 | spec + plan 路径 | `tasks/<VERSION>/<STORYID>-<slug>-tasks.md` |
 | `/spec-implement` | 阶段 3 | spec 路径 | feature 分支 + `src/` 改动 + tasks 实时勾选 |
@@ -383,7 +383,7 @@ Skills 不需要你手动调用，AI 在执行命令时会自动 reference。但
 |------|-------|
 | `specs/v1.6.0/10086-example-user-login.md` | `feature/10086-example-user-login` |
 | `specs/v1.6.0/10086-example-gateway.md`（子 spec） | `feature/10086-example-gateway` |
-| `specs/v1.6.0/0-fix-payment-timeout.md`（紧急修复） | `hotfix/0-fix-payment-timeout` |
+| `specs/v1.6.0/0-fix-export-timeout.md`（紧急修复） | `hotfix/0-fix-export-timeout` |
 
 > ⚠️ 跨仓库的所有 PR 必须使用同一分支名，便于追溯关联。
 
@@ -475,7 +475,7 @@ AI：[Phase 2: 存储接口]
    git commit -m "feat: implement Spec 0001 - Todo list management"
    git push -u origin feature/0001-todo-list
    ```
-2. 在 GitLab/Git 平台（GitHub / GitLab / 工蜂）创建 MR/PR
+2. 在 GitLab/Git 平台创建 MR/PR
 3. **PR 描述自动套用** `.gitlab/merge_request_templates/Default.md` 的三段式：
    - 关联 Spec / Plan / Tasks
    - 偏离说明（无则写"无"）
@@ -526,7 +526,7 @@ AI 会调用 `change-summary` Skill，输出：
 ```
 你的输入                  AI 触发的资产                                产出文件
 ──────────────────────────────────────────────────────────────────────────────────
-原始需求                  →   Rules 在背景生效                       →   docs/intake/*.md
+原始需求                  →   Rules 在背景生效                       →   intake/*.md
 /spec-draft               →   spec-drafting + codebase-survey(light) →   specs/<VERSION>/<STORYID>-*.md（draft）
 [人 review 改 ready]      →   （无）                                 →   specs/<VERSION>/<STORYID>-*.md（ready）
 读 spec                   →   Rules 在背景生效                       →   （无）
@@ -538,7 +538,7 @@ AI 会调用 `change-summary` Skill，输出：
 /spec-test                →   test-writing                           →   tests/*
 /spec-review              →   spec-analysis + change-summary         →   review 报告（对话中）
 /spec-push                →   change-summary                         →   commit + 安全 rebase + push -f + MR 提示
-[人在Git 平台（GitHub / GitLab / 工蜂）创建 MR]         →   （无）                                 →   MR
+[人在Git 平台创建 MR]         →   （无）                                 →   MR
 [MR 合并完成]             →   （无）                                 →   远端 develop/master
 /spec-sync                →   （无 Skill）                           →   spec 状态
 ```
@@ -556,14 +556,14 @@ AI 会调用 `change-summary` Skill，输出：
 ```
 1. 任务来源：产品/Tech Lead 给你一个需求
    ↓
-2. 落到 docs/intake/（二选一，视习惯）：
-   - 手动：复制 docs/intake/templates/intake-template.md，命名为 docs/intake/<VERSION>/<STORYID>-<slug>.md，把原话填进去
+2. 落到 intake/（二选一，视习惯）：
+   - 手动：复制 intake/templates/intake-template.md，命名为 intake/<VERSION>/<STORYID>-<slug>.md，把原话填进去
    - 或（可选命令）：执行 `/spec-intake`，把 PM 需求文档路径或口头描述交给 AI，自动生成 intake 草稿
    ↓
 3. 阶段 0：执行 /spec-draft
    ┌─────────────────────────────────────────────┐
    │ 在 CodeBuddy 输入：                         │
-   │ 请基于 docs/intake/YYYY-MM-DD-xxx.md        │
+   │ 请基于 intake/YYYY-MM-DD-xxx.md        │
    │ 执行 spec-draft                             │
    │                                             │
    │ AI 会：                                     │
@@ -606,7 +606,7 @@ AI 会调用 `change-summary` Skill，输出：
 |------|------|------|
 | AI 跳过 plan 直接写代码 | 你没明确触发 `/spec-plan` | 立刻喊停，要求先 plan |
 | AI 改了 spec 没说 | AI 违规 | 立刻还原 spec，让 AI 在 tasks 的「偏离记录」中说明 |
-| AI 顺手重构了相邻代码 | 违反 `20-coding-rules.md` 最小改动原则 | 让 AI 撤销重构改动；记录到 docs/intake/ 待立项 |
+| AI 顺手重构了相邻代码 | 违反 `20-coding-rules.md` 最小改动原则 | 让 AI 撤销重构改动；记录到 intake/ 待立项 |
 | Tasks 没实时勾选 | AI 攒到最后批量勾选 | 喊停，要求每完成一个 task 立刻勾选 |
 | AI 引入新依赖 | 未经允许 | 让 AI 撤销，除非 spec 明确要求 |
 | Spec status 一直没更新 | 流程没走完 | 执行 `/spec-sync` |
@@ -800,7 +800,7 @@ PR 描述模板里有「偏离说明」段落，这时候不能写"无"：
 ### 7.1 流程速查
 
 ```
-任务来 → docs/intake/  → /spec-draft → specs/ (draft)
+任务来 → intake/  → /spec-draft → specs/ (draft)
         （可选 /spec-intake 生成草稿）
                        → 人 review  → specs/ (ready)
                        → /spec-plan → plans/
@@ -809,7 +809,7 @@ PR 描述模板里有「偏离说明」段落，这时候不能写"无"：
                        → /spec-test → tests/
                        → /spec-review→ 报告
                        → /spec-push → commit + safe rebase + push -f
-                       → Git 平台（GitHub / GitLab / 工蜂） MR (三段式)
+                       → Git 平台 MR (三段式)
                        → MR 合并
                        → /spec-sync → 状态同步
 ```
@@ -821,7 +821,7 @@ PR 描述模板里有「偏离说明」段落，这时候不能写"无"：
 请基于 docs/产品需求-xxx.md 执行 spec-intake
 
 # 阶段 0：原始需求 → spec 草稿
-请基于 docs/intake/YYYY-MM-DD-xxx.md 执行 spec-draft
+请基于 intake/YYYY-MM-DD-xxx.md 执行 spec-draft
 
 # 阶段 2：起 plan
 请根据 specs/<VERSION>/<STORYID>-<slug>.md 执行 spec-plan
@@ -866,7 +866,7 @@ PR 描述模板里有「偏离说明」段落，这时候不能写"无"：
 
 - [ ] 读完 1.3 的 5 个文件
 - [ ] 跑通 `0-example-feature` 全流程，所有产出文件齐全
-- [ ] 完成第一个真实小任务并合并 MR（用 `/spec-push` + Git 平台（GitHub / GitLab / 工蜂） MR）
+- [ ] 完成第一个真实小任务并合并 MR（用 `/spec-push` + Git 平台 MR）
 - [ ] 能给同事讲清楚 Rules / Skills / Commands 的关系
 - [ ] 在 review 别人的 MR 时，能对照「十条铁律」给出建议
 - [ ] 第二周开始，写下了你自己的「容易踩坑点」笔记

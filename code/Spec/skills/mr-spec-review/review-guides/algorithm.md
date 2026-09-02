@@ -1,8 +1,8 @@
 # 识别 · 算法端 评审依据（Recognition & Algorithm Review Guide）
 
-> 适用：业务识别 Pipeline 与算法服务（`algorithm-repo` = `<ORG>/<算法组>/algorithm-repo`；识别侧 `<业务主仓库>`/`proto` 逻辑已合并进 `<ORG>/<子组>` 的 `src/<业务主仓库>`/`src/proto`）。
-> 技术栈：Go / gRPC 算法服务集 / 识别编排（`private_domain/recognition`）/ 特征库检索。
-> 加载时机：MR 命中 `algorithm-repo` 或识别侧 `<业务主仓库>`/`proto` 逻辑时，Step 4.1 / 4.5 / 4.6 前读完本文件。本端是特殊后台端，通用后台项仍参照 [`backend.md`](./backend.md)。
+> 适用：算法 / 推理 Pipeline 与算法服务（如 `algorithm-repo` 等算法仓，目录名按你团队 `prepare-src.sh` 的 REPOS 映射）。
+> 技术栈（示例）：Go / gRPC 算法服务集 / 算法编排（如 `private_domain/<算法域>`）/ 特征库检索。
+> 加载时机：MR 命中算法仓或算法编排逻辑时，Step 4.1 / 4.5 / 4.6 前读完本文件。本端是特殊后台端，通用后台项仍参照 [`backend.md`](./backend.md)。
 
 ---
 
@@ -26,14 +26,14 @@ Recognize
 **核心算法（主链路实际调用 6 个）**：`livenessCheck`、`onlineLiveness`、`qualityCheck`、`featureExtract`、`retrieval`、`alignment`。
 其余（`shallowFeature`/`watermark`/`actionLive`/`heartbeatLive`/`attribute`/`evaluation`）**不在主识别链路**——spec 若声称调用它们，先核对是否真被 recognition 编排调用。
 
-**两套并行 domain**：`privaterecognition` 用 `private_domain/recognition`；`<识别服务>` 用 `<业务主仓库>/domain/recognition`，编排高度一致但**不是同一份代码**——评审时别张冠李戴。
+**两套并行 domain**：私有算法域（`private_domain/<算法域>`）与服务内算法域（`<业务主仓库>/domain/<算法域>`）编排高度一致但**不是同一份代码**——评审时别张冠李戴。
 
 ---
 
 ## 2. 评审 Checklist（算法/识别专业维度）
 
 ### 2.1 识别准确性与安全（核心，物理副作用）
-- [ ] **误识率（FAR）/ 拒识率（FRR）**：改动阈值（`Threshold`/`VerifyThreshold`）时，是否说明对 FAR/FRR 的影响？业务=支付级身份认证，**降阈值提通过率必须评估误识风险**。
+- [ ] **误识率（FAR）/ 拒识率（FRR）**：改动阈值（`Threshold`/`VerifyThreshold`）时，是否说明对 FAR/FRR 的影响？业务=安全敏感的身份认证，**降阈值提通过率必须评估误识风险**。
 - [ ] **活体/防伪**：绕过或弱化 `CheckLiveness`/`CheckOnlineLiveness` 的改动 → 🔴，必须安全评审（防照片/假体攻击）。
 - [ ] **多因子融合**：RGB+IR 配对、同 userId 归并逻辑改动 → 是否破坏多因子判定强度？在线单因子（RGB）路径的适用边界是否清晰？
 - [ ] **线上库→线下库 Activate 迁移**：`Activate` 用设备图替换线上图并重建特征分组，涉及用户身份，改动要核对状态机是否有竞态/重复激活。
@@ -49,7 +49,7 @@ Recognize
 - [ ] 算法失败降级：活体不过/质量不过/检索超时的错误码与用户提示是否明确（`ErrcodeLogic*`）？不静默吞错。
 
 ### 2.4 编排一致性
-- [ ] 若同时改 `privaterecognition` 与 `<识别服务>` 两套编排 → 逻辑是否需同步？只改一套是否留下行为不一致？
+- [ ] 若同时改两套并行的算法编排 → 逻辑是否需同步？只改一套是否留下行为不一致？
 - [ ] 1:N（`Retrieve`）vs 1:1（`Compare`）用法是否用对场景（验掌用 1:1，识别主链 1:N）。
 
 ---
@@ -68,7 +68,7 @@ Recognize
 
 ## 4. 跨端联调契约（识别端视角）
 
-- 识别侧 proto 已合并进 `proto`（module `<ORG>/<子组>/proto`），`privaterecognition` 接口定义也在此仓（`src/proto`）。改识别接口先看 [`contract.md`](./contract.md) 的 proto 现状说明。
+- 算法侧接口定义如集中在 `proto` 仓（`src/proto`），改算法接口先看 [`contract.md`](./contract.md) 的 proto 现状说明。
 - 与**设备端**：离线识别把特征下发到设备本地检索——特征格式/版本要与 [`device.md`](./device.md) 端侧算法对齐。
 - 与**后台**：识别结果回流用户状态、激活迁移涉及 `<业务主仓库>`/`<业务主仓库>` 业务态，见 [`backend.md`](./backend.md)。
 

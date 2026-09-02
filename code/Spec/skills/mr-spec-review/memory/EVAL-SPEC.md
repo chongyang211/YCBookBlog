@@ -5,7 +5,7 @@
 >
 > 📌 定位：`memory/README.md` 讲"记忆库是什么、怎么用"；本文件讲"记忆库如何在 eval 门禁下**只进好规则、自动清坏规则**"，是让 skill "越用越准、而不是越用越噪"的核心机制。
 >
-> 🤖 **执行主体是 AI agent**（非独立 ML 管道）。下述所有 metric 计算、回测、冲突检测都设计为 **LLM + Git 平台（GitHub / GitLab / 工蜂） MCP 可执行**：数据来自 `search_merge_request_notes` 的 `resolve_state` 与作者回复，判定靠 agent 的语义对齐 + `grep` 锚点校验。
+> 🤖 **执行主体是 AI agent**（非独立 ML 管道）。下述所有 metric 计算、回测、冲突检测都设计为 **LLM + Git 平台 MCP 可执行**：数据来自 `search_merge_request_notes` 的 `resolve_state` 与作者回复，判定靠 agent 的语义对齐 + `grep` 锚点校验。
 
 ---
 
@@ -331,9 +331,9 @@ FOR 每条 Pattern P (active/shadow):
 
 > 🧩 **Knot 部署下的 logic/data 分离（前提，见 SKILL.md Step 0.3）**：skill 逻辑（SKILL.md/scripts）从 Knot **冻结包**执行；但 memory/eval-corpus/review-guides 是**数据**，**唯一真相在 CoSpec 仓**。因此本节的**读**与**写**都针对 CoSpec 仓的记忆分支，**绝不读/写 Knot 打包副本**（那是冻结快照，会让闭环反哺失效）。
 
-**读取（运行时拿最新经验）**：一律经Git 平台（GitHub / GitLab / 工蜂） MCP `get_blob_content(project_id=<CoSpec>, sha=<chore/mr-review-memory>, file_path=skills/mr-spec-review/memory/...)` 读记忆分支 head，拿到**跨会话共享的最新**规则库（不受 Knot 冻结、也不受本地 master 基线滞后影响）。MCP 不可用 → 退回 `$COSPEC_ROOT` 本地副本并注明可能非最新；连 CoSpec 都定位不到 → 用 Knot 冻结种子且**本轮不写回**。
+**读取（运行时拿最新经验）**：一律经Git 平台 MCP `get_blob_content(project_id=<CoSpec>, sha=<chore/mr-review-memory>, file_path=skills/mr-spec-review/memory/...)` 读记忆分支 head，拿到**跨会话共享的最新**规则库（不受 Knot 冻结、也不受本地 master 基线滞后影响）。MCP 不可用 → 退回 `$COSPEC_ROOT` 本地副本并注明可能非最新；连 CoSpec 都定位不到 → 用 Knot 冻结种子且**本轮不写回**。
 
-**因此记忆回写走「Git 平台（GitHub / GitLab / 工蜂） MCP 写 API 提交到专用分支」，零本地 git 副作用：**
+**因此记忆回写走「Git 平台 MCP 写 API 提交到专用分支」，零本地 git 副作用：**
 
 ```
 读远端最新 (get_blob_content, ref=记忆分支)
@@ -365,7 +365,7 @@ FOR 每条 Pattern P (active/shadow):
 **④ 并发写安全**：
 - 同一文件的提交冲突（`create_or_update_file` 基于旧 sha）→ **重读最新内容 → 重算 → 重试**（幂等，最多几次）。
 - eval-corpus 用**追加**语义、按指纹去重，天然幂等。
-- 密钥：提交用的 `GONGFENG_TOKEN` 需对 CoSpec 仓有 write 权限，env-only、掩码注入（遵守 @security_rules）。
+- 密钥：提交用的 `GIT_TOKEN` 需对 CoSpec 仓有 write 权限，env-only、掩码注入（遵守 @security_rules）。
 
 **⑤ 模式 A（本地手动）**：memory 就在你本地工作副本里，正常 `git add/commit/push`（或走你平时的 spec MR 流程）即可，无需 MCP 写 API；但**仍不要在共享/并发工作区**直接改，避免踩其他会话。
 

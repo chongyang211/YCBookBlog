@@ -1,10 +1,9 @@
 # 设备端（固件 · 边缘）评审依据（Device / Edge Review Guide）
 
-> 适用：跑在业务设备上的固件/边缘服务。
-> - `<IoT 服务仓库>`：C++ / CMake，设备侧 Linux IoT 服务。
-> - `paymax_device`：`<终端应用仓库>`（C++ 设备应用）、`<设备接入仓库>`（C++ POS 对接）、`<管理后台仓库>`（Android 设备管家）。
-> - `<IoT 服务仓库>`：Android(Java/Kotlin) 设备侧 IoT 框架/SDK（IoTSdk、module-ota、module-device、module-cmd、module-activate、module-recovery…）。
-> 加载时机：MR 命中上述目录，或涉及 `devicegateway`/`wecarddevicegateway`/`<设备网关>` 接口时，Step 4.1 / 4.3 / 4.5 / 4.6 前读完本文件。
+> 适用：跑在业务设备上的固件/边缘服务（`device-app` 等设备侧仓库）。
+> - C++ / CMake：设备侧 Linux 服务与应用。
+> - Android(Java/Kotlin)：设备侧框架/SDK（OTA、设备管理、指令、恢复等模块）。
+> 加载时机：MR 命中上述目录，或涉及 `devicegateway`/`legacy-devicegateway` 等设备网关接口时，Step 4.1 / 4.3 / 4.5 / 4.6 前读完本文件。
 
 ---
 
@@ -27,7 +26,7 @@
 - [ ] 接口下线/改名前有兼容期，**至少覆盖一个 OTA 周期**（老设备升级需要时间窗）。
 - [ ] 破坏性变更 → 🔴，要求作者给灰度/分批 OTA 方案。
 
-### 2.2 OTA 升级（`module-ota` / `upgradeapp`）
+### 2.2 OTA 升级（OTA 模块 / `upgradeapp`）
 - [ ] 升级包完整性校验（签名/hash）、版本比对、断点续传/失败重试。
 - [ ] **升级失败可回滚**（`module-recovery` / A-B 分区 / 恢复出厂前的保护），不留砖机路径。
 - [ ] 灰度策略：按设备批次/机型灰度，不一次全量推。
@@ -86,7 +85,7 @@ C++ 侧 `service/upgrade/upgrade_schd.cpp` + `service/download_service.cpp`：
 - [ ] 🔴 **无 A/B 分区自动回滚**：C++ 侧靠 `CheckPendingUpgradeSession()` + session 落盘做"断电续做"，装坏无自动回退。新 OTA 方案**必须明确失败恢复路径**（回滚/recovery/最坏可远程重推）。
 - [ ] 版本比对 `CompareVersion()`（点分整数逐段，`>=0` 跳过）；升级模式 `UpgradeMode{ADVICE/FORCE/ATONCE}`；整体超时 `kOverallUpgradeTimeout=1h` + `busy_/installing_` 原子锁防并发——评审改升级流程别破坏这几处保护。
 - [ ] 后置动作 `UpgradePostAction{kRestartApp/kRestartDevice/kRestartDeviceImmediately}`；⚠️ `DoInvokeUpgrade` 的 `post_action` 标注 "还没用上"，实际走 `ExecuteUpgradePostLogic` 的 `max_finish_action` 另一套——改重启逻辑要保证两处一致。
-- [ ] Android 侧 `module-ota`（`OTAManager.kt` + Flow 架构）与 C++ 侧是**两套实现**，评审时别张冠李戴；`module-recovery` 是恢复兜底，涉及升级失败要联动看。
+- [ ] Android 侧 OTA 模块（`OTAManager.kt` + Flow 架构）与 C++ 侧是**两套实现**，评审时别张冠李戴；恢复兜底模块涉及升级失败要联动看。
 
 ### 4.3 指令下发（command 模式，`<IoT 服务仓库>/src/cmds/`）
 指令是 command 模式：`base_cmd.h` + 每指令一个类。
@@ -104,7 +103,7 @@ C++ 侧 `service/upgrade/upgrade_schd.cpp` + `service/download_service.cpp`：
 - [ ] 遵循 `CPPLINT.cfg`；系统调用/IO/网络返回值必检，单点异常不拖垮整进程。
 
 ### 4.6 Android 设备框架（`<IoT 服务仓库>`）
-- [ ] AIDL 跨进程接口（`*.aidl`，如 `module-ota`/`IoTSdk`）**只加方法不改已有签名**；跨进程数据序列化保持兼容。
+- [ ] AIDL 跨进程接口（`*.aidl`，如 OTA 模块 / 设备 SDK）**只加方法不改已有签名**；跨进程数据序列化保持兼容。
 - [ ] 设备侧模块（`module-device`/`module-shadow`/`module-config`）改属性上报/影子逻辑，期望态 vs 上报态收敛要与后台一致。
 - [ ] OkHttp 超时当前硬编码 10s（`IoTApiManager`）——评审新网络调用别各处再散落硬编码超时。
 
@@ -112,7 +111,7 @@ C++ 侧 `service/upgrade/upgrade_schd.cpp` + `service/download_service.cpp`：
 
 ## 5. 跨端联调契约（设备端视角）
 
-- 与**后台**：设备网关（`devicegateway`/`wecarddevicegateway`/`<设备网关>`）的接口/字段/错误码/proto，**是老设备兼容性的高发区**，任何变更强制对照 [`contract.md`](./contract.md)，并让后端与设备端 spec 作者双向确认（对应 code-patterns#4 兄弟 spec 字段号一致）。
+- 与**后台**：设备网关（`devicegateway`/`legacy-devicegateway`/`<设备网关>`）的接口/字段/错误码/proto，**是老设备兼容性的高发区**，任何变更强制对照 [`contract.md`](./contract.md)，并让后端与设备端 spec 作者双向确认（对应 code-patterns#4 兄弟 spec 字段号一致）。
 - 与**识别端**：离线本地识别的特征格式/版本要与云端下发对齐（[`algorithm.md`](./algorithm.md)）。
 - 与**前端**：设备状态/OTA 进度/属性上报的枚举语义与前端展示一致。
 

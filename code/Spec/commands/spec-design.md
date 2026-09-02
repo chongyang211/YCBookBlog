@@ -6,7 +6,7 @@
 
 ## 作用
 
-当需求较大、较复杂或技术方案尚不明确时，基于原始需求（`docs/intake/xxx.md`）先产出一份**技术方案（Design）**，供团队评审。评审通过后，再由 `/spec-draft` 基于「原始需求 + 技术方案」一起起草 spec，使 spec 更准确、边界更清晰。
+当需求较大、较复杂或技术方案尚不明确时，基于原始需求（`intake/xxx.md`）先产出一份**技术方案（Design）**，供团队评审。评审通过后，再由 `/spec-draft` 基于「原始需求 + 技术方案」一起起草 spec，使 spec 更准确、边界更清晰。
 
 > 这是一个**可选的前置环节**，位于阶段零（Draft）**之前**。小需求 / 改动清晰的需求可直接跳过，走 `/spec-draft`。
 
@@ -15,7 +15,7 @@
 | 维度 | 技术方案 Design（本命令，阶段零前·可选） | 实施计划 Plan（`/spec-plan`，阶段二） |
 |------|------|------|
 | 时机 | **spec 之前**（需求大 / 方案不确定时） | **spec 已 ready 之后** |
-| 输入 | 原始需求 `docs/intake/` | 已 ready 的 spec |
+| 输入 | 原始需求 `intake/` | 已 ready 的 spec |
 | 关注点 | 整体架构、技术选型、**方案对比与取舍**、模块划分、跨系统/跨仓库影响、可行性、风险预判 | 落地到**具体文件**的改动清单、Phase 步骤、实施顺序 |
 | 颗粒度 | 方案级（用什么思路、为什么这样选） | 执行级（改哪些文件、按什么顺序） |
 | 关键产出 | 技术方案 + **建议的 spec 拆分** | 可执行步骤清单 |
@@ -29,14 +29,14 @@
 
 | 参数 | 必选 | 说明 |
 |------|------|------|
-| 原始需求来源 | 是 | `docs/intake/<VERSION>/<STORYID>-<slug>.md` 文件路径 或 自然语言描述 |
+| 原始需求来源 | 是 | `intake/<VERSION>/<STORYID>-<slug>.md` 文件路径 或 自然语言描述 |
 | Story ID | 否 | 不指定则从 intake frontmatter 取；都没有则主动询问，暂无用 `0` 占位 |
 | Author | 否 | 默认 `[TBD]`，建议指定 |
 
 **触发方式**：
 
 ```
-请基于 docs/intake/v1.6.0/10086-example-user-login.md 执行 spec-design
+请基于 intake/v1.6.0/10086-example-user-login.md 执行 spec-design
 ```
 
 或：
@@ -51,12 +51,12 @@
 
 0. **前置校验 — Story ID + 版本目录**
    - 与 `/spec-draft` 一致：Story ID 来源优先级为「用户对话 → intake frontmatter → 主动询问」
-   - **从 intake 路径解析 `<VERSION>`（`docs/intake/<VERSION>/…`）；design 写入同名版本目录 `designs/<VERSION>/`，目录不存在则先 `mkdir -p`。如 intake 路径缺少版本目录段，主动询问归属版本（如 `v1.6.0`）**
+   - **从 intake 路径解析 `<VERSION>`（`intake/<VERSION>/…`）；design 写入同名版本目录 `designs/<VERSION>/`，目录不存在则先 `mkdir -p`。如 intake 路径缺少版本目录段，主动询问归属版本（如 `v1.6.0`）**
    - 暂无对应 story 用 `0` 占位
    - design 文件名沿用此 Story ID 与 `<VERSION>`，后续 `/spec-draft` 继续沿用
 
 1. **收集原始需求**
-   - 优先读取 `docs/intake/xxx.md`；如用户直接描述，先复述确认理解
+   - 优先读取 `intake/xxx.md`；如用户直接描述，先复述确认理解
    - 明确本次技术方案要回答的核心问题
 
 2. **澄清需求（关键步骤，不可跳过，可多轮）**
@@ -138,7 +138,7 @@
 ## 与其他命令的衔接
 
 ```
-原始需求 (docs/intake/)
+原始需求 (intake/)
   ↓
 /spec-design        ← 你现在用的命令（可选，需求大时用）
   ↓
