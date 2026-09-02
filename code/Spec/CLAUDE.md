@@ -8,8 +8,9 @@
 
 ## 当前活跃 Spec
 
-> 完整索引在 团队 Wiki：<TEAM-WIKI-URL>。本地不再维护聚合的 `INDEX.md` 文件，避免 MR 冲突。
-> 团队 Wiki 索引由带外命令 `/spec-index` 按需完整覆盖发布，**不在个人开发流程中执行**——个人分支只是部分进度，集体发布交由专人/工具。新需求请走 `/spec-draft` 命令起草。
+完整索引在 团队 Wiki：<TEAM-WIKI-URL>。本地不再维护聚合的 `INDEX.md` 文件，避免 MR 冲突。
+
+团队 Wiki 索引由带外命令 `/spec-index` 按需完整覆盖发布，**不在个人开发流程中执行**——个人分支只是部分进度，集体发布交由专人/工具。新需求请走 `/spec-draft` 命令起草。
 
 ## 规则引用
 
@@ -45,9 +46,9 @@
 
 | 命令 | 阶段 | 输入 | 输出 |
 |------|------|------|------|
-| `/spec-intake` | 0 前置 — Intake（可选） | PM 需求文档路径 或 对话描述 | `docs/intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） |
-| `/spec-design` | 0 前 — Design（可选） | `docs/intake/<VERSION>/<id>-<slug>.md`（需求大时） | `designs/<VERSION>/<STORYID>-<slug>-design.md`（status: draft → approved） |
-| `/spec-draft` | 0 — Draft | `docs/intake/<VERSION>/<id>-<slug>.md` 或描述（+ 可选 design） | `specs/<VERSION>/<STORYID>-<slug>.md`（status: draft） |
+| `/spec-intake` | 0 前置 — Intake（可选） | PM 需求文档路径 或 对话描述 | `intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） |
+| `/spec-design` | 0 前 — Design（可选） | `intake/<VERSION>/<id>-<slug>.md`（需求大时） | `designs/<VERSION>/<STORYID>-<slug>-design.md`（status: draft → approved） |
+| `/spec-draft` | 0 — Draft | `intake/<VERSION>/<id>-<slug>.md` 或描述（+ 可选 design） | `specs/<VERSION>/<STORYID>-<slug>.md`（status: draft） |
 | `/spec-plan` | 2 — Plan | spec 路径 | `plans/<VERSION>/<STORYID>-<slug>-plan.md` |
 | `/spec-tasks` | 2.5 — Tasks | spec + plan 路径 | `tasks/<VERSION>/<STORYID>-<slug>-tasks.md` |
 | `/spec-implement` | 3 — Implement | spec 路径 | feature 分支 + `src/` 改动 + tasks 实时勾选 |
@@ -66,11 +67,11 @@
 | Plan（怎么做） | `plans/` | `plans/templates/plan-template.md` |
 | Tasks（步步执行） | `tasks/` | `tasks/templates/tasks-template.md` |
 
-> Spec → Plan → Tasks 必须**沉淀为文件**，不允许只在对话中存在。详见 `rules/10-spec-workflow.md`。
->
-> 此外，需求较大时可在 Spec 之前先产出**技术方案**（`designs/<VERSION>/<STORYID>-<slug>-design.md`，模板 `designs/templates/design-template.md`），评审通过后再起草 spec。它是可选前置产物，不属于必备三件套。
->
-> 📂 **版本目录层级（强制）**：intake / designs / specs / plans / tasks 五类产物均按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；`templates/` / `README.md` 是跨版本元文件，留在各目录根。聚合索引由 `/spec-index` 发布到 团队 Wiki，仓库内不再维护 `INDEX.md`。
+Spec → Plan → Tasks 必须**沉淀为文件**，不允许只在对话中存在。详见 `rules/10-spec-workflow.md`。
+
+此外，需求较大时可在 Spec 之前先产出**技术方案**（`designs/<VERSION>/<STORYID>-<slug>-design.md`，模板 `designs/templates/design-template.md`），评审通过后再起草 spec。它是可选前置产物，不属于必备三件套。
+
+📂 **版本目录层级（强制）**：intake / designs / specs / plans / tasks 五类产物均按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；`templates/` / `README.md` 是跨版本元文件，留在各目录根。聚合索引由 `/spec-index` 发布到 团队 Wiki，仓库内不再维护 `INDEX.md`。
 
 ## Git 工作流
 
