@@ -10,30 +10,20 @@
 
 每个仓库都有一个**基线分支**（baseline）—— 团队约定的稳定主干，feature 从它拉、最终也合回它。
 
-> 🤖 **机器可读的权威来源**：`skills/mr-spec-review/scripts/prepare-src.sh` 的 `REPOS` 映射。自动化评审据它同步 `src/` 业务仓；本表与该脚本保持一致，改动请同步两处。
+🤖 **机器可读的权威来源**：`skills/mr-spec-review/scripts/prepare-src.sh` 的 `REPOS` 映射。自动化评审据它同步 `src/` 业务仓；本表与该脚本保持一致，改动请同步两处。
 
-| 本地目录（`src/`） | Git 地址 | 基线分支 |
-|------|---------|---------|
-| `<迁移工具仓库>` | <GIT-HOST>/<ORG>/<迁移工具仓库> | `[TBD]` |
-| `<业务主仓库>` | <GIT-HOST>/<ORG>/<业务主仓库> | `develop` |
-| `<协议仓库>` | <GIT-HOST>/<ORG>/<协议仓库> | `master` |
-| `<前端仓库>` | <GIT-HOST>/<ORG>/<子组>/<前端仓库> | `develop` |
-| `<设备管理仓库>` | <GIT-HOST>/<ORG>/<子组>/<设备管理仓库> | `develop` |
-| `<业务主仓库>` | <GIT-HOST>/<ORG>/<子组>/<业务主仓库> | `develop` |
-| `proto` | <GIT-HOST>/<ORG>/<子组>/proto | `master` |
-| `infrastructure` | <GIT-HOST>/<ORG>/<子组>/infrastructure | `develop` |
-| `algorithm-repo` | <GIT-HOST>/<ORG>/<算法组>/algorithm-repo | `master` |
-| `paymax_device` | <GIT-HOST>/<ORG>/O4/paymax_device | `develop` |
-| `<支付仓库>` | <GIT-HOST>/<ORG>/O1/<支付仓库> | `develop` |
-| `<激活服务仓库>` | <GIT-HOST>/<ORG>/O1/<激活服务仓库> | `develop` |
-| `<IoT 服务仓库>` | <GIT-HOST>/<ORG>/O1/<IoT 服务仓库> | `develop` |
-| `<IoT 服务仓库>` | <GIT-HOST>/<ORG>/<IoT 服务仓库> | `develop` |
-| `<SDK 仓库>` | <GIT-HOST>/<ORG>/<SDK 仓库> | `master` |
-| `<示例仓库>` | <GIT-HOST>/<ORG>/<示例仓库> | `master` |
+⚠️ 下表为**真实形态的例子**（`acme-corp` 是示例组织名）——落地时整体替换为你自己的 Git 平台、组织与仓库：目录名 = `src/` 下的 clone 目录名，Git 地址 = 真实可 clone 的 URL，基线分支 = 团队约定主干。
 
-> ⚠️ **识别侧仓库归并**：`<ORG>/<算法组>` 原有的 `<业务主仓库>` / `proto` 逻辑**已合并进** `<ORG>/<子组>` 的 `<业务主仓库>` / `proto`（`src/<业务主仓库>`、`src/proto`），原 `src/<旧流水线目录>/` 分组已废弃删除。识别算法仓 `algorithm-repo`（`<ORG>/<算法组>/algorithm-repo`）平铺在 `src/algorithm-repo`。
->
-> ⚠️ `[TBD]` 的仓库需要团队补全。补全规则：基线分支 = 团队约定、所有 feature 都基于它拉、合并目标也是它。补全后请同步更新 `prepare-src.sh` 的 `REPOS`。
+| 本地目录（`src/`） | Git 地址 | 基线分支 | 说明 |
+|------|---------|---------|------|
+| `backend` | `gitlab.com/acme-corp/api-server.git` | `develop` | 后端主服务 |
+| `proto` | `gitlab.com/acme-corp/proto.git` | `master` | 跨端协议定义（被依赖方，先合并） |
+| `infrastructure` | `gitlab.com/acme-corp/infra.git` | `main` | 基础设施与部署脚本 |
+| `frontend` | `github.com/acme-corp/web-console.git` | `main` | Web 管理端 |
+| `device-app` | `gitlab.com/acme-corp/device-agent.git` | `develop` | 设备端应用 |
+| `mobile-sdk` | `github.com/acme-corp/mobile-sdk.git` | `master` | 移动端接入 SDK |
+
+💡 **补全规则**：基线分支 = 团队约定、所有 feature 都基于它拉、合并目标也是它。常见约定：业务仓 `develop` / `main`，协议仓与 SDK 仓偏稳定可走 `master`。被依赖方（如 `proto`）建议先合并（见 §2 多仓库 Push 顺序）。
 
 ---
 
@@ -76,7 +66,7 @@ git pull -r origin <baseline>
 git checkout -b feature/10086-example-user-login
 ```
 
-> 💡 多仓库使用**同一分支名**，便于追溯关联（详见 `rules/10-spec-workflow.md` 分支命名规范）
+💡 多仓库使用**同一分支名**，便于追溯关联（详见 `rules/10-spec-workflow.md` 分支命名规范）
 
 ---
 
@@ -97,7 +87,7 @@ git checkout -b feature/10086-example-user-login
 | `<type>` | ✅ | 改动类型，见下表 |
 | `<scope>` | ✅ | 模块名（小写），如 `auth` / `dashboard` / `gateway` / `proto` |
 | `<subject>` | ✅ | 简洁的中文描述（&、/ 等符号可用） |
-| `--story=<STORYID>` | ✅ | 关联Git 平台（GitHub / GitLab / 工蜂）需求单号（与 spec frontmatter Story ID 一致；无 story 用 `--story=0`） |
+| `--story=<STORYID>` | ✅ | 关联Git 平台需求单号（与 spec frontmatter Story ID 一致；无 story 用 `--story=0`） |
 | `#finish` | 可选 | 合并 MR 时关闭关联 story；只在**本 story 的最后一笔 commit** 上加 |
 
 **type 取值**（Conventional Commits 风格）：
@@ -130,7 +120,7 @@ docs(spec): 补充偏离回流流程说明 --story=0
 | 单 spec 多 commit | 仅最后一笔加 `#finish` |
 | 多 spec 共享 Story | 整个 Story 的最后一个 spec 的最后一笔加 `#finish`，其他不加 |
 
-> ⚠️ 不确定时，宁可不加 `#finish` —— 后续可在Git 平台（GitHub / GitLab / 工蜂） UI 手动关闭 story；多加了反而会过早关闭。
+> ⚠️ 不确定时，宁可不加 `#finish` —— 后续可在Git 平台 UI 手动关闭 story；多加了反而会过早关闭。
 
 ---
 
@@ -161,7 +151,7 @@ git rebase <baseline>
 git push -u origin {feature|hotfix}/<spec-name>      # 首次
 git push -f origin {feature|hotfix}/<spec-name>       # rebase 后
 
-# 6. 在Git 平台（GitHub / GitLab / 工蜂） UI 创建 MR
+# 6. 在Git 平台 UI 创建 MR
 #    源分支 → 基线分支
 #    描述自动套用 .gitlab/merge_request_templates/Default.md
 ```
@@ -203,7 +193,7 @@ proto 仓库（如 <协议仓库>）→ 业务代码（如 <业务主仓库>）
 | rebase 时大量冲突 | 基线分支跑得太前 | 提前 rebase（实施期间也定期同步）；冲突解决后必须**重新跑测试** |
 | `push -f` 后队友报"分支被覆盖" | feature 分支非单人持有 | 沟通确认；如多人协作同一 spec，应拆为多个子 spec（每人独立分支） |
 | 忘记加 `--story=` | 不符合规范 | `git commit --amend` 修正最后一笔；已 push 的 → rebase 改 message 后 force push |
-| `#finish` 加错位置 | 过早关闭 story | Git 平台（GitHub / GitLab / 工蜂） UI 重新打开 story；下次注意只在最后一笔加 |
+| `#finish` 加错位置 | 过早关闭 story | Git 平台 UI 重新打开 story；下次注意只在最后一笔加 |
 | 多仓库 rebase 时间差导致 stub 缺失 | proto 仓库没先合 | 严格按"被依赖优先"顺序合并；用 `replace` 指令本地联调，提交前移除 |
 
 ---
