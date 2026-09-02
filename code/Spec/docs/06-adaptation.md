@@ -79,8 +79,8 @@ your-monorepo/
 ├─ tasks/templates/          ← 模板
 ├─ designs/templates/        ← 模板
 ├─ intake/templates/    ← 模板
-├─ docs/spec-flow-overview.md
-├─ docs/spec-coding-handbook.md
+├─ docs/README.md         ← 文档总入口（7 篇方法论文档矩阵）
+├─ docs/01-overview.md ~ 07-case.md   ← 通用方法论全套
 └─ CLAUDE.md（或对应 AI 助手的入口文件）
 ```
 
@@ -103,9 +103,20 @@ mkdir -p specs/v1.0.0 plans/v1.0.0 tasks/v1.0.0 \
 ### Step 3：AI 助手识别
 
 **Cursor**：把 `CLAUDE.md` 改名为 `.cursorrules`，或在 Cursor 设置里指定读取路径。
-**Codebuddy**：项目根放 `CLAUDE.md`（或 `codebuddyRules`）。
+**CodeBuddy**：项目根放 `CLAUDE.md`（或 `codebuddyRules`）；也可在 `.codebuddy/` 下建软链共享根目录同一份（`commands → ../commands`、`rules/rules → ../../rules`）。
 **Continue / Cline**：在其配置里加载 `rules/*.md`。
 **其他**：查各自文档，找到"项目级 system prompt"的加载方式。
+
+**两种触发方式**（以 CodeBuddy 为例，其他助手同理）：
+
+```
+方式 A（斜杠命令）：/spec-plan specs/v1.0.0/1001-short-url-core.md
+方式 B（自然语言）：请根据 specs/v1.0.0/1001-short-url-core.md 执行 spec-plan
+```
+
+两种方式 AI 都能识别，**自然语言更稳**（不依赖命令注册机制）。
+
+> 💡 **CodeBuddy 与 Claude Code 的关系**：两者读取**同一份**源文件——CodeBuddy 走 `.codebuddy/` 软链，Claude Code 走 `CLAUDE.md` 的 `@rules/*` 显式导入。规则只维护一份，体验一致。
 
 **验证**：在 AI 助手中输入 `/spec-draft`，看它是否识别命令。
 

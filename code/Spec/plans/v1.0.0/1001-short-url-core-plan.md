@@ -1,6 +1,6 @@
 # Plan: 短链接核心服务（1001-short-url-core）
 
-> 📌 **这是教学案例**（Story 1001「短链接服务」全套样例之一，导读见 `read/07-case.md`）。
+> 📌 **这是教学案例**（Story 1001「短链接服务」全套样例之一，导读见 `docs/07-case.md`）。
 > 真实 plan 请复制 `templates/plan-template.md` 起草。本文件刻意展示：改动文件精确到路径（超出即偏离）、复用 design 决策、Phase 按依赖排序。
 
 > **Story ID**: 1001

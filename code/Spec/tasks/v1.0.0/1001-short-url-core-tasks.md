@@ -1,6 +1,6 @@
 # Tasks: 短链接核心服务（1001-short-url-core）
 
-> 📌 **这是教学案例**（Story 1001「短链接服务」全套样例之一，导读见 `read/07-case.md`）。
+> 📌 **这是教学案例**（Story 1001「短链接服务」全套样例之一，导读见 `docs/07-case.md`）。
 > 真实 tasks 请复制 `templates/tasks-template.md` 起草。本文件刻意展示：任务粒度 15-60 分钟、实时勾选终态、偏离记录闭环（含 spec 修订回流）。
 
 > **Story ID**: 1001

@@ -219,6 +219,17 @@ Design 输出：
 
 **总耗时**：数天至数周（一个大需求切多个 spec，各自并行）。
 
+### 2.4 流程例外速查（什么情况可简化）
+
+| 场景 | 可省略 | 不可省略 |
+|------|--------|----------|
+| 纯 bugfix（< 50 行） | Plan、Tasks | Spec、Test、Review、Push、Summary |
+| 纯文档 / 注释修改 | Plan、Tasks、Test | Push、Summary |
+| 紧急 hotfix（`hotfix/` 前缀） | Plan、Tasks | Spec（事后补）、Push、Summary |
+| 配置项调整 | Plan、Tasks、Test（视情况） | Push、Summary |
+
+**变更摘要、commit message 规范、push 前安全 rebase 在任何情况下都不可省略。**
+
 ---
 
 ## 三、10 个最常用的日常操作
@@ -412,6 +423,31 @@ grep -c '\[ \]' tasks/**/<spec>-tasks.md
 3. 需求本身不成熟 → **spec 撤回，改回 intake 阶段继续讨论**
 
 **不要** 让 spec 悬着——半成品 spec 是最大的负担。
+
+### Q11：实施中 AI 出现违规行为怎么自救？
+
+| 现象 | 原因 | 自救 |
+|------|------|------|
+| AI 跳过 plan 直接写代码 | 你没明确触发 `/spec-plan` | 立刻喊停，要求先 plan |
+| AI 改了 spec 没说 | AI 违规 | 还原 spec，让 AI 在 tasks「偏离记录」中说明 |
+| AI 顺手重构了相邻代码 | 违反最小改动原则 | 撤销重构；记录到 intake/ 待立项 |
+| Tasks 没实时勾选 | AI 攒到最后批量勾选 | 喊停，要求每完成一条立刻勾选 |
+| AI 引入新依赖 | 未经允许 | 撤销，除非 spec 明确要求 |
+| 测试只覆盖 happy path | 违反测试规则 | 让 AI 补边界与错误路径测试 |
+
+### Q12：卡住了找谁帮忙？
+
+| 卡点 | 找谁 |
+|------|------|
+| Spec 写不出来 | Tech Lead 或同 Owner |
+| Plan 拿不准（架构选型） | 架构师 |
+| 实施时发现 spec 有缺陷 | **不要私自改 spec**：tasks「偏离记录」记下来，找 Spec Author |
+| 单测一直跑不过 | 找同事；或让 AI 定位（"分析一下为什么 xxx_test 不通过"） |
+| MR 一直被打回 | 看 review 评论，针对性补 |
+
+### Q13：多人能并行做同一个 spec 吗？
+
+**能**。每人认领 tasks 中的一个 Phase 并在 tasks 文件标注 owner；建议各自开 worktree 或子分支。更大规模应拆为多个子 spec（共享 Story ID）。
 
 ---
 

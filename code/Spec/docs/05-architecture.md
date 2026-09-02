@@ -44,9 +44,9 @@ your-project/
 │  ├─ change-summary/
 │  └─ technical-design/
 │
-├─ docs/                                       ← 项目级文档
-│  ├─ spec-flow-overview.md                   ← 流程概览
-│  ├─ spec-coding-handbook.md                 ← 一页纸速查
+├─ docs/                                       ← 项目级文档 + 方法论文档矩阵
+│  ├─ README.md                               ← 文档总入口
+│  ├─ 01-overview.md ~ 07-case.md             ← 通用方法论 7 篇（全景 → 案例）
 │  └─ git-workflow.md                         ← Git 工作流细则
 │
 ├─ intake/                                     ← 原始需求录入（五类产物之一）
@@ -499,6 +499,31 @@ Version: [归属版本]
 ---
 
 ## 十、Rules 层文件说明
+
+### 10.0 三层如何协作（先看这张图）
+
+```txt
+        ┌──────────────┐
+        │   人（你）    │
+        └──────┬───────┘
+               │ 触发
+               ▼
+        ┌──────────────┐
+        │  Commands    │  ← 人直接交互的接口（/spec-plan 等）
+        └──────┬───────┘
+               │ 调用
+               ▼
+        ┌──────────────┐
+        │  Skills      │  ← AI 的"操作手册"（spec-analysis 等，自动调用）
+        └──────┬───────┘
+               │ 必须遵循
+               ▼
+        ┌──────────────┐
+        │  Rules       │  ← 永远在背景里生效（10-spec-workflow 等）
+        └──────────────┘
+```
+
+**一句话**：**Commands 是人的入口，Skills 是 AI 的操作手册，Rules 是永远生效的背景约束**——一个 Command 通常调用多个 Skill，全部行为受 Rules 制约。
 
 ### 10.1 `00-project-principles.md`
 

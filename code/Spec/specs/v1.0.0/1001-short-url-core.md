@@ -1,6 +1,6 @@
 # 短链接核心服务：生成、跳转与过期控制
 
-> 📌 **这是教学案例**（Story 1001「短链接服务」全套样例之一，导读见 `read/07-case.md`）。
+> 📌 **这是教学案例**（Story 1001「短链接服务」全套样例之一，导读见 `docs/07-case.md`）。
 > 真实 spec 请复制 `templates/spec-template.md` 起草。本文件刻意展示：来源标注（📥🤖🔍❓）、Sibling Specs、可勾选验收标准。
 
 > **Story ID**: 1001

@@ -120,7 +120,7 @@ flowchart TD
 | `skills/` | AI 可复用技能（8 个 SKILL） | ✅ |
 | `commands/` | 协作命令（10 个 `/spec-*` 入口） | ✅ |
 | `tests/` | 测试代码（与 spec 验收标准对齐） | ✅ |
-| `docs/` | 团队手册 / 流程概要 / git 工作流 / onboarding | ✅ |
+| `docs/` | 方法论文档矩阵（README + 01~07）、git 工作流、反馈问卷 | ✅ |
 | `intake/` | 原始需求草稿区（**不是** spec） | ✅ |
 | `.gitlab/` | MR 模板（Git 平台） | ✅ |
 | `.codebuddy/` | CodeBuddy IDE 协作配置（commands/rules 软链） | ✅ |
@@ -165,9 +165,9 @@ git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 定义仓库（基线 ma
 | 顺序 | 文件 | 用途 | 时间 |
 |------|------|------|------|
 | 1 | `README.md` | 你正在读——项目门面与全局视图 | — |
-| 2 | [`docs/spec-flow-overview.md`](./docs/spec-flow-overview.md) | 流程概要（流程图 + 每步关注点 + 规范），一眼看清怎么跑 | 5 分钟 |
-| 3 | [`docs/spec-coding-handbook.md`](./docs/spec-coding-handbook.md) | 团队手册（一页纸，10 条铁律 + 全景图） | 5 分钟 |
-| 4 | [`docs/onboarding-codebuddy.md`](./docs/onboarding-codebuddy.md) | 新人完整手册（端到端实操 + IDE 操作 + 常见错误自救） | 30 分钟 |
+| 2 | [`docs/README.md`](./docs/README.md) | **文档总入口**——7 篇方法论文档矩阵（全景 → 案例） | 2 分钟 |
+| 3 | [`docs/01-overview.md`](./docs/01-overview.md) | 全景总览——是什么、为什么、四理念、十铁律 | 10 分钟 |
+| 4 | [`docs/04-how-to-use.md`](./docs/04-how-to-use.md) | 使用手册——三种规模场景 + FAQ + 常见错误自救 | 20 分钟 |
 | — | [`docs/git-workflow.md`](./docs/git-workflow.md) | Git 操作手册（基线分支 / commit / 安全 rebase / 多仓库） | 按需 |
 
 ---
@@ -183,4 +183,4 @@ git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 定义仓库（基线 ma
 
 ## 十、反馈与改进
 
-本仓库是**活文档**，欢迎提 MR 改进规则、模板、文档。改 `rules/` 与 `commands/` 时，请同步 review `docs/` 下的 handbook、flow-overview、onboarding 是否仍然一致。
+本仓库是**活文档**，欢迎提 MR 改进规则、模板、文档。改 `rules/` 与 `commands/` 时，请同步 review `docs/` 下的方法论文档矩阵（README + 01~07）是否仍然一致。

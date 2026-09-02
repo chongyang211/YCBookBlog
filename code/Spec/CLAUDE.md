@@ -88,6 +88,6 @@ Spec → Plan → Tasks 必须**沉淀为文件**，不允许只在对话中存�
 
 ## 新人入口
 
-- 📘 [`docs/onboarding-codebuddy.md`](./docs/onboarding-codebuddy.md) — **新人完整使用手册**（含端到端实操、CodeBuddy IDE 操作示范、常见错误自救）
-- 📗 [`docs/spec-coding-handbook.md`](./docs/spec-coding-handbook.md) — 团队手册（一页纸版本）
+- 📘 [`docs/README.md`](./docs/README.md) — **文档总入口**（7 篇方法论文档矩阵 + 案例导读，新人从 `01-overview` 顺序读）
+- 📗 [`docs/04-how-to-use.md`](./docs/04-how-to-use.md) — 使用手册（三种规模场景 + FAQ + 常见错误自救）
 - 🧭 [`docs/git-workflow.md`](./docs/git-workflow.md) — Git 流程操作手册（基线分支 / commit / 安全 rebase / 多仓库合并）

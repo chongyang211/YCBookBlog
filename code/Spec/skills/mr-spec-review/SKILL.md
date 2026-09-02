@@ -173,7 +173,7 @@ COSPEC_ROOT="$COSPEC_ROOT" GIT_TOKEN="$GIT_TOKEN" \
    - **只有 intake、无 design 也无 spec** → 提示用户"该 MR 仅有 intake，缺技术方案/spec，可评审需求描述的清晰度与边界，但无法评估技术方案"；征询后按 intake 维度轻量评审。
    - **完全无 intake/design/spec/plan/tasks** → 告诉用户该 MR 非本 skill 适用范围（纯代码 MR 走 `code-review`）。
 
-> 评审范围：只评 MR 中**实际存在**的类型，缺失的不强求作者补。**intake/design-only 是完全合法的评审对象**（对应 spec 流程的"0前置"阶段，见 `docs/spec-flow-overview.md`）。
+> 评审范围：只评 MR 中**实际存在**的类型，缺失的不强求作者补。**intake/design-only 是完全合法的评审对象**（对应 spec 流程的"0前置"阶段，见 `docs/02-workflow.md`）。
 
 ### Step 1.5: 加载 MR 版本的 spec 文件全文（**必做 · 默认只读拉取，不切分支**）
 
