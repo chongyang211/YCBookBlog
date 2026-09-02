@@ -2,9 +2,9 @@
 
 你的团队的 **Spec 驱动 AI 协作开发工作空间**。
 
-> 一句话理念：**我们不写"AI 自由发挥"的代码——每个改动都从一份 Spec 开始，经 Plan、Tasks 三件套沉淀，由「人审 + AI 执行 + 人合并」。**
+一句话理念：**我们不写"AI 自由发挥"的代码——每个改动都从一份 Spec 开始，经 Plan、Tasks 三件套沉淀，由「人审 + AI 执行 + 人合并」。**
 
-> 📋 **全队 Spec 索引 / 当前迭代需求一览** → 团队 Wiki：<TEAM-WIKI-URL>（含每个 spec 的版本号、Status、Owner、Spec/Plan/Tasks 链接）
+📋 **全队 Spec 索引 / 当前迭代需求一览** → 团队 Wiki：<TEAM-WIKI-URL>（含每个 spec 的版本号、Status、Owner、Spec/Plan/Tasks 链接）
 
 ---
 
@@ -14,7 +14,7 @@
 
 本工作空间把开发流程切成标准阶段，**每个阶段产出一份磁盘文件**，让需求、方案、计划、执行全程可读、可审、可交接、可追溯。
 
-> 本仓库只管理「协作元数据」（Spec / Plan / Tasks / 规则 / 技能 / 命令 / 文档），**不存放业务代码**——业务代码由各人按需 clone 到 `src/`（已 gitignore）。
+本仓库只管理「协作元数据」（Spec / Plan / Tasks / 规则 / 技能 / 命令 / 文档），**不存放业务代码**——业务代码由各人按需 clone 到 `src/`（已 gitignore）。
 
 ---
 
@@ -59,11 +59,11 @@ flowchart TD
 
 ### 命令清单（10 个工作流命令，其中 3 个可选）
 
-> 此外还有一个**带外工具** `/spec-index`：扫描 `specs/` 生成索引并完整覆盖同步到 团队 Wiki（<TEAM-WIKI-URL>）。它**不属于个人开发流程**，由专人/工具按需运行，避免大家在自己分支上各自重生导致 团队 Wiki 反复被半成品覆盖。
+此外还有一个**带外工具** `/spec-index`：扫描 `specs/` 生成索引并完整覆盖同步到 团队 Wiki（<TEAM-WIKI-URL>）。它**不属于个人开发流程**，由专人/工具按需运行，避免大家在自己分支上各自重生导致 团队 Wiki 反复被半成品覆盖。
 
 | 阶段 | 命令 | 输入 | 输出 |
 |------|------|------|------|
-| 0 前置（可选） | `/spec-intake` | PM 需求文档路径 或 对话描述 | `docs/intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） |
+| 0 前置（可选） | `/spec-intake` | PM 需求文档路径 或 对话描述 | `intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） |
 | 0 前（可选） | `/spec-design` | intake 或描述（需求大/复杂时） | `designs/<VERSION>/<STORYID>-<slug>-design.md`（draft → approved） |
 | 0 | `/spec-draft` | intake 或描述（+ 可选 design） | `specs/<VERSION>/<STORYID>-<slug>.md`（status: draft） |
 | 1 | （个人 review + 同事评审） | spec draft | status 改 `ready` |
@@ -75,7 +75,7 @@ flowchart TD
 | 6（可选） | `/spec-push` | spec 路径 | commit + 安全 rebase + `git push -f` + 提示开 MR（也可自行 git 提交） |
 | 6 后 | `/spec-sync` | spec 路径或 `all` | spec 状态 + 三件套一致性同步 |
 
-> **3 个可选命令**：`/spec-intake`（视习惯把 PM 需求/零散描述结构化成 intake）、`/spec-design`（仅需求大、需先评审方案时用）、`/spec-push`（视个人代码提交习惯，也可自行 `git` 提交）。小需求可直接从 `/spec-draft` 起步。`change-summary` 不是独立命令，由 `/spec-review` 与 `/spec-push` 内部自动调用。
+**3 个可选命令**：`/spec-intake`（视习惯把 PM 需求/零散描述结构化成 intake）、`/spec-design`（仅需求大、需先评审方案时用）、`/spec-push`（视个人代码提交习惯，也可自行 `git` 提交）。小需求可直接从 `/spec-draft` 起步。`change-summary` 不是独立命令，由 `/spec-review` 与 `/spec-push` 内部自动调用。
 
 ---
 
@@ -121,16 +121,16 @@ flowchart TD
 | `commands/` | 协作命令（10 个 `/spec-*` 入口） | ✅ |
 | `tests/` | 测试代码（与 spec 验收标准对齐） | ✅ |
 | `docs/` | 团队手册 / 流程概要 / git 工作流 / onboarding | ✅ |
-| `docs/intake/` | 原始需求草稿区（**不是** spec） | ✅ |
-| `.gitlab/` | MR 模板（Git 平台（GitHub / GitLab / 工蜂）） | ✅ |
+| `intake/` | 原始需求草稿区（**不是** spec） | ✅ |
+| `.gitlab/` | MR 模板（Git 平台） | ✅ |
 | `.codebuddy/` | CodeBuddy IDE 协作配置（commands/rules 软链） | ✅ |
 | `src/` | 业务代码仓库（按 spec 涉及范围自行 clone） | ❌ gitignore |
 | `bin/` | 本地工具二进制（如 gopls） | ❌ gitignore |
 | `pkg/` | Go module 缓存 | ❌ gitignore |
 
-> 📂 **版本目录层级**：`docs/intake/`、`designs/`、`specs/`、`plans/`、`tasks/` 下的文档均按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；各目录的 `templates/`、`README.md` 为跨版本元文件，保留在目录根。
->
-> 🌐 **Spec 索引发布到 团队 Wiki**：仓库内不再维护聚合的 `specs/INDEX.md`（避免 MR 冲突）。索引以 团队 Wiki 文档为单一发布出口（<TEAM-WIKI-URL>），由专人/工具按需运行带外命令 `/spec-index` 完整覆盖发布，**不在个人开发流程中执行**。
+📂 **版本目录层级**：`intake/`、`designs/`、`specs/`、`plans/`、`tasks/` 下的文档均按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；各目录的 `templates/`、`README.md` 为跨版本元文件，保留在目录根。
+
+🌐 **Spec 索引发布到 团队 Wiki**：仓库内不再维护聚合的 `specs/INDEX.md`（避免 MR 冲突）。索引以 团队 Wiki 文档为单一发布出口（<TEAM-WIKI-URL>），由专人/工具按需运行带外命令 `/spec-index` 完整覆盖发布，**不在个人开发流程中执行**。
 
 ---
 
