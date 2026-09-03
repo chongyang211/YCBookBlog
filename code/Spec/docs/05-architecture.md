@@ -629,16 +629,35 @@ description: 何时应触发这个 skill 的一句话说明
 
 **skill 的触发**：由 command 或 rule 显式调用（如 `/spec-draft` 会调用 `skills/spec-drafting/SKILL.md`）。
 
+**核心 skills 速查**（8 个工作流 skill + 2 个扩展 skill）：
+
+| 技能 | 路径 | 用途 |
+|------|------|------|
+| 技术方案 | `skills/technical-design/` | 需求大时，起草 spec 前先产出供评审的技术方案 |
+| Spec 起草 | `skills/spec-drafting/` | 把原始需求转成 spec 草稿 |
+| Spec 分析 | `skills/spec-analysis/` | 分析已有 spec 完整性 |
+| 代码侦察 | `skills/codebase-survey/` | 扫描现有代码（被 spec-drafting / implementation-planning 自动调用，也可独立用） |
+| 实施计划 | `skills/implementation-planning/` | 制定实施计划 |
+| 功能实现 | `skills/feature-implementation/` | 执行代码实现 |
+| 测试编写 | `skills/test-writing/` | 编写测试用例 |
+| 变更摘要 | `skills/change-summary/` | 生成变更摘要（被 review / push / sync 内部调用，无独立命令） |
+| MR Spec 评审 | `skills/mr-spec-review/` | 评审他人提交的 spec / plan / tasks MR，结论投递为 MR 评论 |
+| MR 评审处理 | `skills/mr-review-resolve/` | 作者侧：逐条评估 MR 评论并处置、回写 resolved |
+
 ---
 
 ## 十三、CLAUDE.md（AI 助手入口）
 
-项目根的 `CLAUDE.md` 是 AI 助手加载的入口：
+项目根的 `CLAUDE.md`（或 `.cursorrules` 等，视 AI 助手而定）是 AI 加载规则的入口。本仓库已预置 `CLAUDE.md` 作为可直接使用的示例；落地到你团队时按需修改（Claude Code 用 `@rules/*` 显式导入；CodeBuddy 可改用 `.codebuddy/` 软链，见 [06 §二](./06-adaptation.md)）：
 
 ```markdown
 # Project: <项目名>
 
 本项目使用 CoSpec 范式（Spec 驱动 AI 协作开发）。
+
+## 当前活跃 Spec 索引
+
+完整索引在 <TEAM-WIKI-URL>（或你的需求系统）。本地不维护聚合 INDEX 文件，避免 MR 冲突；索引由带外命令 `/spec-index` 按需发布。
 
 ## 常驻规则（每次会话都加载）
 

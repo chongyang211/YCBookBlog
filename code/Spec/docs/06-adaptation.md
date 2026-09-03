@@ -81,7 +81,7 @@ your-monorepo/
 ├─ intake/templates/    ← 模板
 ├─ docs/README.md         ← 文档总入口（7 篇方法论文档矩阵）
 ├─ docs/01-overview.md ~ 07-case.md   ← 通用方法论全套
-└─ CLAUDE.md（或对应 AI 助手的入口文件）
+└─ CLAUDE.md（AI 助手入口，可直接复用仓库根的示例，模板见 docs/05 §十三）
 ```
 
 **不需要**拷贝的：
