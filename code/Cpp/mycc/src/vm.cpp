@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <variant>
 
-namespace mycc {
+namespace Mycc {
 
 void VM::load(Chunk topChunk, std::unordered_map<std::string, Chunk> fns) {
     top_ = std::move(topChunk);
@@ -227,4 +227,4 @@ void VM::run() {
     }
 }
 
-}  // namespace mycc
+}  // namespace Mycc

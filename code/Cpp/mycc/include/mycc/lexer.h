@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace mycc {
+namespace Mycc {
 
 class Lexer {
 public:
@@ -28,4 +28,4 @@ private:
     Token readString();   // 字符串字面量
 };
 
-}  // namespace mycc
+}  // namespace Mycc

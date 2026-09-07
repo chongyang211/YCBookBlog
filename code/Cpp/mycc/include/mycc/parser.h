@@ -4,7 +4,7 @@
 #include "token.h"
 #include <vector>
 
-namespace mycc {
+namespace Mycc {
 
 class Parser {
 public:
@@ -52,4 +52,4 @@ private:
     AstPtr parseExprStmt();
 };
 
-}  // namespace mycc
+}  // namespace Mycc

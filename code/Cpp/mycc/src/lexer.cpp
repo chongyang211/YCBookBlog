@@ -4,7 +4,7 @@
 #include <cctype>
 #include <unordered_map>
 
-namespace mycc {
+namespace Mycc {
 
 std::vector<Token> Lexer::scanAll() {
     std::vector<Token> out;
@@ -139,4 +139,4 @@ Token Lexer::readString() {
     return Token(TokKind::String, s, line);
 }
 
-}  // namespace mycc
+}  // namespace Mycc

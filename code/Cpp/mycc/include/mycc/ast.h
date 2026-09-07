@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace mycc {
+namespace Mycc {
 
 // 类型标签——TypeChecker 阶段会给每个表达式贴上
 enum class Type { Unknown, Num, Bool, Str, Void };
@@ -188,12 +188,12 @@ public:
     void acceptCode(AstVisitor<void>& v) override;
 };
 
-}  // namespace mycc
+}  // namespace Mycc
 
 // === accept 实现（需要 visitor.h 的完整定义）===
 #include "visitor.h"
 
-namespace mycc {
+namespace Mycc {
 
 inline Type NumLit::acceptType(AstVisitor<Type>& v)      { return v.visit(*this); }
 inline void NumLit::acceptCode(AstVisitor<void>& v)      {        v.visit(*this); }
@@ -246,4 +246,4 @@ inline void PrintStmt::acceptCode(AstVisitor<void>& v)   {        v.visit(*this)
 inline Type Program::acceptType(AstVisitor<Type>& v)     { return v.visit(*this); }
 inline void Program::acceptCode(AstVisitor<void>& v)     {        v.visit(*this); }
 
-}  // namespace mycc
+}  // namespace Mycc

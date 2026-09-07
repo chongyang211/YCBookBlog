@@ -5,7 +5,7 @@
 #include <string>
 #include <variant>
 
-namespace mycc {
+namespace Mycc {
 
 // 运行期值类型——五种之一
 struct Nil {};   // 用空类区分 nil 和 false
@@ -40,4 +40,4 @@ inline std::ostream& operator<<(std::ostream& os, const Value& v) {
     return os;
 }
 
-}  // namespace mycc
+}  // namespace Mycc

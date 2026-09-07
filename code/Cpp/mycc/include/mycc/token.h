@@ -4,7 +4,7 @@
 #include <variant>
 #include <iostream>
 
-namespace mycc {
+namespace Mycc {
 
 // Token 类别
 enum class TokKind {
@@ -46,4 +46,4 @@ struct Token {
 // 把 TokKind 转成可读字符串（调试 + 错误信息用）
 const char* tokKindName(TokKind k);
 
-}  // namespace mycc
+}  // namespace Mycc

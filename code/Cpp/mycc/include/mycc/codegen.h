@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 
-namespace mycc {
+namespace Mycc {
 
 // 局部变量信息：名字 + 它的作用域深度
 struct Local {
@@ -72,4 +72,4 @@ private:
     void emitConst(Constant c, int line);
 };
 
-}  // namespace mycc
+}  // namespace Mycc

@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-namespace mycc {
+namespace Mycc {
 
 // 函数符号——记录函数的参数个数（本案例不严格检查参数类型）
 struct FnSig {
@@ -53,4 +53,4 @@ private:
     Type lookup(const std::string& name, int line);
 };
 
-}  // namespace mycc
+}  // namespace Mycc

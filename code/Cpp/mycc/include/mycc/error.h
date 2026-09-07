@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace mycc {
+namespace Mycc {
 
 // ============================================================
 //  根异常：所有 mycc 的诊断都从它派生
@@ -73,4 +73,4 @@ public:
     int exitCode() const override { return 4; }
 };
 
-}  // namespace mycc
+}  // namespace Mycc

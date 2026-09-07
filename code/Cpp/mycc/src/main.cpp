@@ -11,7 +11,7 @@
 #include <string>
 #include <unordered_map>
 
-using namespace mycc;
+using namespace Mycc;
 
 // 一次编译的产物：主 chunk + 函数表
 struct Compiled {
@@ -106,34 +106,38 @@ static int runFile(const std::string& path) {
 
 // REPL 模式
 static int runRepl() {
-    std::cout << "mycc 0.1 — :h for help, :q to quit\n";
+    std::cout << "Mycc 0.1 — 输入 h 查看帮助，q 退出\n";
     std::string line;
     while (true) {
-        std::cout << "mycc> " << std::flush;
+        std::cout << "Mycc> " << std::flush;
         if (!std::getline(std::cin, line)) break;
         if (line.empty()) continue;
 
+        // 提取命令名和剩余部分
         std::string cmd = line, rest;
         if (auto sp = line.find(' '); sp != std::string::npos) {
             cmd  = line.substr(0, sp);
             rest = line.substr(sp + 1);
         }
+        // 去掉冒号前缀，:q 和 q 等价
+        if (!cmd.empty() && cmd[0] == ':') cmd = cmd.substr(1);
 
-        if (cmd == ":q") break;
-        if (cmd == ":h") {
-            std::cout << "  :run    <code>  编译并执行\n"
-                         "  :dump   <code>  显示字节码\n"
-                         "  :tcheck <code>  仅类型检查\n"
-                         "  :q              退出\n"
-                         "  直接输入代码     等价于 :run\n";
+        if (cmd == "q" || cmd == "quit" || cmd == "exit") break;
+        if (cmd == "h" || cmd == "help") {
+            std::cout << "  run <code>    编译并执行\n"
+                         "  dump <code>   反汇编字节码\n"
+                         "  tcheck <code> 仅类型检查\n"
+                         "  q / quit      退出\n"
+                         "  h / help      帮助\n"
+                         "  其他输入       当作 Mycc 源码执行\n";
             continue;
         }
-        if (cmd == ":dump")   { dump(rest, "<repl>"); continue; }
-        if (cmd == ":tcheck") { typecheck(rest, "<repl>"); continue; }
+        if (cmd == "dump")   { dump(rest, "<repl>"); continue; }
+        if (cmd == "tcheck") { typecheck(rest, "<repl>"); continue; }
+        if (cmd == "run")    { run(rest, "<repl>"); continue; }
 
-        // :run 或普通代码
-        std::string code = (cmd[0] == ':') ? rest : line;
-        run(code, "<repl>");
+        // 其他：当作源码执行
+        run(line, "<repl>");
     }
     return 0;
 }
@@ -141,6 +145,6 @@ static int runRepl() {
 int main(int argc, char** argv) {
     if (argc == 1) return runRepl();
     if (argc == 2) return runFile(argv[1]);
-    std::cerr << "Usage: mycc [file.mycc]\n";
+    std::cerr << "Usage: Mycc [file.mycc]\n";
     return 1;
 }

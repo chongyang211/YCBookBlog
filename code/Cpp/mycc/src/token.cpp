@@ -1,6 +1,6 @@
 #include "mycc/token.h"
 
-namespace mycc {
+namespace Mycc {
 
 const char* tokKindName(TokKind k) {
     switch (k) {
@@ -39,4 +39,4 @@ void Token::dump(std::ostream& os) const {
     os << ")";
 }
 
-}  // namespace mycc
+}  // namespace Mycc

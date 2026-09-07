@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace mycc {
+namespace Mycc {
 
 // ========================================
 //  字节码指令集（共 36 条）
@@ -63,4 +63,4 @@ enum class OpCode : uint8_t {
 // 反汇编辅助：把 OpCode 转成字符串
 const char* opcodeName(OpCode op);
 
-}  // namespace mycc
+}  // namespace Mycc

@@ -7,7 +7,7 @@
 #include <vector>
 #include <variant>
 
-namespace mycc {
+namespace Mycc {
 
 // 常量池中的元素：数字、字符串、布尔都用它表示
 using Constant = std::variant<double, std::string, bool>;
@@ -51,4 +51,4 @@ public:
     void disassemble(std::ostream& os) const;
 };
 
-}  // namespace mycc
+}  // namespace Mycc

@@ -3,7 +3,7 @@
 // ⚠️ 本文件只前置声明所有节点类型，不 include ast.h
 // 因为 ast.h 已经前置声明了 AstVisitor<R>，避免循环引用
 
-namespace mycc {
+namespace Mycc {
 
 // 前置声明所有节点（与 ast.h 中的派生类一一对应）
 class NumLit; class StringLit; class BoolLit; class VarRef;
@@ -39,4 +39,4 @@ public:
     virtual R visit(Program&)    = 0;
 };
 
-}  // namespace mycc
+}  // namespace Mycc

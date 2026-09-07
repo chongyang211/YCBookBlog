@@ -1,4 +1,4 @@
-# mycc — 迷你编译器解释器
+# Mycc — 迷你编译器解释器
 
 一个用现代 C++17 从零实现的迷你编程语言解释器，完整走完「**源码 → Token → AST → 字节码 → 执行**」五段式编译全链路。它是《C++ 入门到精通》卷二综合案例的第七关，用 17 个类、约 1800 行代码，把 `std::variant`、多态、访问者模式、模板、异常体系等 17 章知识点揉进一个真实可跑的语言实现。
 
@@ -88,25 +88,27 @@ cmake --build build -j
 
 ```bash
 # 文件模式
-./build/mycc examples/fib.mycc        # 输出斐波那契数列 0..34
-./build/mycc examples/hello.mycc      # 输出 mycc / world
+./build/Mycc examples/fib.mycc        # 输出斐波那契数列 0..34
+./build/Mycc examples/hello.mycc      # 输出 mycc / world
 
 # REPL 模式（直接运行，无参数）
-./build/mycc
+./build/Mycc
 ```
 
 ### REPL 命令
 
 ```text
-mycc> print 1 + 2 * 3;                 # 直接输入代码即可执行
+Mycc> print 1 + 2 * 3;                 // 直接输入代码即可执行
 7
-mycc> :run  fn fib(n) { if (n < 2) return n; return fib(n-1)+fib(n-2); }  print fib(10);
+Mycc> run fn fib(n) { if (n < 2) return n; return fib(n-1)+fib(n-2); } print fib(10);
 55
-mycc> :dump  let a = 1 + 2;            # 反汇编看字节码
-mycc> :tcheck  print 1 + "abc";        # 仅类型检查
+Mycc> dump let a = 1 + 2;              // 反汇编看字节码
+Mycc> tcheck print 1 + "abc";          // 仅类型检查
 [Type] line 1: arithmetic requires Num operands
-mycc> :q                               # 退出
+Mycc> q                                // 退出
 ```
+
+> 命令可加可不加冒号：`run` / `:run` 等价，`q` / `:q` 等价。`quit`、`exit` 也可退出。
 
 ## 语言语法
 

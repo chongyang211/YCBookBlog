@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(mycc CXX)
+project(Mycc CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(mycc
+add_executable(Mycc
     src/main.cpp
     src/token.cpp
     src/lexer.cpp
@@ -16,10 +16,10 @@ add_executable(mycc
     src/codegen.cpp
     src/vm.cpp
 )
-target_include_directories(mycc PRIVATE include)
+target_include_directories(Mycc PRIVATE include)
 
 if(MSVC)
-    target_compile_options(mycc PRIVATE /W4)
+    target_compile_options(Mycc PRIVATE /W4)
 else()
-    target_compile_options(mycc PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(Mycc PRIVATE -Wall -Wextra -Wpedantic)
 endif()

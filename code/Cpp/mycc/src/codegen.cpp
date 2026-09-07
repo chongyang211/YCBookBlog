@@ -1,7 +1,7 @@
 #include "mycc/codegen.h"
 #include <stdexcept>
 
-namespace mycc {
+namespace Mycc {
 
 Codegen::Codegen() {
     frames_.emplace_back("<top>");   // 主程序栈帧
@@ -242,4 +242,4 @@ void Codegen::declareLocal(const std::string& name, int /*line*/) {
     cur().locals.push_back({ name, cur().scopeDepth });
 }
 
-}  // namespace mycc
+}  // namespace Mycc

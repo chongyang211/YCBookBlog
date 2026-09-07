@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-namespace mycc {
+namespace Mycc {
 
 // 调用栈帧：每个函数调用对应一个 CallFrame
 struct CallFrame {
@@ -54,4 +54,4 @@ private:
     [[noreturn]] void runtimeError(const std::string& msg, int line);
 };
 
-}  // namespace mycc
+}  // namespace Mycc

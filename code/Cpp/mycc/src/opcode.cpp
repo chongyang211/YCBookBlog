@@ -1,6 +1,6 @@
 #include "mycc/opcode.h"
 
-namespace mycc {
+namespace Mycc {
 
 const char* opcodeName(OpCode op) {
     switch (op) {
@@ -42,4 +42,4 @@ const char* opcodeName(OpCode op) {
     return "??";
 }
 
-}  // namespace mycc
+}  // namespace Mycc

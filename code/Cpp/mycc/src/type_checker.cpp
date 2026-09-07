@@ -1,7 +1,7 @@
 #include "mycc/type_checker.h"
 #include "mycc/error.h"
 
-namespace mycc {
+namespace Mycc {
 
 void TypeChecker::check(AstPtr program) {
     enterScope();           // 全局作用域
@@ -155,4 +155,4 @@ Type TypeChecker::visit(Program& n) {
     return Type::Void;
 }
 
-}  // namespace mycc
+}  // namespace Mycc

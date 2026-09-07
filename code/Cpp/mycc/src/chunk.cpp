@@ -3,7 +3,7 @@
 #include <ostream>
 #include <stdexcept>
 
-namespace mycc {
+namespace Mycc {
 
 uint16_t Chunk::addConstant(const Constant& c) {
     // 去重：避免常量池膨胀
@@ -87,4 +87,4 @@ void Chunk::disassemble(std::ostream& os) const {
     }
 }
 
-}  // namespace mycc
+}  // namespace Mycc

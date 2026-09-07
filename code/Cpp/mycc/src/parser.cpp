@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-namespace mycc {
+namespace Mycc {
 
 const Token& Parser::expect(TokKind k, const char* what) {
     if (!check(k)) {
@@ -248,4 +248,4 @@ AstPtr Parser::parsePrimary() {
                      t.line, file_);
 }
 
-}  // namespace mycc
+}  // namespace Mycc
