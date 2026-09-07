@@ -1,4 +1,16 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /Users/github/YCCoding/Cpp/MiniKV -B /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug
--- Configuring done (0.0s)
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /Users/ugit/YCBookBlog/code/Cpp/MiniKV -B /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug
+-- The C compiler identification is AppleClang 21.0.0.21000101
+-- The CXX compiler identification is AppleClang 21.0.0.21000101
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (5.7s)
 -- Generating done (0.0s)
--- Build files have been written to: /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug
+-- Build files have been written to: /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug

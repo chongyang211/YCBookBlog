@@ -20,7 +20,14 @@ events:
     names:
       - "uname"
     candidate_directories:
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/usr/bin/"
@@ -30,15 +37,33 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
+      - "/Users/yangchong/.local/bin/uname"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/uname"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/uname"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/uname"
       - "/Users/yangchong/.codebuddy/bin/uname"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/uname"
+      - "/opt/homebrew/bin/uname"
+      - "/opt/homebrew/sbin/uname"
       - "/usr/local/bin/uname"
       - "/System/Cryptexes/App/usr/bin/uname"
     found: "/usr/bin/uname"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -48,6 +73,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "message-v1"
@@ -55,7 +82,7 @@ events:
       - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeDetermineSystem.cmake:212 (message)"
       - "CMakeLists.txt:3 (project)"
     message: |
-      The system is: Darwin - 23.4.0 - arm64
+      The system is: Darwin - 25.6.0 - arm64
   -
     kind: "find-v1"
     backtrace:
@@ -77,7 +104,14 @@ events:
       - "make"
       - "smake"
     candidate_directories:
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/usr/bin/"
@@ -87,9 +121,18 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
+      - "/Users/yangchong/.local/bin/gmake"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/gmake"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/gmake"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/gmake"
       - "/Users/yangchong/.codebuddy/bin/gmake"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/gmake"
+      - "/opt/homebrew/bin/gmake"
+      - "/opt/homebrew/sbin/gmake"
       - "/usr/local/bin/gmake"
       - "/System/Cryptexes/App/usr/bin/gmake"
       - "/usr/bin/gmake"
@@ -99,14 +142,32 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/gmake"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/gmake"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/gmake"
+      - "/pkg/env/global/bin/gmake"
+      - "/Users/yangchong/.iwiki/gmake"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/gmake"
+      - "/Users/yangchong/.local/bin/make"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/make"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/make"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/make"
       - "/Users/yangchong/.codebuddy/bin/make"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/make"
+      - "/opt/homebrew/bin/make"
+      - "/opt/homebrew/sbin/make"
       - "/usr/local/bin/make"
       - "/System/Cryptexes/App/usr/bin/make"
     found: "/usr/bin/make"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -116,6 +177,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -143,7 +206,14 @@ events:
       - "icx"
       - "clang"
     candidate_directories:
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/usr/bin/"
@@ -153,15 +223,33 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
+      - "/Users/yangchong/.local/bin/cc"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/cc"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/cc"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/cc"
       - "/Users/yangchong/.codebuddy/bin/cc"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/cc"
+      - "/opt/homebrew/bin/cc"
+      - "/opt/homebrew/sbin/cc"
       - "/usr/local/bin/cc"
       - "/System/Cryptexes/App/usr/bin/cc"
     found: "/usr/bin/cc"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -171,6 +259,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -199,7 +289,16 @@ events:
     found: "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerId.c.in"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -209,6 +308,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "message-v1"
@@ -230,7 +331,7 @@ events:
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
       
       The C compiler identification is AppleClang, found in:
-        /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/4.1.2/CompilerIdC/a.out
+        /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/4.1.2/CompilerIdC/a.out
       
   -
     kind: "message-v1"
@@ -243,23 +344,32 @@ events:
         # 1 "apple-sdk.c"
         # 1 "<built-in>" 1
         # 1 "<built-in>" 3
-        # 418 "<built-in>" 3
+        # 482 "<built-in>" 3
         # 1 "<command line>" 1
         # 1 "<built-in>" 2
         # 1 "apple-sdk.c" 2
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 1 3 4
-        # 86 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
+        # 89 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h" 1 3 4
-        # 87 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
-        # 206 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
+        # 90 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/TargetConditionals.h" 1 3 4
+        # 91 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
+        # 207 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 1 3 4
-        # 177 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 3 4
+        # 196 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h" 1 3 4
+        # 197 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 1 3 4
-        # 176 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 3 4
+        # 33 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h" 1 3 4
+        # 34 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 2 3 4
+        # 198 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h" 1 3 4
-        # 177 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 2 3 4
-        # 178 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
-        # 207 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
+        # 34 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h" 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 1 3 4
+        # 35 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h" 2 3 4
+        # 199 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
+        # 208 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
         # 2 "apple-sdk.c" 2
         
         
@@ -285,7 +395,14 @@ events:
       - "ar"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -294,11 +411,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     found: "/usr/bin/ar"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -308,6 +436,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -330,7 +460,14 @@ events:
       - "ranlib"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -339,11 +476,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     found: "/usr/bin/ranlib"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -353,6 +501,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -375,7 +525,14 @@ events:
       - "strip"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -384,11 +541,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     found: "/usr/bin/strip"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -398,6 +566,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -420,7 +590,14 @@ events:
       - "ld"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -429,11 +606,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     found: "/usr/bin/ld"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -443,6 +631,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -465,7 +655,14 @@ events:
       - "nm"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -474,11 +671,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     found: "/usr/bin/nm"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -488,6 +696,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -510,7 +720,14 @@ events:
       - "objdump"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -519,11 +736,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     found: "/usr/bin/objdump"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -533,6 +761,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -555,7 +785,14 @@ events:
       - "objcopy"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -564,10 +801,19 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
       - "/usr/bin/objcopy"
+      - "/Users/yangchong/.local/bin/objcopy"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/objcopy"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/objcopy"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/objcopy"
       - "/Users/yangchong/.codebuddy/bin/objcopy"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/objcopy"
+      - "/opt/homebrew/bin/objcopy"
+      - "/opt/homebrew/sbin/objcopy"
       - "/usr/local/bin/objcopy"
       - "/System/Cryptexes/App/usr/bin/objcopy"
       - "/bin/objcopy"
@@ -576,11 +822,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/objcopy"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/objcopy"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/objcopy"
+      - "/pkg/env/global/bin/objcopy"
+      - "/Users/yangchong/.iwiki/objcopy"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/objcopy"
     found: false
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -590,6 +847,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -612,7 +871,14 @@ events:
       - "readelf"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -621,10 +887,19 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
       - "/usr/bin/readelf"
+      - "/Users/yangchong/.local/bin/readelf"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/readelf"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/readelf"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/readelf"
       - "/Users/yangchong/.codebuddy/bin/readelf"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/readelf"
+      - "/opt/homebrew/bin/readelf"
+      - "/opt/homebrew/sbin/readelf"
       - "/usr/local/bin/readelf"
       - "/System/Cryptexes/App/usr/bin/readelf"
       - "/bin/readelf"
@@ -633,11 +908,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/readelf"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/readelf"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/readelf"
+      - "/pkg/env/global/bin/readelf"
+      - "/Users/yangchong/.iwiki/readelf"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/readelf"
     found: false
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -647,6 +933,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -669,7 +957,14 @@ events:
       - "dlltool"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -678,10 +973,19 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
       - "/usr/bin/dlltool"
+      - "/Users/yangchong/.local/bin/dlltool"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/dlltool"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/dlltool"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/dlltool"
       - "/Users/yangchong/.codebuddy/bin/dlltool"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/dlltool"
+      - "/opt/homebrew/bin/dlltool"
+      - "/opt/homebrew/sbin/dlltool"
       - "/usr/local/bin/dlltool"
       - "/System/Cryptexes/App/usr/bin/dlltool"
       - "/bin/dlltool"
@@ -690,11 +994,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/dlltool"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/dlltool"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/dlltool"
+      - "/pkg/env/global/bin/dlltool"
+      - "/Users/yangchong/.iwiki/dlltool"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/dlltool"
     found: false
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -704,6 +1019,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -726,7 +1043,14 @@ events:
       - "addr2line"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -735,10 +1059,19 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
       - "/usr/bin/addr2line"
+      - "/Users/yangchong/.local/bin/addr2line"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/addr2line"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/addr2line"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/addr2line"
       - "/Users/yangchong/.codebuddy/bin/addr2line"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/addr2line"
+      - "/opt/homebrew/bin/addr2line"
+      - "/opt/homebrew/sbin/addr2line"
       - "/usr/local/bin/addr2line"
       - "/System/Cryptexes/App/usr/bin/addr2line"
       - "/bin/addr2line"
@@ -747,11 +1080,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/addr2line"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/addr2line"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/addr2line"
+      - "/pkg/env/global/bin/addr2line"
+      - "/Users/yangchong/.iwiki/addr2line"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/addr2line"
     found: false
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -761,6 +1105,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -783,7 +1129,14 @@ events:
       - "tapi"
     candidate_directories:
       - "/usr/bin/"
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/bin/"
@@ -792,10 +1145,19 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
       - "/usr/bin/tapi"
+      - "/Users/yangchong/.local/bin/tapi"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/tapi"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/tapi"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/tapi"
       - "/Users/yangchong/.codebuddy/bin/tapi"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/tapi"
+      - "/opt/homebrew/bin/tapi"
+      - "/opt/homebrew/sbin/tapi"
       - "/usr/local/bin/tapi"
       - "/System/Cryptexes/App/usr/bin/tapi"
       - "/bin/tapi"
@@ -804,11 +1166,22 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/tapi"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/tapi"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/tapi"
+      - "/pkg/env/global/bin/tapi"
+      - "/Users/yangchong/.iwiki/tapi"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/tapi"
     found: false
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -818,6 +1191,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -849,7 +1224,16 @@ events:
     found: "/usr/bin/c++"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -859,6 +1243,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "find-v1"
@@ -887,7 +1273,16 @@ events:
     found: "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerId.cpp.in"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -897,6 +1292,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
   -
     kind: "message-v1"
@@ -918,7 +1315,7 @@ events:
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
       
       The CXX compiler identification is AppleClang, found in:
-        /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/4.1.2/CompilerIdCXX/a.out
+        /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/4.1.2/CompilerIdCXX/a.out
       
   -
     kind: "message-v1"
@@ -931,23 +1328,32 @@ events:
         # 1 "apple-sdk.cpp"
         # 1 "<built-in>" 1
         # 1 "<built-in>" 3
-        # 433 "<built-in>" 3
+        # 531 "<built-in>" 3
         # 1 "<command line>" 1
         # 1 "<built-in>" 2
         # 1 "apple-sdk.cpp" 2
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 1 3 4
-        # 86 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
+        # 89 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h" 1 3 4
-        # 87 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
-        # 206 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
+        # 90 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/TargetConditionals.h" 1 3 4
+        # 91 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
+        # 207 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 1 3 4
-        # 177 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 3 4
+        # 196 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h" 1 3 4
+        # 197 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 1 3 4
-        # 176 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 3 4
+        # 33 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityVersions.h" 1 3 4
+        # 34 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 2 3 4
+        # 198 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
         # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h" 1 3 4
-        # 177 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 2 3 4
-        # 178 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
-        # 207 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
+        # 34 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h" 3 4
+        # 1 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternal.h" 1 3 4
+        # 35 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityInternalLegacy.h" 2 3 4
+        # 199 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/Availability.h" 2 3 4
+        # 208 "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/AvailabilityMacros.h" 2 3 4
         # 2 "apple-sdk.cpp" 2
         
         
@@ -972,7 +1378,14 @@ events:
     names:
       - "install_name_tool"
     candidate_directories:
+      - "/Users/yangchong/.local/bin/"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/"
       - "/Users/yangchong/.codebuddy/bin/"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/"
+      - "/opt/homebrew/bin/"
+      - "/opt/homebrew/sbin/"
       - "/usr/local/bin/"
       - "/System/Cryptexes/App/usr/bin/"
       - "/usr/bin/"
@@ -982,15 +1395,33 @@ events:
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin/"
       - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin/"
+      - "/pkg/env/global/bin/"
+      - "/Users/yangchong/.iwiki/"
       - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/"
     searched_directories:
+      - "/Users/yangchong/.local/bin/install_name_tool"
+      - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin/install_name_tool"
+      - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin/install_name_tool"
+      - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin/install_name_tool"
       - "/Users/yangchong/.codebuddy/bin/install_name_tool"
+      - "/Users/yangchong/Library/Android/sdk/platform-tools/install_name_tool"
+      - "/opt/homebrew/bin/install_name_tool"
+      - "/opt/homebrew/sbin/install_name_tool"
       - "/usr/local/bin/install_name_tool"
       - "/System/Cryptexes/App/usr/bin/install_name_tool"
     found: "/usr/bin/install_name_tool"
     search_context:
       ENV{PATH}:
+        - "/Users/yangchong/.local/bin"
+        - "/Users/yangchong/.nvm/versions/node/v22.23.1/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/.workbuddy/binaries/python/versions/3.11.15/bin"
         - "/Users/yangchong/.codebuddy/bin"
+        - "/Users/yangchong/.workbuddy/binaries/node/versions/20.18.0/bin"
+        - "/Users/yangchong/Library/Android/sdk/platform-tools"
+        - "/Users/yangchong/.codebuddy/bin"
+        - "/opt/homebrew/bin"
+        - "/opt/homebrew/sbin"
         - "/usr/local/bin"
         - "/System/Cryptexes/App/usr/bin"
         - "/usr/bin"
@@ -1000,6 +1431,8 @@ events:
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin"
         - "/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin"
+        - "/pkg/env/global/bin"
+        - "/Users/yangchong/.iwiki"
         - "/Applications/CLion.app/Contents/bin/ninja/mac/aarch64"
       CMAKE_INSTALL_PREFIX: "/usr/local"
   -
@@ -1011,8 +1444,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1"
-      binary: "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1"
+      source: "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt"
+      binary: "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt"
     cmakeVariables:
       CMAKE_C_FLAGS: ""
       CMAKE_C_FLAGS_DEBUG: "-g"
@@ -1024,48 +1457,49 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1'
+        Change Dir: '/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt'
         
-        Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_6a9bb/fast
-        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_6a9bb.dir/build.make CMakeFiles/cmTC_6a9bb.dir/build
-        Building C object CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o
-        /usr/bin/cc   -arch arm64 -fcolor-diagnostics   -v -Wl,-v -MD -MT CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c
-        Apple clang version 15.0.0 (clang-1500.3.9.4)
-        Target: arm64-apple-darwin23.4.0
+        Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_85271/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_85271.dir/build.make CMakeFiles/cmTC_85271.dir/build
+        Building C object CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o
+        /usr/bin/cc   -arch arm64 -fcolor-diagnostics   -v -Wl,-v -MD -MT CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c
+        Apple clang version 21.0.0 (clang-2100.1.1.101)
+        Target: arm64-apple-darwin25.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
         clang: \x1b[0;1;35mwarning: \x1b[0m\x1b[1m-Wl,-v: 'linker' input unused [-Wunused-command-line-argument]\x1b[0m
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx14.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all --mrelax-relocations -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=14.4 -fvisibility-inlines-hidden-static-local-var -target-cpu apple-m1 -target-feature +v8.5a -target-feature +crc -target-feature +lse -target-feature +rdm -target-feature +crypto -target-feature +dotprod -target-feature +fp-armv8 -target-feature +neon -target-feature +fp16fml -target-feature +ras -target-feature +rcpc -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-feature +sm4 -target-feature +sha3 -target-feature +sha2 -target-feature +aes -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1053.12 -v -fcoverage-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0 -dependency-file CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdebug-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1 -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -mllvm -disable-aligned-alloc-awareness=1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -x c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c
-        clang -cc1 version 15.0.0 (clang-1500.3.9.4) default target arm64-apple-darwin23.4.0
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -fno-sized-deallocation -target-sdk-version=26.5 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -enable-tlsdesc -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +ccpp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +flagm -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt -target-linker-version 1267 -v -fcoverage-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/21/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-elaborated-enum-base -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -Wno-error=allocator-wrappers -fdwarf2-cfi-asm -o CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -x c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 21.0.0 (clang-2100.1.1.101) default target arm64-apple-darwin25.6.0
         ignoring nonexistent directory "/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
         #include "..." search starts here:
         #include <...> search starts here:
-         /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/21/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
          /Library/Developer/CommandLineTools/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
         End of search list.
-        Linking C executable cmTC_6a9bb
-        /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6a9bb.dir/link.txt --verbose=1
-        Apple clang version 15.0.0 (clang-1500.3.9.4)
-        Target: arm64-apple-darwin23.4.0
+        Linking C executable cmTC_85271
+        /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85271.dir/link.txt --verbose=1
+        Apple clang version 21.0.0 (clang-2100.1.1.101)
+        Target: arm64-apple-darwin25.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 14.0.0 14.4 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o cmTC_6a9bb -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/lib/darwin/libclang_rt.osx.a
-        @(#)PROGRAM:ld PROJECT:ld-1053.12
-        BUILD 15:45:29 Feb  3 2024
-        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
-        will use ld-classic for: armv6 armv7 armv7s arm64_32 i386 armv6m armv7k armv7m armv7em
-        LTO support using: LLVM version 15.0.0 (static support for 29, runtime is 29)
-        TAPI support using: Apple TAPI version 15.0.0 (tapi-1500.3.2.2)
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 26.0.0 26.5 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_85271 -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/21/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld PROJECT:ld-1267
+        BUILD 16:38:58 Jun  8 2026
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em armv8m.main armv8.1m.main
+        will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em
+        LTO support using: LLVM version 21.0.0 (static support for 30, runtime is 30)
+        TAPI support using: Apple TAPI version 21.0.0 (tapi-2100.0.2.6)
         Library search paths:
         	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
         	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift
         Framework search paths:
         	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-        /usr/bin/cc  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -o cmTC_6a9bb
+        /usr/bin/cc  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -o cmTC_85271
         
       exitCode: 0
   -
@@ -1099,17 +1533,17 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1']
+        ignore line: [Change Dir: '/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt']
         ignore line: []
-        ignore line: [Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_6a9bb/fast]
-        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_6a9bb.dir/build.make CMakeFiles/cmTC_6a9bb.dir/build]
-        ignore line: [Building C object CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o]
-        ignore line: [/usr/bin/cc   -arch arm64 -fcolor-diagnostics   -v -Wl -v -MD -MT CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c]
-        ignore line: [Apple clang version 15.0.0 (clang-1500.3.9.4)]
-        ignore line: [Target: arm64-apple-darwin23.4.0]
+        ignore line: [Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_85271/fast]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_85271.dir/build.make CMakeFiles/cmTC_85271.dir/build]
+        ignore line: [Building C object CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/cc   -arch arm64 -fcolor-diagnostics   -v -Wl -v -MD -MT CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c]
+        ignore line: [Apple clang version 21.0.0 (clang-2100.1.1.101)]
+        ignore line: [Target: arm64-apple-darwin25.6.0]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
-        ignore line: [clang: \x1b[0;1;35mwarning: \x1b[0m\x1b[1m-Wl,-v: 'linker' input unused [-Wunused-command-line-argument]\x1b[0m; "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx14.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all --mrelax-relocations -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=14.4 -fvisibility-inlines-hidden-static-local-var -target-cpu apple-m1 -target-feature +v8.5a -target-feature +crc -target-feature +lse -target-feature +rdm -target-feature +crypto -target-feature +dotprod -target-feature +fp-armv8 -target-feature +neon -target-feature +fp16fml -target-feature +ras -target-feature +rcpc -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-feature +sm4 -target-feature +sha3 -target-feature +sha2 -target-feature +aes -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1053.12 -v -fcoverage-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0 -dependency-file CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdebug-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-EYJRt1 -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -mllvm -disable-aligned-alloc-awareness=1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -x c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c;clang -cc1 version 15.0.0 (clang-1500.3.9.4) default target arm64-apple-darwin23.4.0;ignoring nonexistent directory "/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks";#include "..." search starts here:;#include <...> search starts here:; /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include; /Library/Developer/CommandLineTools/usr/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory);End of search list.;Linking C executable cmTC_6a9bb;/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6a9bb.dir/link.txt --verbose=1;Apple clang version 15.0.0 (clang-1500.3.9.4);Target: arm64-apple-darwin23.4.0;Thread model: posix;InstalledDir: /Library/Developer/CommandLineTools/usr/bin; "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 14.0.0 14.4 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o cmTC_6a9bb -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/lib/darwin/libclang_rt.osx.a;@(#)PROGRAM:ld PROJECT:ld-1053.12;BUILD 15:45:29 Feb  3 2024;configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em;will use ld-classic for: armv6 armv7 armv7s arm64_32 i386 armv6m armv7k armv7m armv7em;LTO support using: LLVM version 15.0.0 (static support for 29, runtime is 29);TAPI support using: Apple TAPI version 15.0.0 (tapi-1500.3.2.2);Library search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift;Framework search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks;/usr/bin/cc  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_6a9bb.dir/CMakeCCompilerABI.c.o -o cmTC_6a9bb;;]
+        ignore line: [clang: \x1b[0;1;35mwarning: \x1b[0m\x1b[1m-Wl,-v: 'linker' input unused [-Wunused-command-line-argument]\x1b[0m; "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -fno-sized-deallocation -target-sdk-version=26.5 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -enable-tlsdesc -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +ccpp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +flagm -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt -target-linker-version 1267 -v -fcoverage-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-oexzLt -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/21/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-elaborated-enum-base -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -Wno-error=allocator-wrappers -fdwarf2-cfi-asm -o CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -x c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCCompilerABI.c;clang -cc1 version 21.0.0 (clang-2100.1.1.101) default target arm64-apple-darwin25.6.0;ignoring nonexistent directory "/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks";#include "..." search starts here:;#include <...> search starts here:; /Library/Developer/CommandLineTools/usr/lib/clang/21/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include; /Library/Developer/CommandLineTools/usr/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory); /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory);End of search list.;Linking C executable cmTC_85271;/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85271.dir/link.txt --verbose=1;Apple clang version 21.0.0 (clang-2100.1.1.101);Target: arm64-apple-darwin25.6.0;Thread model: posix;InstalledDir: /Library/Developer/CommandLineTools/usr/bin; "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 26.0.0 26.5 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_85271 -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/21/lib/darwin/libclang_rt.osx.a;@(#)PROGRAM:ld PROJECT:ld-1267;BUILD 16:38:58 Jun  8 2026;configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em armv8m.main armv8.1m.main;will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em;LTO support using: LLVM version 21.0.0 (static support for 30, runtime is 30);TAPI support using: Apple TAPI version 21.0.0 (tapi-2100.0.2.6);Library search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift;Framework search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks;/usr/bin/cc  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_85271.dir/CMakeCCompilerABI.c.o -o cmTC_85271;;]
         Library search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib;/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift]
         Framework search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks]
         collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib]
@@ -1130,8 +1564,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK"
-      binary: "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK"
+      source: "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404"
+      binary: "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404"
     cmakeVariables:
       CMAKE_CXX_FLAGS: ""
       CMAKE_CXX_FLAGS_DEBUG: "-g"
@@ -1144,49 +1578,51 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK'
+        Change Dir: '/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404'
         
-        Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_e06a1/fast
-        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_e06a1.dir/build.make CMakeFiles/cmTC_e06a1.dir/build
-        Building CXX object CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o
-        /usr/bin/c++   -arch arm64 -fcolor-diagnostics   -v -Wl,-v -MD -MT CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp
-        Apple clang version 15.0.0 (clang-1500.3.9.4)
-        Target: arm64-apple-darwin23.4.0
+        Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_90c19/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_90c19.dir/build.make CMakeFiles/cmTC_90c19.dir/build
+        Building CXX object CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/c++   -arch arm64 -fcolor-diagnostics   -v -Wl,-v -MD -MT CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp
+        Apple clang version 21.0.0 (clang-2100.1.1.101)
+        Target: arm64-apple-darwin25.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-        clang: \x1b[0;1;35mwarning: \x1b[0m\x1b[1m-Wl,-v: 'linker' input unused [-Wunused-command-line-argument]\x1b[0m
-         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx14.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all --mrelax-relocations -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=14.4 -fvisibility-inlines-hidden-static-local-var -target-cpu apple-m1 -target-feature +v8.5a -target-feature +crc -target-feature +lse -target-feature +rdm -target-feature +crypto -target-feature +dotprod -target-feature +fp-armv8 -target-feature +neon -target-feature +fp16fml -target-feature +ras -target-feature +rcpc -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-feature +sm4 -target-feature +sha3 -target-feature +sha2 -target-feature +aes -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1053.12 -v -fcoverage-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0 -dependency-file CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdeprecated-macro -fdebug-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -mllvm -disable-aligned-alloc-awareness=1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp
-        clang -cc1 version 15.0.0 (clang-1500.3.9.4) default target arm64-apple-darwin23.4.0
+        clang++: \x1b[0;1;35mwarning: \x1b[0m\x1b[1m-Wl,-v: 'linker' input unused [-Wunused-command-line-argument]\x1b[0m
+        ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"
+         "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -fno-sized-deallocation -target-sdk-version=26.5 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -enable-tlsdesc -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +ccpp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +flagm -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404 -target-linker-version 1267 -v -fcoverage-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/21/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-elaborated-enum-base -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -Wno-error=allocator-wrappers -fdwarf2-cfi-asm -o CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 21.0.0 (clang-2100.1.1.101) default target arm64-apple-darwin25.6.0
         ignoring nonexistent directory "/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include"
         ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks"
         #include "..." search starts here:
         #include <...> search starts here:
          /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1
-         /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include
+         /Library/Developer/CommandLineTools/usr/lib/clang/21/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
          /Library/Developer/CommandLineTools/usr/include
          /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)
+         /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory)
         End of search list.
-        Linking CXX executable cmTC_e06a1
-        /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e06a1.dir/link.txt --verbose=1
-        Apple clang version 15.0.0 (clang-1500.3.9.4)
-        Target: arm64-apple-darwin23.4.0
+        Linking CXX executable cmTC_90c19
+        /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_90c19.dir/link.txt --verbose=1
+        Apple clang version 21.0.0 (clang-2100.1.1.101)
+        Target: arm64-apple-darwin25.6.0
         Thread model: posix
         InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 14.0.0 14.4 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o cmTC_e06a1 -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/lib/darwin/libclang_rt.osx.a
-        @(#)PROGRAM:ld PROJECT:ld-1053.12
-        BUILD 15:45:29 Feb  3 2024
-        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
-        will use ld-classic for: armv6 armv7 armv7s arm64_32 i386 armv6m armv7k armv7m armv7em
-        LTO support using: LLVM version 15.0.0 (static support for 29, runtime is 29)
-        TAPI support using: Apple TAPI version 15.0.0 (tapi-1500.3.2.2)
+         "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 26.0.0 26.5 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_90c19 -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/21/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld PROJECT:ld-1267
+        BUILD 16:38:58 Jun  8 2026
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em armv8m.main armv8.1m.main
+        will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em
+        LTO support using: LLVM version 21.0.0 (static support for 30, runtime is 30)
+        TAPI support using: Apple TAPI version 21.0.0 (tapi-2100.0.2.6)
         Library search paths:
         	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
         	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift
         Framework search paths:
         	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks
-        /usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_e06a1
+        /usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_90c19
         
       exitCode: 0
   -
@@ -1220,17 +1656,17 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK']
+        ignore line: [Change Dir: '/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404']
         ignore line: []
-        ignore line: [Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_e06a1/fast]
-        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_e06a1.dir/build.make CMakeFiles/cmTC_e06a1.dir/build]
-        ignore line: [Building CXX object CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o]
-        ignore line: [/usr/bin/c++   -arch arm64 -fcolor-diagnostics   -v -Wl -v -MD -MT CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp]
-        ignore line: [Apple clang version 15.0.0 (clang-1500.3.9.4)]
-        ignore line: [Target: arm64-apple-darwin23.4.0]
+        ignore line: [Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_90c19/fast]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_90c19.dir/build.make CMakeFiles/cmTC_90c19.dir/build]
+        ignore line: [Building CXX object CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/c++   -arch arm64 -fcolor-diagnostics   -v -Wl -v -MD -MT CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Apple clang version 21.0.0 (clang-2100.1.1.101)]
+        ignore line: [Target: arm64-apple-darwin25.6.0]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /Library/Developer/CommandLineTools/usr/bin]
-        ignore line: [clang: \x1b[0;1;35mwarning: \x1b[0m\x1b[1m-Wl,-v: 'linker' input unused [-Wunused-command-line-argument]\x1b[0m; "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx14.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all --mrelax-relocations -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -target-sdk-version=14.4 -fvisibility-inlines-hidden-static-local-var -target-cpu apple-m1 -target-feature +v8.5a -target-feature +crc -target-feature +lse -target-feature +rdm -target-feature +crypto -target-feature +dotprod -target-feature +fp-armv8 -target-feature +neon -target-feature +fp16fml -target-feature +ras -target-feature +rcpc -target-feature +zcm -target-feature +zcz -target-feature +fullfp16 -target-feature +sm4 -target-feature +sha3 -target-feature +sha2 -target-feature +aes -target-abi darwinpcs -debugger-tuning=lldb -target-linker-version 1053.12 -v -fcoverage-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0 -dependency-file CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-elaborated-enum-base -Wno-reserved-identifier -Wno-gnu-folding-constant -fdeprecated-macro -fdebug-compilation-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-rdz8PK -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fno-cxx-modules -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -mllvm -disable-aligned-alloc-awareness=1 -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp;clang -cc1 version 15.0.0 (clang-1500.3.9.4) default target arm64-apple-darwin23.4.0;ignoring nonexistent directory "/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks";#include "..." search starts here:;#include <...> search starts here:; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1; /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include; /Library/Developer/CommandLineTools/usr/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory);End of search list.;Linking CXX executable cmTC_e06a1;/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e06a1.dir/link.txt --verbose=1;Apple clang version 15.0.0 (clang-1500.3.9.4);Target: arm64-apple-darwin23.4.0;Thread model: posix;InstalledDir: /Library/Developer/CommandLineTools/usr/bin; "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 14.0.0 14.4 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -o cmTC_e06a1 -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/15.0.0/lib/darwin/libclang_rt.osx.a;@(#)PROGRAM:ld PROJECT:ld-1053.12;BUILD 15:45:29 Feb  3 2024;configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em;will use ld-classic for: armv6 armv7 armv7s arm64_32 i386 armv6m armv7k armv7m armv7em;LTO support using: LLVM version 15.0.0 (static support for 29, runtime is 29);TAPI support using: Apple TAPI version 15.0.0 (tapi-1500.3.2.2);Library search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift;Framework search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks;/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_e06a1.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_e06a1;;]
+        ignore line: [clang++: \x1b[0;1;35mwarning: \x1b[0m\x1b[1m-Wl,-v: 'linker' input unused [-Wunused-command-line-argument]\x1b[0m;ignoring nonexistent directory "/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"; "/Library/Developer/CommandLineTools/usr/bin/clang" -cc1 -triple arm64-apple-macosx26.0.0 -Wundef-prefix=TARGET_OS_ -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mframe-pointer=non-leaf -fno-strict-return -ffp-contract=on -fno-rounding-math -funwind-tables=1 -fobjc-msgsend-selector-stubs -fno-sized-deallocation -target-sdk-version=26.5 -fvisibility-inlines-hidden-static-local-var -fno-modulemap-allow-subdirectory-search -fdefine-target-os-macros -fno-assume-unique-vtables -fno-modulemap-allow-subdirectory-search -enable-tlsdesc -target-cpu apple-m1 -target-feature +v8.5a -target-feature +aes -target-feature +altnzcv -target-feature +ccdp -target-feature +ccpp -target-feature +complxnum -target-feature +crc -target-feature +dotprod -target-feature +flagm -target-feature +fp-armv8 -target-feature +fp16fml -target-feature +fptoint -target-feature +fullfp16 -target-feature +jsconv -target-feature +lse -target-feature +neon -target-feature +pauth -target-feature +perfmon -target-feature +predres -target-feature +ras -target-feature +rcpc -target-feature +rdm -target-feature +sb -target-feature +sha2 -target-feature +sha3 -target-feature +specrestrict -target-feature +ssbs -target-abi darwinpcs -debugger-tuning=lldb -fdebug-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404 -target-linker-version 1267 -v -fcoverage-compilation-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-DVe404 -resource-dir /Library/Developer/CommandLineTools/usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -internal-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include -internal-isystem /Library/Developer/CommandLineTools/usr/lib/clang/21/include -internal-externc-isystem /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -internal-externc-isystem /Library/Developer/CommandLineTools/usr/include -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks -internal-iframework /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks -Wno-elaborated-enum-base -fdeprecated-macro -ferror-limit 19 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -fmax-type-align=16 -fcommon -fcolor-diagnostics -clang-vendor-feature=+disableNonDependentMemberExprInCurrentInstantiation -fno-odr-hash-protocols -clang-vendor-feature=+enableAggressiveVLAFolding -clang-vendor-feature=+revert09abecef7bbf -clang-vendor-feature=+thisNoAlignAttr -clang-vendor-feature=+thisNoNullAttr -clang-vendor-feature=+disableAtImportPrivateFrameworkInImplementationError -Wno-error=allocator-wrappers -fdwarf2-cfi-asm -o CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CMakeCXXCompilerABI.cpp;clang -cc1 version 21.0.0 (clang-2100.1.1.101) default target arm64-apple-darwin25.6.0;ignoring nonexistent directory "/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/local/include";ignoring nonexistent directory "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/Library/Frameworks";#include "..." search starts here:;#include <...> search starts here:; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1; /Library/Developer/CommandLineTools/usr/lib/clang/21/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include; /Library/Developer/CommandLineTools/usr/include; /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory); /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/SubFrameworks (framework directory);End of search list.;Linking CXX executable cmTC_90c19;/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_90c19.dir/link.txt --verbose=1;Apple clang version 21.0.0 (clang-2100.1.1.101);Target: arm64-apple-darwin25.6.0;Thread model: posix;InstalledDir: /Library/Developer/CommandLineTools/usr/bin; "/Library/Developer/CommandLineTools/usr/bin/ld" -demangle -lto_library /Library/Developer/CommandLineTools/usr/lib/libLTO.dylib -dynamic -arch arm64 -platform_version macos 26.0.0 26.5 -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mllvm -enable-linkonceodr-outlining -o cmTC_90c19 -L/usr/local/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Library/Developer/CommandLineTools/usr/lib/clang/21/lib/darwin/libclang_rt.osx.a;@(#)PROGRAM:ld PROJECT:ld-1267;BUILD 16:38:58 Jun  8 2026;configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em armv8m.main armv8.1m.main;will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em;LTO support using: LLVM version 21.0.0 (static support for 30, runtime is 30);TAPI support using: Apple TAPI version 21.0.0 (tapi-2100.0.2.6);Library search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift;Framework search paths:;	/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks;/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -v -Wl,-v CMakeFiles/cmTC_90c19.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_90c19;;]
         Library search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib;/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/swift]
         Framework search paths: [;/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks]
         collapse library dir [/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib] ==> [/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib]

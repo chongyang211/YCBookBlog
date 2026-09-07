@@ -1,2 +1,2 @@
 CMakeFiles/MiniKV.dir/src/entry.cpp.o: \
-  /Users/github/YCCoding/Cpp/MiniKV/src/entry.cpp
+  /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp

@@ -25,7 +25,7 @@
 					"linkLibraries" : []
 				},
 				"path" : "/usr/bin/cc",
-				"version" : "15.0.0.15000309"
+				"version" : "21.0.0.21000101"
 			},
 			"language" : "C",
 			"sourceFileExtensions" : 
@@ -57,7 +57,7 @@
 					"linkLibraries" : []
 				},
 				"path" : "/usr/bin/c++",
-				"version" : "15.0.0.15000309"
+				"version" : "21.0.0.21000101"
 			},
 			"language" : "CXX",
 			"sourceFileExtensions" : 

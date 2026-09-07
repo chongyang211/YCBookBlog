@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/github/YCCoding/Cpp/MiniKV/include
+CXX_INCLUDES = -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include
 
 CXX_FLAGSarm64 = -g -std=gnu++17 -arch arm64 -fcolor-diagnostics
 

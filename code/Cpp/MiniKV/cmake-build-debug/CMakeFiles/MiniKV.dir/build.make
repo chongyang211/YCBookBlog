@@ -53,10 +53,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/github/YCCoding/Cpp/MiniKV
+CMAKE_SOURCE_DIR = /Users/ugit/YCBookBlog/code/Cpp/MiniKV
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/MiniKV.dir/depend.make
@@ -73,74 +73,74 @@ CMakeFiles/MiniKV.dir/codegen:
 .PHONY : CMakeFiles/MiniKV.dir/codegen
 
 CMakeFiles/MiniKV.dir/src/main.cpp.o: CMakeFiles/MiniKV.dir/flags.make
-CMakeFiles/MiniKV.dir/src/main.cpp.o: /Users/github/YCCoding/Cpp/MiniKV/src/main.cpp
+CMakeFiles/MiniKV.dir/src/main.cpp.o: /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp
 CMakeFiles/MiniKV.dir/src/main.cpp.o: CMakeFiles/MiniKV.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MiniKV.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/main.cpp.o -MF CMakeFiles/MiniKV.dir/src/main.cpp.o.d -o CMakeFiles/MiniKV.dir/src/main.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MiniKV.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/main.cpp.o -MF CMakeFiles/MiniKV.dir/src/main.cpp.o.d -o CMakeFiles/MiniKV.dir/src/main.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp
 
 CMakeFiles/MiniKV.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MiniKV.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/github/YCCoding/Cpp/MiniKV/src/main.cpp > CMakeFiles/MiniKV.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp > CMakeFiles/MiniKV.dir/src/main.cpp.i
 
 CMakeFiles/MiniKV.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MiniKV.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/github/YCCoding/Cpp/MiniKV/src/main.cpp -o CMakeFiles/MiniKV.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp -o CMakeFiles/MiniKV.dir/src/main.cpp.s
 
 CMakeFiles/MiniKV.dir/src/command.cpp.o: CMakeFiles/MiniKV.dir/flags.make
-CMakeFiles/MiniKV.dir/src/command.cpp.o: /Users/github/YCCoding/Cpp/MiniKV/src/command.cpp
+CMakeFiles/MiniKV.dir/src/command.cpp.o: /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp
 CMakeFiles/MiniKV.dir/src/command.cpp.o: CMakeFiles/MiniKV.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MiniKV.dir/src/command.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/command.cpp.o -MF CMakeFiles/MiniKV.dir/src/command.cpp.o.d -o CMakeFiles/MiniKV.dir/src/command.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/command.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MiniKV.dir/src/command.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/command.cpp.o -MF CMakeFiles/MiniKV.dir/src/command.cpp.o.d -o CMakeFiles/MiniKV.dir/src/command.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp
 
 CMakeFiles/MiniKV.dir/src/command.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MiniKV.dir/src/command.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/github/YCCoding/Cpp/MiniKV/src/command.cpp > CMakeFiles/MiniKV.dir/src/command.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp > CMakeFiles/MiniKV.dir/src/command.cpp.i
 
 CMakeFiles/MiniKV.dir/src/command.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MiniKV.dir/src/command.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/github/YCCoding/Cpp/MiniKV/src/command.cpp -o CMakeFiles/MiniKV.dir/src/command.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp -o CMakeFiles/MiniKV.dir/src/command.cpp.s
 
 CMakeFiles/MiniKV.dir/src/entry.cpp.o: CMakeFiles/MiniKV.dir/flags.make
-CMakeFiles/MiniKV.dir/src/entry.cpp.o: /Users/github/YCCoding/Cpp/MiniKV/src/entry.cpp
+CMakeFiles/MiniKV.dir/src/entry.cpp.o: /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp
 CMakeFiles/MiniKV.dir/src/entry.cpp.o: CMakeFiles/MiniKV.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/MiniKV.dir/src/entry.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/entry.cpp.o -MF CMakeFiles/MiniKV.dir/src/entry.cpp.o.d -o CMakeFiles/MiniKV.dir/src/entry.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/entry.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/MiniKV.dir/src/entry.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/entry.cpp.o -MF CMakeFiles/MiniKV.dir/src/entry.cpp.o.d -o CMakeFiles/MiniKV.dir/src/entry.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp
 
 CMakeFiles/MiniKV.dir/src/entry.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MiniKV.dir/src/entry.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/github/YCCoding/Cpp/MiniKV/src/entry.cpp > CMakeFiles/MiniKV.dir/src/entry.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp > CMakeFiles/MiniKV.dir/src/entry.cpp.i
 
 CMakeFiles/MiniKV.dir/src/entry.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MiniKV.dir/src/entry.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/github/YCCoding/Cpp/MiniKV/src/entry.cpp -o CMakeFiles/MiniKV.dir/src/entry.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp -o CMakeFiles/MiniKV.dir/src/entry.cpp.s
 
 CMakeFiles/MiniKV.dir/src/value.cpp.o: CMakeFiles/MiniKV.dir/flags.make
-CMakeFiles/MiniKV.dir/src/value.cpp.o: /Users/github/YCCoding/Cpp/MiniKV/src/value.cpp
+CMakeFiles/MiniKV.dir/src/value.cpp.o: /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp
 CMakeFiles/MiniKV.dir/src/value.cpp.o: CMakeFiles/MiniKV.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MiniKV.dir/src/value.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/value.cpp.o -MF CMakeFiles/MiniKV.dir/src/value.cpp.o.d -o CMakeFiles/MiniKV.dir/src/value.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/src/value.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MiniKV.dir/src/value.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/src/value.cpp.o -MF CMakeFiles/MiniKV.dir/src/value.cpp.o.d -o CMakeFiles/MiniKV.dir/src/value.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp
 
 CMakeFiles/MiniKV.dir/src/value.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MiniKV.dir/src/value.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/github/YCCoding/Cpp/MiniKV/src/value.cpp > CMakeFiles/MiniKV.dir/src/value.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp > CMakeFiles/MiniKV.dir/src/value.cpp.i
 
 CMakeFiles/MiniKV.dir/src/value.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MiniKV.dir/src/value.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/github/YCCoding/Cpp/MiniKV/src/value.cpp -o CMakeFiles/MiniKV.dir/src/value.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp -o CMakeFiles/MiniKV.dir/src/value.cpp.s
 
 CMakeFiles/MiniKV.dir/tests/test_value.cpp.o: CMakeFiles/MiniKV.dir/flags.make
-CMakeFiles/MiniKV.dir/tests/test_value.cpp.o: /Users/github/YCCoding/Cpp/MiniKV/tests/test_value.cpp
+CMakeFiles/MiniKV.dir/tests/test_value.cpp.o: /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp
 CMakeFiles/MiniKV.dir/tests/test_value.cpp.o: CMakeFiles/MiniKV.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MiniKV.dir/tests/test_value.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/tests/test_value.cpp.o -MF CMakeFiles/MiniKV.dir/tests/test_value.cpp.o.d -o CMakeFiles/MiniKV.dir/tests/test_value.cpp.o -c /Users/github/YCCoding/Cpp/MiniKV/tests/test_value.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MiniKV.dir/tests/test_value.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MiniKV.dir/tests/test_value.cpp.o -MF CMakeFiles/MiniKV.dir/tests/test_value.cpp.o.d -o CMakeFiles/MiniKV.dir/tests/test_value.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp
 
 CMakeFiles/MiniKV.dir/tests/test_value.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MiniKV.dir/tests/test_value.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/github/YCCoding/Cpp/MiniKV/tests/test_value.cpp > CMakeFiles/MiniKV.dir/tests/test_value.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp > CMakeFiles/MiniKV.dir/tests/test_value.cpp.i
 
 CMakeFiles/MiniKV.dir/tests/test_value.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MiniKV.dir/tests/test_value.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/github/YCCoding/Cpp/MiniKV/tests/test_value.cpp -o CMakeFiles/MiniKV.dir/tests/test_value.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp -o CMakeFiles/MiniKV.dir/tests/test_value.cpp.s
 
 # Object files for target MiniKV
 MiniKV_OBJECTS = \
@@ -160,7 +160,7 @@ MiniKV: CMakeFiles/MiniKV.dir/src/value.cpp.o
 MiniKV: CMakeFiles/MiniKV.dir/tests/test_value.cpp.o
 MiniKV: CMakeFiles/MiniKV.dir/build.make
 MiniKV: CMakeFiles/MiniKV.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable MiniKV"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable MiniKV"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MiniKV.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -172,6 +172,6 @@ CMakeFiles/MiniKV.dir/clean:
 .PHONY : CMakeFiles/MiniKV.dir/clean
 
 CMakeFiles/MiniKV.dir/depend:
-	cd /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/github/YCCoding/Cpp/MiniKV /Users/github/YCCoding/Cpp/MiniKV /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug /Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/MiniKV.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/ugit/YCBookBlog/code/Cpp/MiniKV /Users/ugit/YCBookBlog/code/Cpp/MiniKV /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/MiniKV.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/MiniKV.dir/depend
 

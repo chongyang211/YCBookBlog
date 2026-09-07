@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug"
+			"value" : "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -479,7 +479,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -539,7 +539,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/github/YCCoding/Cpp/MiniKV"
+			"value" : "/Users/ugit/YCBookBlog/code/Cpp/MiniKV"
 		},
 		{
 			"name" : "CMAKE_INSTALL_NAME_TOOL",
@@ -1155,7 +1155,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug"
+			"value" : "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug"
 		},
 		{
 			"name" : "MiniKV_IS_TOP_LEVEL",
@@ -1179,7 +1179,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/github/YCCoding/Cpp/MiniKV"
+			"value" : "/Users/ugit/YCBookBlog/code/Cpp/MiniKV"
 		}
 	],
 	"kind" : "cache",

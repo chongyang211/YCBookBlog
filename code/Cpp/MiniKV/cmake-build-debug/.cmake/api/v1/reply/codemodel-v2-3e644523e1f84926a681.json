@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "MiniKV::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-MiniKV-Debug-828677dd20090ba79aa8.json",
+					"jsonFile" : "target-MiniKV-Debug-c25b22823486160d60cd.json",
 					"name" : "MiniKV",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/github/YCCoding/Cpp/MiniKV/cmake-build-debug",
-		"source" : "/Users/github/YCCoding/Cpp/MiniKV"
+		"build" : "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+		"source" : "/Users/ugit/YCBookBlog/code/Cpp/MiniKV"
 	},
 	"version" : 
 	{
