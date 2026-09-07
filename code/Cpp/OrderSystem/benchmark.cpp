@@ -1,7 +1,7 @@
-#include "ThreadPool.h"
-#include "OrderManager.h"
-#include "Product.h"
-#include "FlashStrategy.h"
+#include "include/ThreadPool.h"
+#include "include/OrderManager.h"
+#include "include/Product.h"
+#include "include/FlashStrategy.h"
 #include <chrono>
 #include <iostream>
 #include <atomic>

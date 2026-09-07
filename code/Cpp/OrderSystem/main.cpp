@@ -1,11 +1,11 @@
 
-#include "ThreadPool.h"
-#include "OrderManager.h"
-#include "Product.h"
-#include "NormalStrategy.h"
-#include "FlashStrategy.h"
-#include "BatchStrategy.h"
-#include "Logger.h"
+#include "include/ThreadPool.h"
+#include "include/OrderManager.h"
+#include "include/Product.h"
+#include "include/NormalStrategy.h"
+#include "include/FlashStrategy.h"
+#include "include/BatchStrategy.h"
+#include "include/Logger.h"
 #include <iostream>
 
 int main() {
