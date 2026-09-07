@@ -1,3 +1,9 @@
+/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/mkv_core.dir
 /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/MiniKV.dir
+/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/test_value.dir
+/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/test_store.dir
+/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/test_aof.dir
+/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/test_race.dir
+/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/stress.dir
 /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/edit_cache.dir
 /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/rebuild_cache.dir

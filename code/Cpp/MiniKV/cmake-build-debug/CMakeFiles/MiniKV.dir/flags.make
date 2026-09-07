@@ -6,7 +6,7 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include
 
-CXX_FLAGSarm64 = -g -std=gnu++17 -arch arm64 -fcolor-diagnostics
+CXX_FLAGSarm64 = -g -std=c++20 -arch arm64 -fcolor-diagnostics
 
-CXX_FLAGS = -g -std=gnu++17 -arch arm64 -fcolor-diagnostics
+CXX_FLAGS = -g -std=c++20 -arch arm64 -fcolor-diagnostics
 

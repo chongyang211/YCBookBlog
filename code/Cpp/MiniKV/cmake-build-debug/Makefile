@@ -117,6 +117,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named mkv_core
+
+# Build rule for target.
+mkv_core: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mkv_core
+.PHONY : mkv_core
+
+# fast build rule for target.
+mkv_core/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/build
+.PHONY : mkv_core/fast
+
+#=============================================================================
 # Target rules for targets named MiniKV
 
 # Build rule for target.
@@ -129,12 +142,101 @@ MiniKV/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/build
 .PHONY : MiniKV/fast
 
+#=============================================================================
+# Target rules for targets named test_value
+
+# Build rule for target.
+test_value: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_value
+.PHONY : test_value
+
+# fast build rule for target.
+test_value/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/build
+.PHONY : test_value/fast
+
+#=============================================================================
+# Target rules for targets named test_store
+
+# Build rule for target.
+test_store: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_store
+.PHONY : test_store
+
+# fast build rule for target.
+test_store/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/build
+.PHONY : test_store/fast
+
+#=============================================================================
+# Target rules for targets named test_aof
+
+# Build rule for target.
+test_aof: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_aof
+.PHONY : test_aof
+
+# fast build rule for target.
+test_aof/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/build
+.PHONY : test_aof/fast
+
+#=============================================================================
+# Target rules for targets named test_race
+
+# Build rule for target.
+test_race: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_race
+.PHONY : test_race
+
+# fast build rule for target.
+test_race/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/build
+.PHONY : test_race/fast
+
+#=============================================================================
+# Target rules for targets named stress
+
+# Build rule for target.
+stress: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stress
+.PHONY : stress
+
+# fast build rule for target.
+stress/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/build
+.PHONY : stress/fast
+
+src/aof.o: src/aof.cpp.o
+.PHONY : src/aof.o
+
+# target to build an object file
+src/aof.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/aof.cpp.o
+.PHONY : src/aof.cpp.o
+
+src/aof.i: src/aof.cpp.i
+.PHONY : src/aof.i
+
+# target to preprocess a source file
+src/aof.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/aof.cpp.i
+.PHONY : src/aof.cpp.i
+
+src/aof.s: src/aof.cpp.s
+.PHONY : src/aof.s
+
+# target to generate assembly for a file
+src/aof.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/aof.cpp.s
+.PHONY : src/aof.cpp.s
+
 src/command.o: src/command.cpp.o
 .PHONY : src/command.o
 
 # target to build an object file
 src/command.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/command.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/command.cpp.o
 .PHONY : src/command.cpp.o
 
 src/command.i: src/command.cpp.i
@@ -142,7 +244,7 @@ src/command.i: src/command.cpp.i
 
 # target to preprocess a source file
 src/command.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/command.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/command.cpp.i
 .PHONY : src/command.cpp.i
 
 src/command.s: src/command.cpp.s
@@ -150,7 +252,7 @@ src/command.s: src/command.cpp.s
 
 # target to generate assembly for a file
 src/command.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/command.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/command.cpp.s
 .PHONY : src/command.cpp.s
 
 src/entry.o: src/entry.cpp.o
@@ -158,7 +260,7 @@ src/entry.o: src/entry.cpp.o
 
 # target to build an object file
 src/entry.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/entry.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/entry.cpp.o
 .PHONY : src/entry.cpp.o
 
 src/entry.i: src/entry.cpp.i
@@ -166,7 +268,7 @@ src/entry.i: src/entry.cpp.i
 
 # target to preprocess a source file
 src/entry.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/entry.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/entry.cpp.i
 .PHONY : src/entry.cpp.i
 
 src/entry.s: src/entry.cpp.s
@@ -174,7 +276,7 @@ src/entry.s: src/entry.cpp.s
 
 # target to generate assembly for a file
 src/entry.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/entry.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/entry.cpp.s
 .PHONY : src/entry.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -201,12 +303,60 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/server.o: src/server.cpp.o
+.PHONY : src/server.o
+
+# target to build an object file
+src/server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/server.cpp.o
+.PHONY : src/server.cpp.o
+
+src/server.i: src/server.cpp.i
+.PHONY : src/server.i
+
+# target to preprocess a source file
+src/server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/server.cpp.i
+.PHONY : src/server.cpp.i
+
+src/server.s: src/server.cpp.s
+.PHONY : src/server.s
+
+# target to generate assembly for a file
+src/server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/server.cpp.s
+.PHONY : src/server.cpp.s
+
+src/store.o: src/store.cpp.o
+.PHONY : src/store.o
+
+# target to build an object file
+src/store.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/store.cpp.o
+.PHONY : src/store.cpp.o
+
+src/store.i: src/store.cpp.i
+.PHONY : src/store.i
+
+# target to preprocess a source file
+src/store.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/store.cpp.i
+.PHONY : src/store.cpp.i
+
+src/store.s: src/store.cpp.s
+.PHONY : src/store.s
+
+# target to generate assembly for a file
+src/store.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/store.cpp.s
+.PHONY : src/store.cpp.s
+
 src/value.o: src/value.cpp.o
 .PHONY : src/value.o
 
 # target to build an object file
 src/value.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/value.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/value.cpp.o
 .PHONY : src/value.cpp.o
 
 src/value.i: src/value.cpp.i
@@ -214,7 +364,7 @@ src/value.i: src/value.cpp.i
 
 # target to preprocess a source file
 src/value.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/value.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/value.cpp.i
 .PHONY : src/value.cpp.i
 
 src/value.s: src/value.cpp.s
@@ -222,15 +372,111 @@ src/value.s: src/value.cpp.s
 
 # target to generate assembly for a file
 src/value.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/src/value.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/src/value.cpp.s
 .PHONY : src/value.cpp.s
+
+tests/stress.o: tests/stress.cpp.o
+.PHONY : tests/stress.o
+
+# target to build an object file
+tests/stress.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/tests/stress.cpp.o
+.PHONY : tests/stress.cpp.o
+
+tests/stress.i: tests/stress.cpp.i
+.PHONY : tests/stress.i
+
+# target to preprocess a source file
+tests/stress.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/tests/stress.cpp.i
+.PHONY : tests/stress.cpp.i
+
+tests/stress.s: tests/stress.cpp.s
+.PHONY : tests/stress.s
+
+# target to generate assembly for a file
+tests/stress.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/tests/stress.cpp.s
+.PHONY : tests/stress.cpp.s
+
+tests/test_aof.o: tests/test_aof.cpp.o
+.PHONY : tests/test_aof.o
+
+# target to build an object file
+tests/test_aof.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/tests/test_aof.cpp.o
+.PHONY : tests/test_aof.cpp.o
+
+tests/test_aof.i: tests/test_aof.cpp.i
+.PHONY : tests/test_aof.i
+
+# target to preprocess a source file
+tests/test_aof.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/tests/test_aof.cpp.i
+.PHONY : tests/test_aof.cpp.i
+
+tests/test_aof.s: tests/test_aof.cpp.s
+.PHONY : tests/test_aof.s
+
+# target to generate assembly for a file
+tests/test_aof.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/tests/test_aof.cpp.s
+.PHONY : tests/test_aof.cpp.s
+
+tests/test_race.o: tests/test_race.cpp.o
+.PHONY : tests/test_race.o
+
+# target to build an object file
+tests/test_race.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/tests/test_race.cpp.o
+.PHONY : tests/test_race.cpp.o
+
+tests/test_race.i: tests/test_race.cpp.i
+.PHONY : tests/test_race.i
+
+# target to preprocess a source file
+tests/test_race.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/tests/test_race.cpp.i
+.PHONY : tests/test_race.cpp.i
+
+tests/test_race.s: tests/test_race.cpp.s
+.PHONY : tests/test_race.s
+
+# target to generate assembly for a file
+tests/test_race.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/tests/test_race.cpp.s
+.PHONY : tests/test_race.cpp.s
+
+tests/test_store.o: tests/test_store.cpp.o
+.PHONY : tests/test_store.o
+
+# target to build an object file
+tests/test_store.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/tests/test_store.cpp.o
+.PHONY : tests/test_store.cpp.o
+
+tests/test_store.i: tests/test_store.cpp.i
+.PHONY : tests/test_store.i
+
+# target to preprocess a source file
+tests/test_store.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/tests/test_store.cpp.i
+.PHONY : tests/test_store.cpp.i
+
+tests/test_store.s: tests/test_store.cpp.s
+.PHONY : tests/test_store.s
+
+# target to generate assembly for a file
+tests/test_store.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/tests/test_store.cpp.s
+.PHONY : tests/test_store.cpp.s
 
 tests/test_value.o: tests/test_value.cpp.o
 .PHONY : tests/test_value.o
 
 # target to build an object file
 tests/test_value.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/tests/test_value.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/tests/test_value.cpp.o
 .PHONY : tests/test_value.cpp.o
 
 tests/test_value.i: tests/test_value.cpp.i
@@ -238,7 +484,7 @@ tests/test_value.i: tests/test_value.cpp.i
 
 # target to preprocess a source file
 tests/test_value.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/tests/test_value.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/tests/test_value.cpp.i
 .PHONY : tests/test_value.cpp.i
 
 tests/test_value.s: tests/test_value.cpp.s
@@ -246,7 +492,7 @@ tests/test_value.s: tests/test_value.cpp.s
 
 # target to generate assembly for a file
 tests/test_value.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/tests/test_value.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/tests/test_value.cpp.s
 .PHONY : tests/test_value.cpp.s
 
 # Help Target
@@ -258,6 +504,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MiniKV"
+	@echo "... mkv_core"
+	@echo "... stress"
+	@echo "... test_aof"
+	@echo "... test_race"
+	@echo "... test_store"
+	@echo "... test_value"
+	@echo "... src/aof.o"
+	@echo "... src/aof.i"
+	@echo "... src/aof.s"
 	@echo "... src/command.o"
 	@echo "... src/command.i"
 	@echo "... src/command.s"
@@ -267,9 +522,27 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/server.o"
+	@echo "... src/server.i"
+	@echo "... src/server.s"
+	@echo "... src/store.o"
+	@echo "... src/store.i"
+	@echo "... src/store.s"
 	@echo "... src/value.o"
 	@echo "... src/value.i"
 	@echo "... src/value.s"
+	@echo "... tests/stress.o"
+	@echo "... tests/stress.i"
+	@echo "... tests/stress.s"
+	@echo "... tests/test_aof.o"
+	@echo "... tests/test_aof.i"
+	@echo "... tests/test_aof.s"
+	@echo "... tests/test_race.o"
+	@echo "... tests/test_race.i"
+	@echo "... tests/test_race.s"
+	@echo "... tests/test_store.o"
+	@echo "... tests/test_store.i"
+	@echo "... tests/test_store.s"
 	@echo "... tests/test_value.o"
 	@echo "... tests/test_value.i"
 	@echo "... tests/test_value.s"

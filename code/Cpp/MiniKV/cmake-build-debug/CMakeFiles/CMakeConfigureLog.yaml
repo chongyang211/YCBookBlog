@@ -1679,3 +1679,42 @@ events:
       
       
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/CheckCXXSourceCompiles.cmake:103 (cmake_check_source_compiles)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/FindThreads.cmake:99 (check_cxx_source_compiles)"
+      - "/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-4.1/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "CMakeLists.txt:8 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-13Vnmo"
+      binary: "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-13Vnmo"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-13Vnmo'
+        
+        Run Build Command(s): /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c0362/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_c0362.dir/build.make CMakeFiles/cmTC_c0362.dir/build
+        Building CXX object CMakeFiles/cmTC_c0362.dir/src.cxx.o
+        /usr/bin/c++ -DCMAKE_HAVE_LIBC_PTHREAD  -std=c++20 -arch arm64 -fcolor-diagnostics -MD -MT CMakeFiles/cmTC_c0362.dir/src.cxx.o -MF CMakeFiles/cmTC_c0362.dir/src.cxx.o.d -o CMakeFiles/cmTC_c0362.dir/src.cxx.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-13Vnmo/src.cxx
+        Linking CXX executable cmTC_c0362
+        /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c0362.dir/link.txt --verbose=1
+        /usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_c0362.dir/src.cxx.o -o cmTC_c0362
+        
+      exitCode: 0
+...

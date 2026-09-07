@@ -1,22 +1,22 @@
-
 #include <iostream>
+#include <cassert>
 
 #include "mkv/value.hpp"
 
-namespace mkv {
+using namespace mkv;
 
-    void test1() {
-        mkv::Value v1 = std::int64_t{42};
-        mkv::Value v2 = std::string("hello");
-        std::cout << "v1 isInt? "    << mkv::isInt(v1)    << "\n";
-        std::cout << "v2 isString? " << mkv::isString(v2) << "\n";
+int main() {
+    // test1: 类型查询
+    Value v1 = std::int64_t{42};
+    Value v2 = std::string("hello");
+    assert(isInt(v1));
+    assert(isString(v2));
+    std::cout << "v1 isInt? "    << isInt(v1)    << "\n";
+    std::cout << "v2 isString? " << isString(v2) << "\n";
+
+    // test2: 类型推断
+    for (auto s : {"42", "-7", "3.14", "true", "false", "nil", "hello", "42abc"}) {
+        std::cout << s << " -> " << formatValue(valueFromToken(s)) << "\n";
     }
-
-    void test2() {
-        for (auto s : {"42", "-7", "3.14", "true", "false", "nil", "hello", "42abc"}) {
-            std::cout << s << " -> " << mkv::formatValue(mkv::valueFromToken(s)) << "\n";
-        }
-
-    }
-
+    return 0;
 }

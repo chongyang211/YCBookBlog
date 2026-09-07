@@ -8,11 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp" "CMakeFiles/MiniKV.dir/src/command.cpp.o" "gcc" "CMakeFiles/MiniKV.dir/src/command.cpp.o.d"
-  "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp" "CMakeFiles/MiniKV.dir/src/entry.cpp.o" "gcc" "CMakeFiles/MiniKV.dir/src/entry.cpp.o.d"
   "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp" "CMakeFiles/MiniKV.dir/src/main.cpp.o" "gcc" "CMakeFiles/MiniKV.dir/src/main.cpp.o.d"
-  "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp" "CMakeFiles/MiniKV.dir/src/value.cpp.o" "gcc" "CMakeFiles/MiniKV.dir/src/value.cpp.o.d"
-  "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp" "CMakeFiles/MiniKV.dir/tests/test_value.cpp.o" "gcc" "CMakeFiles/MiniKV.dir/tests/test_value.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

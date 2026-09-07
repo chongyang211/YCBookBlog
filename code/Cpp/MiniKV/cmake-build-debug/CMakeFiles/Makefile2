@@ -63,11 +63,23 @@ CMAKE_BINARY_DIR = /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/mkv_core.dir/all
 all: CMakeFiles/MiniKV.dir/all
+all: CMakeFiles/test_value.dir/all
+all: CMakeFiles/test_store.dir/all
+all: CMakeFiles/test_aof.dir/all
+all: CMakeFiles/test_race.dir/all
+all: CMakeFiles/stress.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
+codegen: CMakeFiles/mkv_core.dir/codegen
 codegen: CMakeFiles/MiniKV.dir/codegen
+codegen: CMakeFiles/test_value.dir/codegen
+codegen: CMakeFiles/test_store.dir/codegen
+codegen: CMakeFiles/test_aof.dir/codegen
+codegen: CMakeFiles/test_race.dir/codegen
+codegen: CMakeFiles/stress.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -75,22 +87,60 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/mkv_core.dir/clean
 clean: CMakeFiles/MiniKV.dir/clean
+clean: CMakeFiles/test_value.dir/clean
+clean: CMakeFiles/test_store.dir/clean
+clean: CMakeFiles/test_aof.dir/clean
+clean: CMakeFiles/test_race.dir/clean
+clean: CMakeFiles/stress.dir/clean
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/mkv_core.dir
+
+# All Build rule for target.
+CMakeFiles/mkv_core.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=3,4,5,6,7,8,9 "Built target mkv_core"
+.PHONY : CMakeFiles/mkv_core.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/mkv_core.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 7
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mkv_core.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/mkv_core.dir/rule
+
+# Convenience name for target.
+mkv_core: CMakeFiles/mkv_core.dir/rule
+.PHONY : mkv_core
+
+# codegen rule for target.
+CMakeFiles/mkv_core.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=3,4,5,6,7,8,9 "Finished codegen for target mkv_core"
+.PHONY : CMakeFiles/mkv_core.dir/codegen
+
+# clean rule for target.
+CMakeFiles/mkv_core.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mkv_core.dir/build.make CMakeFiles/mkv_core.dir/clean
+.PHONY : CMakeFiles/mkv_core.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/MiniKV.dir
 
 # All Build rule for target.
-CMakeFiles/MiniKV.dir/all:
+CMakeFiles/MiniKV.dir/all: CMakeFiles/mkv_core.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target MiniKV"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target MiniKV"
 .PHONY : CMakeFiles/MiniKV.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/MiniKV.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/MiniKV.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/MiniKV.dir/rule
@@ -102,13 +152,173 @@ MiniKV: CMakeFiles/MiniKV.dir/rule
 # codegen rule for target.
 CMakeFiles/MiniKV.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6 "Finished codegen for target MiniKV"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=1,2 "Finished codegen for target MiniKV"
 .PHONY : CMakeFiles/MiniKV.dir/codegen
 
 # clean rule for target.
 CMakeFiles/MiniKV.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MiniKV.dir/build.make CMakeFiles/MiniKV.dir/clean
 .PHONY : CMakeFiles/MiniKV.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_value.dir
+
+# All Build rule for target.
+CMakeFiles/test_value.dir/all: CMakeFiles/mkv_core.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=18,19 "Built target test_value"
+.PHONY : CMakeFiles/test_value.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_value.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_value.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/test_value.dir/rule
+
+# Convenience name for target.
+test_value: CMakeFiles/test_value.dir/rule
+.PHONY : test_value
+
+# codegen rule for target.
+CMakeFiles/test_value.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=18,19 "Finished codegen for target test_value"
+.PHONY : CMakeFiles/test_value.dir/codegen
+
+# clean rule for target.
+CMakeFiles/test_value.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_value.dir/build.make CMakeFiles/test_value.dir/clean
+.PHONY : CMakeFiles/test_value.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_store.dir
+
+# All Build rule for target.
+CMakeFiles/test_store.dir/all: CMakeFiles/mkv_core.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=16,17 "Built target test_store"
+.PHONY : CMakeFiles/test_store.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_store.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_store.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/test_store.dir/rule
+
+# Convenience name for target.
+test_store: CMakeFiles/test_store.dir/rule
+.PHONY : test_store
+
+# codegen rule for target.
+CMakeFiles/test_store.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=16,17 "Finished codegen for target test_store"
+.PHONY : CMakeFiles/test_store.dir/codegen
+
+# clean rule for target.
+CMakeFiles/test_store.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_store.dir/build.make CMakeFiles/test_store.dir/clean
+.PHONY : CMakeFiles/test_store.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_aof.dir
+
+# All Build rule for target.
+CMakeFiles/test_aof.dir/all: CMakeFiles/mkv_core.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=12,13 "Built target test_aof"
+.PHONY : CMakeFiles/test_aof.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_aof.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_aof.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/test_aof.dir/rule
+
+# Convenience name for target.
+test_aof: CMakeFiles/test_aof.dir/rule
+.PHONY : test_aof
+
+# codegen rule for target.
+CMakeFiles/test_aof.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=12,13 "Finished codegen for target test_aof"
+.PHONY : CMakeFiles/test_aof.dir/codegen
+
+# clean rule for target.
+CMakeFiles/test_aof.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_aof.dir/build.make CMakeFiles/test_aof.dir/clean
+.PHONY : CMakeFiles/test_aof.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_race.dir
+
+# All Build rule for target.
+CMakeFiles/test_race.dir/all: CMakeFiles/mkv_core.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=14,15 "Built target test_race"
+.PHONY : CMakeFiles/test_race.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_race.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_race.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/test_race.dir/rule
+
+# Convenience name for target.
+test_race: CMakeFiles/test_race.dir/rule
+.PHONY : test_race
+
+# codegen rule for target.
+CMakeFiles/test_race.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=14,15 "Finished codegen for target test_race"
+.PHONY : CMakeFiles/test_race.dir/codegen
+
+# clean rule for target.
+CMakeFiles/test_race.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_race.dir/build.make CMakeFiles/test_race.dir/clean
+.PHONY : CMakeFiles/test_race.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/stress.dir
+
+# All Build rule for target.
+CMakeFiles/stress.dir/all: CMakeFiles/mkv_core.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=10,11 "Built target stress"
+.PHONY : CMakeFiles/stress.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/stress.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 9
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/stress.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/stress.dir/rule
+
+# Convenience name for target.
+stress: CMakeFiles/stress.dir/rule
+.PHONY : stress
+
+# codegen rule for target.
+CMakeFiles/stress.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug/CMakeFiles --progress-num=10,11 "Finished codegen for target stress"
+.PHONY : CMakeFiles/stress.dir/codegen
+
+# clean rule for target.
+CMakeFiles/stress.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/stress.dir/build.make CMakeFiles/stress.dir/clean
+.PHONY : CMakeFiles/stress.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -1,68 +1,69 @@
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <thread>
-#include <vector>
 
+#include "mkv/store.hpp"
+#include "mkv/aof.hpp"
+#include "mkv/server.hpp"
 #include "mkv/command.hpp"
-#include "mkv/value.hpp"
+#include "mkv/errors.hpp"
+#include "mkv/log.hpp"
+
 using namespace mkv;
 
-// strategy_installer_demo.cpp
-// 编译运行：g++ -std=c++17 strategy_installer_demo.cpp -o demo && ./demo
-#include <chrono>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <future>
-#include <thread>
-
-
-void test() {
-
-}
-
 int main() {
-    test();
-    return 0;
-    std::cout << "MiniKV v0.1 - type EXIT to quit.\n";
-    std::string line;
-    while (true) {
-        std::cout << "> ";
-        if (!std::getline(std::cin, line)) {
-            // Ctrl-D 退出
-            break;
-        }
-        if (line.empty()) {
-            continue;
-        }
+    try {
+        fs::path aofPath = "data/aof.log";
+        Store store;
+        auto report = replayAof(aofPath, store);
+        KV_LOG_INFO("replayed " << report.replayed << " keys, skipped "
+                    << report.corrupted << " corrupted");
 
-        // 切词
-        std::istringstream iss(line);
-        std::vector<std::string> tokens;
-        for (std::string tok; iss >> tok; ) {
-            tokens.push_back(tok);
-        }
-        if (tokens.empty()) {
-            continue;
-        }
-        switch (parseCmdType(tokens[0])) {
-            case CmdType::Set:     std::cout << "[TODO] SET\n";    break;
-            case CmdType::Get:     std::cout << "[TODO] GET\n";    break;
-            case CmdType::Del:     std::cout << "[TODO] DEL\n";    break;
-            case CmdType::Expire:  std::cout << "[TODO] EXPIRE\n"; break;
-            case CmdType::Ttl:     std::cout << "[TODO] TTL\n";    break;
-            case CmdType::Keys:    std::cout << "[TODO] KEYS\n";   break;
-            case CmdType::Save:    std::cout << "[TODO] SAVE\n";   break;
-            case CmdType::Exit:    std::cout << "bye.\n";          return 0;
-            case CmdType::Unknown: std::cout << "(error) unknown command\n"; break;
-        }
+        AofWriter aof(aofPath);
+        Server    server(store);   // 启动后台清理
 
-        std::cout << "(unknown) you said: ";
-        for (auto& t : tokens) {
-            std::cout << "[" << t << "] ";
+        std::cout << "MiniKV v1.0 - type EXIT to quit.\n";
+        std::string line;
+        while (true) {
+            std::cout << "> ";
+            if (!std::getline(std::cin, line)) break;   // Ctrl-D 退出
+            if (line.empty()) continue;
+
+            try {
+                auto tokens = tokenize(line);
+                if (tokens.empty()) continue;
+
+                auto type = parseCmdType(std::string(tokens[0]));
+
+                // EXIT 单独处理，不走 makeCommand
+                if (type == CmdType::Exit) {
+                    std::cout << "bye.\n";
+                    break;
+                }
+
+                auto cmd = makeCommand(tokens);
+                std::string out = cmd->execute(store);
+
+                // SAVE：强制刷盘（本身不产生 AOF 记录）
+                if (type == CmdType::Save) {
+                    aof.flush();
+                }
+
+                // 写命令同步落盘，确保 ACK 时数据已在文件里
+                if (cmd->isWrite()) {
+                    aof.append(cmd->toAofLine());
+                    aof.flush();
+                }
+                std::cout << out << "\n";
+            }
+            catch (const KvError& e) {
+                std::cout << "(error) " << e.what() << "\n";
+            }
         }
-        std::cout << "\n";
+        // server 析构 → 后台线程自动停 → 然后 aof 析构 → store 析构
+    }
+    catch (const std::exception& e) {
+        KV_LOG_ERROR("fatal: " << e.what());
+        return 1;
     }
     return 0;
 }

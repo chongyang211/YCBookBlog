@@ -18,6 +18,12 @@ packages/website/.vuepress/.temp/
 packages/website/.vuepress/config.bundled_*.mjs
 dist/
 
+# ===== C++ / CMake 构建产物 =====
+build/
+cmake-build-*/
+compile_commands.json
+data/
+
 # ===== 小程序生成数据 =====
 packages/miniapp/static/chapters/
 

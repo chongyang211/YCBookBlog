@@ -1,32 +1,74 @@
 [
 {
   "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
-  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/main.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -Wall -Wextra -Wpedantic -o CMakeFiles/mkv_core.dir/src/value.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp",
+  "output": "CMakeFiles/mkv_core.dir/src/value.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -Wall -Wextra -Wpedantic -o CMakeFiles/mkv_core.dir/src/entry.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp",
+  "output": "CMakeFiles/mkv_core.dir/src/entry.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -Wall -Wextra -Wpedantic -o CMakeFiles/mkv_core.dir/src/store.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/store.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/store.cpp",
+  "output": "CMakeFiles/mkv_core.dir/src/store.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -Wall -Wextra -Wpedantic -o CMakeFiles/mkv_core.dir/src/command.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp",
+  "output": "CMakeFiles/mkv_core.dir/src/command.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -Wall -Wextra -Wpedantic -o CMakeFiles/mkv_core.dir/src/aof.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/aof.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/aof.cpp",
+  "output": "CMakeFiles/mkv_core.dir/src/aof.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -Wall -Wextra -Wpedantic -o CMakeFiles/mkv_core.dir/src/server.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/server.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/server.cpp",
+  "output": "CMakeFiles/mkv_core.dir/src/server.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/main.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp",
   "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/main.cpp",
   "output": "CMakeFiles/MiniKV.dir/src/main.cpp.o"
 },
 {
   "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
-  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/command.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp",
-  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/command.cpp",
-  "output": "CMakeFiles/MiniKV.dir/src/command.cpp.o"
-},
-{
-  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
-  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/entry.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp",
-  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/entry.cpp",
-  "output": "CMakeFiles/MiniKV.dir/src/entry.cpp.o"
-},
-{
-  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
-  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/src/value.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp",
-  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/src/value.cpp",
-  "output": "CMakeFiles/MiniKV.dir/src/value.cpp.o"
-},
-{
-  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
-  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=gnu++17 -arch arm64 -fcolor-diagnostics -o CMakeFiles/MiniKV.dir/tests/test_value.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -o CMakeFiles/test_value.dir/tests/test_value.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp",
   "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_value.cpp",
-  "output": "CMakeFiles/MiniKV.dir/tests/test_value.cpp.o"
+  "output": "CMakeFiles/test_value.dir/tests/test_value.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -o CMakeFiles/test_store.dir/tests/test_store.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_store.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_store.cpp",
+  "output": "CMakeFiles/test_store.dir/tests/test_store.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -o CMakeFiles/test_aof.dir/tests/test_aof.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_aof.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_aof.cpp",
+  "output": "CMakeFiles/test_aof.dir/tests/test_aof.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -o CMakeFiles/test_race.dir/tests/test_race.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_race.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/test_race.cpp",
+  "output": "CMakeFiles/test_race.dir/tests/test_race.cpp.o"
+},
+{
+  "directory": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/cmake-build-debug",
+  "command": "/usr/bin/c++  -I/Users/ugit/YCBookBlog/code/Cpp/MiniKV/include -g -std=c++20 -arch arm64 -fcolor-diagnostics -o CMakeFiles/stress.dir/tests/stress.cpp.o -c /Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/stress.cpp",
+  "file": "/Users/ugit/YCBookBlog/code/Cpp/MiniKV/tests/stress.cpp",
+  "output": "CMakeFiles/stress.dir/tests/stress.cpp.o"
 }
 ]
