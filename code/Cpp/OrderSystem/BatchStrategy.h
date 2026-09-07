@@ -1,7 +1,7 @@
 #pragma once
 
-#include "OrderStrategy.h"
-#include "ThreadPool.h"
+#include "include/OrderStrategy.h"
+#include "include/ThreadPool.h"
 #include <future>
 #include <algorithm>
 
