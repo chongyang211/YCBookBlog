@@ -186,21 +186,7 @@ CoSpec 的对策：
 
 ## 六、命令清单（8 阶段命令链）
 
-| 阶段         | 命令               | 输入                       | 输出                                    | 是否必须       |
-| ------------ | ------------------ | -------------------------- | --------------------------------------- | -------------- |
-| 0 前置       | `/spec-intake`     | 口头 / IM / 邮件           | `intake/<VER>/<ID>-<slug>.md`     | 可选           |
-| 0 前         | `/spec-design`     | intake                     | `designs/<VER>/<ID>-<slug>-design.md`   | 大需求必须    |
-| 0            | `/spec-draft`      | intake + design（可选）    | `specs/<VER>/<ID>-<slug>.md` (draft)   | **必须**       |
-| 1 卡口       | **人工评审**       | draft spec                  | spec status: `ready`                    | **必须**       |
-| 2            | `/spec-plan`       | ready spec                  | `plans/<VER>/<ID>-<slug>-plan.md`      | 复杂改动必须  |
-| 2.5          | `/spec-tasks`      | plan                        | `tasks/<VER>/<ID>-<slug>-tasks.md`     | 复杂改动必须  |
-| 3            | `/spec-implement`  | tasks                       | feature 分支 + `src/` 改动              | **必须**       |
-| 4            | `/spec-test`       | 实现                        | 测试代码 + 结果报告                     | 有可测行为则必须 |
-| 5            | `/spec-review`     | 实现 + 测试                 | review 报告                             | 关键改动必须  |
-| 6 可选       | `/spec-push`       | commit 序列                 | rebase + push                            | 可选           |
-| 6 后         | `/spec-sync`       | 合并信息                    | spec status: `implemented`              | **必须**       |
-
-**详细的命令解释见 [02-workflow.md](./02-workflow.md)。**
+完整命令链：`intake → design → draft → 评审 → plan → tasks → implement → test → review → push → sync`，共 10 个命令（其中 3 个可选），唯一强制卡口是「人工评审」。逐命令的输入 / 输出 / AI 行为详解见 [02-workflow.md](./02-workflow.md)。
 
 ---
 

@@ -10,11 +10,11 @@
 
 ## 一、这是什么（30 秒了解）
 
-传统「vibe coding」让 AI 直接写代码，问题是：不同人/不同 Agent 结果差异大、改动范围漂移、文档与代码脱节、改动难追溯。
-
-本工作空间把开发流程切成标准阶段，**每个阶段产出一份磁盘文件**，让需求、方案、计划、执行全程可读、可审、可交接、可追溯。
+传统「vibe coding」让 AI 直接写代码，问题是改动范围漂移、文档与代码脱节、难追溯。本工作空间把开发流程切成标准阶段，**每个阶段产出一份磁盘文件**，让需求、方案、计划、执行全程可读、可审、可交接、可追溯。
 
 本仓库只管理「协作元数据」（Spec / Plan / Tasks / 规则 / 技能 / 命令 / 文档），**不存放业务代码**——业务代码由各人按需 clone 到 `src/`（已 gitignore）。
+
+想深入了解设计理念，见 [`docs/01-overview.md`](./docs/01-overview.md)。
 
 ---
 
@@ -59,8 +59,6 @@ flowchart TD
 
 ### 命令清单（10 个工作流命令，其中 3 个可选）
 
-此外还有一个**带外工具** `/spec-index`：扫描 `specs/` 生成索引并完整覆盖同步到 团队 Wiki（<TEAM-WIKI-URL>）。它**不属于个人开发流程**，由专人/工具按需运行，避免大家在自己分支上各自重生导致 团队 Wiki 反复被半成品覆盖。
-
 | 阶段 | 命令 | 输入 | 输出 |
 |------|------|------|------|
 | 0 前置（可选） | `/spec-intake` | PM 需求文档路径 或 对话描述 | `intake/<VERSION>/<STORYID>-<slug>.md`（原始需求草稿） |
@@ -77,38 +75,21 @@ flowchart TD
 
 **3 个可选命令**：`/spec-intake`（视习惯把 PM 需求/零散描述结构化成 intake）、`/spec-design`（仅需求大、需先评审方案时用）、`/spec-push`（视个人代码提交习惯，也可自行 `git` 提交）。小需求可直接从 `/spec-draft` 起步。`change-summary` 不是独立命令，由 `/spec-review` 与 `/spec-push` 内部自动调用。
 
----
-
-## 四、三件套产物
-
-| 类型 | 目录 | 回答的问题 | 模板 |
-|------|------|-----------|------|
-| **Spec** | `specs/` | 要做什么 | `specs/templates/spec-template.md` |
-| **Plan** | `plans/` | 怎么做、涉及哪些仓库 | `plans/templates/plan-template.md` |
-| **Tasks** | `tasks/` | 分几步、做到哪了 | `tasks/templates/tasks-template.md` |
-
-> 需求较大时，可在 Spec 之前先产出**技术方案**（`designs/`，评审通过后再起草 spec）。它是可选前置产物，不属于必备三件套。
+此外还有一个**带外工具** `/spec-index`：扫描 `specs/` 生成索引并同步到 团队 Wiki。它**不属于个人开发流程**，由专人/工具按需运行。
 
 ---
 
-## 五、关键原则（10 条铁律摘要）
+## 四、三件套与十铁律速记
 
-1. 没有 Spec，不写代码
-2. Plan 与 Tasks 必须沉淀为磁盘文件
-3. 执行权 ≠ 定义权（AI 不能改 Spec，只能在 tasks「偏离记录」提建议）
-4. MR 必须可追溯到 Story ID
-5. 变更摘要不可省略（即使 1 行 bugfix）
-6. Tasks 实时勾选，不允许批量补
-7. 偏离必须记录（沉默偏离视为缺陷）
-8. 分支命名严格统一：`{feature|hotfix}/<spec-name>`，多仓库一致
-9. Push 前必须安全 rebase（基线 `git pull -r` → feature `git rebase 基线` → `git push -f`）
-10. Commit Message 严格规范：`<type>(<scope>): <subject> --story=<STORYID> [#finish]`
+**三件套**：Spec（要做什么）→ Plan（怎么做）→ Tasks（步步执行），各有磁盘文件，模板见各 `*/templates/` 目录。需求较大时，可在 Spec 前先出**技术方案**（`designs/`）再起草 spec。
+
+**十铁律**：无 spec 不写代码 · 三件套落盘 · AI 不改 spec · MR 带 Story ID · 变更摘要必写 · tasks 实时勾 · 偏离必记录 · 分支统一 · push 前 rebase · commit 规范。
 
 完整规则见 [`rules/`](./rules/)，详细工作流见 [`rules/10-spec-workflow.md`](./rules/10-spec-workflow.md)。
 
 ---
 
-## 六、目录速览
+## 五、目录速览
 
 | 目录 | 职责 | 入仓 |
 |------|------|------|
@@ -116,25 +97,24 @@ flowchart TD
 | `designs/` | 技术方案文档（可选前置，需求大时用） | ✅ |
 | `plans/` | 实施计划（每个 spec 对应一份） | ✅ |
 | `tasks/` | 任务清单（实施中的可勾选活文档） | ✅ |
+| `intake/` | 原始需求草稿区（**不是** spec） | ✅ |
 | `rules/` | AI 协作规则（5 个 rule 文件，10 条铁律） | ✅ |
 | `skills/` | AI 可复用技能（8 个 SKILL） | ✅ |
 | `commands/` | 协作命令（10 个 `/spec-*` 入口） | ✅ |
 | `tests/` | 测试代码（与 spec 验收标准对齐） | ✅ |
 | `docs/` | 方法论文档矩阵（README + 01~07）、git 工作流、反馈问卷 | ✅ |
-| `intake/` | 原始需求草稿区（**不是** spec） | ✅ |
 | `.gitlab/` | MR 模板（Git 平台） | ✅ |
 | `.codebuddy/` | CodeBuddy IDE 协作配置（commands/rules 软链） | ✅ |
 | `src/` | 业务代码仓库（按 spec 涉及范围自行 clone） | ❌ gitignore |
-| `bin/` | 本地工具二进制（如 gopls） | ❌ gitignore |
-| `pkg/` | Go module 缓存 | ❌ gitignore |
+| `bin/` `pkg/` | 本地工具二进制 / Go module 缓存 | ❌ gitignore |
 
 📂 **版本目录层级**：`intake/`、`designs/`、`specs/`、`plans/`、`tasks/` 下的文档均按迭代版本归档到 `<VERSION>/` 子目录（如 `v1.6.0/`）；各目录的 `templates/`、`README.md` 为跨版本元文件，保留在目录根。
 
-🌐 **Spec 索引发布到 团队 Wiki**：仓库内不再维护聚合的 `specs/INDEX.md`（避免 MR 冲突）。索引以 团队 Wiki 文档为单一发布出口（<TEAM-WIKI-URL>），由专人/工具按需运行带外命令 `/spec-index` 完整覆盖发布，**不在个人开发流程中执行**。
+🌐 **Spec 索引发布到 团队 Wiki**：仓库内不再维护聚合的 `specs/INDEX.md`（避免 MR 冲突），由带外命令 `/spec-index` 按需覆盖发布到团队 Wiki（<TEAM-WIKI-URL>）。
 
 ---
 
-## 七、首次使用（约 20 分钟）
+## 六、首次使用（约 20 分钟）
 
 **Step 1 — 拉本仓库**
 
@@ -145,7 +125,7 @@ cd spec
 
 > CodeBuddy / Claude Code 用户：在 IDE 中 `File → Open Folder` 选择该目录即可。
 
-**Step 2 — 按需把业务代码仓库 clone 到 `src/<repo>/`**（`src/` 已 gitignore，本仓库不存放业务代码）
+**Step 2 — 按需把业务代码仓库 clone 到 `src/<repo>/`**（`src/` 已 gitignore）
 
 ```bash
 mkdir -p src && cd src
@@ -160,7 +140,7 @@ git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 定义仓库（基线 ma
 
 ---
 
-## 八、文档导航
+## 七、文档导航
 
 | 顺序 | 文件 | 用途 | 时间 |
 |------|------|------|------|
@@ -172,7 +152,7 @@ git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 定义仓库（基线 ma
 
 ---
 
-## 九、推广路径
+## 八、推广路径
 
 1. **第 1 周**：Tech Lead + 1 位志愿者用一个真实小需求跑完整命令链路，全员旁观
 2. **第 2-3 周**：每个新 Spec 必须三件套；老 Spec 不强制回填；MR 必须用 `.gitlab/merge_request_templates/Default.md`
@@ -181,6 +161,6 @@ git clone <GIT-HOST>:<ORG>/<协议仓库>.git   # proto 定义仓库（基线 ma
 
 ---
 
-## 十、反馈与改进
+## 九、反馈与改进
 
 本仓库是**活文档**，欢迎提 MR 改进规则、模板、文档。改 `rules/` 与 `commands/` 时，请同步 review `docs/` 下的方法论文档矩阵（README + 01~07）是否仍然一致。
