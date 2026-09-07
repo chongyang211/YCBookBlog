@@ -21,10 +21,10 @@ int main() {
         AofWriter aof(aofPath);
         Server    server(store);   // 启动后台清理
 
-        std::cout << "MiniKV v1.0 - type EXIT to quit.\n";
+        std::cout << "MiniKV v1.0 - type EXIT to quit." << std::endl;
         std::string line;
         while (true) {
-            std::cout << "> ";
+            std::cout << "> " << std::flush;
             if (!std::getline(std::cin, line)) break;   // Ctrl-D 退出
             if (line.empty()) continue;
 
@@ -36,7 +36,7 @@ int main() {
 
                 // EXIT 单独处理，不走 makeCommand
                 if (type == CmdType::Exit) {
-                    std::cout << "bye.\n";
+                    std::cout << "bye." << std::endl;
                     break;
                 }
 
@@ -53,10 +53,10 @@ int main() {
                     aof.append(cmd->toAofLine());
                     aof.flush();
                 }
-                std::cout << out << "\n";
+                std::cout << out << std::endl;
             }
             catch (const KvError& e) {
-                std::cout << "(error) " << e.what() << "\n";
+                std::cout << "(error) " << e.what() << std::endl;
             }
         }
         // server 析构 → 后台线程自动停 → 然后 aof 析构 → store 析构
