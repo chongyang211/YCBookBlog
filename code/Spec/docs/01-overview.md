@@ -93,8 +93,10 @@ graph LR
 需求不留在 IM / 邮件 / 脑子里——一律沉淀到 `specs/*.md`。任何时候有人问"这个功能到底要做什么"，答案永远指向 spec 文件。
 
 **推论**：spec 与代码不一致时，**改哪个由 spec 状态决定**：
-- `draft/ready` → 改代码方向，因为需求还没定稿；
-- `implemented` → spec 才是权威，代码要么修 bug 要么走"偏离回流"更新 spec。
+
+`draft/ready` → 改代码方向，因为需求还没定稿；
+
+`implemented` → spec 才是权威，代码要么修 bug 要么走"偏离回流"更新 spec。
 
 ### 3.2 三件套必须落盘
 
