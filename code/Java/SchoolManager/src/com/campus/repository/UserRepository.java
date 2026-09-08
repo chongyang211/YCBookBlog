@@ -113,16 +113,16 @@ public class UserRepository {
 
     private String toCsv(User u) {
         if (u instanceof Student s) {
-            return CsvUtil.join("STUDENT", s.getId(), s.getName(), "***",
+            return CsvUtil.join("STUDENT", s.getId(), s.getName(), s.getPassword(),
                     s.getDepartment(), s.getStudentNo());
         } else if (u instanceof Teacher t) {
-            return CsvUtil.join("TEACHER", t.getId(), t.getName(), "***",
+            return CsvUtil.join("TEACHER", t.getId(), t.getName(), t.getPassword(),
                     t.getDepartment(), t.getTitle());
         } else if (u instanceof Admin a) {
             int bits = (a.canApprove() ? 1 : 0)
                     | ((a.canManageUser() ? 1 : 0) << 1)
                     | ((a.canManageRoom() ? 1 : 0) << 2);
-            return CsvUtil.join("ADMIN", a.getId(), a.getName(), "***",
+            return CsvUtil.join("ADMIN", a.getId(), a.getName(), a.getPassword(),
                     String.valueOf(bits));
         }
         throw new IllegalStateException("未知用户类型: " + u.getClass());

@@ -20,6 +20,7 @@ public abstract class User {
     public String getId() { return id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+    public String getPassword() { return password; }
     public boolean checkPassword(String input) {
         return password != null && password.equals(input);
     }
