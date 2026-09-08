@@ -27,11 +27,6 @@
 - **签名四态**：`SIMPLE`（固定密钥 HMAC-SM3）/ `ACTIVATION`（会话密钥 HMAC-SM3）/ `DEVICE`（SE-SM2，`DeviceAuthSign`）/ `RECOGNIZE`（SE `SignPayAuth`，`DeviceRecogSign`）。
 - **trace 规则**：W3C `traceparent` = `00-{32hex trace}-{16hex span}-01`；调用方可 override 串联会话，否则网络层每次现起新 trace。
 
-
-【TODO：签名是什么，为什么要签名？】
-
-
-
 ### 1.4 改动范围
 - **[主干]** `network.h/.cpp`：`Network` 单例、`IotDeviceRequestImpl` 请求主干、四类签名、`ClassifyCprError` / `ParseIoTHttpResponse` / `BuildErrorNotification`。
 - **[传输层]** `http_request.h/.cpp`：cpr 封装、curl share 复用、内嵌加密压缩 CA、DNS 缓存 1h。
