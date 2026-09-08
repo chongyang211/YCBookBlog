@@ -119,7 +119,7 @@ graph LR
 
 **为什么如此严格**：因为一旦 AI 有权改 spec，"改动漂移"就无法遏制——AI 每次执行都能顺手改需求让代码"符合 spec"，等于回到 vibe coding。
 
-### 3.4 全程用需求编号（Story ID）串联
+### 3.4 全程用编号串联
 
 从 `intake → design → spec → plan → tasks → branch → commit → MR` 全程用同一个 Story ID：
 
