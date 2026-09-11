@@ -51,6 +51,17 @@ cmake --build build -j
 ./build/StudentManager
 ```
 
+## 命令行运行
+
+```shell
+g++ -std=c++17 main.cpp StudentManager.cpp
+./a.out
+
+# 也可以用下面这种
+g++ -std=c++17 main.cpp StudentManager.cpp -o address_book
+./address_book
+```
+
 ## 核心知识点
 
 - **`struct` 打包**：5 个字段属于"同一个实体"（联系人），用 `Person` 打包；容器 + 计数用 `AddressBooks` 打包
