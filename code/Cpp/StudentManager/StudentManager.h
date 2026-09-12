@@ -2,7 +2,17 @@
 
 #include <string>
 
+// 误区
+// ❌ 反例：5 个数组分别存
+// std::string names[100];
+// int         sexes[100];
+// int         ages[100];
+// std::string phones[100];
+// std::string addresses[100];
+// int         size = 0;
+
 // 联系人结构体：姓名、性别、年龄、电话、地址
+// 其实是面向对象的一种设计思想，把属性放到一起
 struct Person {
     std::string name;       // 姓名
     int sex;                // 性别：1=男 2=女
@@ -12,6 +22,7 @@ struct Person {
 };
 
 // 通讯录结构体：联系人数组 + 当前人数
+// 增删改查需求，添加人，删除人，查找，替换等
 struct AddressBooks {
     static const int MAX = 100;         // 最大联系人数量
     Person personArray[MAX];            // 联系人数组
