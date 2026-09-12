@@ -2,6 +2,8 @@
 
 #include <string>
 
+// #define MAX = 100;  //最大人数
+
 // 误区
 // ❌ 反例：5 个数组分别存
 // std::string names[100];
