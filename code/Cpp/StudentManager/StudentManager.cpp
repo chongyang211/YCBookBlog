@@ -71,6 +71,8 @@ void showMainSelect(AddressBooks* abs) {
                 break;
             case 0:  // 退出通讯录
                 cout << "欢迎下次使用" << endl;
+                std::cout << "Press Enter to continue..."  << endl;
+                std::cin.get(); // 等待用户输入字符
                 return;
             default:
                 cout << "输入有误，请重新输入" << endl;
