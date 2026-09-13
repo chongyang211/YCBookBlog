@@ -82,6 +82,14 @@ void showMainSelect(AddressBooks* abs) {
 }
 
 // ===== 业务函数 =====
+void addPerson1(AddressBooks* books) {
+    if (books->size >= AddressBooks::MAX) {
+        cout << "通讯录已经满了，无法添加" << endl;
+        return;
+    }
+    Person& p = books->personArray[books->size];
+}
+
 
 void addPerson(AddressBooks* abs) {
     if (abs->size >= AddressBooks::MAX) {
