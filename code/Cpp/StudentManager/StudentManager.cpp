@@ -19,16 +19,6 @@ void pauseAndCls() {
     clearScreen();
 }
 
-// 按姓名查找联系人，返回下标；找不到返回 -1
-int isExist(AddressBooks* abs, const string& name) {
-    for (int i = 0; i < abs->size; i++) {
-        if (abs->personArray[i].name == name) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 // ===== 菜单 =====
 
 void showMenu() {
@@ -88,6 +78,15 @@ void addPerson1(AddressBooks* books) {
         return;
     }
     Person& p = books->personArray[books->size];
+}
+
+void addPerson2(AddressBooks books) {
+    if (books.size >= AddressBooks::MAX) {
+        cout << "通讯录已经满了，无法添加" << endl;
+        return;
+    }
+    Person& p = books.personArray[books.size];
+    // 因为函数要改到调用方那份原始数据，而值传递只能改到副本。
 }
 
 
@@ -236,4 +235,14 @@ void cleanPerson(AddressBooks* abs) {
     abs->size = 0;   // 逻辑清空：只把人数置 0，无需逐个擦除
     cout << "通讯录已清空" << endl;
     pauseAndCls();
+}
+
+// 按姓名查找联系人，返回下标；找不到返回 -1
+int isExist(AddressBooks* abs, const string& name) {
+    for (int i = 0; i < abs->size; i++) {
+        if (abs->personArray[i].name == name) {
+            return i;
+        }
+    }
+    return -1;
 }
