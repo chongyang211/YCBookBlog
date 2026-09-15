@@ -33,7 +33,7 @@ void showMenu() {
     cout << "***************************" << endl;
 }
 
-void showMainSelect(AddressBooks* abs) {
+void showMainSelect(AddressBooks* books) {
     int select = 0;
     while (true) {
         showMenu();
@@ -42,22 +42,22 @@ void showMainSelect(AddressBooks* abs) {
 
         switch (select) {
             case 1:  // 添加联系人
-                addPerson(abs);
+                addPerson(books);
                 break;
             case 2:  // 显示联系人
-                showPerson(abs);
+                showPerson(books);
                 break;
             case 3:  // 删除联系人
-                deletePerson(abs);
+                deletePerson(books);
                 break;
             case 4:  // 查找联系人
-                findPerson(abs);
+                findPerson(books);
                 break;
             case 5:  // 修改联系人
-                modifyPerson(abs);
+                modifyPerson(books);
                 break;
             case 6:  // 清空联系人
-                cleanPerson(abs);
+                cleanPerson(books);
                 break;
             case 0:  // 退出通讯录
                 cout << "欢迎下次使用" << endl;
@@ -90,13 +90,13 @@ void addPerson2(AddressBooks books) {
 }
 
 
-void addPerson(AddressBooks* abs) {
-    if (abs->size >= AddressBooks::MAX) {
+void addPerson(AddressBooks* books) {
+    if (books->size >= AddressBooks::MAX) {
         cout << "通讯录已经满了，无法添加" << endl;
         return;
     }
 
-    Person& p = abs->personArray[abs->size];   // 引用当前空槽位，后续直接赋值
+    Person& p = books->personArray[books->size];   // 引用当前空槽位，后续直接赋值
 
     cout << "请输入姓名：" << endl;
     cin >> p.name;
@@ -123,19 +123,19 @@ void addPerson(AddressBooks* abs) {
     cout << "请输入家庭地址：" << endl;
     cin >> p.address;
 
-    abs->size++;
-    cout << "添加用户：" << p.name << " 成功。当前人数：" << abs->size << endl;
+    books->size++;
+    cout << "添加用户：" << p.name << " 成功。当前人数：" << books->size << endl;
     pauseAndCls();
 }
 
-void showPerson(AddressBooks* abs) {
-    if (abs->size == 0) {
+void showPerson(AddressBooks* books) {
+    if (books->size == 0) {
         cout << "通讯录为空，没有联系人" << endl;
         pauseAndCls();
         return;
     }
-    for (int i = 0; i < abs->size; i++) {
-        const Person& p = abs->personArray[i];
+    for (int i = 0; i < books->size; i++) {
+        const Person& p = books->personArray[i];
         cout << "姓名：" << p.name << "\t";
         cout << "性别：" << (p.sex == 1 ? "男" : "女") << "\t";
         cout << "年龄：" << p.age << "\t";
@@ -145,12 +145,12 @@ void showPerson(AddressBooks* abs) {
     pauseAndCls();
 }
 
-void deletePerson(AddressBooks* abs) {
+void deletePerson(AddressBooks* books) {
     cout << "请输入您要删除的联系人姓名：" << endl;
     string name;
     cin >> name;
 
-    int result = isExist(abs, name);
+    int result = isExist(books, name);
     if (result == -1) {
         cout << "查无此人" << endl;
         pauseAndCls();
@@ -159,27 +159,27 @@ void deletePerson(AddressBooks* abs) {
 
     // 从 result 开始，后面的元素整体前移一位
     // 注意上界是 size-1：避免访问 personArray[size]（未写入的位置）
-    for (int i = result; i < abs->size - 1; i++) {
-        abs->personArray[i] = abs->personArray[i + 1];
+    for (int i = result; i < books->size - 1; i++) {
+        books->personArray[i] = books->personArray[i + 1];
     }
-    abs->size--;
+    books->size--;
     cout << "删除成功" << endl;
     pauseAndCls();
 }
 
-void findPerson(AddressBooks* abs) {
+void findPerson(AddressBooks* books) {
     cout << "请输入您要查找的联系人姓名：" << endl;
     string name;
     cin >> name;
 
-    int result = isExist(abs, name);
+    int result = isExist(books, name);
     if (result == -1) {
         cout << "查无此人" << endl;
         pauseAndCls();
         return;
     }
 
-    const Person& p = abs->personArray[result];
+    const Person& p = books->personArray[result];
     cout << "姓名：" << p.name << "\t";
     cout << "性别：" << (p.sex == 1 ? "男" : "女") << "\t";
     cout << "年龄：" << p.age << "\t";
@@ -188,19 +188,19 @@ void findPerson(AddressBooks* abs) {
     pauseAndCls();
 }
 
-void modifyPerson(AddressBooks* abs) {
+void modifyPerson(AddressBooks* books) {
     cout << "请输入您要修改的联系人姓名：" << endl;
     string name;
     cin >> name;
 
-    int result = isExist(abs, name);
+    int result = isExist(books, name);
     if (result == -1) {
         cout << "查无此人" << endl;
         pauseAndCls();
         return;
     }
 
-    Person& p = abs->personArray[result];   // ⭐ 引用旧位置，覆盖原值而非追加
+    Person& p = books->personArray[result];   // ⭐ 引用旧位置，覆盖原值而非追加
 
     cout << "请输入姓名：" << endl;
     cin >> p.name;
@@ -231,16 +231,16 @@ void modifyPerson(AddressBooks* abs) {
     pauseAndCls();
 }
 
-void cleanPerson(AddressBooks* abs) {
-    abs->size = 0;   // 逻辑清空：只把人数置 0，无需逐个擦除
+void cleanPerson(AddressBooks* books) {
+    books->size = 0;   // 逻辑清空：只把人数置 0，无需逐个擦除
     cout << "通讯录已清空" << endl;
     pauseAndCls();
 }
 
 // 按姓名查找联系人，返回下标；找不到返回 -1
-int isExist(AddressBooks* abs, const string& name) {
-    for (int i = 0; i < abs->size; i++) {
-        if (abs->personArray[i].name == name) {
+int isExist(const AddressBooks* books, const string& name) {
+    for (int i = 0; i < books->size; i++) {
+        if (books->personArray[i].name == name) {
             return i;
         }
     }
