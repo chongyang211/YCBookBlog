@@ -65,3 +65,56 @@
 **核心优势**：基座已从源头缓解上述问题——需求先落 Spec 再动手、改动全程由 Story ID 串联可追溯、变更摘要不可省略、AI 偏离必须显式记录。
 
 **试点环境与人力**：内网 GitLab + CI 测试环境，2~3 个真实迭代需求试点；发榜方 1 名工程师对接数据、需求与联调。
+
+### 全景图：场景 → 风险 → 解决方案 → 验收指标
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontSize":"14px"}}}%%
+flowchart LR
+    subgraph COL1["🔥 问题场景"]
+        direction TB
+        p1["CR 闭眼合并<br/>AI 审 AI"]
+        p2["静默偏离<br/>改动与需求对不上"]
+        p3["回滚不掉<br/>几十文件一个 commit"]
+        p4["换 Agent 换实现<br/>质量看 prompt 运气"]
+        p5["测试幻觉<br/>边界情况零覆盖"]
+        p6["上下文断层<br/>文档与代码脱节"]
+    end
+    subgraph COL2["⚠️ 直接风险"]
+        direction TB
+        r1["评审人为没看懂的<br/>代码签字担责"]
+        r2["事后无人说得清<br/>当初为什么这么改"]
+        r3["整包 revert · MTTR 拉长<br/>省的时间加倍还回去"]
+        r4["工程能力无法沉淀<br/>退回'看运气'"]
+        r5["虚假信心 · 缺陷逃逸<br/>线上修复 ×3~5"]
+        r6["人肉缓存 · 黑盒化<br/>关键人离开即失控"]
+    end
+    subgraph COL3["💡 解决方案"]
+        direction TB
+        s1["对照 Spec 验收标准<br/>逐条核验，AI 核查报告先行"]
+        s2["实现-Spec 一致性自动比对<br/>改哪些/不动哪些，越界即告警"]
+        s3["按任务边界拆提交<br/>每笔 commit 可独立回滚"]
+        s4["Spec/Plan/Tasks 落盘<br/>工程能力沉淀复用"]
+        s5["测试强制覆盖 Spec<br/>边界情况章节"]
+        s6["决策落盘磁盘文件<br/>Story ID 全链可交接"]
+    end
+    subgraph COL4["🎯 验收指标"]
+        direction TB
+        m1["评审有效性<br/>CR ↓30% · 缺陷不升"]
+        m2["一致性检出 ≥80%<br/>误报 ≤15%"]
+        m3["独立回滚 ≥80%"]
+        m4["Story ID 追溯 100%<br/>漂移 24h 发现"]
+        m5["缺陷逃逸率 ↓30%"]
+        m6["可解释性 ≥90%<br/>重写率 ≤10%"]
+    end
+    p1 --> r1 --> s1 --> m1
+    p2 --> r2 --> s2 --> m2
+    p3 --> r3 --> s3 --> m3
+    p4 --> r4 --> s4 --> m4
+    p5 --> r5 --> s5 --> m5
+    p6 --> r6 --> s6 --> m6
+    style COL1 fill:#FFF1F0,stroke:#E0524D,color:#8A211C
+    style COL2 fill:#FFF8E7,stroke:#D69E00,color:#6B5200
+    style COL3 fill:#F0F9F1,stroke:#3F9B57,color:#1E5B31
+    style COL4 fill:#EEF2FB,stroke:#4A6FD4,color:#1F3E8A
+```
