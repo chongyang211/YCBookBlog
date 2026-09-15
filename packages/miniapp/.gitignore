@@ -9,3 +9,7 @@ miniapp/cloudfunctions/*/node_modules/
 
 # 本地私有配置（appid / 云环境 ID）
 config.js
+
+# 小程序代码上传密钥（miniprogram-ci 用，切勿入库）
+private.key
+*.key

@@ -1,6 +1,13 @@
 {
   "description": "杨充的书架 - 自我精进方法论",
-  "packOptions": { "ignore": [] },
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "static/chapters" },
+      { "type": "folder", "value": "scripts" },
+      { "type": "file", "value": "README.md" },
+      { "type": "file", "value": "config.example.js" }
+    ]
+  },
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -32,7 +39,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.6.0",
-  "appid": "YOUR_APPID",
+  "appid": "wxe7797e6250e28d0d",
   "projectname": "yccoding-books",
   "cloudfunctionRoot": "cloudfunctions/",
   "condition": {}
