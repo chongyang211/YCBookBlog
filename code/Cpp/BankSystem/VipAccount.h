@@ -15,7 +15,7 @@ public:
     VipAccount(const std::string& id, const std::string& name, double initBalance, double rate);
 
     void showInfo() const override;
-    bool withdraw(double amount) override;
+    bool withdraw(double amount) override;      // 注意 VIP 这个取钱可以透支
     void deposit(double amount) override;       // VIP 重写：存款带利息
     char typeTag() const override { return 'V'; }
     std::string toCsv() const override;
