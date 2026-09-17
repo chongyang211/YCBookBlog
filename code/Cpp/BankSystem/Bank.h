@@ -32,6 +32,7 @@ public:
     void queryBalance();
     // 转账
     void transfer();
+    // 展示所有
     void showAll() const;
     void saveAll();
     void loadAll();
