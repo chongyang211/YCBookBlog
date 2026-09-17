@@ -34,7 +34,9 @@ public:
     void transfer();
     // 展示所有
     void showAll() const;
+    // 保存
     void saveAll();
+    // 加载
     void loadAll();
 };
 

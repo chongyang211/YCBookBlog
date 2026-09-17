@@ -11,7 +11,9 @@
 
 class FileManager {
 public:
+    // 保存
     static bool save(const std::string& fileName, const std::vector<Account*> accounts);
+    // 获取
     static std::vector<Account*> load(const std::string& fileName);
 };
 
