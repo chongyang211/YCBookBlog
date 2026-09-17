@@ -22,6 +22,7 @@ public:
     Bank();
     // 析构函数
     ~Bank();
+    // 开户
     void openAccount();
     void deposit();
     void withdraw();
