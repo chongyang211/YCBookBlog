@@ -30,6 +30,7 @@ public:
     void withdraw();
     // 查询余额
     void queryBalance();
+    // 转账
     void transfer();
     void showAll() const;
     void saveAll();
