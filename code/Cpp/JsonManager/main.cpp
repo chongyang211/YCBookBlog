@@ -57,8 +57,17 @@ void repl(KvDatabase& db) {
     }
 }
 
+void test() {
+    try {
+        throw jsonkv::JsonError("base class works!");
+    } catch (const std::exception& e) {     // 用基类捕获也行
+        std::cout << "caught: " << e.what() << "\n";
+    }
+}
+
 // g++ -std=c++17 main.cpp JsonNode.cpp JsonParser.cpp JsonWriter.cpp KvDatabase.cpp
 int main(int argc, char** argv) {
+    test();
     KvDatabase db(argc > 1 ? argv[1] : "kv.json");
     db.load();
     repl(db);
