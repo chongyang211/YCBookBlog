@@ -8,13 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(Threads REQUIRED)
 
 # ====== 主程序：交互式 CLI ======
-add_executable(OrderSystem
-    main.cpp
-    thread/thread.cpp
-    thread/extensible_thread.cpp
-    thread/thread_pool.cpp
-    thread/threads.cpp
-)
+add_executable(OrderSystem main.cpp)
 target_include_directories(OrderSystem PRIVATE include)
 target_link_libraries(OrderSystem PRIVATE Threads::Threads)
 
