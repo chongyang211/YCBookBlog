@@ -63,7 +63,7 @@ if [[ "$DO_CLEAN" -eq 1 ]]; then
 fi
 
 echo "==> 配置 CMake (Build type: $BUILD_TYPE)"
-cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 echo "==> 编译 (-j$JOBS)"
 cmake --build "$BUILD_DIR" -j"$JOBS"

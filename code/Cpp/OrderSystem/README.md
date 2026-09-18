@@ -28,9 +28,13 @@ OrderSystem/
 │   └── Logger.h                # 线程安全日志
 ├── main.cpp                    # 交互式 CLI
 ├── benchmark.cpp               # 万级并发压测 + 一致性校验
+├── run.sh                      # 一键构建运行脚本
 ├── CMakeLists.txt
 └── README.md
 ```
+
+> 本项目只依赖 `include/` 下的组件，可独立编译。
+> 另一套通用线程设施（命名线程 / 线程池 / 可扩展线程）已独立到 `Cpp/Demo`，与本工程无关。
 
 ## 类职责说明
 

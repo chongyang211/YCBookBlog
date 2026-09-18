@@ -27,14 +27,12 @@
 
 #include <atomic>
 #include <chrono>
-#include <functional>
 #include <future>
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <string>
 #include <thread>
-#include <vector>
+#include <utility>
 
 // Demo 自带的极简线程安全日志（用法与 OrderSystem 的 Logger 一致）
 struct Logger {
