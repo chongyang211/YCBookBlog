@@ -80,6 +80,8 @@ void test() {
             std::cout << "[" << i << "] " << e.what() << "\n";
         }
     }
+    jsonkv::JsonNode n; 
+    n = 3.14;
 }
 
 // g++ -std=c++17 main.cpp JsonNode.cpp JsonParser.cpp JsonWriter.cpp KvDatabase.cpp
