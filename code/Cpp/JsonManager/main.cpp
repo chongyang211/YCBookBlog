@@ -57,6 +57,7 @@ void repl(KvDatabase& db) {
     }
 }
 
+// g++ -std=c++17 main.cpp JsonNode.cpp JsonParser.cpp JsonWriter.cpp KvDatabase.cpp
 int main(int argc, char** argv) {
     KvDatabase db(argc > 1 ? argv[1] : "kv.json");
     db.load();
