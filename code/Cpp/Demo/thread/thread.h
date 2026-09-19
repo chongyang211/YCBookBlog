@@ -49,7 +49,7 @@ class Thread {
     RunCtx();
   }
 
-  friend class Threads;  // 全局线程的创建与生命周期由 Threads 统一管理
+  friend class ThreadManager;  // 全局线程的创建与生命周期由 ThreadManager 统一管理
 
  protected:
   // 每执行完一个任务后调用，子类可重写做扩展（默认空实现）

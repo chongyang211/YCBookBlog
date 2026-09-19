@@ -35,9 +35,9 @@ class ThreadPool {
 
  private:
   ThreadPool();                          // 私有构造：只能通过 Instance() / Threads 获取
-  void Start();                          // 创建并启动全部工人线程（由 Threads::Init 调用）
+  void Start();                          // 创建并启动全部工人线程（由 ThreadManager::Init 调用）
   void Enqueue(std::function<void()> task);  // 入队（线程安全）；已停止则丢弃
-  friend class Threads;                  // 生命周期由 Threads 托管
+  friend class ThreadManager;            // 生命周期由 ThreadManager 托管
 
  private:
   std::mutex mtx_;                              // 保护 tasks_ 与 stopped_

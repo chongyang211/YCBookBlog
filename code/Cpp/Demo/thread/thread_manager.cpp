@@ -1,6 +1,6 @@
 // Copyright © 1998 - 2023 Tencent. All Rights Reserved.
 
-#include "threads.h"
+#include "thread_manager.h"
 
 namespace facility {
 
@@ -8,32 +8,30 @@ namespace facility {
 static_assert(sizeof(kGlobalThreadNames) / sizeof(const char *) == static_cast<size_t>(kGlobalThreadAll),
               "all global threads must have names");
 
-Threads *Threads::Instance() {
-  static Threads inst;
+ThreadManager *ThreadManager::Instance() {
+  static ThreadManager inst;
   return &inst;
 }
 
-Thread *Threads::CreateThread(std::string_view name) {
+Thread *ThreadManager::CreateThread(std::string_view name) {
   auto thr = new Thread;
   thr->SetName(name);
   thr->Start();
   return thr;
 }
 
-ExtensibleThread *Threads::CreateExtensibleThread(std::string_view name) {
+ExtensibleThread *ThreadManager::CreateExtensibleThread(std::string_view name) {
   auto thr = new ExtensibleThread;
   thr->SetName(name);
   thr->Start();
   return thr;
 }
 
-// void Threads::StopThread(Thread *inst) {}
+ThreadManager::ThreadManager() { Init(); }
 
-Threads::Threads() { Init(); }
+ThreadManager::~ThreadManager() = default;  // thrs_ 中 unique_ptr 析构时各自 Stop + join
 
-Threads::~Threads() = default;  // thrs_ 中 unique_ptr 析构时各自 Stop + join
-
-void Threads::Init() {
+void ThreadManager::Init() {
   for (int i = kMainThread; i < kGlobalThreadAll; i++) {
     thrs_[i] = std::unique_ptr<Thread>(new Thread());
     thrs_[i]->SetName(kGlobalThreadNames[i]);

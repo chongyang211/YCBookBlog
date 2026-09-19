@@ -13,17 +13,17 @@
 //   - 投递到「不同线程」的任务并行执行（各自跑各自的队列）。
 //
 // 主要 API 一览：
-//   Threads::IotThread()/NetworkThread()/...  -> 取全局命名线程
+//   ThreadManager::IotThread()/NetworkThread()/...  -> 取全局命名线程
 //   Thread::Post(callable)                    -> 把任务投递到该线程
 //   Thread::GetName()/Name()/Id()             -> 线程标识
 //   this_thread::Handle()                     -> 在任务内部拿到"当前线程"
 //   this_thread::Post(callable)               -> 把任务排到当前线程队列尾部
-//   Threads::Pool()->Post(callable)           -> 投递任务到线程池（多工人线程并行）
-//   Threads::CreateThread(name)               -> 动态创建线程（调用方持有）
-//   Threads::CreateExtensibleThread(name)     -> 可扩展线程（支持任务后回调）
+//   ThreadManager::Pool()->Post(callable)           -> 投递任务到线程池（多工人线程并行）
+//   ThreadManager::CreateThread(name)               -> 动态创建线程（调用方持有）
+//   ThreadManager::CreateExtensibleThread(name)     -> 可扩展线程（支持任务后回调）
 //   ExtensibleThread::SetPluginCtxHandler(fn) -> 设置"每执行完一个任务"的回调
 
-#include "thread/threads.h"
+#include "thread/thread_manager.h"
 
 #include <atomic>
 #include <chrono>
@@ -62,30 +62,30 @@ auto PostAndWait(Target* target, Func&& func) {
 }
 
 // ---------------------------------------------------------------------------
-// 1. 全局命名线程：Threads::XxxThread()->Post()
+// 1. 全局命名线程：ThreadManager::XxxThread()->Post()
 // ---------------------------------------------------------------------------
 void demo_global_threads() {
     Logger::info("=== 1. 全局命名线程 ===");
 
     // 取到线程对象后可以查看它的名字和 id
-    facility::Thread* iot = facility::Threads::IotThread();
+    facility::Thread* iot = facility::ThreadManager::IotThread();
     Logger::info("Iot 线程: name=", iot->GetName(), ", id=", iot->Id());
 
     // 1.1 不同线程并行工作：任务最终在各自所属的线程上执行
-    facility::Threads::NetworkThread()->Post([]() {
+    facility::ThreadManager::NetworkThread()->Post([]() {
         Logger::info("[network] 收到网络包，当前线程 = ", facility::this_thread::Handle()->Name());
     });
-    facility::Threads::HeartBeatThread()->Post([]() {
+    facility::ThreadManager::HeartBeatThread()->Post([]() {
         Logger::info("[heartbeat] 发送心跳，当前线程 = ", facility::this_thread::Handle()->Name());
     });
-    facility::Threads::OtaInstallThread()->Post([]() {
+    facility::ThreadManager::OtaInstallThread()->Post([]() {
         Logger::info("[ota_install] 开始安装固件，当前线程 = ", facility::this_thread::Handle()->Name());
     });
 
     // 1.2 同一线程串行：投递到 Iot 的 5 个任务严格按 FIFO 依次执行，
     //     所以这里不用任何锁，也不会有数据竞争（顺序一定是 1..5）
     for (int i = 1; i <= 5; ++i) {
-        facility::Threads::IotThread()->Post([i]() {
+        facility::ThreadManager::IotThread()->Post([i]() {
             Logger::info("[iot] 第 ", i, " 个任务");
         });
     }
@@ -108,7 +108,7 @@ void demo_this_thread() {
     auto              done = std::make_shared<std::promise<void>>();
     std::future<void> fut  = done->get_future();
 
-    facility::Threads::IotThread()->Post([done]() {
+    facility::ThreadManager::IotThread()->Post([done]() {
         Logger::info("[iot] 任务 A 开始，当前线程 = ", facility::this_thread::Handle()->Name());
         // 把任务 B 排到"当前线程"队列的尾部，等 A 结束后由同一个线程执行。
         // 这种写法常用于：把耗时的后续步骤拆开，避免长时间占住队列。
@@ -123,12 +123,12 @@ void demo_this_thread() {
 }
 
 // ---------------------------------------------------------------------------
-// 3. 线程池：Threads::Pool()，多个工人线程并发消费同一个队列
+// 3. 线程池：ThreadManager::Pool()，多个工人线程并发消费同一个队列
 // ---------------------------------------------------------------------------
 void demo_thread_pool() {
     Logger::info("=== 3. 线程池 ===");
 
-    facility::ThreadPool* pool = facility::Threads::Pool();
+    facility::ThreadPool* pool = facility::ThreadManager::Pool();
     Logger::info("线程池工人线程数 = ", facility::ThreadPool::kInitalThreadsNum);
 
     const int         n       = 8;
@@ -149,14 +149,14 @@ void demo_thread_pool() {
 }
 
 // ---------------------------------------------------------------------------
-// 4. 动态创建线程：Threads::CreateThread(name)
+// 4. 动态创建线程：ThreadManager::CreateThread(name)
 // ---------------------------------------------------------------------------
 void demo_dynamic_thread() {
     Logger::info("=== 4. 动态创建线程 ===");
 
     // CreateThread 返回裸指针，所有权归调用方 —— 用 unique_ptr 托管，
     // 析构时会自动 Stop() + join()，不会泄漏。
-    std::unique_ptr<facility::Thread> thr(facility::Threads::CreateThread("worker"));
+    std::unique_ptr<facility::Thread> thr(facility::ThreadManager::CreateThread("worker"));
     Logger::info("已创建线程 name=", thr->GetName(), ", id=", thr->Id());
 
     thr->Post([]() { Logger::info("[worker] 任务 1"); });
@@ -175,7 +175,7 @@ void demo_extensible_thread() {
 
     // 注意：ExtensibleThread 的析构函数是 protected，所以要用基类指针 Thread*
     // 托管（Thread 是虚析构），才能被 unique_ptr 正确释放。
-    facility::ExtensibleThread* ext = facility::Threads::CreateExtensibleThread("plugin");
+    facility::ExtensibleThread* ext = facility::ThreadManager::CreateExtensibleThread("plugin");
     std::unique_ptr<facility::Thread> thr(ext);
     auto ticks = std::make_shared<std::atomic<int>>(0);
 

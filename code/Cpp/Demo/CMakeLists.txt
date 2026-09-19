@@ -9,12 +9,12 @@ find_package(Threads REQUIRED)
 
 # ====== 通用线程设施库 ======
 # 命名线程（Thread/Threads）+ 线程池（ThreadPool::submit → future）+ 可扩展线程
-# 引用方式： #include "thread/threads.h"   →   facility::Threads::IotThread()
+# 引用方式： #include "thread/thread_manager.h"   →   facility::ThreadManager::IotThread()
 add_library(threadfacility STATIC
     thread/thread.cpp
     thread/extensible_thread.cpp
     thread/thread_pool.cpp
-    thread/threads.cpp
+    thread/thread_manager.cpp
 )
 target_include_directories(threadfacility PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(threadfacility PUBLIC Threads::Threads)
