@@ -7,7 +7,7 @@
 
 namespace facility {
 
-static thread_local Thread* this_thr = nullptr;
+static thread_local Thread* this_thr = nullptr;  // 当前线程对应的 Thread 对象（线程局部）
 
 namespace {
 
@@ -48,7 +48,7 @@ void Thread::Stop() {
     std::lock_guard<std::mutex> lock(mtx_);
     stopped_ = true;
   }
-  cv_.notify_all();
+  cv_.notify_all();  // 唤醒阻塞在 wait 上的主循环
 }
 
 void Thread::SetupThreadLocal() {
@@ -63,7 +63,7 @@ void Thread::Enqueue(std::function<void()> task) {
     if (stopped_) return;
     tasks_.push_back(std::move(task));
   }
-  cv_.notify_one();
+  cv_.notify_one();  // 只唤醒一个等待者即可（一次取一个任务）
 }
 
 void Thread::OnTaskDone() {}
@@ -74,16 +74,16 @@ void Thread::RunCtx() {
     std::function<void()> task;
     {
       std::unique_lock<std::mutex> lock(mtx_);
-      cv_.wait(lock, [this]() { return stopped_ || !tasks_.empty(); });
+      cv_.wait(lock, [this]() { return stopped_ || !tasks_.empty(); });  // 防虚假唤醒
       if (tasks_.empty()) {
-        if (stopped_) return;
+        if (stopped_) return;  // 停止且任务已排空 → 退出主循环
         continue;
       }
       task = std::move(tasks_.front());
       tasks_.pop_front();
     }
-    if (task) task();
-    OnTaskDone();
+    if (task) task();  // 锁外执行任务，避免持锁运行用户代码
+    OnTaskDone();      // 任务完成钩子（子类可扩展）
   }
 }
 

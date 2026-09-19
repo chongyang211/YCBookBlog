@@ -8,6 +8,7 @@ namespace facility {
 
 namespace {
 
+// 设置当前线程名（不同平台签名不同）
 void SetCurrentThreadName(const std::string& name) {
 #if defined(__APPLE__)
   ::pthread_setname_np(name.c_str());
@@ -19,7 +20,7 @@ void SetCurrentThreadName(const std::string& name) {
 }  // namespace
 
 ThreadPool* ThreadPool::Instance() {
-  static ThreadPool pool;
+  static ThreadPool pool;  // 函数内静态变量：C++11 起初始化线程安全
   return &pool;
 }
 
@@ -35,7 +36,7 @@ void ThreadPool::Stop() {
     std::lock_guard<std::mutex> lock(mtx_);
     stopped_ = true;
   }
-  cv_.notify_all();
+  cv_.notify_all();  // 唤醒所有阻塞中的工人
 }
 
 ThreadPool::ThreadPool() : thrs_(kInitalThreadsNum) {}
@@ -46,26 +47,26 @@ void ThreadPool::Enqueue(std::function<void()> task) {
     if (stopped_) return;
     tasks_.push_back(std::move(task));
   }
-  cv_.notify_one();
+  cv_.notify_one();  // 唤醒任意一个空闲工人
 }
 
 void ThreadPool::Start() {
   for (size_t i = 0; i < thrs_.size(); i++) {
     thrs_[i] = std::make_unique<std::thread>([i, this]() {
       SetCurrentThreadName("thr_p_" + std::to_string(i));
-      while (true) {
+      while (true) {  // 工人主循环：等任务 → 取任务 → 执行
         std::function<void()> task;
         {
           std::unique_lock<std::mutex> lock(mtx_);
-          cv_.wait(lock, [this]() { return stopped_ || !tasks_.empty(); });
+          cv_.wait(lock, [this]() { return stopped_ || !tasks_.empty(); });  // 防虚假唤醒
           if (tasks_.empty()) {
-            if (stopped_) return;
+            if (stopped_) return;  // 停止且队列已空 → 工人退出
             continue;
           }
           task = std::move(tasks_.front());
           tasks_.pop_front();
         }
-        if (task) task();
+        if (task) task();  // 锁外执行，避免阻塞其他工人取任务
       }
     });
   }
