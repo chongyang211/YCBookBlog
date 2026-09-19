@@ -4,7 +4,7 @@
 
 namespace api {
 
-ApiClient::ApiClient(std::string base_url, http::RequestConfig cfg)
+ApiClient::ApiClient(std::string base_url, http::ClientConfig cfg)
     : http_(std::move(base_url), cfg) {}
 
 void ApiClient::SetBaseUrl(const std::string& base_url) { http_.SetBaseUrl(base_url); }
@@ -17,12 +17,17 @@ void ApiClient::SetBearerToken(const std::string& token) {
   http_.SetDefaultHeader("Authorization", "Bearer " + token);
 }
 
-http::RequestConfig& ApiClient::config() { return http_.config(); }
+void ApiClient::AddInterceptor(http::InterceptorPtr interceptor) {
+  http_.AddInterceptor(std::move(interceptor));
+}
 
-ApiResult ApiClient::ToApiResult(const http::HttpResult& r) {
+http::ClientConfig& ApiClient::config() { return http_.config(); }
+
+ApiResult ApiClient::ToApiResult(const http::Response& r) {
   ApiResult ret;
   ret.status_code = r.status_code;
   ret.raw_body = r.body;
+  ret.headers = r.headers;
 
   if (r.NetworkFailed()) {
     ret.error = r.error;
@@ -32,8 +37,7 @@ ApiResult ApiClient::ToApiResult(const http::HttpResult& r) {
     ret.error = "HTTP " + std::to_string(r.status_code);
     return ret;
   }
-  // 2xx：尝试解析 JSON（204 无内容时 data 置为 null，不算失败）
-  if (r.body.empty()) return ret;
+  if (r.body.empty()) return ret;  // 204 No Content
   try {
     ret.data = nlohmann::json::parse(r.body);
   } catch (const std::exception& ex) {
@@ -67,8 +71,17 @@ ApiResult ApiClient::PostRaw(const std::string& path, const std::string& body,
   return ToApiResult(http_.Post(path, body, content_type, headers));
 }
 
-http::HttpResult ApiClient::Download(const std::string& path, const std::string& file_path) {
+http::Response ApiClient::Download(const std::string& path, const std::string& file_path) {
   return http_.Download(path, file_path);
+}
+
+ApiResult ApiClient::Upload(const std::string& path, const std::string& field_name,
+                            const std::string& file_path, const Headers& headers) {
+  http::Response r = http_.Post(path)
+                         .Multipart({{field_name, file_path}})
+                         .Headers(headers)
+                         .Send();
+  return ToApiResult(r);
 }
 
 }  // namespace api

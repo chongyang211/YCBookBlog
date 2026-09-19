@@ -1,15 +1,11 @@
 // Copyright © 1998 - 2026 Tencent. All Rights Reserved.
 
-// 通用 API 调用层：在 HttpClient 之上做 JSON 化，
-// 对齐原 palm 项目 RequestEngine 的"三段式"（序列化→请求→解析），
-// 但把 40 行样板收敛为一个泛型调用。
+// 通用 API 调用层 v2：在 HttpClient（拦截器链）之上做 JSON 化，
+// 提供 Retrofit 风格的 Response<T>：传 URL + JSON，拿回业务结构体。
 
 #pragma once
 
-#include <map>
 #include <string>
-#include <utility>
-#include <vector>
 
 #include "network/http_client.h"
 #include "nlohmann/json.hpp"
@@ -18,107 +14,111 @@ namespace api {
 
 using http::Headers;
 using http::Query;
+using http::Response;
 
 /**
- * @brief 统一 API 响应结构（JSON 化）
+ * @brief JSON API 结果（响应体自动解析为 nlohmann::json）
  *
- * 失败分类（Ok() 为 false 时）：
- *   status_code == 0        网络层失败（连不上/超时），error 有值
- *   status_code >= 400      HTTP 层失败（4xx/5xx），error 为状态码描述
- *   parse_failed == true    HTTP 200 但响应体不是合法 JSON
+ * 失败三分类（Ok() 为 false 时）：
+ *   status_code == 0     网络层失败，error 有值
+ *   status_code >= 400   HTTP 层失败
+ *   parse_failed == true HTTP 200 但响应体不是合法 JSON
  */
 struct ApiResult {
-  int32_t status_code = 0;      // 0 = 网络失败；否则为 HTTP 状态码
-  nlohmann::json data;          // 成功时为解析后的 JSON；失败为 null
-  std::string raw_body;         // 原始响应体（解析失败时排查用）
-  std::string error;            // 失败原因
-  bool parse_failed = false;    // HTTP 成功但 JSON 解析失败
+  int32_t status_code = 0;
+  nlohmann::json data;      // 成功时为解析后的 JSON
+  Headers headers;          // 响应头（便于读取 trace-id / 限流头等）
+  std::string raw_body;
+  std::string error;
+  bool parse_failed = false;
 
-  bool Ok() const { return error.empty() && !parse_failed && status_code >= 200 && status_code < 300; }
+  bool Ok() const {
+    return error.empty() && !parse_failed && status_code >= 200 && status_code < 300;
+  }
 };
 
 /**
- * @brief 通用 API 客户端：传 URL + JSON，拿回 JSON
+ * @brief 通用 API 客户端
  *
- * 用法示例：
- *   api::ApiClient client("https://api.example.com");
- *   auto r = client.GetJson("/v1/user", {{"id", "42"}});
- *   if (r.Ok()) { std::string name = r.data["name"]; }
+ * 用法：
+ *   api::ApiClient api("https://api.example.com");
+ *   auto r = api.GetJson("/v1/user", {{"id","42"}});
+ *   if (r.Ok()) { auto name = r.data["name"]; }
+ *
+ *   // 业务结构体直出（T 需提供 static T FromJson(const json&)）
+ *   auto u = api.Get<User>("/v1/user/42");
+ *   if (u.IsSuccess()) { u.Data().name; }
  */
 class ApiClient {
  public:
-  explicit ApiClient(std::string base_url, http::RequestConfig cfg = {});
+  explicit ApiClient(std::string base_url, http::ClientConfig cfg = {});
 
-  // 透传给 HttpClient 的配置能力
+  // ---------- 配置透传（含拦截器） ----------
   void SetBaseUrl(const std::string& base_url);
-  void SetDefaultHeader(const std::string& key, const std::string& value);  // 如 Authorization: Bearer xx
-  void SetBearerToken(const std::string& token);  // 快捷设置 Bearer Token
-  http::RequestConfig& config();
+  void SetDefaultHeader(const std::string& key, const std::string& value);
+  void SetBearerToken(const std::string& token);
+  void AddInterceptor(http::InterceptorPtr interceptor);  // 自定义拦截器（签名/埋点…）
+  http::ClientConfig& config();
+  http::HttpClient& raw() { return http_; }  // 需要原始能力（下载/multipart）时使用
 
-  // ---------- JSON API ----------
-
-  /** @brief GET，响应体自动解析为 JSON */
+  // ---------- JSON 接口 ----------
   ApiResult GetJson(const std::string& path, const Query& query = {}, const Headers& headers = {});
-
-  /** @brief POST，body 为任意可转 JSON 的值（对象/数组/字面量均可） */
   ApiResult PostJson(const std::string& path, const nlohmann::json& body,
                      const Headers& headers = {});
-
-  /** @brief PUT，body 为 JSON */
   ApiResult PutJson(const std::string& path, const nlohmann::json& body,
                     const Headers& headers = {});
-
-  /** @brief DELETE，响应体自动解析为 JSON */
   ApiResult DeleteJson(const std::string& path, const Query& query = {},
                        const Headers& headers = {});
-
-  // ---------- 泛型便捷调用（自动反序列化到业务结构体） ----------
-
-  /**
-   * @brief GET + 反序列化到 RespT
-   * @tparam RespT 业务响应类型，需提供 static RespT FromJson(const nlohmann::json&)
-   *               （与原 palm::entity 的约定完全一致，现有 entity 可直接复用）
-   */
-  template <typename RespT>
-  bool Get(const std::string& path, RespT& out, const Query& query = {},
-           const Headers& headers = {}) {
-    auto r = GetJson(path, query, headers);
-    return Unpack(r, out);
-  }
-
-  /**
-   * @brief POST + 反序列化到 RespT
-   * @tparam ReqT  请求类型，需提供 ToJson() const
-   * @tparam RespT 响应类型，需提供 static FromJson(const nlohmann::json&)
-   */
-  template <typename ReqT, typename RespT>
-  bool Post(const std::string& path, const ReqT& req, RespT& out, const Headers& headers = {}) {
-    auto r = PostJson(path, req.ToJson(), headers);
-    return Unpack(r, out);
-  }
-
-  // ---------- 非 JSON（表单/protobuf 等） ----------
-
   ApiResult PostRaw(const std::string& path, const std::string& body,
                     const std::string& content_type, const Headers& headers = {});
 
-  /** @brief 文件下载 */
-  http::HttpResult Download(const std::string& path, const std::string& file_path);
+  // ---------- 泛型接口（Retrofit 风格 Response<T>） ----------
+
+  /** @brief GET + 反序列化 */
+  template <typename T>
+  http::ResponseT<T> Get(const std::string& path, const Query& query = {},
+                         const Headers& headers = {}) {
+    return ToTyped<T>(GetJson(path, query, headers));
+  }
+
+  /** @brief POST + 反序列化（ReqT 需提供 ToJson() const） */
+  template <typename RespT, typename ReqT>
+  http::ResponseT<RespT> Post(const std::string& path, const ReqT& req,
+                              const Headers& headers = {}) {
+    return ToTyped<RespT>(PostJson(path, req.ToJson(), headers));
+  }
+
+  /** @brief PUT + 反序列化 */
+  template <typename RespT, typename ReqT>
+  http::ResponseT<RespT> Put(const std::string& path, const ReqT& req,
+                             const Headers& headers = {}) {
+    return ToTyped<RespT>(PutJson(path, req.ToJson(), headers));
+  }
+
+  // ---------- 文件 ----------
+  http::Response Download(const std::string& path, const std::string& file_path);
+  ApiResult Upload(const std::string& path, const std::string& field_name,
+                   const std::string& file_path, const Headers& headers = {});
 
  private:
-  // 统一把 HttpResult 转 ApiResult（含 JSON 解析与错误归一）
-  static ApiResult ToApiResult(const http::HttpResult& r);
+  static ApiResult ToApiResult(const http::Response& r);
 
-  // ApiResult → 业务结构体（Ok 时调 FromJson 反序列化）
-  template <typename RespT>
-  static bool Unpack(const ApiResult& r, RespT& out) {
-    if (!r.Ok()) return false;
-    try {
-      out = RespT::FromJson(r.data);
-      return true;
-    } catch (const std::exception&) {
-      return false;
+  template <typename T>
+  static http::ResponseT<T> ToTyped(const ApiResult& r) {
+    http::ResponseT<T> ret;
+    ret.status_code = r.status_code;
+    ret.raw_body = r.raw_body;
+    ret.error = r.error;
+    ret.parse_failed = r.parse_failed;
+    if (r.Ok()) {
+      try {
+        ret.data = T::FromJson(r.data);
+      } catch (const std::exception& ex) {
+        ret.parse_failed = true;
+        ret.error = std::string("FromJson failed: ") + ex.what();
+      }
     }
+    return ret;
   }
 
   http::HttpClient http_;

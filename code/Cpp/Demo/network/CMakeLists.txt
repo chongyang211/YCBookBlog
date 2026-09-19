@@ -35,6 +35,7 @@ FetchContent_MakeAvailable(json)
 add_library(netclient STATIC
     http_client.cpp
     api_client.cpp
+    interceptor.cpp
     mini_test_server.cpp
 )
 target_include_directories(netclient PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)

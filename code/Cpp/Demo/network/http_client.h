@@ -1,147 +1,142 @@
 // Copyright © 1998 - 2026 Tencent. All Rights Reserved.
 
-// 通用 HTTP 客户端（零业务依赖）：基于 cpr 封装，支持 GET/POST/PUT/DELETE/Download。
-// 与原 palm::HttpRequest 的区别：不耦合 Device/Application 等设备逻辑，
-// 可用于调用任意 REST API。
+// 通用 HTTP 客户端 v2：
+//   · 链式请求构造（requests/axios 风格）：client.Get("/x").Query(...).Header(...).Send()
+//   · 拦截器责任链（OkHttp 风格）：日志/鉴权/签名/重试 可插拔
+//   · Response<T> 泛型响应（Retrofit 风格）：业务结构体直出
+//   · 跨请求复用 DNS/SSL 会话/连接（curl share，提升短连接性能）
+//   · 同步 + 异步（回调 + std::future）
 
 #pragma once
 
 #include <chrono>
-#include <functional>
-#include <map>
+#include <future>
+#include <memory>
 #include <string>
-#include <utility>
 #include <vector>
+
+#include "network/http_defs.h"
 
 namespace http {
 
-using Query = std::vector<std::pair<std::string, std::string>>;
-using Headers = std::map<std::string, std::string>;
-
-/**
- * @brief 统一 HTTP 响应结构
- *
- * status_code == 0 表示请求本身失败（网络错误/超时），此时 error 非空。
- */
-struct HttpResult {
-  int32_t status_code = 0;   // HTTP 状态码（200/404/500...），网络失败时为 0
-  std::string body;          // 响应体（文本）
-  std::string error;         // 网络层错误信息，成功为空
-  std::string final_url;     // 最终 URL（重定向后）
-  long elapsed_ms = 0;       // 请求耗时（毫秒）
-
-  // 2xx 视为业务成功
-  bool Ok() const { return error.empty() && status_code >= 200 && status_code < 300; }
-  // 网络层失败（连不上/超时/DNS 失败等）
-  bool NetworkFailed() const { return !error.empty(); }
+/** @brief 客户端级配置（一个实例的所有请求共享） */
+struct ClientConfig {
+  std::chrono::milliseconds timeout{std::chrono::seconds(15)};
+  std::chrono::milliseconds connect_timeout{std::chrono::seconds(5)};
+  bool verify_ssl = true;
+  bool follow_redirects = true;
+  RetryPolicy retry;                       // 默认不重试（max_attempts=1）
+  Logger logger;                           // 为空则静默
+  bool enable_logging = false;             // 快捷开关：自动加 LoggingInterceptor
 };
 
+class HttpClient;
+
 /**
- * @brief 请求配置（一个 HttpClient 实例共享一组配置）
+ * @brief 链式请求构造器（借鉴 requests/axios）
+ *
+ * 用法：
+ *   auto r = client.Get("/v1/user").Query({{"id","1"}}).Header("X-A","b").Timeout(3s).Send();
  */
-struct RequestConfig {
-  std::chrono::milliseconds timeout{std::chrono::seconds(15)};        // 总超时
-  std::chrono::milliseconds connect_timeout{std::chrono::seconds(5)};  // 连接超时
-  bool verify_ssl = true;                                              // SSL 证书校验
-  bool follow_redirects = true;                                        // 跟随 3xx 重定向
-  int max_retries = 0;                                                 // 网络失败/5xx 自动重试次数
-  int retry_interval_ms = 200;                                        // 重试间隔（每次翻倍）
+class RequestBuilder {
+ public:
+  RequestBuilder(HttpClient* client, Method method, std::string path);
+
+  RequestBuilder& Query(Query q);
+  RequestBuilder& Header(const std::string& key, const std::string& value);
+  RequestBuilder& Headers(Headers h);
+  RequestBuilder& Body(const std::string& body, const std::string& content_type = "application/json");
+  RequestBuilder& Json(const std::string& json_str);
+  RequestBuilder& Multipart(MultipartParts parts);      // 文件上传
+  RequestBuilder& Timeout(std::chrono::milliseconds t);
+  RequestBuilder& ConnectTimeout(std::chrono::milliseconds t);
+  RequestBuilder& VerifySsl(bool on);
+
+  /** @brief 同步发送（走完整拦截器链） */
+  Response Send();
+
+  /**
+   * @brief 同步发送并反序列化为 T（T 需提供 static T FromJson(const nlohmann::json&)）
+   */
+  template <typename T>
+  ResponseT<T> SendAs();
+
+  /** @brief 异步发送，回调在 cpr 工作线程执行 */
+  void SendAsync(std::function<void(Response)> cb);
+
+  /** @brief 异步发送，返回 std::future（调用方自己决定何时等待） */
+  std::future<Response> SendAsync();
+
+ private:
+  HttpClient* client_ = nullptr;
+  Request req_;
 };
 
 /**
  * @brief 通用 HTTP 客户端
  *
- * 用法示例：
- *   http::HttpClient client("https://api.example.com");
- *   auto r = client.Get("/v1/user", {{"id", "42"}});
- *   if (r.Ok()) { r.body 就是响应体 }
+ * client 级：拦截器、超时、日志配置；
+ * request 级：链式覆盖（Query/Header/Body/Timeout）。
  */
 class HttpClient {
  public:
-  /**
-   * @param base_url 服务基地址，如 "https://api.example.com"（末尾带不带 / 均可）
-   * @param cfg      请求配置（超时/SSL/重试等）
-   */
-  explicit HttpClient(std::string base_url, RequestConfig cfg = {});
-
+  explicit HttpClient(std::string base_url, ClientConfig cfg = {});
   ~HttpClient() = default;
   HttpClient(const HttpClient&) = delete;
   HttpClient& operator=(const HttpClient&) = delete;
 
-  // ---------- 配置管理 ----------
+  // ---------- 链式入口 ----------
+  RequestBuilder Get(const std::string& path);
+  RequestBuilder Post(const std::string& path);
+  RequestBuilder Put(const std::string& path);
+  RequestBuilder Delete(const std::string& path);
+  RequestBuilder Patch(const std::string& path);
 
+  // ---------- 拦截器 ----------
+  // 顺序 = 执行顺序；建议：日志 → 重试 → 鉴权/签名 →（末尾为真实请求）
+  void AddInterceptor(InterceptorPtr interceptor);
+  void ClearInterceptors();
+
+  // ---------- 配置 ----------
   void SetBaseUrl(const std::string& base_url);
-  // 设置公共 header（本实例所有请求都会带上，如 Authorization/User-Agent）
   void SetDefaultHeader(const std::string& key, const std::string& value);
   void RemoveDefaultHeader(const std::string& key);
-  RequestConfig& config() { return cfg_; }
+  ClientConfig& config() { return cfg_; }
+  const std::string& base_url() const { return base_url_; }
+  int port() const { return 0; }  // 保留：便于上层做 mock/测试替换
 
-  // ---------- 同步请求 ----------
+  // ---------- 便捷同步接口（内部委托给链式构造器，兼容旧用法） ----------
+  Response Get(const std::string& path, const Query& query, const Headers& headers = {});
+  Response Post(const std::string& path, const std::string& json_body,
+                const Headers& headers = {});
+  Response Post(const std::string& path, const std::string& body, const std::string& content_type,
+                const Headers& headers = {});
+  Response Put(const std::string& path, const std::string& json_body, const Headers& headers = {});
+  // query 不设默认值：否则单参 Delete(path) 会与链式版 RequestBuilder Delete(path) 歧义
+  // 单参数场景请用链式：client.Delete(path).Query(...).Send()
+  Response Delete(const std::string& path, const Query& query, const Headers& headers = {});
+  Response Download(const std::string& path, const std::string& file_path);
 
-  /**
-   * @brief GET 请求
-   * @param path    请求路径，如 "/v1/user"（开头带不带 / 均可）
-   * @param query   查询参数（自动 URL 编码），如 {{"id","42"},{"verbose","true"}}
-   * @param headers 本次请求附加 header（与公共 header 合并，同名覆盖）
-   */
-  HttpResult Get(const std::string& path, const Query& query = {}, const Headers& headers = {});
-
-  /**
-   * @brief POST JSON 请求（Content-Type: application/json）
-   * @param body JSON 字符串
-   */
-  HttpResult Post(const std::string& path, const std::string& json_body,
-                  const Headers& headers = {});
-
-  /**
-   * @brief POST 原始请求体（自定义 Content-Type，如 x-www-form-urlencoded、protobuf）
-   */
-  HttpResult Post(const std::string& path, const std::string& body,
-                  const std::string& content_type, const Headers& headers = {});
-
-  /** @brief PUT JSON 请求 */
-  HttpResult Put(const std::string& path, const std::string& json_body,
-                 const Headers& headers = {});
-
-  /** @brief DELETE 请求 */
-  HttpResult Delete(const std::string& path, const Query& query = {}, const Headers& headers = {});
-
-  /**
-   * @brief 下载文件到本地
-   * @return HttpResult，body 为空，status_code 表示结果
-   */
-  HttpResult Download(const std::string& path, const std::string& file_path);
-
-  // ---------- 异步请求（回调在 cpr 线程池执行） ----------
-
-  using Callback = std::function<void(HttpResult)>;
-
+  // ---------- 异步（旧签名，内部委托） ----------
+  using Callback = std::function<void(Response)>;
   void GetAsync(const std::string& path, const Query& query, const Headers& headers, Callback cb);
   void PostAsync(const std::string& path, const std::string& json_body, const Headers& headers,
                  Callback cb);
 
-  // ---------- 工具 ----------
+  // ---------- 内部：拦截器链入口 ----------
+  Response Execute(Request request);
 
-  // base_url + path 拼接（处理斜杠），query 参数拼成 "a=1&b=2"（已 URL 编码）
+  // 工具：base_url + path 拼接（path 为完整 URL 时直接用）
   static std::string BuildUrl(const std::string& base_url, const std::string& path);
+  static std::string BuildQueryString(const Query& query);
 
  private:
-  // 实际执行：method 为 "GET"/"POST"/"PUT"/"DELETE"
-  HttpResult DoRequest(const std::string& method, const std::string& full_url,
-                       const std::string& body, const std::string& content_type,
-                       const Query& query, const Headers& headers);
-
-  // 按 cfg_.max_retries 重试：网络失败或 5xx 时重试，间隔指数递增
-  HttpResult DoRequestWithRetry(const std::string& method, const std::string& full_url,
-                                const std::string& body, const std::string& content_type,
-                                const Query& query, const Headers& headers);
-
-  // 合并公共 header 与请求 header（后者覆盖前者）
-  Headers MergeHeaders(const Headers& extra) const;
+  friend class RequestBuilder;
 
   std::string base_url_;
-  RequestConfig cfg_;
-  Headers default_headers_;  // 公共 header（配置了会话级 token/UA 时使用）
+  ClientConfig cfg_;
+  Headers default_headers_;
+  std::vector<InterceptorPtr> interceptors_;
 };
 
 }  // namespace http

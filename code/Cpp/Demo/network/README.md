@@ -1,106 +1,127 @@
 # 通用网络库（NetClient）
 
-从 palm 工程网络模块中抽取的**零业务依赖**通用层：基于 [cpr](https://github.com/libcpr/cpr)（libcurl 的现代 C++ 封装）+ [nlohmann/json](https://github.com/nlohmann/json)。
+零业务依赖的 C++ HTTP 客户端，基于 [cpr](https://github.com/libcpr/cpr) + [nlohmann/json](https://github.com/nlohmann/json)。
+
+设计借鉴三款知名库：
+
+| 来源 | 借鉴点 |
+|---|---|
+| **OkHttp** | 拦截器（Interceptor）责任链：日志/鉴权/签名/重试等横切关注可插拔 |
+| **Retrofit** | `Response<T>` 泛型响应：传 URL + JSON，拿回业务结构体 |
+| **axios / requests** | 实例级默认配置 + 链式（Fluent）请求构造 |
 
 ## 分层
 
 ```
-ApiClient      JSON API 层：传 URL + JSON 拿回 JSON；泛型调用直连业务结构体
-HttpClient     通用 HTTP 层：GET/POST/PUT/DELETE/Download，同步 + 异步回调
-cpr/libcurl    传输层
+ApiClient    JSON API 层：GetJson/PostJson… + Response<T> 泛型调用 + Upload/Download
+HttpClient   通用 HTTP 层：链式构造 + 拦截器链 + 连接复用 + 同步/异步
+Interceptor  拦截器：Logging / Header / BearerAuth / Retry / Signing（可自定义）
+cpr/curl     传输层（DNS、SSL 会话、TCP 连接跨请求复用）
 ```
 
 ## 构建与运行
 
 ```bash
 cd code/Cpp/Demo/network
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release   # 首次会 FetchContent 拉取 cpr/json
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release   # 首次 FetchContent 拉取 cpr/json
 cmake --build build -j
-./build/network_demo                              # 内置 mini 服务器，无需外网
+./build/network_demo                              # 内置 mini 服务器，无需外网：ALL PASS
 ```
 
-## 快速上手
-
-### 1. HttpClient（原始层：拿到的是字符串）
+## 1. 链式请求构造
 
 ```cpp
 http::HttpClient client("https://api.example.com");
-client.SetDefaultHeader("Authorization", "Bearer <token>");
 
-auto r = client.Get("/v1/user", {{"id", "42"}});
-if (r.Ok()) {
-  // r.status_code / r.body / r.elapsed_ms / r.final_url
-} else if (r.NetworkFailed()) {
-  // r.error：连不上 / 超时
-} else {
-  // r.status_code：4xx / 5xx
-}
+auto r = client.Get("/v1/user")
+               .Query({{"id", "42"}})
+               .Header("X-Trace", "abc")
+               .Timeout(std::chrono::seconds(3))
+               .Send();
 
-auto r2 = client.Post("/v1/user", R"({"name":"xx"})");       // JSON body
-auto r3 = client.Post("/login", "user=a&pwd=b",
-                      "application/x-www-form-urlencoded");   // 任意 Content-Type
-auto r4 = client.Download("/files/pkg.bin", "/tmp/pkg.bin"); // 下载落盘
-
-client.GetAsync("/v1/ping", {}, {}, [](http::HttpResult r) { /* cpr 线程池回调 */ });
+if (r.Ok()) { /* r.body / r.status_code / r.headers / r.elapsed_ms */ }
+else if (r.NetworkFailed()) { /* r.error：连不上/超时 */ }
+else { /* 4xx / 5xx */ }
 ```
 
-配置（超时 / SSL / 重试）：
+## 2. 拦截器链（核心）
 
 ```cpp
-http::HttpClient client(base, http::RequestConfig{
-    .timeout = std::chrono::seconds(10),
-    .verify_ssl = false,        // 自签名证书场景
-    .max_retries = 2,           // 网络失败/5xx 自动重试（200ms 起指数退避）
-});
+http::ClientConfig cfg;
+cfg.logger = [](const std::string& s) { std::cout << s << std::endl; };
+cfg.enable_logging = true;
+cfg.retry = http::RetryPolicy{3, std::chrono::milliseconds(200)};  // 最多 3 次，指数退避
+
+http::HttpClient client(base, cfg);
+client.AddInterceptor(std::make_shared<http::interceptor::HeaderInterceptor>(
+    http::Headers{{"X-App", "palm"}}));
+client.AddInterceptor(std::make_shared<http::interceptor::BearerAuthInterceptor>("tk-9527"));
+
+// 业务签名从业务代码里剥离：原 palm 工程"三种签名"就是这种拦截器的实际应用
+client.AddInterceptor(std::make_shared<http::interceptor::SigningInterceptor>(
+    [](const std::string& m, const std::string& path, const std::string& body) {
+      return "SIGN(" + m + "," + path + "," + std::to_string(body.size()) + ")";
+    }));
 ```
 
-### 2. ApiClient（推荐：JSON 直进直出）
+自定义拦截器（可实现缓存短路、mock、埋点）：
+
+```cpp
+class MyInterceptor : public http::Interceptor {
+ public:
+  http::Response Intercept(http::Chain& chain) override {
+    // 改请求：chain.request().headers["X"] = "y";  return chain.Proceed(chain.request());
+    // 短路  ：return http::Response{200, "{\"mock\":1}", {}, "", "", 0};
+    // 改响应：auto r = chain.Proceed(); r.body = ...; return r;
+    return chain.Proceed();
+  }
+};
+```
+
+> 顺序建议：**日志 → 重试 → 鉴权/签名**。重试放在日志之后，对外层日志只呈现一次请求（与 OkHttp 一致）。
+
+## 3. Response\<T\> 泛型响应
 
 ```cpp
 api::ApiClient api("https://api.example.com");
-api.SetBearerToken("xxx");
 
-auto r = api.GetJson("/v1/user", {{"id", "42"}});
-if (r.Ok()) {
-  std::string name = r.data["name"];   // 已是 nlohmann::json
-} else if (r.parse_failed) {
-  // HTTP 200 但响应体不是 JSON，看 r.raw_body
+// ReqT 需 ToJson() const；RespT 需 static FromJson(const json&)
+// ——原 palm::entity 的结构体无需修改即可复用
+auto r = api.Post<CreateUserResp>("/v1/user", req);
+if (r.IsSuccess()) {
+  r.Data().name;             // 已反序列化
 } else {
-  // r.status_code / r.error
+  r.status_code; r.error; r.raw_body; r.parse_failed;
 }
-
-api.PostJson("/v1/user", {{"name", "xx"}, {"age", 18}});
-api.PutJson(...); api.DeleteJson(...);
 ```
 
-### 3. 泛型调用（对齐 palm::entity 的 ToJson/FromJson 约定）
-
-现有 `palm::entity` 的结构体（如 `DeviceHeartbeatReq/Resp`）**无需修改**即可复用：
+## 4. 上传 / 下载 / 异步
 
 ```cpp
-// ReqT 需提供 ToJson() const；RespT 需提供 static FromJson(const json&)
-entity::CreateUserReq req{"xiaoming", 18};
-entity::CreateUserResp resp;
-if (api.Post("/echo", req, resp)) {
-  // resp 已完成反序列化
-}
+api.Upload("/upload", "file", "/tmp/a.txt");        // Multipart 上传
+api.Download("/files/a.bin", "/tmp/a.bin");         // 下载落盘
+
+client.Get("/ping").SendAsync([](http::Response r) { /* 回调 */ });
+auto fut = client.Post("/echo").Body("{}").SendAsync();
+auto r = fut.get();                                 // future 方式
 ```
 
-## HttpResult / ApiResult 错误约定
+## 错误约定
 
 | 场景 | status_code | error | parse_failed |
 |---|---|---|---|
 | 2xx + 合法 JSON | 2xx | 空 | false |
-| 2xx 但非法 JSON | 2xx | "JSON parse failed: ..." | true |
-| 4xx/5xx | 404/500... | "HTTP 404" 等 | false |
-| 网络失败/超时 | **0** | curl 错误信息 | false |
+| 2xx 但非法 JSON | 2xx | "JSON parse failed…" | true |
+| 4xx / 5xx | 404/500… | "HTTP 404" 等 | false |
+| 网络失败 / 超时 | **0** | curl 错误信息 | false |
 
 ## 文件清单
 
 | 文件 | 说明 |
 |---|---|
-| `http_client.h/cpp` | 通用 HTTP 客户端（同步/异步/重试/下载） |
-| `api_client.h/cpp` | JSON API 层（含泛型调用） |
-| `mini_test_server.h/cpp` | 迷你测试服务器（127.0.0.1，离线验证用） |
-| `network_demo.cpp` | 用法示例：24 个断言全绿 |
-| `CMakeLists.txt` | 独立构建（FetchContent 自动拉依赖） |
+| `http_defs.h` | Method / Request / Response / RetryPolicy / Chain / Interceptor 接口 |
+| `interceptor.h/cpp` | 内置拦截器（Logging/Header/BearerAuth/Retry/Signing）+ 责任链实现 |
+| `http_client.h/cpp` | 链式构造器 + 拦截器链 + cpr 执行 + curl share 复用 |
+| `api_client.h/cpp` | JSON API 层 + `Response<T>` 泛型 + 上传下载 |
+| `mini_test_server.h/cpp` | 迷你测试服务器（`/get` `/echo` `/upload` `/slow` `/status/N`） |
+| `network_demo.cpp` | 六大能力演示：21 个断言全绿 |

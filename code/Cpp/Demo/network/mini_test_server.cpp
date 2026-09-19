@@ -7,8 +7,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <chrono>
 #include <cstring>
 #include <map>
+#include <thread>
 
 #include "nlohmann/json.hpp"
 
@@ -167,6 +169,28 @@ void MiniTestServer::HandleClient(int client_fd) {
     resp["method"] = method;
     resp["body"] = parsed.is_discarded() ? nlohmann::json(body) : parsed;
     Respond(client_fd, 200, resp.dump());
+  } else if (path == "/upload" && method == "POST") {
+    // multipart：提取 filename 与内容大小（demo 只关心字段命中的文件名与字节数）
+    std::string filename;
+    size_t pos = body.find("filename=\"");
+    if (pos != std::string::npos) {
+      size_t start = pos + 10;
+      size_t end = body.find('"', start);
+      if (end != std::string::npos) filename = body.substr(start, end - start);
+    }
+    nlohmann::json resp;
+    resp["code"] = 0;
+    resp["method"] = "POST";
+    resp["filename"] = filename;
+    resp["size"] = body.size();
+    Respond(client_fd, 200, resp.dump());
+  } else if (path == "/slow") {
+    // 模拟慢响应：?ms=xxx，用于验证客户端超时控制
+    int ms = 300;
+    auto q = ParseQueryString(query);
+    if (q.contains("ms") && q["ms"].is_string()) ms = std::stoi(q["ms"].get<std::string>());
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+    Respond(client_fd, 200, "{\"code\":0,\"msg\":\"slow done\"}");
   } else if (path.rfind("/status/", 0) == 0) {
     int code = std::stoi(path.substr(8));
     Respond(client_fd, code, "{\"code\":-1,\"msg\":\"mock error\"}");
