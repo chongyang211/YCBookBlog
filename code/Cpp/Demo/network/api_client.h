@@ -1,7 +1,10 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
-
-// 通用 API 调用层 v2：在 HttpClient（拦截器链）之上做 JSON 化，
+// 通用网络库 —— JSON API 层：在 HttpClient（拦截器链）之上做 JSON 化，
 // 提供 Retrofit 风格的 Response<T>：传 URL + JSON，拿回业务结构体。
+//
+// 与 HttpClient 的分工：
+//   HttpClient  关心"怎么发"（方法/头/超时/重试/传输）
+//   ApiClient   关心"发回来是什么"（JSON 解析、失败分类、业务结构体映射）
+// 需要下载 / multipart 等原始能力时，用 api.raw() 拿到底层 HttpClient。
 
 #pragma once
 

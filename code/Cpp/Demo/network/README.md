@@ -19,6 +19,44 @@ Interceptor  拦截器：Logging / Header / BearerAuth / Retry / Signing（可�
 cpr/curl     传输层（DNS、SSL 会话、TCP 连接跨请求复用）
 ```
 
+## 一次请求的完整链路
+
+```
+业务代码
+  │  api::ApiClient（JSON 层）：GetJson / Post<User> / Upload …
+  ▼
+  │  http::RequestBuilder（链式攒参数）：.Query().Header().Body().Timeout()
+  ▼
+  │  http::HttpClient::Execute —— 组装 Request（base_url + path + query）
+  ▼
+  │  http::Chain（拦截器责任链，index 递增）
+  │    ① LoggingInterceptor   打印请求/响应摘要
+  │    ② RetryInterceptor     网络失败或 5xx → 指数退避重试（4xx 不重试）
+  │    ③ HeaderInterceptor    公共头（UA / AppId / trace）
+  │    ④ BearerAuthInterceptor / SigningInterceptor   鉴权与签名
+  ▼
+  │  真实发送：cpr/curl（跨请求复用 DNS / SSL 会话 / TCP 连接）
+  ▼
+  │  Response 沿链回溯，每个拦截器都能改写响应（埋点、mock、缓存都在这里做）
+  ▼
+业务代码：Response（原始层）或 Response<T>（业务结构体）
+```
+
+两条设计约定：
+
+- **失败分类**：网络失败（`status_code == 0` + `error`）、HTTP 失败（4xx/5xx）、解析失败（`parse_failed`）三者分开，调用方不会把"连不上"当成"业务报错"。
+- **重试只管传输与 5xx**：4xx 是调用方的错，重试只会放大问题。
+
+## 线程安全与扩展点
+
+| 维度 | 说明 |
+|---|---|
+| 线程安全 | `HttpClient` 实例可被多线程并发调用；curl share（DNS/SSL/连接复用）内部加锁 |
+| 异步 | 回调在 cpr 工作线程执行（注意不要在回调里直接操作 UI/非线程安全对象） |
+| 换传输实现 | 替换 `Chain` 末端的 executor 即可，`http_defs.h` 不绑定任何传输库 |
+| 加横切逻辑 | 继承 `http::Interceptor`，`AddInterceptor` 即可，业务代码零改动 |
+| 测试 | `http::test::MiniTestServer` 内置服务器，无需外网即可跑通全部能力 |
+
 ## 构建与运行
 
 使用案例统一在 `Demo/main.cpp`（`./build/demo network`），入口：
@@ -27,9 +65,10 @@ cpr/curl     传输层（DNS、SSL 会话、TCP 连接跨请求复用）
 cd code/Cpp/Demo
 cmake -B build -DCMAKE_BUILD_TYPE=Release   # 首次 FetchContent 拉取 cpr/json
 cmake --build build -j
-./build/demo              # 线程库 + 网络库全部演示
+./build/demo              # 线程库 + 网络库 + 调度器全部演示
 ./build/demo network      # 只看网络库（内置 mini 服务器，无需外网：ALL PASS）
 ./build/demo thread       # 只看线程库
+./build/demo scheduler    # 只看周期任务调度器
 ```
 
 ## 1. 链式请求构造
@@ -58,10 +97,10 @@ cfg.retry = http::RetryPolicy{3, std::chrono::milliseconds(200)};  // 最多 3 �
 
 http::HttpClient client(base, cfg);
 client.AddInterceptor(std::make_shared<http::interceptor::HeaderInterceptor>(
-    http::Headers{{"X-App", "palm"}}));
+    http::Headers{{"X-App", "demo-app"}}));
 client.AddInterceptor(std::make_shared<http::interceptor::BearerAuthInterceptor>("tk-9527"));
 
-// 业务签名从业务代码里剥离：原 palm 工程"三种签名"就是这种拦截器的实际应用
+// 签名从业务代码里剥离：不同接口需要不同签名算法时，挂多个 SigningInterceptor 即可
 client.AddInterceptor(std::make_shared<http::interceptor::SigningInterceptor>(
     [](const std::string& m, const std::string& path, const std::string& body) {
       return "SIGN(" + m + "," + path + "," + std::to_string(body.size()) + ")";
@@ -90,7 +129,7 @@ class MyInterceptor : public http::Interceptor {
 api::ApiClient api("https://api.example.com");
 
 // ReqT 需 ToJson() const；RespT 需 static FromJson(const json&)
-// ——原 palm::entity 的结构体无需修改即可复用
+// ——已有业务结构体只要补上这两个静态方法即可复用，无需改造字段
 auto r = api.Post<CreateUserResp>("/v1/user", req);
 if (r.IsSuccess()) {
   r.Data().name;             // 已反序列化
@@ -128,4 +167,5 @@ auto r = fut.get();                                 // future 方式
 | `http_client.h/cpp` | 链式构造器 + 拦截器链 + cpr 执行 + curl share 复用 |
 | `api_client.h/cpp` | JSON API 层 + `Response<T>` 泛型 + 上传下载 |
 | `mini_test_server.h/cpp` | 迷你测试服务器（`/get` `/echo` `/upload` `/slow` `/status/N`） |
-| `network_demo.cpp` | 六大能力演示：21 个断言全绿 |
+
+演示代码在上级 `Demo/main.cpp`（`./build/demo network`，六大能力 + 断言全绿）。

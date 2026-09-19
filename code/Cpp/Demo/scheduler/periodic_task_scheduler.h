@@ -1,18 +1,54 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
-
-// 周期性任务调度器（零依赖版）
+// 通用周期任务调度器（Periodic Task Scheduler，零依赖）
 //
-// 设计原型：palm 工程的 BaseFrequencyScheduler
-//   · 基准 tick：调度线程按固定间隔（默认 1 秒）打一次心跳
-//   · 倍频触发：每个任务注册 frequency_multiplier，tick 计数取模命中才执行
-//   · 错峰    ：initial_offset 让同频任务错开，避免同一时刻资源竞争
-//   · 优先级  ：同一 tick 内按 TaskPriority 从小到大排序执行
-//   · 执行模式：kSync（调度线程内跑，仅 <10ms 的短任务）/ kAsync（投递到工作线程池）
-//   · 统计    ：每个任务累计执行次数、失败次数、总耗时/最大/最小耗时
+// 【解决什么问题】
+//   需要按不同周期执行一批任务：心跳上报、日志上传、配置拉取、证书刷新、指标采集…
+//   朴素做法是"每个任务一个线程 + sleep 循环"，问题是：
+//     · 线程数随任务数线性增长；
+//     · 所有任务容易在同一时刻集中触发（惊群、瞬时资源竞争）；
+//     · 启停 / 改频率 / 看执行情况都得各自为政，没有统一入口。
 //
-// 相对原实现的调整（为了在 Demo 中零依赖可运行）：
-//   boost::asio        → std::thread + condition_variable
-//   Device::时间同步校验 → 可注入的 TimeSyncGuard 回调（更易测试，见 main.cpp 演示）
+// 【核心思路：一个基准 tick 驱动所有任务】
+//   只用一个心跳线程按固定间隔打拍（默认 1 秒）；每个任务登记 frequency_multiplier，
+//   用 tick 计数取模决定是否执行：
+//
+//       tick    1  2  3  4  5  6  7  8  9
+//       ×1      ✓  ✓  ✓  ✓  ✓  ✓  ✓  ✓  ✓   每拍都执行
+//       ×2         ✓     ✓     ✓     ✓      隔一拍执行
+//       ×3            ✓        ✓            （再叠加 initial_offset=1 则整体后移）
+//
+//   好处：① 线程数恒定（1 个心跳 + N 个工作线程），与任务数量无关；
+//        ② 频率只能是 tick 的整数倍 → 所有任务共享同一时基，天然便于错峰；
+//        ③ 启停、改频率、查统计都集中在一处。
+//
+// 【其它设计点】
+//   · initial_offset   错峰：前 N 拍跳过，避免同频任务同一时刻抢资源
+//   · TaskPriority     同一 tick 内按优先级升序执行（kCritical 最先）
+//   · TaskExecutionMode
+//       kSync   在心跳线程内执行 —— 只适合 < 10ms 的短任务，否则会拖慢整条时基
+//       kAsync  投递到工作线程池 —— 网络 I/O、可能阻塞的任务必须用它
+//   · TimeSyncGuard    可注入的时间守卫：返回 false 时跳过"时间敏感"任务。
+//                      用注入替代"直接依赖系统/设备模块"，既解耦又可在测试里模拟
+//   · 统计             每任务累计执行次数 / 失败次数 / 耗时，慢任务与失败任务一眼可见。
+//                      任务抛异常只记失败，不会拖垮调度器
+//
+// 【线程模型】
+//   心跳线程（1 个）
+//     └─ 取模判定 + 优先级排序 ──► kSync  任务：就地执行（会占用心跳线程）
+//                              └─► kAsync 任务：投递队列 ──► 工作线程（默认 2 个）
+//   Stop() 会先停心跳，再等工作线程把队列排空后才返回（不丢已派发的任务）。
+//
+// 【用法】
+//   auto& s = sched::PeriodicTaskScheduler::Instance();
+//   s.RegisterTask("heartbeat", 1, [] { /* ... */ },
+//                  sched::TaskPriority::kCritical, sched::TaskExecutionMode::kSync);
+//   s.Start();
+//   ... 运行 ...
+//   s.Stop();
+//   完整示例见 Demo/main.cpp：./build/demo scheduler
+//
+// ⚠️ 生命周期：任务 lambda 捕获的对象必须活到"任务被注销"之后。
+//    捕获函数局部变量引用是典型错误——函数返回即悬垂，下次 Start() 就会踩空。
+//    建议用 shared_ptr 持有状态，并在退出前 UnregisterTask。
 
 #pragma once
 
@@ -29,7 +65,7 @@
 #include <thread>
 #include <vector>
 
-namespace palm {
+namespace sched {
 
 /** @brief 任务优先级：数值越小优先级越高 */
 enum class TaskPriority : int {
@@ -179,4 +215,4 @@ class PeriodicTaskScheduler {
   std::vector<std::thread> worker_threads_;
 };
 
-}  // namespace palm
+}  // namespace sched

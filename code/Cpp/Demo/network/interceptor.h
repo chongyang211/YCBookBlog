@@ -1,7 +1,8 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
-
-// 内置拦截器：日志 / 公共 Header / 重试 / Bearer 鉴权 / 签名示例。
-// 原 palm 工程里"三种签名"这类业务横切逻辑，用拦截器实现即可（见 SigningInterceptor）。
+// 通用网络库 —— 内置拦截器：日志 / 公共 Header / 重试 / Bearer 鉴权 / 签名。
+//
+// 拦截器存在的意义：把"每个请求都要做、但与业务无关"的横切逻辑
+// （日志、鉴权、签名、重试、埋点、mock）从调用点剥离，集中在一处，
+// 业务代码只管 path + body + 结果。
 
 #pragma once
 
@@ -72,9 +73,11 @@ class RetryInterceptor : public Interceptor {
 };
 
 /**
- * @brief 签名拦截器示例（呼应原 palm 工程：把"签名"从业务代码里剥离出来）
+ * @brief 签名拦截器：把"签名"从业务代码里剥离出来
  *
- * signer 签名为 (method, path, body) -> 签名值，拦截器负责写入 Authorization。
+ * 典型场景：接口要求按 (method, path, body) 计算摘要并写入 Authorization/签名头，
+ *            且不同接口可能用不同签名算法（多套签名 = 多个 Signer，互不影响）。
+ * signer 签名为 (method, path, body) -> 签名值，拦截器负责写入指定 header。
  */
 class SigningInterceptor : public Interceptor {
  public:

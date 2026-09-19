@@ -1,7 +1,8 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
-
-// 迷你 HTTP 测试服务器（POSIX socket，单线程逐连接处理）：
-// 用于在无外网环境下验证 HttpClient / ApiClient。
+// 通用网络库 —— 迷你 HTTP 测试服务器（POSIX socket，单线程逐连接处理）。
+//
+// 用途：在无外网环境下验证 HttpClient / ApiClient 的全部能力
+//      （链式构造、拦截器、泛型响应、上传下载、超时、异步）。
+// 定位：测试替身（Test Double），只求行为可控，不追求性能与并发，不上生产。
 //
 // 路由：
 //   GET  /get?k=v  → {"code":0,"method":"GET","query":{"k":"v"}}

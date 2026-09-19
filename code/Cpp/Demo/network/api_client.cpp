@@ -1,4 +1,4 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
+// 通用网络库 —— JSON API 层实现
 
 #include "network/api_client.h"
 

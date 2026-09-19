@@ -1,4 +1,4 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
+// 通用网络库 —— HTTP 客户端实现（链式构造 + 拦截器链 + cpr 执行）
 
 #include "network/http_client.h"
 
@@ -14,7 +14,7 @@ namespace http {
 namespace {
 
 // curl share：跨 Session 复用 DNS 缓存 / SSL 会话 / TCP 连接，显著提升短连接性能。
-// 参考原 palm::HttpRequest 的做法，但只保留必要的三种共享与线程安全锁。
+// 只共享安全的三类（DNS / SSL session / 连接池），并用锁保护 curl 对 share 的并发访问。
 class CurlShare {
  public:
   static CurlShare& Instance() {

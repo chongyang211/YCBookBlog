@@ -1,4 +1,4 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
+// 通用网络库 —— 内置拦截器实现 + 责任链推进
 
 #include "network/interceptor.h"
 

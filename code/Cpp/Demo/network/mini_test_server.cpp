@@ -1,4 +1,4 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
+// 通用网络库 —— 迷你测试服务器实现（仅供测试，不用于生产）
 
 #include "network/mini_test_server.h"
 

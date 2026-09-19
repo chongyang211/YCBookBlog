@@ -33,11 +33,14 @@
 //   Upload/Download、同步/异步（回调 + future）、超时与重试
 //
 // ============================ 调度器 ============================
-// 基准 tick + 倍频触发 + 错峰 + 优先级 + 同步/异步执行模式 + 统计：
-//   scheduler.RegisterTask(name, multiplier, func, priority, mode, offset, need_time_sync)
-//   scheduler.SetTaskEnabled/SetTaskMultiplier 动态管理
-//   scheduler.SetTimeSyncGuard(fn) 注入时间同步守卫（时间未同步时跳过敏感任务）
-//   scheduler.GetStats(name) 查看执行次数 / 失败次数 / 耗时
+// 通用周期任务调度器：一个基准 tick 驱动所有任务（详见 scheduler/README.md）
+//   思路：1 个心跳线程 + 每任务 frequency_multiplier 取模触发 → 线程数与任务数无关
+//   sched::PeriodicTaskScheduler::Instance()
+//     .RegisterTask(name, multiplier, func, priority, mode, offset, need_time_sync)
+//     .SetTaskEnabled / SetTaskMultiplier  动态管理（禁用/改频率）
+//     .SetTimeSyncGuard(fn)                注入时间守卫（未同步则跳过敏感任务）
+//     .GetStats(name)                      执行次数 / 失败次数 / 耗时
+//   ⚠️ 任务 lambda 捕获的对象必须活到"注销之后"（用 shared_ptr，勿捕局部变量引用）
 
 #include "thread/thread_manager.h"
 
@@ -230,7 +233,7 @@ void demo_extensible_thread() {
 // 内置测试服务器地址：由 demo_network() 启动服务器后填入
 std::string g_net_server_url;
 
-// 业务结构体：与 palm::entity 约定一致（ToJson / FromJson）
+// 业务结构体：与 sched::entity 约定一致（ToJson / FromJson）
 namespace entity {
 
 struct CreateUserReq {
@@ -324,9 +327,9 @@ void demo_net_interceptor() {
 
     http::HttpClient client(g_net_server_url, cfg);
     client.AddInterceptor(std::make_shared<http::interceptor::HeaderInterceptor>(
-        http::Headers{{"X-App", "palm"}}));
+        http::Headers{{"X-App", "demo-app"}}));
     client.AddInterceptor(std::make_shared<http::interceptor::BearerAuthInterceptor>("tk-9527"));
-    // 签名外置：原 palm 工程"三种签名"就是这种拦截器的实际用法
+    // 签名外置：不同接口需要不同签名算法时，挂多个 SigningInterceptor 即可
     client.AddInterceptor(std::make_shared<http::interceptor::SigningInterceptor>(
         [](const std::string& m, const std::string& path, const std::string& body) {
             return "SIGN(" + m + "," + path + "," + std::to_string(body.size()) + ")";
@@ -369,7 +372,7 @@ void demo_net_file() {
     Logger::info("=== 网络 4. 上传（Multipart）/ 下载 ===");
 
     {
-        std::ofstream("/tmp/netclient_upload.txt") << "hello-palm";
+        std::ofstream("/tmp/netclient_upload.txt") << "hello-netclient";
     }
     api::ApiClient api(g_net_server_url);
     auto up = api.Upload("/upload", "file", "/tmp/netclient_upload.txt");
@@ -465,7 +468,7 @@ int sched_failed = 0;
 void demo_sched_basic() {
     Logger::info("=== 调度 1. 注册任务 / 倍频触发 / 优先级 / 错峰 ===");
 
-    auto& s = palm::PeriodicTaskScheduler::Instance();
+    auto& s = sched::PeriodicTaskScheduler::Instance();
     s.SetTickInterval(std::chrono::milliseconds(200));  // 演示加速：tick = 200ms
     s.SetWorkerCount(2);
 
@@ -475,13 +478,13 @@ void demo_sched_basic() {
 
     // 每 tick 都执行，同步模式（短任务），优先级最高
     s.RegisterTask("heartbeat", 1, [critical] { (*critical)++; },
-                   palm::TaskPriority::kCritical, palm::TaskExecutionMode::kSync);
+                   sched::TaskPriority::kCritical, sched::TaskExecutionMode::kSync);
     // 每 2 个 tick 执行一次，异步模式
     s.RegisterTask("log_upload", 2, [normal] { (*normal)++; },
-                   palm::TaskPriority::kNormal, palm::TaskExecutionMode::kAsync);
+                   sched::TaskPriority::kNormal, sched::TaskExecutionMode::kAsync);
     // 每 3 个 tick 执行一次，且前 1 个 tick 跳过（错峰）
     s.RegisterTask("firmware_check", 3, [low] { (*low)++; },
-                   palm::TaskPriority::kLow, palm::TaskExecutionMode::kAsync,
+                   sched::TaskPriority::kLow, sched::TaskExecutionMode::kAsync,
                    /*initial_offset=*/1);
 
     s.Start();
@@ -507,12 +510,12 @@ void demo_sched_basic() {
 void demo_sched_dynamic() {
     Logger::info("=== 调度 2. 动态改频率 / 禁用 / 注销 ===");
 
-    auto& s = palm::PeriodicTaskScheduler::Instance();
+    auto& s = sched::PeriodicTaskScheduler::Instance();
     s.SetTickInterval(std::chrono::milliseconds(200));
 
     auto n = std::make_shared<std::atomic<int>>(0);
-    s.RegisterTask("report", 1, [n] { (*n)++; }, palm::TaskPriority::kNormal,
-                   palm::TaskExecutionMode::kSync);
+    s.RegisterTask("report", 1, [n] { (*n)++; }, sched::TaskPriority::kNormal,
+                   sched::TaskExecutionMode::kSync);
 
     s.Start();
     std::this_thread::sleep_for(std::chrono::milliseconds(650));  // ~3 tick
@@ -542,7 +545,7 @@ void demo_sched_dynamic() {
 void demo_sched_time_guard() {
     Logger::info("=== 调度 3. 时间同步守卫（TimeSyncGuard 注入）===");
 
-    auto& s = palm::PeriodicTaskScheduler::Instance();
+    auto& s = sched::PeriodicTaskScheduler::Instance();
     s.SetTickInterval(std::chrono::milliseconds(200));
 
     auto sensitive = std::make_shared<std::atomic<int>>(0);
@@ -551,10 +554,10 @@ void demo_sched_time_guard() {
     s.SetTimeSyncGuard([time_synced] { return time_synced->load(); });  // 模拟"时间未同步"
 
     s.RegisterTask("cert_refresh", 1, [sensitive] { (*sensitive)++; },
-                   palm::TaskPriority::kCritical, palm::TaskExecutionMode::kSync,
+                   sched::TaskPriority::kCritical, sched::TaskExecutionMode::kSync,
                    0, /*requires_time_synced=*/true);
     s.RegisterTask("metrics", 1, [ordinary] { (*ordinary)++; },
-                   palm::TaskPriority::kNormal, palm::TaskExecutionMode::kSync,
+                   sched::TaskPriority::kNormal, sched::TaskExecutionMode::kSync,
                    0, /*requires_time_synced=*/false);
 
     s.Start();
@@ -576,7 +579,7 @@ void demo_sched_time_guard() {
 void demo_sched_stats() {
     Logger::info("=== 调度 4. 任务统计（次数 / 失败 / 耗时）===");
 
-    auto& s = palm::PeriodicTaskScheduler::Instance();
+    auto& s = sched::PeriodicTaskScheduler::Instance();
     s.SetTickInterval(std::chrono::milliseconds(200));
 
     s.RegisterTask("flaky_job", 1,
@@ -584,7 +587,7 @@ void demo_sched_stats() {
                        std::this_thread::sleep_for(std::chrono::milliseconds(10));
                        throw std::runtime_error("simulated failure");
                    },
-                   palm::TaskPriority::kNormal, palm::TaskExecutionMode::kSync);
+                   sched::TaskPriority::kNormal, sched::TaskExecutionMode::kSync);
 
     s.Start();
     std::this_thread::sleep_for(std::chrono::milliseconds(650));

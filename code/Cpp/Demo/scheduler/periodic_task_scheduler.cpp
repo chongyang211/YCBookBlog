@@ -1,10 +1,11 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
+// 通用周期任务调度器 —— 实现
+// 设计思路与线程模型见 periodic_task_scheduler.h 文件头。
 
 #include "scheduler/periodic_task_scheduler.h"
 
 #include <algorithm>
 
-namespace palm {
+namespace sched {
 
 PeriodicTaskScheduler& PeriodicTaskScheduler::Instance() {
   static PeriodicTaskScheduler inst;
@@ -213,4 +214,4 @@ std::vector<std::string> PeriodicTaskScheduler::TaskNames() const {
 
 uint64_t PeriodicTaskScheduler::tick_count() const { return tick_count_; }
 
-}  // namespace palm
+}  // namespace sched

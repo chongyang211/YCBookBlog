@@ -1,11 +1,21 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
-
-// 通用 HTTP 客户端 v2：
+// 通用 HTTP 客户端 —— 传输层之上的"通用 HTTP 层"
+//
+// 一次请求的完整链路（从外到内）：
+//   RequestBuilder（链式攒参数）
+//     → HttpClient::Execute（组装 Request）
+//       → Chain（拦截器责任链：日志 → 重试 → 鉴权/签名）
+//         → 真实发送（cpr/curl，跨请求复用 DNS / SSL 会话 / TCP 连接）
+//       ← Response 沿链回溯，每个拦截器都有机会改写
+//     ← Response（或 Response<T>）
+//
+// 能力：
 //   · 链式请求构造（requests/axios 风格）：client.Get("/x").Query(...).Header(...).Send()
 //   · 拦截器责任链（OkHttp 风格）：日志/鉴权/签名/重试 可插拔
 //   · Response<T> 泛型响应（Retrofit 风格）：业务结构体直出
 //   · 跨请求复用 DNS/SSL 会话/连接（curl share，提升短连接性能）
 //   · 同步 + 异步（回调 + std::future）
+//
+// 配置分两级：client 级（拦截器/超时/日志，全实例共享）+ request 级（链式覆盖）。
 
 #pragma once
 

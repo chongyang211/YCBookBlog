@@ -1,6 +1,7 @@
-// Copyright © 1998 - 2026 Tencent. All Rights Reserved.
-
-// 通用网络库基础定义：Method / Request / Response / Error / 重试策略 / 拦截器接口。
+// 通用网络库 —— 基础定义层：Method / Request / Response / 重试策略 / 拦截器接口。
+//
+// 这一层不含任何传输实现（不绑定 cpr/curl），只定义"数据契约 + 拦截点"，
+// 因此上层可以替换传输实现，拦截器也能独立单测。
 //
 // 设计参考：
 //   OkHttp  —— 拦截器（Interceptor）责任链，横切关注可插拔
