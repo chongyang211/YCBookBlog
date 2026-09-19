@@ -1,8 +1,5 @@
-# 通用网络库（http_client / api_client）独立构建：
+# 通用网络库（http_client / api_client）构建：
 #   cmake -S . -B build && cmake --build build -j && ./build/network_demo
-#
-# 说明：本目录其余文件（network.h/cpp、request_engine.* 等）为原 palm 工程
-# 参考代码，依赖 comm/app/device/sm 等内部模块，不在本构建范围。
 
 cmake_minimum_required(VERSION 3.16)
 project(NetClient CXX)

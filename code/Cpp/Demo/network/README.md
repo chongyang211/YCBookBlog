@@ -2,8 +2,6 @@
 
 从 palm 工程网络模块中抽取的**零业务依赖**通用层：基于 [cpr](https://github.com/libcpr/cpr)（libcurl 的现代 C++ 封装）+ [nlohmann/json](https://github.com/nlohmann/json)。
 
-> 本目录其余文件（`network.*`、`request_engine.*`、`http_request.*`、`entity/` 等）为原 palm 工程参考代码，依赖 comm/app/device/sm 等内部模块，不在本构建范围。
-
 ## 分层
 
 ```
