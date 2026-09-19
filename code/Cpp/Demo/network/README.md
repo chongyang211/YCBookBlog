@@ -21,11 +21,15 @@ cpr/curl     传输层（DNS、SSL 会话、TCP 连接跨请求复用）
 
 ## 构建与运行
 
+使用案例统一在 `Demo/main.cpp`（`./build/demo network`），入口：
+
 ```bash
-cd code/Cpp/Demo/network
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release   # 首次 FetchContent 拉取 cpr/json
+cd code/Cpp/Demo
+cmake -B build -DCMAKE_BUILD_TYPE=Release   # 首次 FetchContent 拉取 cpr/json
 cmake --build build -j
-./build/network_demo                              # 内置 mini 服务器，无需外网：ALL PASS
+./build/demo              # 线程库 + 网络库全部演示
+./build/demo network      # 只看网络库（内置 mini 服务器，无需外网：ALL PASS）
+./build/demo thread       # 只看线程库
 ```
 
 ## 1. 链式请求构造
