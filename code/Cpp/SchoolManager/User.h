@@ -21,6 +21,7 @@ public:
     // 确保在通过基类指针删除派生类对象时，能够正确调用派生类的析构函数。
     virtual ~User() = default;
     // 纯虚函数，表示 User 类是一个抽象基类，不能直接实例化。派生类必须实现 mainMenu 方法。
+    // `= 0`，表示纯虚函数，强制让子类实现
     virtual void mainMenu() = 0;
     // 纯虚：返回身份标签 'S'/'T'/'A'，用于 CSV 反序列化（阶段 ⑦ 用）
     virtual char roleTag() const = 0;
