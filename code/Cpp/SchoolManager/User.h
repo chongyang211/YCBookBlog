@@ -15,8 +15,7 @@ protected:
     std::string userName;   // 用户名
     std::string password;   // 用户密码
 public:
-    User(const std::string& id, const std::string& name, const std::string& pwd)
-        : userId(id), userName(name), password(pwd) {}
+    User(const std::string& id, const std::string& name, const std::string& pwd);
     // 虚析构函数，使用 = default 表示使用编译器生成的默认实现。
     // 确保在通过基类指针删除派生类对象时，能够正确调用派生类的析构函数。
     virtual ~User() = default;

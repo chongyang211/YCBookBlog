@@ -75,3 +75,42 @@ int main() {
     }
     return 0;
 }
+
+class User {
+private:
+    std::string id, 
+    std::string name, 
+    std::string pwd; 
+
+}
+
+// 派生类
+class Student : public User {
+public:
+    void studentMenu();
+}
+
+class Teacher : public User {
+public:
+    void studentMenu();
+}
+
+class Speech : public User{
+public:
+    void studentMenu();
+}
+
+// 返回多种类型
+// 属性，写了多遍，没有进行抽取复用
+// 每添加一种类型，都要改login方法逻辑，违背开闭原则【对修改关闭，对拓展开放】
+User login() {
+    User* user;
+    if (role == 1) {
+        user = new Student();
+    } else if (role == 2) {
+        user = new Teacher();
+    } else {
+
+    }
+    return user;
+}
