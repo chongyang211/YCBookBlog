@@ -25,17 +25,16 @@ shared_ptr<User> login() {
 
     // TODO（阶段 ⑦）: 接 FileStore 校验账号密码
     // （阶段 ②）: 根据 role 返回 Student/Teacher/Admin 对象
-    switch (role) {
-        case 1: return make_shared<Student>(id, "学生" + id, pwd);
-        case 2: return make_shared<Teacher>(id, "教师" + id, pwd);
-        case 3: return make_shared<Admin>(id, "管理员" + id, pwd);
-    }
+    // switch (role) {
+    //     case 1: return make_shared<Student>(id, "学生" + id, pwd);
+    //     case 2: return make_shared<Teacher>(id, "教师" + id, pwd);
+    //     case 3: return make_shared<Admin>(id, "管理员" + id, pwd);
+    // }
     cout << "[Login] 占位：模拟登录成功 - role=" << role << " id=" << id << "\n";
     return nullptr;   // 阶段 ① 暂时返回空，循环会自然结束
 }
 
 void test() {
-
     Computer c(101, 50, "i7+RTX4060");
     Speech s("S001", "AI伦理", 1);
     Reservation r(1, "S001", 101, "2026-06-01");

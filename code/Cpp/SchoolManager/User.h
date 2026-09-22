@@ -11,9 +11,9 @@
 // 1.支持多态性，允许派生类实现不同的行为。2.拓展性，确保所有用户类型都具有一致的行为。
 class User {
 protected:
-    std::string userId;
-    std::string userName;
-    std::string password;
+    std::string userId;     // 用户id
+    std::string userName;   // 用户名
+    std::string password;   // 用户密码
 public:
     User(const std::string& id, const std::string& name, const std::string& pwd)
         : userId(id), userName(name), password(pwd) {}
