@@ -10,6 +10,7 @@
 // User 类是一个抽象基类，用于定义用户的基本接口。
 // 1.支持多态性，允许派生类实现不同的行为。2.拓展性，确保所有用户类型都具有一致的行为。
 class User {
+// protected表示派生类可见（子类可以直接访问父类这些属性），外部不可见
 protected:
     std::string userId;     // 用户id
     std::string userName;   // 用户名
