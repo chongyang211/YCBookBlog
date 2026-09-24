@@ -7,7 +7,7 @@
 using namespace mm;
 
 int main() {
-    constexpr uint32_t kBytes = 64 * 1024;   // 64KB 拷贝
+    constexpr uint32_t kBytes = 32 * 1024;   // 32KB 拷贝(源 + 目的刚好占满 64KB 内存)
 
     // ---- 场景 A: CPU 手工拷贝 ----
     {
