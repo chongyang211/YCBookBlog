@@ -60,6 +60,21 @@ public:
     void mainMenu() override {
         std::cout << "\n--- 老师 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
     }
+    char roleTag() const override { return 'T'; }
+    void setSystem(CampusSystem* t) { sys = t; }
+};
+
+class Admin: public User {
+private:
+    CampusSystem* sys;
+public:
+    Admin(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
+        : User(id, name, pwd), sys(s) {}
+    void mainMenu() override {
+        std::cout << "\n--- 管理元 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
+    }
+    char roleTag() const override { return 'A'; }
+    void setSystem(CampusSystem* t) { sys = t; }
 };
 
 shared_ptr<User> login() {
@@ -73,6 +88,8 @@ shared_ptr<User> login() {
     cout << "密码: "; cin >> pwd;
     switch (role) {
     case 1: return make_shared<Student>(id, "学生" + id, pwd);
+    case 2: return make_shared<Teacher>(id, "教师" + id, pwd);
+    case 3: return make_shared<Admin>(id, "管理员" + id, pwd);
     default: cout << "[Login] 占位：模拟登录成功 - role=" << role << " id=" << id << "\n";
         // case 2: return make_shared<Teacher>(...);  ← 下一步再加
         // case 3: return make_shared<Admin>(...);
