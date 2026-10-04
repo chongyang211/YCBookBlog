@@ -198,13 +198,26 @@ void test() {
 // g++ -std=c++17 Test.cpp CampusSystem.cpp Computer.cpp
 // 身份 + 账号 + 密码
 int main() {
-    test();
+    CampusSystem sys;
+    sys.addUser(make_shared<Student>("S001", "张三", "123"));
+    sys.addUser(make_shared<Teacher>("T001", "李老师", "456"));
+    sys.addUser(make_shared<Admin>("A001", "王管理员", "789"));
     while (true) {
-        auto user = login();
-        if (!user) {
-            cout << "再见！\n";
-            return 0;
-        }
+        cout << "\n=== 校园系统登录 ===\n";
+        cout << "1. 学生  2. 教师  3. 管理员  0. 退出\n";
+        cout << "选择身份: ";
+        int role; cin >> role;
+        if (role == 0) { cout << "再见！\n"; return 0; }
+
+        string id, pwd;
+        cout << "账号: "; cin >> id;
+        cout << "密码: "; cin >> pwd;
+
+        auto user = sys.login(id, pwd);
+        if (!user) continue;
+        if (auto p = dynamic_pointer_cast<Student>(user)) p->setSystem(&sys);
+        else if (auto p = dynamic_pointer_cast<Teacher>(user)) p->setSystem(&sys);
+        else if (auto p = dynamic_pointer_cast<Admin>(user))   p->setSystem(&sys);
         user->mainMenu();
     }
     return 0;
