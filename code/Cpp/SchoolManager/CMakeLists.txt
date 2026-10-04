@@ -19,4 +19,6 @@ add_executable(SchoolManager main.cpp
         Reservation.cpp
         Reservation.h
         CampusSystem.cpp
-        CampusSystem.h)
+        CampusSystem.h
+        Test.cpp
+)
