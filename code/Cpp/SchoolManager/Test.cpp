@@ -100,8 +100,8 @@ public:
     int round = 1;
     double score;
     Speech() = default;
-    Speech(std::string studentId, std::string topic, int round, double score)
-        :studentId(studentId),topic(topic),round(round) {}
+    Speech(const std::string& sid, const std::string& t, int r)
+          : studentId(sid), topic(t), round(r) {}
 };
 
 // 枚举
@@ -152,6 +152,14 @@ void test() {
     Computer c(101, 50, "i7+RTX4060");
     cout << "[Test] 机房 " << c.id << " 容量 " << c.capacity << " 配置 " << c.spec << "\n";
     cout << "[Test] toCsv: " << c.toCsv() << "\n";
+    Speech s("S001", "AI伦理", 1);
+    Reservation r(1, "S001", 101, "2026-06-01");
+
+    cout << "机房: " << c.toCsv() << "\n";
+    cout << "演讲: " << s.studentId << " " << s.topic << " round=" << s.round << "\n";
+    cout << "预约: #" << r.resId << " 学生 " << r.studentId
+         << " 机房 " << r.computerId << " 状态 " << r.statusText() << "\n";
+
 }
 
 // g++ -std==c++17 Test.cpp
