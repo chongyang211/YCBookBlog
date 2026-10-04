@@ -104,6 +104,30 @@ public:
         :studentId(studentId),topic(topic),round(round) {}
 };
 
+// 枚举
+enum class ResStatus { Pending, Approved, Rejected, Cancelled };
+
+class Reservation {
+public:
+    int resId;
+    std::string studentId;
+    int computerId;
+    std::string date;
+    ResStatus status = ResStatus::Pending;
+    Reservation() = default;
+    Reservation(int rid, const std::string& sid, int cid, const std::string& d)
+          : resId(rid), studentId(sid), computerId(cid), date(d) {}
+    std::string statusText() const {
+        switch (status) {
+            case ResStatus::Pending:   return "待审核";
+            case ResStatus::Approved:  return "已批准";
+            case ResStatus::Rejected:  return "已拒绝";
+            case ResStatus::Cancelled: return "已取消";
+        }
+        return "未知";
+    }
+};
+
 shared_ptr<User> login() {
     cout << "\n=== 校园系统登录 ===\n";
     cout << "1. 学生  2. 教师  3. 管理员  0. 退出\n";
