@@ -159,7 +159,6 @@ void test() {
     cout << "演讲: " << s.studentId << " " << s.topic << " round=" << s.round << "\n";
     cout << "预约: #" << r.resId << " 学生 " << r.studentId
          << " 机房 " << r.computerId << " 状态 " << r.statusText() << "\n";
-
 }
 
 // g++ -std==c++17 Test.cpp
