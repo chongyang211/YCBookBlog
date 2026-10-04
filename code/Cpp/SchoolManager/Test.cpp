@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <memory>
 using namespace std;
@@ -127,6 +128,37 @@ public:
         return "未知";
     }
 };
+
+class CampusSystem {
+private:
+    std::map<std::string, std::shared_ptr<User>> users;
+public:
+    CampusSystem() {
+        cout << "[System] 校园系统启动\n";
+    };
+    bool addUser(std::shared_ptr<User> u) {
+        if (users.count(u->getId()) > 0) {
+            cout << "[System] 用户 " << u->getId() << " 已存在\n";
+            return false;
+        }
+        users[u->getId()] = u;
+        cout << "[System] 添加用户 " << u->getId() << " 成功\n";
+        return true;
+    };
+    std::shared_ptr<User> login(const std::string& id, const std::string& pwd) {
+        auto u = users.find(id);
+        if (u == users.end()) {
+            cout << "[System] 账号不存在\n";
+            return nullptr;
+        }
+        if (!u->second->verify(pwd)) {
+            cout << "[System] 密码错误\n";
+            return nullptr;
+        }
+        return u->second;
+    };
+};
+
 
 shared_ptr<User> login() {
     cout << "\n=== 校园系统登录 ===\n";
