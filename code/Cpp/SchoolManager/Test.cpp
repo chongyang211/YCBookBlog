@@ -77,6 +77,33 @@ public:
     void setSystem(CampusSystem* t) { sys = t; }
 };
 
+class Computer {
+public:
+    int id;
+    int capacity;
+    std::string spec;
+    Computer() = default;
+    Computer(int id, int capacity, std::string spec):
+        id(id), capacity(capacity), spec(spec) {}
+    std::string toCsv() const {
+        return std::to_string(id) + "," + std::to_string(capacity) + "," + spec;
+    }
+    static Computer fromCsv(const std::string & line) {
+        return Computer{};
+    }
+};
+
+class Speech {
+public:
+    std::string studentId;
+    std::string topic;
+    int round = 1;
+    double score;
+    Speech() = default;
+    Speech(std::string studentId, std::string topic, int round, double score)
+        :studentId(studentId),topic(topic),round(round) {}
+};
+
 shared_ptr<User> login() {
     cout << "\n=== 校园系统登录 ===\n";
     cout << "1. 学生  2. 教师  3. 管理员  0. 退出\n";
@@ -97,11 +124,18 @@ shared_ptr<User> login() {
     return nullptr;   // 阶段 ① 暂时返回空，循环会自然结束
 }
 
+void test() {
+    Computer c(101, 50, "i7+RTX4060");
+    cout << "[Test] 机房 " << c.id << " 容量 " << c.capacity << " 配置 " << c.spec << "\n";
+    cout << "[Test] toCsv: " << c.toCsv() << "\n";
+}
+
 // g++ -std==c++17 Test.cpp
 // g++ Test.cpp Student.cpp
-// g++ -std=c++17 Test.cpp CampusSystem.cpp
+// g++ -std=c++17 Test.cpp CampusSystem.cpp Computer.cpp
 // 身份 + 账号 + 密码
 int main() {
+    test();
     while (true) {
         auto user = login();
         if (!user) {
