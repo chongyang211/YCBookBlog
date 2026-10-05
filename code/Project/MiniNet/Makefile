@@ -26,16 +26,22 @@ wire-demo:
 bug2-demo:
 	go run ./tests/bug2_demo
 
+# 阶段 ⑦ Step 7.3-7.4 的 🔥 BUG-3 现场
+bug3-demo:
+	go run ./tests/bug3_demo
+
 # 阶段 ⑤ Step 5.3 ping 独立工具
 demo-ping: build
 	./bin/mnet-ping -c 4
+
+# 阶段 ⑥ TCP 握手挥手测试
+demo-tcp:
+	go test ./pkg/transport/ -run 'TestHandshake|TestDataTransfer|TestFourWayClose' -v
 
 clean:
 	rm -rf bin/
 
 # ───── 以下 target 在后续阶段启用 ─────
-demo-tcp:
-	@echo "TODO: 阶段 ⑥"
 demo-http:
 	@echo "TODO: 阶段 ⑪"
 demo-tls:

@@ -25,6 +25,7 @@ import (
 	"mininet/pkg/common"
 	"mininet/pkg/link"
 	netpkg "mininet/pkg/net"
+	"mininet/pkg/transport"
 )
 
 // -------- Layer 接口 (全项目核心抽象,与 pkg/link.L2Layer / pkg/net.L3Layer 结构匹配) --------
@@ -53,13 +54,15 @@ type Stack struct {
 	localMAC link.MAC
 	localIP  netpkg.IPv4Addr
 
-	// 实际的 L2/L3 实例 (为了方便从 REPL 调方法)
+	// 实际的 L2/L3/L4 实例 (为了方便从 REPL 调方法)
 	l2 *link.L2Layer
 	l3 *netpkg.L3Layer
+	l4 *transport.L4Layer
 
-	// peer goroutine 的 L2/L3 (为了关闭)
+	// peer goroutine 的 L2/L3/L4 (为了关闭)
 	peerL2 *link.L2Layer
 	peerL3 *netpkg.L3Layer
+	peerL4 *transport.L4Layer
 }
 
 func newStack() *Stack {
@@ -98,6 +101,12 @@ func main() {
 	fmt.Println("MiniNet v0.2 (type `help` for commands, `quit` to exit)")
 	stack := newStack()
 	defer func() {
+		if stack.l4 != nil {
+			stack.l4.Close()
+		}
+		if stack.peerL4 != nil {
+			stack.peerL4.Close()
+		}
 		if stack.l2 != nil {
 			stack.l2.Close()
 		}
@@ -132,6 +141,8 @@ func main() {
 			handleArp(stack, parts[1:])
 		case "ping":
 			handlePing(stack, parts[1:])
+		case "tcp":
+			handleTCP(stack, parts[1:])
 		case "help":
 			printHelp()
 		case "quit", "exit":
@@ -154,6 +165,9 @@ func printHelp() {
 	fmt.Println("  arp whois <ip>                           主动 ARP 问询")
 	fmt.Println("  arp -a                                   列出 ARP 表")
 	fmt.Println("  ping <ip> [count]                        发 N 个 ICMP echo (默认 4)")
+	fmt.Println("  tcp listen <port>                        监听端口 (echo server)")
+	fmt.Println("  tcp connect <ip>:<port>                  TCP 连接+发送测试字符串")
+	fmt.Println("  tcp show                                 打印 TCB 状态")
 	fmt.Println("  help / quit / exit")
 }
 
@@ -252,16 +266,32 @@ func handlePeer(s *Stack, args []string) {
 	s.localIP = localIP
 	s.l2 = link.NewL2Layer(drvA, localIP)
 	s.l3 = netpkg.NewL3Layer(s.l2, s.Routes)
-	// 把 L2/L3 挂到 Stack
+	s.l4 = transport.NewL4Layer(s.l3)
+	// 把 L2/L3/L4 挂到 Stack
 	s.L2 = s.l2
 	s.L3 = s.l3
+	s.L4 = s.l4
 	// 对端 peer:独立的 Stack(RouteTable 本地的,ping 对面不会用)
 	peerRoutes := netpkg.NewRouteTable()
 	s.peerL2 = link.NewL2Layer(drvB, peerIP)
 	s.peerL3 = netpkg.NewL3Layer(s.peerL2, peerRoutes)
+	s.peerL4 = transport.NewL4Layer(s.peerL3)
 
 	fmt.Printf("peer up: local %s (%s), peer %s (%s)\n",
 		localIP, drvA.MAC(), peerIP, drvB.MAC())
+	fmt.Printf("  L2/L3/L4 attached on both sides\n")
+	fmt.Printf("  tip: `tcp listen 8080` on this side, `tcp connect` from peer (not supported in REPL)\n")
+	fmt.Printf("       or just `tcp listen 8080` + `tcp connect 10.0.0.1:8080` (peer→self test)\n")
+
+	// 为了让 REPL 的 `tcp connect 10.0.0.2:port` 工作,peer 侧要能 listen。
+	// 简化:peer 自动在 8080 开 echo server。
+	go func() {
+		ln, err := s.peerL4.Listen(8080)
+		if err != nil {
+			return
+		}
+		runEchoServer(ln)
+	}()
 }
 
 // -------- arp 命令 (阶段 ④) --------

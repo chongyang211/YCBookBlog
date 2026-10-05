@@ -52,6 +52,9 @@ func (r PingResult) String() string {
 		r.Seq, r.TTL, float64(r.RTT.Microseconds())/1000.0)
 }
 
+// TCPHandler L4 (TCP) 注册的回调:收到 proto=TCP 的 IPv4 包时调
+type TCPHandler func(srcIP IPv4Addr, payload []byte)
+
 // L3Layer IPv4 + ICMP 层
 type L3Layer struct {
 	l2     L2Sender
@@ -60,6 +63,9 @@ type L3Layer struct {
 	// 等待 ping reply 的 waiter: (id<<16 | seq) → chan pingReply
 	waitersMu sync.Mutex
 	waiters   map[uint32]chan pingReply
+
+	// L4 回调 (阶段 ⑥ 新增)
+	tcpHandler TCPHandler
 }
 
 type pingReply struct {
@@ -104,9 +110,30 @@ func (l *L3Layer) onIPv4(payload []byte) {
 	switch h.Proto {
 	case ProtoICMP:
 		l.handleICMP(h, body)
+	case ProtoTCP:
+		if l.tcpHandler != nil {
+			l.tcpHandler(h.Src, body)
+		} else {
+			common.Trace("ipv4", "TCP seg but no handler, drop")
+		}
 	default:
 		common.Trace("ipv4", "unsupported proto %s", h.Proto)
 	}
+}
+
+// -------- 对 L4 的 API --------
+
+// IP 本地 IP (实现 transport.L3Sender)
+func (l *L3Layer) IP() IPv4Addr { return l.l2.IP() }
+
+// SendIP L4 发包的入口 (阶段 ⑥ 新增)
+func (l *L3Layer) SendIP(dst IPv4Addr, proto IPProto, payload []byte) error {
+	return l.sendIPv4To(dst, proto, payload)
+}
+
+// OnTCP L4 注册 TCP handler
+func (l *L3Layer) OnTCP(h func(srcIP IPv4Addr, payload []byte)) {
+	l.tcpHandler = TCPHandler(h)
 }
 
 func (l *L3Layer) handleICMP(ipH *Ipv4Header, body []byte) {
