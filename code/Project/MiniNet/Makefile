@@ -9,7 +9,8 @@
 build:
 	@mkdir -p bin
 	go build -o bin/mnet ./cmd/mnet
-	@echo "✅ built: bin/mnet"
+	go build -o bin/mnet-ping ./cmd/mnet-ping
+	@echo "✅ built: bin/mnet · bin/mnet-ping"
 
 test:
 	go test ./pkg/... -v
@@ -21,12 +22,18 @@ test-race:
 wire-demo:
 	go run ./tests/wire_demo
 
+# 阶段 ⑤ Step 5.4 的 🔥 BUG-2 现场
+bug2-demo:
+	go run ./tests/bug2_demo
+
+# 阶段 ⑤ Step 5.3 ping 独立工具
+demo-ping: build
+	./bin/mnet-ping -c 4
+
 clean:
 	rm -rf bin/
 
 # ───── 以下 target 在后续阶段启用 ─────
-demo-ping:
-	@echo "TODO: 阶段 ⑤ 完成后启用"
 demo-tcp:
 	@echo "TODO: 阶段 ⑥"
 demo-http:
