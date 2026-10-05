@@ -11,7 +11,7 @@
 ## 快速开始
 
 ```bash
-make build          # 编译 bin/mnet · bin/mnet-ping
+make build          # 编译 bin/mnet · bin/mnet-ping · bin/mnet-dig
 
 # 1. REPL 玩法
 ./bin/mnet
@@ -19,20 +19,26 @@ make build          # 编译 bin/mnet · bin/mnet-ping
 >>> peer up                           # 启动对端 goroutine
 >>> arp whois 10.0.0.2                # 主动 ARP
 >>> ping 10.0.0.2 4                   # 发 4 个 ICMP echo
->>> tcp connect 10.0.0.2:8080         # TCP 三次握手 (peer 自动跑 echo server)
->>> tcp show                          # 当前所有 TCB
+>>> tcp connect 10.0.0.2:8080         # TCP 三次握手 + 发消息
 >>> quit
 
 # 2. 独立诊断工具
 ./bin/mnet-ping -c 4 10.0.0.2
+./bin/mnet-dig @8.8.8.8 www.example.com         # 直接查 (本机需能联公网)
+./bin/mnet-dig -recursive www.example.com       # 从根开始自己递归
 
-# 3. 🔥 三个造 BUG 现场
+# 3. 🔥 四个造 BUG 现场
 make wire-demo          # BUG-1 大小端
 make bug2-demo          # BUG-2 子网/路由不一致
 make bug3-demo          # BUG-3 丢包不重传
+make bug4-demo          # BUG-4 EPOLL ET 漏读 (Linux only)
 
-# 4. TCP 握手挥手测试
-make demo-tcp           # 4 个端到端测试
+# 4. 本地演示 (不依赖公网)
+make dns-demo           # fake DNS + Resolver 缓存 + singleflight
+
+# 5. 协议栈内部测试
+make demo-tcp           # 握手挥手 4 个端到端
+go test ./pkg/mux/ -bench=. -benchtime=1s      # reactor QPS 对比
 ```
 
 ## 当前进度
@@ -43,65 +49,68 @@ make demo-tcp           # 4 个端到端测试
 - ✅ ③ 报文编解码 + 🔥BUG-1 大小端
 
 **第 2 次会话**（已完成）：
-- ✅ ④ ARP + 以太帧 + Loopback Driver + 60s 老化表
+- ✅ ④ ARP + 以太帧 + Loopback Driver + 60s 老化
 - ✅ ⑤ IPv4 + ICMP + mnet-ping + 🔥BUG-2 子网/路由
 
 **第 3 次会话**（已完成）：
-- ✅ ⑥ TCP 握手挥手 11 态状态机 (CLOSED→SYN_SENT→ESTABLISHED→FIN_WAIT→TIME_WAIT)
-- ✅ ⑦ TCP 滑窗 + 拥塞 + RTO 重传 + 快速重传 + 🔥BUG-3
+- ✅ ⑥ TCP 握手挥手 11 态状态机
+- ✅ ⑦ 滑窗 + Reno 拥塞 + RTO 重传 + 🔥BUG-3
+
+**第 4 次会话**（已完成）：
+- ✅ ⑧ Reactor + goroutine/epoll(LT+ET)/kqueue stub + 🔥BUG-4 ET 漏读
+- ✅ ⑨ DNS 报文编解码 + 递归解析 + TTL 缓存 + singleflight + mnet-dig
 
 ```bash
 make test               # 所有包测试全绿
-# ok  mininet/pkg/common       (9 tests)
+# ok  mininet/pkg/common       (9  tests)
 # ok  mininet/pkg/link         (11 tests)
 # ok  mininet/pkg/net          (12 tests)
-# ok  mininet/pkg/transport    (13 tests)   ← 第 3 次新增
+# ok  mininet/pkg/transport    (13 tests)
+# ok  mininet/pkg/mux          (2  tests + 3 benchmark)   ← 本次新增
+# ok  mininet/pkg/dns          (7  tests)                 ← 本次新增
 ```
 
-## 项目结构（第 3 次会话结束）
+## 项目结构（第 4 次会话结束）
 
 ```text
 MiniNet/
 ├── go.mod · Makefile · README.md · .gitignore
 ├── cmd/
 │   ├── mnet/                           REPL
-│   │   ├── main.go                     dump/route/peer/arp/ping
-│   │   └── tcp.go                      tcp listen/connect/show (本次新增)
-│   └── mnet-ping/main.go               独立 ping 诊断工具
+│   ├── mnet-ping/                      独立 ping
+│   └── mnet-dig/                       独立 dig    ◀── 本次新增
 ├── pkg/
-│   ├── common/                         公共:日志/hex/大端/校验和 (9 测试)
-│   ├── link/                           L2:链路层 (11 测试)
-│   │   ├── driver.go · loopback.go
-│   │   ├── ethernet.go · arp.go · l2.go · timer.go
-│   ├── net/                            L3:网络层 (12 测试)
-│   │   ├── subnet.go · route.go
-│   │   ├── ipv4.go · icmp.go · l3.go   (l3.go 本次加 OnTCP/SendIP)
-│   └── transport/                      L4:TCP (13 测试)   ◀── 本次新增包
-│       ├── seq.go                      TCP seqnum 环绕算术
-│       ├── tcp_header.go               TCP 头编解码 + 伪头 checksum
-│       ├── state.go                    11 态枚举
-│       ├── tcb.go                      TCB 结构
-│       ├── l4.go                       L4Layer + Dial/Listen
-│       ├── sm.go                       状态机核心
-│       ├── conn.go                     Conn (Read/Write/Close)
-│       ├── retrans.go                  RTO + 拥塞 + 重传队列
-│       ├── seq_test.go
-│       ├── tcp_header_test.go
-│       ├── e2e_test.go                 握手/数据/挥手/大 payload
-│       └── bug3_test.go                🔥 BUG-3 丢包重传
+│   ├── common/                         公共:日志/hex/大端/校验和
+│   ├── link/                           L2:链路层 Driver+ARP
+│   ├── net/                            L3:IPv4+ICMP+路由
+│   ├── transport/                      L4:TCP (11 态状态机+Reno+RTO)
+│   ├── mux/                           ◀── 本次新增 Reactor 事件循环
+│   │   ├── reactor.go                  Reactor 接口 + goroutine 实现
+│   │   ├── epoll_linux.go              Linux epoll (LT + ET + ET-bug)
+│   │   ├── epoll_other.go              非 Linux 占位
+│   │   ├── fdhelper_linux.go
+│   │   ├── reactor_test.go
+│   │   └── bench_test.go               goroutine vs epoll QPS 对比
+│   └── dns/                           ◀── 本次新增 DNS 协议栈
+│       ├── message.go                  RFC1035 编解码(含压缩指针)
+│       ├── resolver.go                 递归解析 + singleflight
+│       ├── cache.go                    TTL 缓存
+│       ├── message_test.go
+│       └── resolver_test.go            本地 fake DNS 端到端
 └── tests/
-    ├── wire_demo/main.go               🔥 BUG-1 大小端
-    ├── bug2_demo/main.go               🔥 BUG-2 子网/路由
-    └── bug3_demo/main.go               🔥 BUG-3 丢包不重传   ◀── 本次新增
+    ├── wire_demo/                      🔥 BUG-1
+    ├── bug2_demo/                      🔥 BUG-2
+    ├── bug3_demo/                      🔥 BUG-3
+    ├── bug4_demo/                     ◀── 本次新增 🔥 BUG-4
+    └── dns_demo/                      ◀── 本次新增 DNS 本地演示
 ```
 
-**代码规模**：~4700 行 Go，45 个测试。
+**代码规模**：~7100 行 Go，54 个测试。
 
 ## 后续路线
 
 | 会话 | 阶段 | 产出 |
 |------|------|------|
-| 4 | ⑧⑨ epoll + DNS | 并发 server + 递归解析 |
 | 5 | ⑩⑪ TLS + HTTP | 自己的 mnet-curl |
 | 6 | ⑫⑬⑭ 代理+缓存+WS | 迷你 Nginx + 聊天室 |
 | 7 | ⑮⑯ QUIC + 总装 | 全链路 shop demo |

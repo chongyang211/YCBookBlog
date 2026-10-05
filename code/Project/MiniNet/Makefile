@@ -10,7 +10,8 @@ build:
 	@mkdir -p bin
 	go build -o bin/mnet ./cmd/mnet
 	go build -o bin/mnet-ping ./cmd/mnet-ping
-	@echo "✅ built: bin/mnet · bin/mnet-ping"
+	go build -o bin/mnet-dig ./cmd/mnet-dig
+	@echo "✅ built: bin/mnet · bin/mnet-ping · bin/mnet-dig"
 
 test:
 	go test ./pkg/... -v
@@ -29,6 +30,14 @@ bug2-demo:
 # 阶段 ⑦ Step 7.3-7.4 的 🔥 BUG-3 现场
 bug3-demo:
 	go run ./tests/bug3_demo
+
+# 阶段 ⑧ Step 8.3 的 🔥 BUG-4 现场 (需 Linux)
+bug4-demo:
+	go run ./tests/bug4_demo
+
+# 阶段 ⑨ Step 9.3-9.4 DNS 本地演示
+dns-demo:
+	go run ./tests/dns_demo
 
 # 阶段 ⑤ Step 5.3 ping 独立工具
 demo-ping: build
