@@ -11,7 +11,10 @@ build:
 	go build -o bin/mnet ./cmd/mnet
 	go build -o bin/mnet-ping ./cmd/mnet-ping
 	go build -o bin/mnet-dig ./cmd/mnet-dig
-	@echo "✅ built: bin/mnet · bin/mnet-ping · bin/mnet-dig"
+	go build -o bin/mnet-curl ./cmd/mnet-curl
+	go build -o bin/mnet-proxy ./cmd/mnet-proxy
+	go build -o bin/mnet-chat ./cmd/mnet-chat
+	@echo "✅ built: 6 binaries (mnet · ping · dig · curl · proxy · chat)"
 
 test:
 	go test ./pkg/... -v
@@ -38,6 +41,18 @@ bug4-demo:
 # 阶段 ⑨ Step 9.3-9.4 DNS 本地演示
 dns-demo:
 	go run ./tests/dns_demo
+
+# 阶段 ⑪ Step 11.5 HTTP 本地演示
+http-demo:
+	go run ./tests/http_demo
+
+# 阶段 ⑬ 🔥 BUG-5 缓存击穿现场
+bug5-demo:
+	go run ./tests/bug5_demo
+
+# 阶段 ⑭ 🔥 BUG-6 WebSocket 无心跳被 LB 杀
+bug6-demo:
+	go run ./tests/bug6_demo
 
 # 阶段 ⑤ Step 5.3 ping 独立工具
 demo-ping: build

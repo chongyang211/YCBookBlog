@@ -11,21 +11,21 @@
 ## 快速开始
 
 ```bash
-make build          # 编译 bin/mnet · bin/mnet-ping · bin/mnet-dig
+make build          # 编译 bin/mnet · bin/mnet-ping · bin/mnet-dig · bin/mnet-curl
 
 # 1. REPL 玩法
 ./bin/mnet
 >>> dump                              # 5 层协议栈当前状态
 >>> peer up                           # 启动对端 goroutine
->>> arp whois 10.0.0.2                # 主动 ARP
 >>> ping 10.0.0.2 4                   # 发 4 个 ICMP echo
 >>> tcp connect 10.0.0.2:8080         # TCP 三次握手 + 发消息
 >>> quit
 
-# 2. 独立诊断工具
+# 2. 四个独立诊断工具
 ./bin/mnet-ping -c 4 10.0.0.2
-./bin/mnet-dig @8.8.8.8 www.example.com         # 直接查 (本机需能联公网)
-./bin/mnet-dig -recursive www.example.com       # 从根开始自己递归
+./bin/mnet-dig @8.8.8.8 www.example.com
+./bin/mnet-curl -v http://httpbin.org/get                 # verbose
+./bin/mnet-curl --tls-debug https://www.example.com/      # 看 ClientHello 字节
 
 # 3. 🔥 四个造 BUG 现场
 make wire-demo          # BUG-1 大小端
@@ -34,11 +34,12 @@ make bug3-demo          # BUG-3 丢包不重传
 make bug4-demo          # BUG-4 EPOLL ET 漏读 (Linux only)
 
 # 4. 本地演示 (不依赖公网)
-make dns-demo           # fake DNS + Resolver 缓存 + singleflight
+make dns-demo           # DNS 缓存+singleflight
+make http-demo          # HTTP server/client 全链路
 
 # 5. 协议栈内部测试
-make demo-tcp           # 握手挥手 4 个端到端
-go test ./pkg/mux/ -bench=. -benchtime=1s      # reactor QPS 对比
+make demo-tcp
+go test ./pkg/mux/ -bench=. -benchtime=1s
 ```
 
 ## 当前进度
@@ -50,15 +51,19 @@ go test ./pkg/mux/ -bench=. -benchtime=1s      # reactor QPS 对比
 
 **第 2 次会话**（已完成）：
 - ✅ ④ ARP + 以太帧 + Loopback Driver + 60s 老化
-- ✅ ⑤ IPv4 + ICMP + mnet-ping + 🔥BUG-2 子网/路由
+- ✅ ⑤ IPv4 + ICMP + mnet-ping + 🔥BUG-2
 
 **第 3 次会话**（已完成）：
 - ✅ ⑥ TCP 握手挥手 11 态状态机
-- ✅ ⑦ 滑窗 + Reno 拥塞 + RTO 重传 + 🔥BUG-3
+- ✅ ⑦ 滑窗 + Reno 拥塞 + RTO + 🔥BUG-3
 
 **第 4 次会话**（已完成）：
-- ✅ ⑧ Reactor + goroutine/epoll(LT+ET)/kqueue stub + 🔥BUG-4 ET 漏读
-- ✅ ⑨ DNS 报文编解码 + 递归解析 + TTL 缓存 + singleflight + mnet-dig
+- ✅ ⑧ Reactor + goroutine/epoll(LT+ET) + 🔥BUG-4
+- ✅ ⑨ DNS 递归 + TTL 缓存 + singleflight + mnet-dig
+
+**第 5 次会话**（已完成）：
+- ✅ ⑩ TLS 1.3 握手可视化 (ClientHello 字节解码 + crypto/tls 包装)
+- ✅ ⑪ HTTP/1.1 服务端 + 客户端 (自写 Request/Response/Mux/chunked)
 
 ```bash
 make test               # 所有包测试全绿
@@ -66,11 +71,13 @@ make test               # 所有包测试全绿
 # ok  mininet/pkg/link         (11 tests)
 # ok  mininet/pkg/net          (12 tests)
 # ok  mininet/pkg/transport    (13 tests)
-# ok  mininet/pkg/mux          (2  tests + 3 benchmark)   ← 本次新增
-# ok  mininet/pkg/dns          (7  tests)                 ← 本次新增
+# ok  mininet/pkg/mux          (2  tests + 3 benchmark)
+# ok  mininet/pkg/dns          (7  tests)
+# ok  mininet/pkg/tls          (4  tests)   ← 本次新增
+# ok  mininet/pkg/http         (10 tests)   ← 本次新增
 ```
 
-## 项目结构（第 4 次会话结束）
+## 项目结构（第 5 次会话结束）
 
 ```text
 MiniNet/
@@ -78,39 +85,30 @@ MiniNet/
 ├── cmd/
 │   ├── mnet/                           REPL
 │   ├── mnet-ping/                      独立 ping
-│   └── mnet-dig/                       独立 dig    ◀── 本次新增
+│   ├── mnet-dig/                       独立 dig
+│   └── mnet-curl/                     ◀── 本次新增 独立 curl
 ├── pkg/
-│   ├── common/                         公共:日志/hex/大端/校验和
-│   ├── link/                           L2:链路层 Driver+ARP
-│   ├── net/                            L3:IPv4+ICMP+路由
-│   ├── transport/                      L4:TCP (11 态状态机+Reno+RTO)
-│   ├── mux/                           ◀── 本次新增 Reactor 事件循环
-│   │   ├── reactor.go                  Reactor 接口 + goroutine 实现
-│   │   ├── epoll_linux.go              Linux epoll (LT + ET + ET-bug)
-│   │   ├── epoll_other.go              非 Linux 占位
-│   │   ├── fdhelper_linux.go
-│   │   ├── reactor_test.go
-│   │   └── bench_test.go               goroutine vs epoll QPS 对比
-│   └── dns/                           ◀── 本次新增 DNS 协议栈
-│       ├── message.go                  RFC1035 编解码(含压缩指针)
-│       ├── resolver.go                 递归解析 + singleflight
-│       ├── cache.go                    TTL 缓存
+│   ├── common/ · link/ · net/ · transport/ · mux/ · dns/  (继承)
+│   ├── tls/                           ◀── 本次新增 TLS 可视化
+│   │   ├── hello.go                    ClientHello/ServerHello 字节解析
+│   │   ├── wrap.go                     crypto/tls 包装 + CaptureClientHello
+│   │   └── hello_test.go
+│   └── http/                          ◀── 本次新增 HTTP/1.1 栈
+│       ├── message.go                  Request/Response 编解码 + chunked
+│       ├── server.go                   Server + Mux (精确/前缀/fallback)
+│       ├── client.go                   Client (http:// + https://)
 │       ├── message_test.go
-│       └── resolver_test.go            本地 fake DNS 端到端
+│       └── server_test.go              端到端 Server+Client
 └── tests/
-    ├── wire_demo/                      🔥 BUG-1
-    ├── bug2_demo/                      🔥 BUG-2
-    ├── bug3_demo/                      🔥 BUG-3
-    ├── bug4_demo/                     ◀── 本次新增 🔥 BUG-4
-    └── dns_demo/                      ◀── 本次新增 DNS 本地演示
+    ├── wire_demo/ · bug2_demo/ · bug3_demo/ · bug4_demo/ · dns_demo/ (继承)
+    └── http_demo/                     ◀── 本次新增 HTTP 本地演示
 ```
 
-**代码规模**：~7100 行 Go，54 个测试。
+**代码规模**：~9000 行 Go，68 个测试。
 
 ## 后续路线
 
 | 会话 | 阶段 | 产出 |
 |------|------|------|
-| 5 | ⑩⑪ TLS + HTTP | 自己的 mnet-curl |
 | 6 | ⑫⑬⑭ 代理+缓存+WS | 迷你 Nginx + 聊天室 |
 | 7 | ⑮⑯ QUIC + 总装 | 全链路 shop demo |
