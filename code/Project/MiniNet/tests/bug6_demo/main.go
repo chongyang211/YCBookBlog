@@ -161,33 +161,62 @@ func main() {
 
 	// ---------- 场景 B: 开 1s 心跳 ----------
 	fmt.Println()
-	fmt.Println("----- ✅ 场景 B: 1s 发一次 ping -----")
+	fmt.Println("----- ✅ 场景 B: 500ms 心跳 + 后台 reader 消化 pong -----")
 	runB := func() {
 		c, err := ws.Dial("ws://" + lbAddr + "/chat")
 		if err != nil {
 			fmt.Printf("  连接失败: %v\n", err)
 			return
 		}
-		c.StartHeartbeat(1 * time.Second)
+		c.StartHeartbeat(500 * time.Millisecond) // < LB 窗口的 1/4,确保稳定
 		defer c.Close()
 
-		c.WriteText("hi")
-		op, msg, _ := c.Read()
-		fmt.Printf("  t=0.0s   收到 %s: %q\n", op, msg)
+		// 关键:真实应用必须有后台 reader goroutine
+		// (否则 server 回的 Pong 没人消化, StartHeartbeat 的 lastPong 永远不更新 → 客户端自判死)
+		msgCh := make(chan string, 10)
+		errCh := make(chan error, 1)
+		go func() {
+			for {
+				op, payload, err := c.Read()
+				if err != nil {
+					errCh <- err
+					return
+				}
+				if op == ws.OpText {
+					msgCh <- string(payload)
+				}
+			}
+		}()
 
-		// 静默等 3 秒 (但心跳一直在跑)
+		c.WriteText("hi")
+		select {
+		case m := <-msgCh:
+			fmt.Printf("  t=0.0s   收到 Text: %q\n", m)
+		case e := <-errCh:
+			fmt.Printf("  💥 read err: %v\n", e)
+			return
+		case <-time.After(1 * time.Second):
+			fmt.Printf("  💥 timeout\n")
+			return
+		}
+
+		// 静默等 3 秒 (但心跳一直在跑, reader 消化 pong)
 		time.Sleep(3 * time.Second)
 		fmt.Printf("  t=3.0s   尝试再发消息...\n")
 		if err := c.WriteText("still alive?"); err != nil {
 			fmt.Printf("  💥 WriteText 失败: %v\n", err)
 			return
 		}
-		op, msg, err = c.Read()
-		if err != nil {
-			fmt.Printf("  💥 Read 失败: %v\n", err)
+		select {
+		case m := <-msgCh:
+			fmt.Printf("  ✅ 收到 Text: %q  → 心跳救了连接!\n", m)
+		case e := <-errCh:
+			fmt.Printf("  💥 read err: %v\n", e)
+			return
+		case <-time.After(2 * time.Second):
+			fmt.Printf("  💥 timeout waiting response\n")
 			return
 		}
-		fmt.Printf("  ✅ 收到 %s: %q  → 心跳救了连接!\n", op, msg)
 		p, pr, _ := c.HeartbeatStats()
 		fmt.Printf("  心跳统计: ping 发 %d · pong 收 %d\n", p, pr)
 	}

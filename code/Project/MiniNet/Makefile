@@ -54,6 +54,16 @@ bug5-demo:
 bug6-demo:
 	go run ./tests/bug6_demo
 
+# 阶段 ⑮ 🔥 BUG-7 TCP 队头阻塞 vs QUIC 多流
+bug7-demo:
+	go run ./tests/bug7_demo
+
+# 阶段 ⑯ 总装: shop 全栈 demo (浏览器可点)
+demo-shop:
+	@echo "启动 shop demo, 然后用浏览器打开 http://127.0.0.1:8080/"
+	@echo "Ctrl+C 停止"
+	go run ./tests/shop_demo
+
 # 阶段 ⑤ Step 5.3 ping 独立工具
 demo-ping: build
 	./bin/mnet-ping -c 4

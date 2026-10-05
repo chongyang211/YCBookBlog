@@ -62,53 +62,68 @@ go test ./pkg/mux/ -bench=. -benchtime=1s
 - ✅ ⑨ DNS 递归 + TTL 缓存 + singleflight + mnet-dig
 
 **第 5 次会话**（已完成）：
-- ✅ ⑩ TLS 1.3 握手可视化 (ClientHello 字节解码 + crypto/tls 包装)
-- ✅ ⑪ HTTP/1.1 服务端 + 客户端 (自写 Request/Response/Mux/chunked)
+- ✅ ⑩ TLS 1.3 握手可视化
+- ✅ ⑪ HTTP/1.1 服务端 + 客户端
+
+**第 6 次会话**（已完成）：
+- ✅ ⑫ Keep-Alive 池 + Client ConnPool
+- ✅ ⑬ ReverseProxy + LRU + singleflight + 🔥 BUG-5 缓存击穿（334× 保护）
+- ✅ ⑭ WebSocket RFC6455 + 聊天室 + 🔥 BUG-6 无心跳被 LB 杀
+
+**第 7 次会话**（已完成 · **完结** 🎉）：
+- ✅ ⑮ MiniQUIC: ConnID + 多流 + 迁移 + 🔥 BUG-7 TCP 队头阻塞（10× 加速）
+- ✅ ⑯ shop 全栈总装: 浏览器可点的 http://127.0.0.1:8080/
 
 ```bash
 make test               # 所有包测试全绿
+# ok  mininet/pkg/cache        (4  tests)
 # ok  mininet/pkg/common       (9  tests)
-# ok  mininet/pkg/link         (11 tests)
-# ok  mininet/pkg/net          (12 tests)
-# ok  mininet/pkg/transport    (13 tests)
-# ok  mininet/pkg/mux          (2  tests + 3 benchmark)
 # ok  mininet/pkg/dns          (7  tests)
-# ok  mininet/pkg/tls          (4  tests)   ← 本次新增
-# ok  mininet/pkg/http         (10 tests)   ← 本次新增
+# ok  mininet/pkg/http         (13 tests)
+# ok  mininet/pkg/link         (11 tests)
+# ok  mininet/pkg/mux          (2  tests + 3 benchmark)
+# ok  mininet/pkg/net          (12 tests)
+# ok  mininet/pkg/proxy        (4  tests)
+# ok  mininet/pkg/quic         (4  tests)   ← 本次新增
+# ok  mininet/pkg/tls          (4  tests)
+# ok  mininet/pkg/transport    (13 tests)
+# ok  mininet/pkg/ws           (5  tests)
+# ─────────────────────────────────────────
+# 共 88 测试, 12 个包全绿
 ```
 
-## 项目结构（第 5 次会话结束）
+## 项目结构（**第 7 次会话结束 · 本案例完结** 🎉）
 
 ```text
 MiniNet/
 ├── go.mod · Makefile · README.md · .gitignore
-├── cmd/
-│   ├── mnet/                           REPL
-│   ├── mnet-ping/                      独立 ping
-│   ├── mnet-dig/                       独立 dig
-│   └── mnet-curl/                     ◀── 本次新增 独立 curl
-├── pkg/
-│   ├── common/ · link/ · net/ · transport/ · mux/ · dns/  (继承)
-│   ├── tls/                           ◀── 本次新增 TLS 可视化
-│   │   ├── hello.go                    ClientHello/ServerHello 字节解析
-│   │   ├── wrap.go                     crypto/tls 包装 + CaptureClientHello
-│   │   └── hello_test.go
-│   └── http/                          ◀── 本次新增 HTTP/1.1 栈
-│       ├── message.go                  Request/Response 编解码 + chunked
-│       ├── server.go                   Server + Mux (精确/前缀/fallback)
-│       ├── client.go                   Client (http:// + https://)
-│       ├── message_test.go
-│       └── server_test.go              端到端 Server+Client
-└── tests/
-    ├── wire_demo/ · bug2_demo/ · bug3_demo/ · bug4_demo/ · dns_demo/ (继承)
-    └── http_demo/                     ◀── 本次新增 HTTP 本地演示
+├── cmd/                              6 个独立二进制
+│   ├── mnet/           REPL
+│   ├── mnet-ping/      ping         · mnet-dig/   dig
+│   ├── mnet-curl/      curl         · mnet-proxy/ 反代
+│   └── mnet-chat/      WebSocket 聊天室
+├── pkg/                              12 个包
+│   ├── common/ · link/ · net/ · transport/ · mux/ · dns/ · tls/ (继承)
+│   ├── http/ · cache/ · proxy/ · ws/  (继承)
+│   └── quic/          ◀── 本次新增 MiniQUIC 教学版
+│       ├── packet.go           包/帧编解码
+│       ├── conn.go             Conn + 多流 + 迁移
+│       └── quic_test.go        (含 ConnID 迁移测试)
+└── tests/                            7 个 BUG + 3 个 demo
+    ├── wire · bug2~bug6 · dns · http_demo (继承)
+    ├── bug7_demo/     ◀── 本次新增 🔥 TCP 队头阻塞 vs QUIC
+    └── shop_demo/     ◀── 本次新增 🎉 全栈 shop.html
+        ├── main.go              3 服务一进程 (origin + edge + ws)
+        └── shop.html            浏览器可点
 ```
 
-**代码规模**：~9000 行 Go，68 个测试。
+**最终规模**：~12500 行 Go，88 个测试全绿，7 个 BUG 现场，1 个 shop 浏览器 demo。
 
-## 后续路线
+## 🎉 完结里程碑
 
-| 会话 | 阶段 | 产出 |
-|------|------|------|
-| 6 | ⑫⑬⑭ 代理+缓存+WS | 迷你 Nginx + 聊天室 |
-| 7 | ⑮⑯ QUIC + 总装 | 全链路 shop demo |
+```bash
+make build && make test              # 6 二进制 + 88 测试
+make bug7-demo                       # 看 TCP vs QUIC 10× 对比
+make demo-shop                       # 打开浏览器 http://127.0.0.1:8080/
+git tag v1.0.0                       # 完结纪念
+```

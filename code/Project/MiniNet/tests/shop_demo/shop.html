@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>MiniNet Shop · 全栈 demo</title>
+  <style>
+    body { font-family: -apple-system, "PingFang SC", sans-serif; max-width: 900px; margin: 2em auto; padding: 0 1em; color: #222; }
+    h1 { color: #0066cc; }
+    .arch { background: #f5f5f7; padding: 1em; border-radius: 8px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; white-space: pre; overflow-x: auto; }
+    .product { border: 1px solid #e5e5e5; border-radius: 8px; padding: 1em; margin: 1em 0; display: flex; justify-content: space-between; align-items: center; }
+    .product.lowstock { border-color: #ff6b6b; background: #fff5f5; }
+    .product h3 { margin: 0; }
+    .price { font-size: 1.5em; color: #e73c3c; font-weight: 600; }
+    .stock { font-size: 14px; color: #666; }
+    #log { background: #1e1e1e; color: #d4d4d4; padding: 1em; border-radius: 8px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; height: 200px; overflow-y: auto; }
+    .log-ws { color: #4ec9b0; }
+    .log-http { color: #569cd6; }
+    .log-err { color: #f48771; }
+    .badges { margin: 0.5em 0; }
+    .badge { display: inline-block; background: #0066cc; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 4px; }
+    .badge.hit { background: #10b981; }
+    .badge.miss { background: #f59e0b; }
+  </style>
+</head>
+<body>
+  <h1>🛒 MiniNet Shop</h1>
+  <p>这个页面背后的所有网络栈，都是我们在前 6 次会话里<strong>自己写的</strong>。</p>
+
+  <div class="arch">
+┌─────────────┐   HTTP   ┌──────────────┐   HTTP   ┌─────────────┐
+│  Chrome     │ ───────> │ mnet-proxy   │ ───────> │ 源站(商品)  │
+│  浏览器      │ <─────── │ (LRU+SF 边缘) │ <─────── │  :9001      │
+└─────────────┘          └──────────────┘          └─────────────┘
+       │
+       │ WebSocket (ws://.../push)
+       ▼
+┌─────────────┐
+│ 库存推送 WS │  (当前连接数见 /api/stats)
+│  :9100      │
+└─────────────┘
+  </div>
+
+  <div id="products"></div>
+
+  <h3>📋 实时日志（HTTP 请求 + WebSocket 推送）</h3>
+  <div id="log"></div>
+
+  <script>
+    const log = document.getElementById('log');
+    function logLine(cls, msg) {
+      const d = document.createElement('div');
+      d.className = 'log-' + cls;
+      d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+      log.appendChild(d);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    // 1. HTTP 拉商品列表 (经过 mnet-proxy 边缘缓存)
+    async function fetchProducts() {
+      const t0 = performance.now();
+      const r = await fetch('/api/products');
+      const cache = r.headers.get('X-Cache') || '?';
+      const rid = r.headers.get('X-Request-ID') || '?';
+      const data = await r.json();
+      const dt = (performance.now() - t0).toFixed(1);
+      logLine('http', `GET /api/products → X-Cache=${cache} rid=${rid} (${dt}ms)`);
+      render(data, cache);
+    }
+    function render(items, cacheState) {
+      const div = document.getElementById('products');
+      div.innerHTML = '';
+      items.forEach(p => {
+        const d = document.createElement('div');
+        d.className = 'product' + (p.stock < 10 ? ' lowstock' : '');
+        d.id = 'p-' + p.id;
+        d.innerHTML = `
+          <div>
+            <h3>${p.name}</h3>
+            <div class="badges">
+              <span class="badge">ID ${p.id}</span>
+              <span class="badge ${cacheState === 'HIT' ? 'hit' : 'miss'}">X-Cache: ${cacheState}</span>
+            </div>
+            <div class="stock">库存: <span class="stock-n">${p.stock}</span> 件</div>
+          </div>
+          <div class="price">¥${p.price}</div>
+        `;
+        div.appendChild(d);
+      });
+    }
+
+    // 2. WebSocket 订阅库存推送 (通过 mnet-chat 的推送服务器)
+    function connectWS() {
+      const ws = new WebSocket('ws://' + location.hostname + ':9100/push');
+      ws.onopen = () => logLine('ws', 'WebSocket connected to :9100/push');
+      ws.onmessage = (e) => {
+        logLine('ws', '← ' + e.data);
+        try {
+          const m = JSON.parse(e.data);
+          if (m.type === 'stock_update') {
+            const el = document.querySelector('#p-' + m.product_id + ' .stock-n');
+            if (el) {
+              el.textContent = m.stock;
+              const p = document.getElementById('p-' + m.product_id);
+              if (m.stock < 10) p.classList.add('lowstock');
+            }
+          }
+        } catch(_) {}
+      };
+      ws.onclose = () => { logLine('err', 'WS closed, reconnect in 2s'); setTimeout(connectWS, 2000); };
+      // 30s 心跳 (前端 JS 版的 ping)
+      setInterval(() => {
+        if (ws.readyState === 1) ws.send('ping');
+      }, 30000);
+    }
+
+    // 启动
+    fetchProducts();
+    // 每 3s 再拉一次(看 cache HIT/MISS 变化)
+    setInterval(fetchProducts, 3000);
+    connectWS();
+  </script>
+</body>
+</html>
