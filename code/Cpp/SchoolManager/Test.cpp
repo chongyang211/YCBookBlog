@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <iomanip>      // setw / left
 using namespace std;
 
 class User {
@@ -45,7 +46,10 @@ public:
         cout << "1. 浏览机房  2. 预约机房  3. 取消预约  4. 报名演讲  0. 退出登录\n";
         int op; cin >> op;
         switch (op) {
-            case 1: cout << "[Student] 进入了 listRooms 占位\n"; break;
+            case 1: 
+                // cout << "[Student] 进入了 listRooms 占位\n"; 
+                sys->listRooms();
+                break;
             case 2: cout << "[Student] 进入了 reserveRoom 占位\n"; break;
             case 3: cout << "[Student] 进入了 cancelReservation 占位\n"; break;
             case 4: cout << "[Student] 进入了 signupSpeech 占位\n"; break;
@@ -169,7 +173,23 @@ public:
         }
         return u->second;
     };
-    void listRooms() const;
+    void listRooms() const {
+        cout << "\n=== 机房列表 ===\n";
+        cout << left << setw(6) << "编号" << setw(8) << "容量"
+            << setw(20) << "配置" << setw(8) << "状态\n";
+        cout << string(42, '-') << "\n";
+
+        if (rooms.empty()) { cout << "（暂无机房）\n"; return; }
+
+        // ⭐ 范围 for + 结构化绑定（C++17）
+        for (const auto& [id, room] : rooms) {
+            bool occupied = reservedRooms.count(id) > 0;
+            cout << left << setw(6) << id << setw(8) << room.capacity
+                << setw(20) << room.spec
+                << (occupied ? "占用中" : "空闲") << "\n";
+        }
+    }
+
 };
 
 
