@@ -42,7 +42,17 @@ public:
         : User(id, name, pwd), sys(s) {}
 
     void mainMenu() override{
-        cout << "\n--- 学生 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
+        cout << "1. 浏览机房  2. 预约机房  3. 取消预约  4. 报名演讲  0. 退出登录\n";
+        int op; cin >> op;
+        switch (op) {
+            case 1: cout << "[Student] 进入了 listRooms 占位\n"; break;
+            case 2: cout << "[Student] 进入了 reserveRoom 占位\n"; break;
+            case 3: cout << "[Student] 进入了 cancelReservation 占位\n"; break;
+            case 4: cout << "[Student] 进入了 signupSpeech 占位\n"; break;
+            case 0: return;
+            default: cout << "无效选择\n";
+        }
+
     }
     char roleTag() const override{
         return 'S';
