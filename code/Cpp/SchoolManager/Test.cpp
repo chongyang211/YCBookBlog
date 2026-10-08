@@ -142,6 +142,8 @@ public:
 class CampusSystem {
 private:
     std::map<std::string, std::shared_ptr<User>> users;
+    std::map<int, Computer>                       rooms;    // ⭐ 第 2 个容器
+
 public:
     CampusSystem() {
         cout << "[System] 校园系统启动\n";
@@ -167,6 +169,7 @@ public:
         }
         return u->second;
     };
+    void listRooms() const;
 };
 
 
