@@ -1,6 +1,10 @@
 //
 // Created by 杨充 on 2026/10/4.
 //
+// 单文件练习版：自包含全部类定义，单独编译即可
+//   g++ -std=c++17 Test.cpp -o test_app
+// 注意：不要和 CampusSystem.cpp 一起编译——
+// 本文件内嵌的 CampusSystem 与头文件版内容不同，两套定义同链是 ODR 违反
 
 #include <iostream>
 #include <map>
@@ -33,64 +37,6 @@ public:
     virtual std::string toCsv() const {
         return std::string(1, roleTag()) + "," + userId + "," + userName + "," + password;
     }
-};
-
-class CampusSystem;
-class Student : public User {
-private:
-    CampusSystem* sys;
-public:
-    Student(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
-        : User(id, name, pwd), sys(s) {}
-
-    void mainMenu() override{
-        cout << "1. 浏览机房  2. 预约机房  3. 取消预约  4. 报名演讲  0. 退出登录\n";
-        int op; cin >> op;
-        switch (op) {
-            case 1: 
-                // cout << "[Student] 进入了 listRooms 占位\n"; 
-                sys->listRooms();
-                break;
-            case 2: cout << "[Student] 进入了 reserveRoom 占位\n"; break;
-            case 3: cout << "[Student] 进入了 cancelReservation 占位\n"; break;
-            case 4: cout << "[Student] 进入了 signupSpeech 占位\n"; break;
-            case 0: return;
-            default: cout << "无效选择\n";
-        }
-
-    }
-    char roleTag() const override{
-        return 'S';
-    }
-    void setSystem(CampusSystem* s) {
-        sys = s;
-    }
-};
-
-class Teacher: public User {
-private:
-    CampusSystem* sys;
-public:
-    Teacher(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
-        : User(id, name, pwd), sys(s) {}
-    void mainMenu() override {
-        std::cout << "\n--- 老师 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
-    }
-    char roleTag() const override { return 'T'; }
-    void setSystem(CampusSystem* t) { sys = t; }
-};
-
-class Admin: public User {
-private:
-    CampusSystem* sys;
-public:
-    Admin(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
-        : User(id, name, pwd), sys(s) {}
-    void mainMenu() override {
-        std::cout << "\n--- 管理元 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
-    }
-    char roleTag() const override { return 'A'; }
-    void setSystem(CampusSystem* t) { sys = t; }
 };
 
 class Computer {
@@ -144,6 +90,9 @@ public:
     }
 };
 
+// ⭐ CampusSystem 必须定义在 Student 之前：
+// Student::mainMenu 里要调 sys->listRooms()，成员访问需要完整类定义，
+// 前向声明只够声明 CampusSystem* 指针成员，不够调用方法
 class CampusSystem {
 private:
     std::map<std::string, std::shared_ptr<User>> users;
@@ -195,6 +144,63 @@ public:
 
 };
 
+class Student : public User {
+private:
+    CampusSystem* sys;
+public:
+    Student(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
+        : User(id, name, pwd), sys(s) {}
+
+    void mainMenu() override{
+        cout << "1. 浏览机房  2. 预约机房  3. 取消预约  4. 报名演讲  0. 退出登录\n";
+        int op; cin >> op;
+        switch (op) {
+            case 1:
+                // cout << "[Student] 进入了 listRooms 占位\n";
+                sys->listRooms();
+                break;
+            case 2: cout << "[Student] 进入了 reserveRoom 占位\n"; break;
+            case 3: cout << "[Student] 进入了 cancelReservation 占位\n"; break;
+            case 4: cout << "[Student] 进入了 signupSpeech 占位\n"; break;
+            case 0: return;
+            default: cout << "无效选择\n";
+        }
+
+    }
+    char roleTag() const override{
+        return 'S';
+    }
+    void setSystem(CampusSystem* s) {
+        sys = s;
+    }
+};
+
+class Teacher: public User {
+private:
+    CampusSystem* sys;
+public:
+    Teacher(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
+        : User(id, name, pwd), sys(s) {}
+    void mainMenu() override {
+        std::cout << "\n--- 老师 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
+    }
+    char roleTag() const override { return 'T'; }
+    void setSystem(CampusSystem* t) { sys = t; }
+};
+
+class Admin: public User {
+private:
+    CampusSystem* sys;
+public:
+    Admin(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
+        : User(id, name, pwd), sys(s) {}
+    void mainMenu() override {
+        std::cout << "\n--- 管理元 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
+    }
+    char roleTag() const override { return 'A'; }
+    void setSystem(CampusSystem* t) { sys = t; }
+};
+
 
 shared_ptr<User> login() {
     cout << "\n=== 校园系统登录 ===\n";
@@ -232,7 +238,6 @@ void test() {
 // g++ -std==c++17 Test.cpp
 // g++ Test.cpp Student.cpp
 // g++ -std=c++17 Test.cpp CampusSystem.cpp Computer.cpp
-// 身份 + 账号 + 密码
 int main() {
     CampusSystem sys;
     sys.addUser(make_shared<Student>("S001", "张三", "123"));
