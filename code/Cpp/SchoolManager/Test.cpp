@@ -147,8 +147,13 @@ public:
     // 2.预约机房
     bool reserveRoom(const std::string& sid, int roomId, const std::string& date) {
         if (rooms.find(roomId) == rooms.end()) {
-
+            cout << "[预约] 机房不存在\n";
+            return false;
         }
+        Reservation r(nextResId++, sid, roomId, date);
+        reservations.push_back(r);    // 只塞 vector
+        cout << "[预约] 提交成功，预约号 " << r.resId << "\n";
+        return true;
     }
 };
 
@@ -167,11 +172,25 @@ public:
                 // cout << "[Student] 进入了 listRooms 占位\n";
                 sys->listRooms();
                 break;
-            case 2: cout << "[Student] 进入了 reserveRoom 占位\n"; break;
-            case 3: cout << "[Student] 进入了 cancelReservation 占位\n"; break;
-            case 4: cout << "[Student] 进入了 signupSpeech 占位\n"; break;
-            case 0: return;
-            default: cout << "无效选择\n";
+            case 2: {                                     // ⭐ 大括号限定作用域
+                // cout << "[Student] 进入了 reserveRoom 占位\n";
+                int roomId; string date;
+                cout << "机房编号: "; cin >> roomId;
+                cout << "日期(YYYY-MM-DD): "; cin >> date;
+                sys->reserveRoom(userId, roomId, date);
+                break;
+            }
+        case 3:
+                cout << "[Student] 进入了 cancelReservation 占位\n";
+                break;
+        case 4:
+                cout << "[Student] 进入了 signupSpeech 占位\n";
+                break;
+            case 0:
+                return;
+            default:
+                cout << "无效选择\n";
+                break;
         }
 
     }
