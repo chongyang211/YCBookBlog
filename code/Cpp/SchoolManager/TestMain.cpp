@@ -7,6 +7,8 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <thread>
+
 using namespace std;
 
 
@@ -30,11 +32,30 @@ void test() {
     worker.join();
 }
 
+void threadFunction() {
+    std::cout << "Hello from thread!" << std::endl;
+}
+
+void test2() {
+    std::thread t(threadFunction);
+    t.join();
+    std::cout << "Main thread finished." << std::endl;
+}
+
+void test3() {
+    std::thread t([](){
+        std::cout << "Hello from Lambda thread!" << std::endl;
+    });
+    t.join();
+    std::cout << "Main thread finished." << std::endl;
+}
+
 // g++ -std==c++17 Test.cpp
 // g++ TestMain.cpp
 // g++ -std=c++17 TestMain.cpp
 // 身份 + 账号 + 密码
 int main() {
     test();
+    test2();
     return 0;
 }
