@@ -10,17 +10,18 @@
 // User 类是一个抽象基类，用于定义用户的基本接口。
 // 1.支持多态性，允许派生类实现不同的行为。2.拓展性，确保所有用户类型都具有一致的行为。
 class User {
+// protected表示派生类可见（子类可以直接访问父类这些属性），外部不可见
 protected:
-    std::string userId;
-    std::string userName;
-    std::string password;
+    std::string userId;     // 用户id
+    std::string userName;   // 用户名
+    std::string password;   // 用户密码
 public:
-    User(const std::string& id, const std::string& name, const std::string& pwd)
-        : userId(id), userName(name), password(pwd) {}
+    User(const std::string& id, const std::string& name, const std::string& pwd);
     // 虚析构函数，使用 = default 表示使用编译器生成的默认实现。
     // 确保在通过基类指针删除派生类对象时，能够正确调用派生类的析构函数。
     virtual ~User() = default;
     // 纯虚函数，表示 User 类是一个抽象基类，不能直接实例化。派生类必须实现 mainMenu 方法。
+    // `= 0`，表示纯虚函数，强制让子类实现
     virtual void mainMenu() = 0;
     // 纯虚：返回身份标签 'S'/'T'/'A'，用于 CSV 反序列化（阶段 ⑦ 用）
     virtual char roleTag() const = 0;

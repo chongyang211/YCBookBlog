@@ -25,17 +25,16 @@ shared_ptr<User> login() {
 
     // TODO（阶段 ⑦）: 接 FileStore 校验账号密码
     // （阶段 ②）: 根据 role 返回 Student/Teacher/Admin 对象
-    switch (role) {
-        case 1: return make_shared<Student>(id, "学生" + id, pwd);
-        case 2: return make_shared<Teacher>(id, "教师" + id, pwd);
-        case 3: return make_shared<Admin>(id, "管理员" + id, pwd);
-    }
+    // switch (role) {
+    //     case 1: return make_shared<Student>(id, "学生" + id, pwd);
+    //     case 2: return make_shared<Teacher>(id, "教师" + id, pwd);
+    //     case 3: return make_shared<Admin>(id, "管理员" + id, pwd);
+    // }
     cout << "[Login] 占位：模拟登录成功 - role=" << role << " id=" << id << "\n";
     return nullptr;   // 阶段 ① 暂时返回空，循环会自然结束
 }
 
 void test() {
-
     Computer c(101, 50, "i7+RTX4060");
     Speech s("S001", "AI伦理", 1);
     Reservation r(1, "S001", 101, "2026-06-01");
@@ -75,4 +74,43 @@ int main() {
         user->mainMenu();   // ⭐ 多态分发
     }
     return 0;
+}
+
+class User {
+private:
+    std::string id, 
+    std::string name, 
+    std::string pwd; 
+
+}
+
+// 派生类
+class Student : public User {
+public:
+    void studentMenu();
+}
+
+class Teacher : public User {
+public:
+    void studentMenu();
+}
+
+class Speech : public User{
+public:
+    void studentMenu();
+}
+
+// 返回多种类型
+// 属性，写了多遍，没有进行抽取复用
+// 每添加一种类型，都要改login方法逻辑，违背开闭原则【对修改关闭，对拓展开放】
+User login() {
+    User* user;
+    if (role == 1) {
+        user = new Student();
+    } else if (role == 2) {
+        user = new Teacher();
+    } else {
+
+    }
+    return user;
 }

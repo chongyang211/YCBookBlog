@@ -57,7 +57,36 @@ void repl(KvDatabase& db) {
     }
 }
 
+void demo(int which) {
+    switch (which) {
+        case 1: throw jsonkv::JsonParseError("bad token", 3, 12);
+        case 2: throw jsonkv::TypeMismatchError("string", "number");
+        case 3: throw jsonkv::KeyNotFoundError("user.name");
+        case 4: throw jsonkv::JsonIoError("cannot open kv.json");
+        default: throw jsonkv::JsonError("base class works!");
+    }
+}
+
+void test() {
+    try {
+        throw jsonkv::JsonError("base class works!");
+    } catch (const std::exception& e) {     // 用基类捕获也行
+        std::cout << "caught: " << e.what() << "\n";
+    }
+
+    for (int i = 1; i <= 5; ++i) {
+        try { demo(i); }
+        catch (const JsonError& e) {                     // ⭐ 父类一次接住
+            std::cout << "[" << i << "] " << e.what() << "\n";
+        }
+    }
+    jsonkv::JsonNode n; 
+    n = 3.14;
+}
+
+// g++ -std=c++17 main.cpp JsonNode.cpp JsonParser.cpp JsonWriter.cpp KvDatabase.cpp
 int main(int argc, char** argv) {
+    test();
     KvDatabase db(argc > 1 ? argv[1] : "kv.json");
     db.load();
     repl(db);

@@ -25,7 +25,7 @@ public:
     using std::runtime_error::runtime_error;
 };
 
-
+// json解析异常
 class JsonParseError: public JsonError {
 public:
     JsonParseError(const std::string& msg, size_t line, size_t col)

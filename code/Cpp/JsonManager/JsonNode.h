@@ -39,6 +39,9 @@ public:
 
     // ====== 构造函数：每种 JSON 类型一个 ======
     JsonNode() : v(nullptr) {}                                   // null
+    // explicit，禁止隐式转换。
+    // 避免`JsonNode n = 3.14;` 会偷偷把 double 转成 JsonNode
+    // 加上`explicit` 强制写 `JsonNode n{3.14}`
     explicit JsonNode(bool b)                : v(b) {}
     explicit JsonNode(double n)              : v(n) {}
     explicit JsonNode(int n)                 : v(static_cast<double>(n)) {}   // int 转 double
