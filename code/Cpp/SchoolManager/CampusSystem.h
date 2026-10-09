@@ -21,9 +21,9 @@ class CampusSystem {
 private:
     std::map<std::string, std::shared_ptr<User>> users;
     std::map<int, Computer> rooms;
-    std::vector<Reservation> reservations;
+    std::vector<Reservation> reservations;      // 容器
     std::set<int> reservedRooms;
-    int nextResId = 1;
+    int nextResId = 1;          // 自增 id
     // 存储键值对（key-value pairs）。与 std::map 不同，std::multimap 允许键（key）重复，即多个值可以关联到同一个键。
     std::multimap<int, Speech> speeches;
 public:
@@ -32,9 +32,13 @@ public:
     std::shared_ptr<User> login(const std::string& id, const std::string& pwd);
 
     // student
+    // 1.浏览机房
     void listRooms() const;
+    // 2.预约机房
     bool reserveRoom(const std::string& sid, int roomId, const std::string& date);
+    // 3.取消预约
     bool cancelReservation(const std::string& sid, int resId);
+    // 4.报名演讲
     bool signupSpeech(const std::string& sid, const std::string& topic, int round);
 
     // teacher

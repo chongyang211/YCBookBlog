@@ -97,6 +97,8 @@ class CampusSystem {
 private:
     std::map<std::string, std::shared_ptr<User>> users;
     std::map<int, Computer>                       rooms;    // ⭐ 第 2 个容器
+    std::vector<Reservation> reservations;
+    int nextResId = 1;
     // std::set<int> reservedRooms;        // ⭐ 第 4 个容器：已被占用的机房编号
 
 public:
@@ -142,6 +144,12 @@ public:
         }
     }
 
+    // 2.预约机房
+    bool reserveRoom(const std::string& sid, int roomId, const std::string& date) {
+        if (rooms.find(roomId) == rooms.end()) {
+
+        }
+    }
 };
 
 class Student : public User {
