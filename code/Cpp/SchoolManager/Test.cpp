@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include <iomanip>      // setw / left
+#include <set>
 using namespace std;
 
 class User {
@@ -147,6 +148,7 @@ class CampusSystem {
 private:
     std::map<std::string, std::shared_ptr<User>> users;
     std::map<int, Computer>                       rooms;    // ⭐ 第 2 个容器
+    // std::set<int> reservedRooms;        // ⭐ 第 4 个容器：已被占用的机房编号
 
 public:
     CampusSystem() {
@@ -183,7 +185,8 @@ public:
 
         // ⭐ 范围 for + 结构化绑定（C++17）
         for (const auto& [id, room] : rooms) {
-            bool occupied = reservedRooms.count(id) > 0;
+            // bool occupied = reservedRooms.count(id) > 0;
+            bool occupied = false;
             cout << left << setw(6) << id << setw(8) << room.capacity
                 << setw(20) << room.spec
                 << (occupied ? "占用中" : "空闲") << "\n";
