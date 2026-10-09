@@ -99,7 +99,7 @@ private:
     std::map<int, Computer>                       rooms;    // ⭐ 第 2 个容器
     std::vector<Reservation> reservations;
     int nextResId = 1;
-    // std::set<int> reservedRooms;        // ⭐ 第 4 个容器：已被占用的机房编号
+    std::set<int> reservedRooms;        // ⭐ 第 4 个容器：已被占用的机房编号
 
 public:
     CampusSystem() {
@@ -150,8 +150,13 @@ public:
             cout << "[预约] 机房不存在\n";
             return false;
         }
+        if (reservedRooms.count(roomId) > 0) {
+            cout << "[预约] 该机房已被预约\n";
+            return false;
+        }
         Reservation r(nextResId++, sid, roomId, date);
         reservations.push_back(r);    // 只塞 vector
+        reservedRooms.insert(roomId);
         cout << "[预约] 提交成功，预约号 " << r.resId << "\n";
         return true;
     }
