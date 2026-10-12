@@ -192,6 +192,14 @@ public:
         cout << "[演讲] 报名成功 - 第 " << round << " 轮 - " << topic << "\n";
         return true;
     }
+
+    void listPendingReservations() const {
+        auto pending = users.begin();
+    }
+
+    bool reviewReservation(int resId, bool approved) {
+
+    }
 };
 
 class Student : public User {
