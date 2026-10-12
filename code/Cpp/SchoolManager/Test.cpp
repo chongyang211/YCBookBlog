@@ -257,7 +257,20 @@ public:
     Teacher(std::string id, std::string name, std::string pwd, CampusSystem* s = nullptr)
         : User(id, name, pwd), sys(s) {}
     void mainMenu() override {
-        std::cout << "\n--- 老师 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
+        // std::cout << "\n--- 老师 " << userName << " 已登录（占位菜单，阶段 ④ 实现）---\n";
+        while (true) {
+            cout << "\n--- 教师 " << userName << " ---\n";
+            cout << "1. 待审预约  2. 审核预约  3. 演讲评分  4. 查看排名  0. 退出登录\n";
+            int op; cin >> op;
+            switch (op) {
+            case 1: cout << "[Teacher] listPending 占位\n"; break;
+            case 2: cout << "[Teacher] reviewReservation 占位\n"; break;
+            case 3: cout << "[Teacher] scoreSpeech 占位\n"; break;
+            case 4: cout << "[Teacher] rankSpeeches 占位\n"; break;
+            case 0: return;
+            default: cout << "无效选择\n";
+            }
+        }
     }
     char roleTag() const override { return 'T'; }
     void setSystem(CampusSystem* t) { sys = t; }
