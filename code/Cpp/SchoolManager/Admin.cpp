@@ -65,10 +65,12 @@ void Admin::mainMenu() {
                 //   - make_shared<T>(...) 一次堆分配同时容纳对象与控制块（比
                 //     shared_ptr<T>(new T) 少一次分配，且异常安全）；
                 //   - u 声明为 shared_ptr<User>（基类指针），指向 Student/Teacher
-                //     均可 —— 这是"运行时多态"的前提（虚函数通过 vtable 分发）。
+                //     均可 —— 这是"运行时多态"的前提（虚函数通过 vtable 分发）；
+                //   - 注意必须写 std::make_shared：不加命名空间前缀会被部分编译器
+                //     视为 C++20 扩展（ADL 仅对已声明模板生效），产生告警甚至报错。
                 std::shared_ptr<User> u;
-                if      (role == 1) u = make_shared<Student>(id, name, pwd);   // 创建学生
-                else if (role == 2) u = make_shared<Teacher>(id, name, pwd);   // 创建教师
+                if      (role == 1) u = std::make_shared<Student>(id, name, pwd);   // 创建学生
+                else if (role == 2) u = std::make_shared<Teacher>(id, name, pwd);   // 创建教师
                 // 【安全设计】管理员不能再创建管理员（权限不可自我复制）；
                 //             break 直接放弃本次操作（u 为空也不会误入库）
                 else { std::cout << "[Admin] 不允许添加管理员\n"; break; }
