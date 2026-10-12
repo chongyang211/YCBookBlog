@@ -160,6 +160,26 @@ public:
         cout << "[预约] 提交成功，预约号 " << r.resId << "\n";
         return true;
     }
+
+    //3.取消预约
+    bool cancelReservation(const std::string& sid, int resId) {
+        auto it = std::find_if(reservations.begin(), reservations.end(),[resId, &sid](const Reservation& r){
+            return r.resId == resId && r.studentId == sid;
+        });
+        if (it == reservations.end()) {
+            cout << "[取消] 预约不存在或不属于你\n";
+            return false;
+        }
+        if (it->status != ResStatus::Pending) {
+            cout << "[取消] 该预约已被审核，无法取消\n";
+            return false;
+        }
+
+        it->status = ResStatus::Cancelled;
+        reservedRooms.erase(it->computerId);    // ⭐ 同步清理 set（取消后机房空闲）
+        cout << "[取消] 已取消\n";
+        return true;
+    }
 };
 
 class Student : public User {
@@ -185,9 +205,14 @@ public:
                 sys->reserveRoom(userId, roomId, date);
                 break;
             }
-        case 3:
+        case 3:{
                 cout << "[Student] 进入了 cancelReservation 占位\n";
+                    int resId;
+                    cout << "预约号: "; cin >> resId;
+                    sys->cancelReservation(userId, resId);
                 break;
+            }
+
         case 4:
                 cout << "[Student] 进入了 signupSpeech 占位\n";
                 break;
