@@ -194,11 +194,24 @@ public:
     }
 
     void listPendingReservations() const {
-        auto pending = users.begin();
+        auto pendingCount = std::count_if(reservations.begin(), reservations.end(),
+               [](const Reservation& r) { return r.status == ResStatus::Pending; });
+
+        if (pendingCount == 0) { cout << "（无待审）\n"; return; }
+
+        for (const auto& r : reservations) {
+            if (r.status != ResStatus::Pending) continue;
+            cout << "  预约 " << r.resId << " | 学生 " << r.studentId
+                 << " | 机房 " << r.computerId << " | 日期 " << r.date << "\n";
+        }
     }
 
     bool reviewReservation(int resId, bool approved) {
-
+        auto it = std::find_if(reservations.begin(), reservations.end(),[resId](const Reservation& r)
+        {
+            return r.resId == resId;
+        });
+        
     }
 };
 
