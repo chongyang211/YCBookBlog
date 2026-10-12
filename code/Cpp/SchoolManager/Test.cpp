@@ -211,7 +211,7 @@ public:
         {
             return r.resId == resId;
         });
-        
+
     }
 };
 
