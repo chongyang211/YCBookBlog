@@ -41,6 +41,7 @@ std::shared_ptr<User> CampusSystem::login(const std::string &id, const std::stri
 }
 
 // 列出所有机房的信息。const 表示该函数不会修改类的成员变量。
+// 学生：1.浏览机房
 void CampusSystem::listRooms() const {
     std::cout << "\n=== 机房列表 ===\n";
     // 输出机房列表的表头。std::left：设置输出左对齐。std::setw(n)：设置字段宽度为 n 个字符。
@@ -58,6 +59,7 @@ void CampusSystem::listRooms() const {
     }
 }
 
+// 学生：2.预约机房
 bool CampusSystem::reserveRoom(const std::string &sid, int roomId, const std::string &date) {
     if (rooms.find(roomId) == rooms.end()) {
         std::cout << "[预约] 机房不存在\n";
@@ -74,6 +76,7 @@ bool CampusSystem::reserveRoom(const std::string &sid, int roomId, const std::st
     return true;
 }
 
+// 学生：3.取消预约
 bool CampusSystem::cancelReservation(const std::string &sid, int resId) {
     auto it = std::find_if(reservations.begin(),reservations.end(), [resId,&sid](const Reservation& r) {
         return r.resId == resId && r.studentId == sid;
@@ -92,7 +95,7 @@ bool CampusSystem::cancelReservation(const std::string &sid, int resId) {
     return true;
 }
 
-
+// 学生：4.报名演讲
 bool CampusSystem::signupSpeech(const std::string &sid, const std::string &topic, int round) {
     if (round != 1 && round != 2) {
         std::cout << "[演讲] round 只能是 1 或 2\n";

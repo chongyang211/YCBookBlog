@@ -100,6 +100,7 @@ private:
     std::vector<Reservation> reservations;
     int nextResId = 1;
     std::set<int> reservedRooms;        // ⭐ 第 4 个容器：已被占用的机房编号
+    std::multimap<int, Speech> speeches;
 
 public:
     CampusSystem() {
@@ -180,6 +181,17 @@ public:
         cout << "[取消] 已取消\n";
         return true;
     }
+
+    bool signupSpeech(const string& sid, const string& topic, int round) {
+        if (round != 1 && round != 2) {
+            cout << "[演讲] round 只能是 1 或 2\n";
+            return false;
+        }
+        // ⭐ multimap 允许同 key 多 value：一个 round 可以有很多人报名
+        speeches.insert({round, Speech(sid, topic, round)});
+        cout << "[演讲] 报名成功 - 第 " << round << " 轮 - " << topic << "\n";
+        return true;
+    }
 };
 
 class Student : public User {
@@ -206,16 +218,22 @@ public:
                 break;
             }
         case 3:{
-                cout << "[Student] 进入了 cancelReservation 占位\n";
+                // cout << "[Student] 进入了 cancelReservation 占位\n";
                     int resId;
                     cout << "预约号: "; cin >> resId;
                     sys->cancelReservation(userId, resId);
                 break;
             }
 
-        case 4:
-                cout << "[Student] 进入了 signupSpeech 占位\n";
-                break;
+        case 4: {
+                    // cout << "[Student] 进入了 signupSpeech 占位\n";
+                    string topic;
+                    int round;
+                    cout << "演讲主题: "; cin >> topic;
+                    cout << "轮次(1=初赛, 2=复赛): "; cin >> round;
+
+                    break;
+                }
             case 0:
                 return;
             default:
