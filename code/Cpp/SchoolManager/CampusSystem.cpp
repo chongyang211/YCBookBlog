@@ -196,7 +196,7 @@ void CampusSystem::listPendingReservations() const {
     }
 }
 
-// 教师审核预约：唯一入口实现状态转移 Pending → Approved / Rejected
+// 教师审核预约：根据预约单集合，查找唯一入口实现状态转移 Pending → Approved / Rejected
 bool CampusSystem::reviewReservation(int resId, bool approved) {
     // 按预约号查找（教师视角无需校验归属，任何教师可审任何单）
     auto it = std::find_if(reservations.begin(), reservations.end(),
@@ -226,7 +226,9 @@ void CampusSystem::scoreSpeech(const std::string &sid, int round, double score) 
     // 【技术原理】equal_range 返回 pair<iterator, iterator>：
     //             [first, last) 恰好是同 key 的所有元素区间（红黑树等价类），
     //             比逐个 find + ++ 更安全高效（一次 O(logN) 定位整段）。
+    // 这个是从演讲集合中，找到某一轮的报名记录（多条学生演讲记录）
     auto range = speeches.equal_range(round);
+    // first 是区间的开始，second 是区间的结束。second是Speech对象
     for (auto it = range.first; it != range.second; ++it) {  // 只在等价类内线性扫描
         // multimap 迭代器解引用得到 pair<const int, Speech>：it->second 才是 Speech 对象
         if (it->second.studentId == sid) {
@@ -238,8 +240,6 @@ void CampusSystem::scoreSpeech(const std::string &sid, int round, double score) 
     }
     std::cout << "[评分] 未找到该报名\n";     // 扫描完等价类仍未命中：报名不存在
 }
-
-
 
 // 教师查看排名：把 multimap 中某轮的报名抽出来，按分数降序排序展示
 void CampusSystem::rankSpeechesByScore(int round) const {
