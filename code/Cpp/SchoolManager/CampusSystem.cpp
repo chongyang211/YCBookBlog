@@ -18,6 +18,7 @@
 #include <iostream>     // std::cout / std::cin
 #include <iomanip>      // std::setw / std::left（输出对齐格式化）
 #include <numeric>      // std::accumulate（数值累计，配合 lambda 做计数统计）
+#include <vector>
 
 #include "Reservation.h"
 #include "Speech.h"     // Speech 的完整定义（multimap 中存的是其值对象，
