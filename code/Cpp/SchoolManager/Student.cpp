@@ -37,13 +37,12 @@ void Student::mainMenu() {
             }
             case 2: {       // 预约机房：功能占位（参数采集代码被注释掉，待后续阶段启用）
                 cout << "[Student] 进入了 reserveRoom \n";
-                // int roomId; std::string date;
-                // cout << "机房编号: "; cin >> roomId;
-                // cout << "日期(YYYY-MM-DD): "; cin >> date;
-                // sys->reserveRoom(userId, roomId, date);
+                int roomId; std::string date;
+                cout << "机房编号: "; cin >> roomId;
+                cout << "日期(YYYY-MM-DD): "; cin >> date;
+                sys->reserveRoom(userId, roomId, date);
                 break;
             }
-
             case 3: {       // 取消预约：先采集预约号，再转发
                 cout << "[Student] 进入了 cancelReservation \n";
                 int resId;

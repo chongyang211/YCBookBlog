@@ -1,13 +1,25 @@
 #pragma once
 
+// ============================================================================
+// 【组件定位】Order —— 订单实体：纯数据载体（POD 风格）
+// ----------------------------------------------------------------------------
+// 【设计思路】只描述"一张订单长什么样"（四个字段），不含任何行为 ——
+//   业务规则（下单/查询/并发保护）分别收敛在策略与 OrderManager，
+//   "数据与行为分离"让实体类可以被原子地拷贝进出容器（见 OrderManager
+//   的 vector<Order>）。id 唯一性由 OrderManager 的 atomic 自增保证。
+// ============================================================================
+
 // 订单实体：纯数据载体
 struct Order {
-    int id;
-    int userId;
-    int productId;
-    int quantity;
+    int id;          // 订单号（全局唯一，OrderManager 里 atomic 自增分配）
+    int userId;      // 下单用户（"外键"：只存 id 不嵌用户对象）
+    int productId;   // 购买的商品（"外键"：同上）
+    int quantity;    // 购买数量
 
+    // = default 补回默认构造：定义了带参构造后编译器不再隐式生成无参版本；
+    // vector<Order> 扩容/值初始化等场景需要"可默认构造"
     Order() = default;
+    // 聚合字段初始化列表：成员一出生就有正确值（比函数体内赋值少一步）
     Order(int i, int u, int p, int q)
         : id(i), userId(u), productId(p), quantity(q) {}
 };

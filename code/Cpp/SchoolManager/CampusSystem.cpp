@@ -19,6 +19,7 @@
 #include <iomanip>      // std::setw / std::left（输出对齐格式化）
 #include <numeric>      // std::accumulate（数值累计，配合 lambda 做计数统计）
 
+#include "Reservation.h"
 #include "Speech.h"     // Speech 的完整定义（multimap 中存的是其值对象，
                         //  取出后要访问 s.studentId/s.score 等成员，必须知道布局）
 
@@ -237,6 +238,8 @@ void CampusSystem::scoreSpeech(const std::string &sid, int round, double score) 
     }
     std::cout << "[评分] 未找到该报名\n";     // 扫描完等价类仍未命中：报名不存在
 }
+
+
 
 // 教师查看排名：把 multimap 中某轮的报名抽出来，按分数降序排序展示
 void CampusSystem::rankSpeechesByScore(int round) const {

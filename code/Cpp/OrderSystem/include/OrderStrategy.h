@@ -1,18 +1,37 @@
 #pragma once
 
-#include "Product.h"
-#include "OrderManager.h"
-#include <vector>
+#include "Product.h"       // 下单要扣商品库存
+#include "OrderManager.h"   // 下单要登记订单
+#include <vector>           // std::vector：数量列表与订单 id 列表
+
+// ============================================================================
+// 【组件定位】OrderStrategy —— 下单策略抽象接口（策略模式的"策略基类"）
+// ----------------------------------------------------------------------------
+// 【设计思想·策略模式】下单方式有三种（普通/秒杀/批量），它们的差异是
+//   "怎么执行"（顺序/全并发/分批），共性是"做什么"（扣库存 + 登记订单）。
+//   把共性定为接口，差异留给子类 —— main 里用基类引用统一调
+//   placeOrders，运行时换策略不换代码（对修改关闭、对扩展开放：
+//   新增"分布式策略"只需再派生一个类）。
+// 【对比教程阶段⑤】三种策略分别对应 Step 5.1/5.2/5.3 逐步点亮。
+// ============================================================================
 
 // 下单策略接口（策略模式）：不同订单类型使用不同的下单策略
 class OrderStrategy {
 public:
     virtual ~OrderStrategy() = default;
+    // 【虚析构铁律】策略对象会经由基类指针使用/销毁 —— 非虚析构时
+    // delete 基类指针只析构基类部分（子类资源泄漏 + UB）
 
     // 对给定商品下若干单，返回每个订单的 id（失败为 -1）
     virtual std::vector<int> placeOrders(
-        Product& product,
-        OrderManager& mgr,
+        Product& product,          // 商品（引用：策略要改它的库存）
+        OrderManager& mgr,         // 订单管理器（引用：策略要往里登记）
         int userId,
-        const std::vector<int>& quantities) = 0;
+        const std::vector<int>& quantities    // 每单的数量（一单一个元素）
+    ) = 0;
+    // 【接口契约】返回向量与 quantities 等长、位置对应 ——
+    //   第 i 个元素是第 i 单的结果（成功为订单 id，失败为 -1 哨兵）。
+    //   返回"逐单结果"而非"总数"：调用方（main/benchmark）能统计成功率。
+    // 【参数设计】product/mgr 用引用而非常值传递 —— 策略必须改到
+    //   调用方那一份（扣库存、登记单），传值只会改副本。
 };
