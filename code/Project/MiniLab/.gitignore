@@ -1,0 +1,21 @@
+# build output
+build/
+cmake-build-*/
+_deps/
+
+# ide
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# minilab runtime output
+out/
+*.pcap
+*.img
+*.ko
+*.o
+*.mod*
+.tmp_versions/
+modules.order
+Module.symvers

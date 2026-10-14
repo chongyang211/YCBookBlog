@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+# Vagrantfile for MiniLab
+# 为 macOS/Windows 用户提供一个干净的 Linux 环境跑盒 ⑩⑪⑫
+#
+# 用法：
+#   vagrant up
+#   vagrant ssh
+#   cd /vagrant && cmake -B build && cmake --build build -j
+#
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"       # Ubuntu 22.04 LTS
+
+  config.vm.hostname = "minilab-dev"
+  config.vm.synced_folder ".", "/vagrant"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name   = "MiniLab-Dev"
+    vb.memory = "2048"
+    vb.cpus   = 2
+  end
+
+  # 开机自动装编译环境
+  config.vm.provision "shell", inline: <<-SHELL
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -y
+    apt-get install -y build-essential cmake git \
+                       linux-headers-$(uname -r) \
+                       python3 python3-pip \
+                       stress-ng iproute2 lsof \
+                       libmnl-dev
+    pip3 install pandas matplotlib
+    # cgroup v2
+    if ! grep -q 'cgroup2' /proc/mounts; then
+        echo "cgroup v2 not mounted; enabling via systemd..."
+        # Ubuntu 22.04 默认已启用 unified cgroup
+    fi
+    echo "=== MiniLab dev env ready ==="
+    echo "cd /vagrant && cmake -B build && cmake --build build -j"
+  SHELL
+end

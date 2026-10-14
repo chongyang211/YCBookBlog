@@ -1,0 +1,5 @@
+# demo/sched/nice_demo.task — CFS 的 nice 权重实验
+# nice=0 vs nice=5：预期 CPU 分配比 ≈ 1024 : 335 ≈ 3:1
+# pid        arrive  burst  nice
+NiceZero    0       20     0
+NiceFive    0       20     5

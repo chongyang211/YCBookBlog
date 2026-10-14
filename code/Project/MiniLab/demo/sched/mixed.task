@@ -1,0 +1,7 @@
+# demo/sched/mixed.task — 五种调度器对比的经典输入
+# pid  arrive  burst  nice
+A      0       7      0
+B      2       4      0
+C      4       1      0
+D      5       4      0
+E      6       5      0
