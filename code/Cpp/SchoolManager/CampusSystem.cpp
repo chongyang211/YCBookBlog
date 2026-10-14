@@ -179,8 +179,13 @@ void CampusSystem::listPendingReservations() const {
     // ⭐ count_if 先看有几个（没有就提前返回）
     // 【技术原理】count_if(begin, end, 谓词)：对区间内每个元素调用 lambda，
     //             统计返回 true 的个数；无捕获 lambda 可被内联，效率接近手写循环。
+    // reservations 是 vector，没有 count 方法。这个是预约单集合
     auto pendingCount = std::count_if(reservations.begin(), reservations.end(),
         [](const Reservation& r) { return r.status == ResStatus::Pending; });
+
+        auto pendCount = std::count_if(reservations.begin(), reservations.end(), [](const Reservation& r){
+            return r.status == ResStatus::Pending;
+        });
     // 卫语句：空列表提前返回，避免打印孤零零的表头
     if (pendingCount == 0) { std::cout << "（无待审）\n"; return; }
 
