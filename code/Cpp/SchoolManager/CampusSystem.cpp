@@ -182,10 +182,7 @@ void CampusSystem::listPendingReservations() const {
     // reservations 是 vector，没有 count 方法。这个是预约单集合
     auto pendingCount = std::count_if(reservations.begin(), reservations.end(),
         [](const Reservation& r) { return r.status == ResStatus::Pending; });
-
-        auto pendCount = std::count_if(reservations.begin(), reservations.end(), [](const Reservation& r){
-            return r.status == ResStatus::Pending;
-        });
+    std::cout << "共 " << pendingCount << " 条\n";
     // 卫语句：空列表提前返回，避免打印孤零零的表头
     if (pendingCount == 0) { std::cout << "（无待审）\n"; return; }
 
