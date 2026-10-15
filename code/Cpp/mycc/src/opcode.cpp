@@ -1,7 +1,11 @@
+// ============================================================================
+// 【文件定位】opcode.cpp —— OpCode → 可读字符串（反汇编/调试的翻译层）
+// ============================================================================
 #include "mycc/opcode.h"
 
 namespace Mycc {
 
+// switch 全覆盖映射 + 兜底：与 tokKindName 同款"枚举→人话"工具
 const char* opcodeName(OpCode op) {
     switch (op) {
         case OpCode::CONST:        return "CONST";

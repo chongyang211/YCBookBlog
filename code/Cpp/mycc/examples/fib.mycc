@@ -1,9 +1,14 @@
+// 示例 2：递归斐波那契 —— 三大机制的综合验收：
+//   ① 递归调用（帧栈 push/pop + RETURN 的栈截断）
+//   ② if 分支（跳转回填）
+//   ③ while 循环（LOOP 回跳 + POP_JUMP_IF_FALSE 出口）
 fn fib(n) {
-    if (n < 2) return n;
-    return fib(n - 1) + fib(n - 2);
+    if (n < 2) return n;                 // 递归出口：if 的回填跳转 + RETURN 带值弹帧
+    return fib(n - 1) + fib(n - 2);      // 双递归：两次 CALL 的结果在栈上 ADD
 }
-let i = 0;
-while (i < 10) {
-    print fib(i);
-    i = i + 1;
+let i = 0;                               // 全局变量（STORE_GLOBAL + POP）
+while (i < 10) {                         // 循环：条件 POP_JUMP_IF_FALSE 出口
+    print fib(i);                        // 调用表达式作为 print 的实参
+    i = i + 1;                           // 赋值语句（DUP + STORE_GLOBAL + POP）
 }
+// 预期输出：0 1 1 2 3 5 8 13 21 34（fib(0..9)）

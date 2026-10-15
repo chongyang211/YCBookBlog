@@ -1,2 +1,7 @@
+// 示例 3：语法错误演示 —— 第一行故意漏分号
 let x = 1
+// ↑ 行尾缺 ";"：Parser 在第二行 expect(Semicolon) 失败，
+//   报 "[Parse] line 1: expected ; but got let"（退出码 2）
 let y = 2;
+// 【教学点】语法错误在"编译期"拦下（第三段之前），VM 根本不会启动 ——
+//   对比 divzero.mycc 的"运行期"错误，体会五段式各段的守门分工
