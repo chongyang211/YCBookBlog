@@ -1,5 +1,8 @@
+// 示例 1：函数 + 参数 + 字符串 —— 验证"函数声明 → 调用 → 参数传递 → print"
 fn greet(name) {
+    // fn 声明函数：greet 进函数表，name 是形参（运行期占据槽 0）
     print name;
+    // print 直接输出形参（字符串经参数传递后原样可打）
 }
-greet("mycc");
-greet("world");
+greet("mycc");     // 第一次调用：CONST "mycc" + LOAD_GLOBAL greet + CALL 1
+greet("world");    // 第二次调用同一 chunk —— 函数体编译一次、执行多次
