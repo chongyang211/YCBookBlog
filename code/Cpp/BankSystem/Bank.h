@@ -18,7 +18,7 @@
 #include <vector>       // std::vector：动态数组（对比案例01的定长数组，容量不再写死100）
 #include <string>       // std::string
 
-
+// 账户容器
 class Bank {
 private:
     // 唯一的"数据库"
