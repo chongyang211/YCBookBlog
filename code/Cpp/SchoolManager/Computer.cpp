@@ -12,6 +12,7 @@
 #include "Computer.h"  // 本类声明
 #include <sstream>     // std::istringstream（字符串流：把一行文本当流读取，便于按逗号切分）
 
+
 // 类外定义静态工厂方法：字符串 → Computer 对象
 // 【技术原理】静态成员函数没有 this 指针，通过 "Computer::fromCsv(line)" 调用。
 //             典型实现思路（阶段 ⑦）：
