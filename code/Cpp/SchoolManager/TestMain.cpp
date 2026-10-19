@@ -27,7 +27,16 @@ private:
 };
 
 void test() {
-    std::shared_ptr<MyClass> my_class;
+    std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>(42);
+    ptr1->printValue();
+    std::shared_ptr<MyClass> ptr2 = ptr1;
+    ptr2->printValue();
+    // ptr1 超出作用域，引用计数减 1
+    {
+        std::shared_ptr<MyClass> ptr3 = ptr1;
+        std::cout << "Reference count after ptr3 creation: " << ptr1.use_count() << std::endl;
+    }
+    ptr1->printValue();
 }
 
 void test2() {
