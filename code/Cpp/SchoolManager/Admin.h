@@ -19,7 +19,8 @@ class CampusSystem;         // 前向声明，避免循环 include
 // 【技术原理】CampusSystem ↔ User/Student/Teacher/Admin 相互引用形成包含环，
 //             头文件里只需要"CampusSystem*"指针，前向声明即可打破环。
 
-class Admin : public User {     // public 继承 User：管理员 is-a 用户
+class Admin : public User {
+// public 继承 User：管理员 is-a 用户
 private:
     CampusSystem* sys;      // 反向引用，用来调用业务方法（阶段 ④ 才会用到）
     // 【设计思路】与 Student/Teacher 同构的"控制器回指"：
@@ -39,7 +40,5 @@ public:
     // 运行期注入系统引用：登录成功后由 main 调用（与其他角色一致）
     void setSystem(CampusSystem* a) { sys = a; }
 };
-
-
 
 #endif //ADMIN_H     // 头文件保护宏结束
