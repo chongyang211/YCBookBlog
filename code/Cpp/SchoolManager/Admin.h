@@ -41,4 +41,16 @@ public:
     void setSystem(CampusSystem* a) { sys = a; }
 };
 
+class Admin1 : public User {
+private:
+    CampusSystem* sys;
+public:
+    Admin1(const std::string& id, const std::string& name, const std::string& pwd,CampusSystem* a = nullptr)
+    :User(id,name,pwd) {}
+
+    void mainMenu() override;
+    char roleTag() const override { return 'A'; }
+    void setSystem(CampusSystem* a) { sys = a; }
+};
+
 #endif //ADMIN_H     // 头文件保护宏结束
