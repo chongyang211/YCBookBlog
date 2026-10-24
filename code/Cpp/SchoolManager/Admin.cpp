@@ -17,8 +17,6 @@
 #include "Teacher.h"   // 添加用户时需要 new Teacher（完整定义）
 #include "CampusSystem.h" // 调用 sys->addRoom/addUser/statistics 需要完整定义
 
-
-
 // 管理员主菜单：覆写基类纯虚函数，由虚表分发调用
 void Admin::mainMenu() {
     while (true) {      // 事件循环：直到选 0 退出
@@ -87,5 +85,22 @@ void Admin::mainMenu() {
     }
 }
 
+
+void Admin1::mainMenu() {
+    while (true)
+    {
+        cout << "\n--- 管理员 " << userName << " ---\n";
+        cout << "1. 添加机房  2. 添加用户  3. 数据统计  0. 退出登录\n";
+        int op; cin >> op;
+        switch (op)
+        {
+        case 1: cout << "[Admin] addRoom 占位\n"; break;
+        case 2: cout << "[Admin] addUser 占位\n"; break;
+        case 3: cout << "[Admin] statistics 占位\n"; break;
+        case 0: return;
+        default: cout << "无效选择\n";
+        }
+    }
+}
 
 
