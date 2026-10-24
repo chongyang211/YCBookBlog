@@ -97,6 +97,7 @@ public:
     void rankSpeechesByScore(int round) const;     // ⭐ 业务方法 4：lambda 排序高光
 
     // ============ 管理员业务（由 Admin::mainMenu 转发调用）============
+    // 1.添加机房
     bool addRoom(const Computer& c);     // ⭐ Admin 业务方法
     void statistics() const;     // ⭐ 业务方法：lambda 三连 accumulate
     // 【技术原理】statistics() 加 const（其余写操作不加）：编译器会逐个检查

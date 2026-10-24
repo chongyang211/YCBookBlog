@@ -86,21 +86,3 @@ void Admin::mainMenu() {
 }
 
 
-void Admin1::mainMenu() {
-    while (true)
-    {
-        cout << "\n--- 管理员 " << userName << " ---\n";
-        cout << "1. 添加机房  2. 添加用户  3. 数据统计  0. 退出登录\n";
-        int op; cin >> op;
-        switch (op)
-        {
-        case 1: cout << "[Admin] addRoom 占位\n"; break;
-        case 2: cout << "[Admin] addUser 占位\n"; break;
-        case 3: cout << "[Admin] statistics 占位\n"; break;
-        case 0: return;
-        default: cout << "无效选择\n";
-        }
-    }
-}
-
-
