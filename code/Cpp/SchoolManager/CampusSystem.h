@@ -69,8 +69,6 @@ private:
     std::multimap<int, Speech> speeches;
 public:
     CampusSystem();  // 构造函数（.cpp 中打印启动提示）
-    // 添加用户：先查重再插入；参数是 shared_ptr（移交所有权给 users map）
-    bool addUser(std::shared_ptr<User> u);
     // 登录：账号不存在/密码错误返回 nullptr，成功返回多态的用户指针
     std::shared_ptr<User> login(const std::string& id, const std::string& pwd);
 
@@ -99,6 +97,8 @@ public:
     // ============ 管理员业务（由 Admin::mainMenu 转发调用）============
     // 1.添加机房
     bool addRoom(const Computer& c);     // ⭐ Admin 业务方法
+    // 2.添加用户：先查重再插入；参数是 shared_ptr（移交所有权给 users map）
+    bool addUser(std::shared_ptr<User> u);
     void statistics() const;     // ⭐ 业务方法：lambda 三连 accumulate
     // 【技术原理】statistics() 加 const（其余写操作不加）：编译器会逐个检查
     //             const 方法内是否意外修改成员，相当于免费的正确性检查。
