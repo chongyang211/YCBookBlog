@@ -1,0 +1,16 @@
+:root { --border:#e2e8f0; --muted:#64748b; --primary:#1976d2; --bg:#f8fafc; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+       background: var(--bg); color: #0f172a; padding: 24px; max-width: 1080px; margin: 0 auto; }
+h1 { font-size: 22px; margin-bottom: 16px; }
+#app { display: flex; gap: 16px; align-items: flex-start; }
+#feed-list { list-style: none; flex: 1; background: #fff; border: 1px solid var(--border);
+             border-radius: 8px; padding: 8px 16px; }
+#feed-list li { padding: 10px 4px; border-bottom: 1px solid var(--border); }
+#feed-list li:last-child { border-bottom: 0; }
+#feed-list a { color: var(--primary); text-decoration: none; font-weight: 500; }
+#feed-list a:hover { text-decoration: underline; }
+#feed-list small { color: var(--muted); margin-left: 8px; font-size: 12px; }
+#sentinel { text-align: center; color: var(--muted); padding: 16px; font-size: 13px;
+            flex: 1; }
+@media (max-width: 720px) { #app { flex-direction: column; } }

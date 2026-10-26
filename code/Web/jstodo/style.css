@@ -1,0 +1,21 @@
+:root { --bg: #f5f5f5; --primary: #1976d2; --danger: #e53935; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: var(--bg); padding: 40px 0; }
+.app { max-width: 540px; margin: 0 auto; background: #fff; border-radius: 8px;
+       box-shadow: 0 2px 8px rgba(0,0,0,.08); padding: 24px; }
+h1 { font-size: 28px; margin-bottom: 16px; color: var(--primary); }
+#todo-form { display: flex; gap: 8px; margin-bottom: 16px; }
+#todo-input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+#todo-form button { padding: 8px 16px; background: var(--primary); color: #fff;
+                    border: 0; border-radius: 4px; cursor: pointer; }
+#todo-list { list-style: none; }
+#todo-list li { display: flex; align-items: center; gap: 8px;
+                padding: 8px 4px; border-bottom: 1px solid #eee; }
+#todo-list li.done span { text-decoration: line-through; color: #999; }
+#todo-list span { flex: 1; }
+#todo-list .delete { background: transparent; border: 0; color: var(--danger); cursor: pointer; }
+.bar { display: flex; justify-content: space-between; margin-top: 16px;
+       font-size: 13px; color: #666; }
+.filters button { background: transparent; border: 1px solid transparent;
+                  padding: 2px 8px; cursor: pointer; color: inherit; }
+.filters button.active { border-color: var(--primary); color: var(--primary); border-radius: 4px; }

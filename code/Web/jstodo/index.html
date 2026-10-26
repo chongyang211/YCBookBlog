@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>jstodo · 原生待办清单</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <h1>jstodo</h1>
+    <form id="todo-form">
+      <input id="todo-input" type="text" placeholder="今天要做什么？" autofocus />
+      <button type="submit">添加</button>
+    </form>
+
+    <ul id="todo-list"></ul>
+
+    <footer class="bar">
+      <span id="todo-count">0 项未完成</span>
+      <div class="filters">
+        <button data-filter="all"    class="active">全部</button>
+        <button data-filter="active">未完成</button>
+        <button data-filter="done">已完成</button>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ⭐ 关键：type="module" 才能用 import/export -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

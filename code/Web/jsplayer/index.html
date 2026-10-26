@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>jsplayer</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <!-- 方式 1：普通 mp4 原生路径（demo.mp4 已就位，开箱即播） -->
+  <jsplayer-app src="/public/demo.mp4" muted autoplay title="jsplayer 演示"></jsplayer-app>
+
+  <!-- 方式 2：迷你 HLS 路径（需先用 ffmpeg 把 demo.mp4 切成 fmp4 分段放到 public/ 下） -->
+  <!-- ffmpeg -i demo.mp4 -t 5 -c copy -movflags frag_keyframe+empty_moov+default_base_moof seg-1.mp4 -->
+  <!-- ffmpeg -i demo.mp4 -ss 5 -c copy -movflags frag_keyframe+empty_moov+default_base_moof seg-2.mp4 -->
+  <!-- <jsplayer-app src="/public/hls/index.m3u8" muted autoplay></jsplayer-app> -->
+
+  <!-- 演示：监听状态 + 直接调 player API -->
+  <script type="module">
+    document.addEventListener('player-state', (e) => {
+      if (e.detail.to === 'ready') {
+        console.log('[demo] 元数据 OK，duration =', e.target.player.video.duration);
+      }
+    });
+  </script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

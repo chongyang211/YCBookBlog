@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jschart · 响应式数据看板</title>
+    <style>
+      body { margin: 0; font-family: -apple-system, sans-serif; background: #1e1e2e; color: #cdd6f4; }
+      #app { padding: 20px; }
+      .card { background: #313244; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+      .toolbar { margin-top: 8px; display: flex; gap: 8px; }
+      .toolbar button { background: #45475a; border: 0; color: #cdd6f4; border-radius: 4px;
+                        padding: 6px 12px; cursor: pointer; font-size: 13px; }
+      .toolbar button:hover { background: #585b70; }
+      h2 { font-size: 16px; margin: 0 0 12px; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="card">
+        <h1>jschart 启动中...</h1>
+        <p id="status">等待 main.js 加载</p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
