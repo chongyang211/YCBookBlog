@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea
+*.log
+.env.local
+.env.*.local
+
+# 测试素材不入 git
+public/media/*
+!public/media/README.md

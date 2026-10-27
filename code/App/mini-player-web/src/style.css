@@ -1,0 +1,108 @@
+// 全局样式 + CSS 变量主题。对应 §08 阶段⑦主题切换方案：
+// - 默认跟随 prefers-color-scheme
+// - 手动覆盖通过给 <html> 加 data-theme="light"|"dark" 实现
+:root {
+  --accent: #4facfe;
+  --accent-strong: #2196f3;
+  --accent-soft: rgba(79, 172, 254, 0.15);
+  --playerbar-h: 92px;
+  --radius: 10px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:root,
+html[data-theme='light'] {
+  --bg: #f6f8fb;
+  --bg-elev: #ffffff;
+  --sidebar-bg: #ffffff;
+  --playerbar-bg: rgba(255, 255, 255, 0.92);
+  --text: #1a1f2b;
+  --text-sub: #4a5564;
+  --text-mute: #9199a6;
+  --border: #e5e9f0;
+  --hover: #eef2f7;
+  --danger: #e55353;
+  --success: #40b56c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1419;
+    --bg-elev: #171c22;
+    --sidebar-bg: #141920;
+    --playerbar-bg: rgba(20, 25, 32, 0.92);
+    --text: #e5e9f0;
+    --text-sub: #a7b1c0;
+    --text-mute: #6b7482;
+    --border: #242b35;
+    --hover: #1f252e;
+    --danger: #ff6b6b;
+    --success: #4ade80;
+  }
+}
+
+html[data-theme='dark'] {
+  --bg: #0f1419;
+  --bg-elev: #171c22;
+  --sidebar-bg: #141920;
+  --playerbar-bg: rgba(20, 25, 32, 0.92);
+  --text: #e5e9f0;
+  --text-sub: #a7b1c0;
+  --text-mute: #6b7482;
+  --border: #242b35;
+  --hover: #1f252e;
+  --danger: #ff6b6b;
+  --success: #4ade80;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-top: -4px;
+  box-shadow: var(--shadow-sm);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
+
+.hidden { display: none !important; }
