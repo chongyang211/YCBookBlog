@@ -61,7 +61,6 @@ onBeforeUnmount(() => {
     <!-- 元素放根：切路由不打断播放 -->
     <audio
       :ref="onAudioRef"
-      :hidden="true"
       preload="metadata"
       crossorigin="anonymous"
     />

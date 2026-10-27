@@ -1,7 +1,7 @@
 <!-- 媒体库页：三 Tab 列表 + 导入入口 + 搜索框
      对应 §03 阶段② + §08 阶段⑦ -->
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { MediaItem, MediaType } from '@/types'
 import { repository } from '@/data/repository'
@@ -43,7 +43,7 @@ async function reload() {
 /** search 变化节流重查 */
 const reloadDebounced = debounce(reload, 220)
 watch(search, () => reloadDebounced())
-watch(() => tab.value, reload)
+watch(tab, reload)
 
 onMounted(reload)
 
@@ -162,53 +162,25 @@ async function walkEntry(entry: FileSystemDirectoryEntry, out: File[]): Promise<
 
 /* ---------------- 列表交互 ---------------- */
 function switchTab(t: Tab) {
-  if (t === 'favorite' || t === 'history') {
-    router.push(`/library/all`)  // 让路由仍停在 all，但页内切 Tab
-    nextTick(() => { setActiveTab(t) })
-  } else {
-    router.push(`/library/${t}`)
-  }
+  router.push(`/library/${t}`)
 }
-
-const activeExtra = ref<'favorite' | 'history' | null>(null)
-function setActiveTab(t: 'favorite' | 'history') { activeExtra.value = t; reload() }
-
-watch(() => route.params.tab, () => { activeExtra.value = null })
-
-const effectiveTab = computed<Tab>(() => activeExtra.value ?? tab.value)
-async function nextTick(fn: () => void) { await Promise.resolve(); fn() }
-
-watch(effectiveTab, reload)
 
 function play(index: number) {
   // 用当前列表作为队列
   player.loadQueue(items.value, index, true)
 }
-
-/* ---------------- 删除当前曲目（右键或 Del） ---------------- */
-async function deleteItem(id: string) {
-  await repository.deleteMedia(id)
-  await reload()
-}
-
-/* 清理 Blob URL（切换标签时） */
-onUnmounted(() => {
-  for (const m of items.value) {
-    if (m.coverUrl) try { URL.revokeObjectURL(m.coverUrl) } catch {/* noop */}
-  }
-})
 </script>
 
 <template>
   <div class="library">
     <div class="toolbar">
       <div class="tabs">
-        <button :class="{ active: effectiveTab === 'all' }" @click="switchTab('all')">全部</button>
-        <button :class="{ active: effectiveTab === 'audio' }" @click="switchTab('audio')">音频</button>
-        <button :class="{ active: effectiveTab === 'video' }" @click="switchTab('video')">视频</button>
+        <button :class="{ active: tab === 'all' }" @click="switchTab('all')">全部</button>
+        <button :class="{ active: tab === 'audio' }" @click="switchTab('audio')">音频</button>
+        <button :class="{ active: tab === 'video' }" @click="switchTab('video')">视频</button>
         <span class="sep" />
-        <button :class="{ active: effectiveTab === 'favorite' }" @click="switchTab('favorite')">我喜欢</button>
-        <button :class="{ active: effectiveTab === 'history' }" @click="switchTab('history')">历史</button>
+        <button :class="{ active: tab === 'favorite' }" @click="switchTab('favorite')">我喜欢</button>
+        <button :class="{ active: tab === 'history' }" @click="switchTab('history')">历史</button>
       </div>
       <input class="search" placeholder="搜索标题 / 艺术家 / 专辑..." v-model="search" />
       <div class="actions">
@@ -238,7 +210,7 @@ onUnmounted(() => {
 
       <MediaList
         :items="items"
-        :empty-text="search ? '无匹配结果' : effectiveTab === 'favorite' ? '尚未收藏任何曲目' : effectiveTab === 'history' ? '暂无播放历史' : '媒体库为空 · 点击右上角导入'"
+        :empty-text="search ? '无匹配结果' : tab === 'favorite' ? '尚未收藏任何曲目' : tab === 'history' ? '暂无播放历史' : '媒体库为空 · 点击右上角导入'"
         @play="play"
       />
     </div>

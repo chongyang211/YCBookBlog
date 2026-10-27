@@ -8,7 +8,7 @@ const SettingsPage = () => import('@/ui/pages/SettingsPage.vue')
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/library/all' },
   {
-    path: '/library/:tab(all|audio|video)',
+    path: '/library/:tab(all|audio|video|favorite|history)',
     name: 'library',
     component: LibraryPage,
     props: true,

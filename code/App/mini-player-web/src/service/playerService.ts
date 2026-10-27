@@ -135,8 +135,9 @@ export const usePlayerStore = defineStore('player', () => {
         const cur = queue.value.find(m => m.id === s.lastMediaId)
         if (cur) {
           current.value = cur
-          position.value = await repository.getLastPosition(cur.id)
-          loadIntoElement(cur, /*autoplay*/ false)
+          const lastPos = await repository.getLastPosition(cur.id)
+          position.value = lastPos
+          loadIntoElement(cur, /*autoplay*/ false, lastPos)
         }
       }
     }
@@ -156,7 +157,7 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
-  function loadIntoElement(item: MediaItem, autoplay: boolean) {
+  function loadIntoElement(item: MediaItem, autoplay: boolean, startMs = 0) {
     const el = item.type === 'video' ? videoEl.value : audioEl.value
     if (!el) return
 
@@ -181,6 +182,15 @@ export const usePlayerStore = defineStore('player', () => {
     duration.value = item.duration
     el.src = src
     el.load()
+
+    // 断点续播：loadedmetadata 后再 seek 一次
+    if (startMs > 0) {
+      const onReady = () => {
+        try { el.currentTime = startMs / 1000 } catch {/* noop */}
+        el.removeEventListener('loadedmetadata', onReady)
+      }
+      el.addEventListener('loadedmetadata', onReady)
+    }
 
     if (autoplay) {
       // play() 返回 Promise——必须 catch，不然浏览器拒绝一次就卡死

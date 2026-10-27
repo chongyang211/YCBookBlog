@@ -57,11 +57,6 @@ function toggleFullscreen() {
   </section>
 </template>
 
-<script lang="ts">
-import { RouterLink } from 'vue-router'
-export default { components: { RouterLink } }
-</script>
-
 <style scoped>
 .playing {
   position: relative;
