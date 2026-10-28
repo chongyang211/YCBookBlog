@@ -99,6 +99,7 @@ public:
     bool addRoom(const Computer& c);     // ⭐ Admin 业务方法
     // 2.添加用户：先查重再插入；参数是 shared_ptr（移交所有权给 users map）
     bool addUser(std::shared_ptr<User> u);
+    // 3.统计数据
     void statistics() const;     // ⭐ 业务方法：lambda 三连 accumulate
     // 【技术原理】statistics() 加 const（其余写操作不加）：编译器会逐个检查
     //             const 方法内是否意外修改成员，相当于免费的正确性检查。
