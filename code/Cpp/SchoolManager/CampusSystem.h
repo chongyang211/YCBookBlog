@@ -67,10 +67,31 @@ private:
     // 【设计思路】一轮比赛(key=1) 可以有多条报名(value=多个 Speech) —— 正是多对一关系，
     //             用 multimap 免去"map<int, vector<Speech>>"的嵌套写法。
     std::multimap<int, Speech> speeches;
+
+    // ============ 持久化（文档 §09 多文件持久化 / 阶段 ⑧）============
+    // 【设计思路】按业务实体拆三个 CSV 文件（RDBMS 思想：一个实体一张表），
+    //             外键关系：reservations.studentId → users.id、reservations.roomId → rooms.id
+    // 【注意】speeches 暂不持久化（文档 §09 范围只有三文件，演讲持久化留给后续案例）
+    std::string usersFile         = "users.csv";         // 列：tag,id,name,pwd
+    std::string roomsFile         = "rooms.csv";         // 列：id,capacity,spec
+    std::string reservationsFile  = "reservations.csv";  // 列：resId,studentId,roomId,date,status
+
+    // 内部加载函数：一个文件一个文件长出来（§9.3 users → §9.5 rooms → §9.6 reservations）
+    // 【技术原理】拆成三个私有函数而非一坨大函数：每个文件的自洽逻辑（解析/校验/容错）内聚，
+    //             loadAll 只负责编排加载顺序（先被引用方、后引用方——顺序反了外键全断）。
+    void loadUsers(const std::string& path);
+    void loadRooms(const std::string& path);
+    void loadReservations(const std::string& path);
 public:
     CampusSystem();  // 构造函数（.cpp 中打印启动提示）
     // 登录：账号不存在/密码错误返回 nullptr，成功返回多态的用户指针
     std::shared_ptr<User> login(const std::string& id, const std::string& pwd);
+
+    // ============ 持久化接口（main 启动时 loadAll、退出时 saveAll）============
+    void saveAll();     // 三容器 → 三个 CSV（覆盖写）
+    void loadAll();     // 三个 CSV → 三容器（文件不存在视为首次启动，静默跳过）
+    // 供 main 判断"是否首次启动"：空库时播种默认账号，否则完全信任 CSV
+    std::size_t userCount() const { return users.size(); }
 
     // ============ 学生业务（由 Student::mainMenu 转发调用）============
     // student

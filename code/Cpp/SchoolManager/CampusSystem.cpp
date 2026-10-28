@@ -15,20 +15,166 @@
 #include "CampusSystem.h"   // 本类声明（同时带来了 User/Computer/Reservation 及 STL 头）
 
 #include <algorithm>    // std::find_if / std::count_if / std::sort（算法库）
+#include <fstream>      // std::ofstream / std::ifstream（文件读写，阶段 ⑧ 持久化）
 #include <iostream>     // std::cout / std::cin
 #include <iomanip>      // std::setw / std::left（输出对齐格式化）
 #include <numeric>      // std::accumulate（数值累计，配合 lambda 做计数统计）
+#include <sstream>      // std::stringstream（CSV 行按逗号切分）
 #include <vector>
 
+#include "Admin.h"      // loadUsers 的简易工厂：按 tag 创建三个子类需要完整定义
 #include "Reservation.h"
 #include "Speech.h"     // Speech 的完整定义（multimap 中存的是其值对象，
                         //  取出后要访问 s.studentId/s.score 等成员，必须知道布局）
+#include "Student.h"
+#include "Teacher.h"
 
-// 构造函数：目前只打印启动横幅（后续阶段可在此加载 CSV 数据恢复现场）
+// 构造函数：目前只打印启动横幅（CSV 加载由 main 显式调用 loadAll，职责更清晰）
 // 【技术原理】成员容器（map/set/vector/multimap）与 nextResId=1（NSDMI）
 //             都在进入函数体前自动完成初始化，函数体无需再写任何代码。
 CampusSystem::CampusSystem() {
     std::cout << "[System] 校园系统启动\n";
+}
+
+
+// ============ 持久化（文档 §09 多文件持久化 / 阶段 ⑧）============
+
+// 保存：三个容器 → 三个 CSV 文件（覆盖写）
+// 【设计要点】一个文件一个流，任一文件打开失败只提示该文件、不影响其他文件
+//             （多文件拆分的容错红利：单文件损坏不拖垮全部数据）。
+void CampusSystem::saveAll() {
+    // ① users.csv：tag,id,name,pwd（toCsv 是虚函数，多态输出三种角色）
+    std::ofstream ofsUsers(usersFile);
+    if (!ofsUsers) {
+        std::cout << "[Save] 打开 " << usersFile << " 失败\n";
+    } else {
+        for (const auto& [id, user] : users) {
+            ofsUsers << user->toCsv() << "\n";      // ⭐ 多态：每个子类按自己格式输出
+        }
+        std::cout << "[Save] 已保存 " << users.size() << " 个用户到 " << usersFile << "\n";
+    }
+
+    // ② rooms.csv：id,capacity,spec
+    std::ofstream ofsRooms(roomsFile);
+    if (!ofsRooms) {
+        std::cout << "[Save] 打开 " << roomsFile << " 失败\n";
+    } else {
+        for (const auto& [id, room] : rooms) {
+            ofsRooms << room.toCsv() << "\n";
+        }
+        std::cout << "[Save] 已保存 " << rooms.size() << " 个机房到 " << roomsFile << "\n";
+    }
+
+    // ③ reservations.csv：resId,studentId,roomId,date,status（含已取消/已拒绝的历史单）
+    std::ofstream ofsRes(reservationsFile);
+    if (!ofsRes) {
+        std::cout << "[Save] 打开 " << reservationsFile << " 失败\n";
+    } else {
+        for (const auto& r : reservations) {
+            ofsRes << r.toCsv() << "\n";
+        }
+        std::cout << "[Save] 已保存 " << reservations.size() << " 条预约到 " << reservationsFile << "\n";
+    }
+}
+
+// 加载入口：严格按"先被引用方、后引用方"编排 —— users → rooms → reservations
+// 【文档 §9.1 灵魂三问】顺序反了会怎样？reservations 的外键（studentId/roomId）
+//             查不到主人，全部预约被当孤儿丢弃 —— 所以本函数只做编排，顺序不可调换。
+void CampusSystem::loadAll() {
+    loadUsers(usersFile);
+    loadRooms(roomsFile);
+    loadReservations(reservationsFile);
+}
+
+// 内部①：加载 users.csv，按 tag 简易工厂创建子类
+void CampusSystem::loadUsers(const std::string &path) {
+    std::ifstream ifs(path);
+    if (!ifs) {     // 首次启动文件不存在是正常现象：静默跳过，交给 main 播种默认账号
+        std::cout << "[Load] 文件不存在: " << path << "（首次启动，稍后播种默认账号）\n";
+        return;
+    }
+    std::string line;
+    int count = 0;
+    while (std::getline(ifs, line)) {           // 逐行读，getline 自动去掉行尾换行符
+        if (line.empty()) continue;             // 跳过空行（文件末尾常有）
+
+        // 解析 CSV：tag,id,name,pwd
+        std::stringstream ss(line);
+        std::string tag, id, name, pwd;
+        std::getline(ss, tag,  ',');
+        std::getline(ss, id,   ',');
+        std::getline(ss, name, ',');
+        std::getline(ss, pwd,  ',');
+
+        // ⭐ 根据 tag 多态创建子类（简易工厂模式）：新增角色只需在这里加一个分支
+        std::shared_ptr<User> u;
+        if      (tag == "S") u = std::make_shared<Student>(id, name, pwd);
+        else if (tag == "T") u = std::make_shared<Teacher>(id, name, pwd);
+        else if (tag == "A") u = std::make_shared<Admin>(id, name, pwd);
+        else { std::cout << "[Load] 未知身份标签: " << tag << "\n"; continue; }
+
+        users[id] = u;      // 直接入 map：加载路径无需 addUser 的查重提示（文件是我们自己写的）
+        count++;
+    }
+    std::cout << "[Load] 已加载 " << count << " 个用户\n";
+}
+
+// 内部②：加载 rooms.csv
+void CampusSystem::loadRooms(const std::string &path) {
+    std::ifstream ifs(path);
+    if (!ifs) {
+        std::cout << "[Load] 文件不存在: " << path << "（首次启动）\n";
+        return;
+    }
+    std::string line;
+    int count = 0;
+    while (std::getline(ifs, line)) {
+        if (line.empty()) continue;
+        Computer c = Computer::fromCsv(line);   // 解析责任内聚在实体类（信息隐藏）
+        if (c.id == 0) {                        // fromCsv 失败返回 id=0 的空对象 → 丢弃
+            std::cout << "[Load] 机房行解析失败: " << line << "\n";
+            continue;
+        }
+        rooms[c.id] = c;
+        count++;
+    }
+    std::cout << "[Load] 已加载 " << count << " 个机房\n";
+}
+
+// 内部③：加载 reservations.csv（外键校验 + 恢复派生状态）
+// 【技术原理】持久化只存"主数据"，reservations 的两个派生状态要在加载时重建：
+//   1. nextResId（内存自增计数器没存盘）→ 取 max(resId)+1，保证新单号不与历史冲突；
+//   2. reservedRooms（冗余占用索引）→ 遍历 Pending/Approved 单重建，
+//      否则重启后"已批准的机房"显示空闲，可被二次预约 —— 经典不一致 bug。
+void CampusSystem::loadReservations(const std::string &path) {
+    std::ifstream ifs(path);
+    if (!ifs) {
+        std::cout << "[Load] 文件不存在: " << path << "（首次启动）\n";
+        return;
+    }
+    std::string line;
+    int count = 0, skipped = 0;
+    while (std::getline(ifs, line)) {
+        if (line.empty()) continue;
+        Reservation r = Reservation::fromCsv(line);
+        // 外键校验（文档 §9.6）：引用的学生/机房必须存在，否则按孤儿数据丢弃
+        if (r.resId == 0 || users.count(r.studentId) == 0 || rooms.count(r.computerId) == 0) {
+            std::cout << "[Load] 跳过孤儿预约: " << line << "\n";
+            skipped++;
+            continue;
+        }
+        reservations.push_back(r);
+        // 重建派生状态①：占用索引只收"仍然生效"的单（Pending 待审也先占着，审核拒绝时再释放）
+        if (r.status == ResStatus::Pending || r.status == ResStatus::Approved) {
+            reservedRooms.insert(r.computerId);
+        }
+        // 重建派生状态②：自增计数器越过历史最大单号
+        if (r.resId >= nextResId) nextResId = r.resId + 1;
+        count++;
+    }
+    std::cout << "[Load] 已加载 " << count << " 条预约"
+              << (skipped > 0 ? ("（跳过 " + std::to_string(skipped) + " 条孤儿数据）") : "")
+              << "\n";
 }
 
 

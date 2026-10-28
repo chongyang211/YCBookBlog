@@ -63,19 +63,27 @@ void test() {
 // 程序入口：操作系统加载可执行文件后从这里开始执行
 int main() {
     CampusSystem sys;       // 栈上构造业务中枢：四大容器自动初始化为空，nextResId=1
-    // ⭐ 临时：手动 add 三个测试用户（阶段 ⑦ 接 FileStore 后会从 CSV 加载）
+    // ⭐ 阶段 ⑧：启动时从 CSV 恢复现场（顺序：users → rooms → reservations）
+    sys.loadAll();
+    // 首次启动（CSV 都不存在、库为空）才播种默认账号；之后完全信任 users.csv
     // 【技术原理】make_shared<Student>(...)：堆上创建 Student 并交给 shared_ptr<User>
-    //             （基类指针指向派生类对象 → 多态的前提）；随后按值传给 addUser，
-    //             map 内部再拷贝一份 shared_ptr，引用计数共享同一对象。
-    sys.addUser(make_shared<Student>("S001", "张三", "123"));       // 种子学生账号
-    sys.addUser(make_shared<Teacher>("T001", "李老师", "456"));     // 种子教师账号
-    sys.addUser(make_shared<Admin>("A001", "王管理员", "789"));     // 种子管理员账号
+    //             （基类指针指向派生类对象 → 多态的前提）。
+    if (sys.userCount() == 0) {
+        sys.addUser(make_shared<Student>("S001", "张三", "123"));       // 种子学生账号
+        sys.addUser(make_shared<Teacher>("T001", "李老师", "456"));     // 种子教师账号
+        sys.addUser(make_shared<Admin>("A001", "王管理员", "789"));     // 种子管理员账号
+    }
     while (true) {          // 主循环 = 登录网关：退出唯一出口是身份选择 0
         cout << "\n=== 校园系统登录 ===\n";
         cout << "1. 学生  2. 教师  3. 管理员  0. 退出\n";
         cout << "选择身份: ";
         int role; cin >> role;              // 读取身份（身份本身不参与校验，账号密码才是凭证）
-        if (role == 0) { cout << "再见！\n"; return 0; }    // 0 → 优雅退出：return 0 表示正常结束
+        if (role == 0) {
+            // ⭐ 阶段 ⑧：退出前保存全部数据（验收标准：开户 → 退出 → 重启 → 数据还在）
+            sys.saveAll();
+            cout << "再见！\n";
+            return 0;    // 0 → 优雅退出：return 0 表示正常结束
+        }
         string id, pwd;                     // 登录凭证
         cout << "账号: "; cin >> id;        // 读账号
         cout << "密码: "; cin >> pwd;       // 读密码

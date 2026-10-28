@@ -59,6 +59,38 @@ public:
         }
         return "未知";
     }
+
+    // ============ CSV 序列化（阶段 ⑧：reservations.csv 的行格式）============
+    // 行格式与文档 §9.2 对齐：resId,studentId,roomId,date,status
+    // status 存英文枚举名（Pending/Approved/...）而非中文——CSV 是给机器读的，
+    // 中文文案（statusText）是给界面看的，两者职责分离。
+
+    // 枚举 → CSV 字段文本（static：不依赖任何实例，反序列化也要用）
+    static std::string statusToText(ResStatus s) {
+        switch (s) {
+            case ResStatus::Pending:   return "Pending";
+            case ResStatus::Approved:  return "Approved";
+            case ResStatus::Rejected:  return "Rejected";
+            case ResStatus::Cancelled: return "Cancelled";
+        }
+        return "Pending";   // 兜底（理论上到不了这里）
+    }
+    // CSV 字段文本 → 枚举（未知文本按 Pending 兜底，与"新单默认待审"的业务直觉一致）
+    static ResStatus statusFromText(const std::string& t) {
+        if (t == "Approved")  return ResStatus::Approved;
+        if (t == "Rejected")  return ResStatus::Rejected;
+        if (t == "Cancelled") return ResStatus::Cancelled;
+        return ResStatus::Pending;
+    }
+
+    // 序列化为 CSV 一行（对象 → 字符串）
+    std::string toCsv() const {
+        return std::to_string(resId) + "," + studentId + "," +
+               std::to_string(computerId) + "," + date + "," + statusToText(status);
+    }
+
+    // 反序列化（字符串 → 对象），实现在 Reservation.cpp（static 工厂，同 Computer::fromCsv）
+    static Reservation fromCsv(const std::string& line);
 };
 
 

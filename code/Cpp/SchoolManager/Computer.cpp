@@ -15,17 +15,21 @@
 
 // 类外定义静态工厂方法：字符串 → Computer 对象
 // 【技术原理】静态成员函数没有 this 指针，通过 "Computer::fromCsv(line)" 调用。
-//             典型实现思路（阶段 ⑦）：
-//               1. istringstream iss(line);    把整行文本包装成输入流；
-//               2. 用 std::getline(iss, field, ',') 逐段按逗号切出字段；
-//               3. 字符串转数值可用 std::stoi / iss >> id 的方式解析；
-//               4. 按字段顺序（id, capacity, spec）构造并返回 Computer。
+//             字段顺序与 toCsv 严格对应：id,capacity,spec
+// 【安全边界】解析失败（字段不足/编号非数字）返回默认对象由调用方丢弃，
+//             不抛异常中断主流程 —— 教学项目保持 IO 路径"永不中断"。
 Computer Computer::fromCsv(const std::string &line) {
-    // TODO（阶段 ⑦）: 真正解析 CSV
-    return Computer{};      // 暂时返回默认构造的空机房（id=0, capacity=0, spec=""）
-    // 【技术原理】"Computer{}" 是 C++11 值初始化语法：
-    //             int 成员被零初始化，string 走默认构造为空串，
-    //             保证返回值处于确定状态（不会是未初始化的随机内存）。
+    std::istringstream iss(line);   // 把整行文本包装成输入流
+    std::string idStr, capStr, spec;
+    // 按逗号逐段切出字段：getline 的第三个参数是分隔符（读到分隔符为止，分隔符本身丢弃）
+    if (!std::getline(iss, idStr, ',')) return Computer{};
+    if (!std::getline(iss, capStr, ',')) return Computer{};
+    if (!std::getline(iss, spec))       return Computer{};  // 最后一个字段读到行尾
+    try {
+        return Computer{std::stoi(idStr), std::stoi(capStr), spec};
+    } catch (const std::exception&) {   // stoi 遇到非数字会抛异常：兜底成空对象
+        return Computer{};
+    }
 }
 
 
