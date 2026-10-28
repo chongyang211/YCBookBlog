@@ -9,6 +9,7 @@
 // ============================================================================
 
 #include <iostream>     // cin / cout 标准输入输出
+#include <limits>       // std::numeric_limits（输入校验时清空缓冲区用）
 #include <string>       // std::string（账号、密码）
 #include <memory>       // std::shared_ptr / make_shared（多态对象的智能指针管理）
 
@@ -76,8 +77,21 @@ int main() {
     while (true) {          // 主循环 = 登录网关：退出唯一出口是身份选择 0
         cout << "\n=== 校园系统登录 ===\n";
         cout << "1. 学生  2. 教师  3. 管理员  0. 退出\n";
-        cout << "选择身份: ";
-        int role; cin >> role;              // 读取身份（身份本身不参与校验，账号密码才是凭证）
+
+        // 读取身份编号（带输入校验：非数字/越界 → 提示重输，而不是静默退出）
+        // 【技术原理】cin >> int 遇到非法输入会进入 fail 状态且变量被置 0（C++11 起），
+        //             必须三步恢复：clear() 清错误标志 → ignore() 丢弃残留行 → 重新读取。
+        //             cin.ignore(numeric_limits<streamsize>::max(), '\n') 是"清空一行"的
+        //             惯用法：max 是流的最大长度上限，遇到换行符为止。
+        int role = -1;
+        while (true) {
+            cout << "选择身份: ";
+            if (cin >> role && role >= 0 && role <= 3) break;   // 合法输入：跳出校验循环
+            cin.clear();                                        // ① 清除 failbit（否则后续读取全部跳过）
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');// ② 丢掉这一行残留（如 "A001"）
+            cout << "输入无效，请输入 0-3 的编号\n";
+        }
+
         if (role == 0) {
             // ⭐ 阶段 ⑧：退出前保存全部数据（验收标准：开户 → 退出 → 重启 → 数据还在）
             sys.saveAll();
