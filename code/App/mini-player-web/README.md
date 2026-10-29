@@ -37,6 +37,7 @@ pnpm typecheck    # 纯类型检查，不出产物
 ### 🐛 关键 Bug 修复
 
 - **"导入文件却无法播放"**：根因是 `repository.addMediaBatch` 存库前 strip 掉 `file` 字段，reload 读回的 `items` 没有 `file`。新增 `src/service/fileCache.ts` 内存池，scanner 完成后自动注册、`loadIntoElement` 优先从 cache 取。详见文档 §04 "fileCache 修复详解"。
+- **进度条"隐形"（v0.2.1）**：全局 `input[type=range]` 的灰色 runnable-track 恰好盖在自绘 fill 层之上 → **彻底抛弃 `<input type="range">`**，重写为纯 div + Pointer Events：hover 轨道长高、thumb 弹性浮现、拖动光环、时间气泡、`setPointerCapture` 拖出窗口不丢事件、`touch-action: none` 防触摸滚屏、ARIA 键盘无障碍。详见文档 §8.5.8。
 - **`style.css` JS 风格 `//` 注释**：改为 `/* */`。
 - **音量拖动不自动取消静音、文件失效态无提示** 等 UX 细节。
 
@@ -89,7 +90,7 @@ src/
 │   │   └── SettingsPage.vue      主题 / 速度 / 睡眠 / EQ / 统计
 │   └── components/
 │       ├── PlayerBar.vue         底部控制条（三段式 + 响应式）
-│       ├── ProgressBar.vue       拖动 + hover 时间气泡
+│       ├── ProgressBar.vue       纯 div + Pointer Events v2（hover 气泡/拖动光环）
 │       ├── MediaList.vue         列表（频谱动画 / 失效徽标 / 单删）
 │       ├── LyricsView.vue        歌词滚动高亮
 │       ├── EqualizerPanel.vue    10 频段 EQ（自定义开关 + 渐变 preset）
