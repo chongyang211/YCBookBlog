@@ -6,9 +6,12 @@ import { useRoute, useRouter } from 'vue-router'
 import type { MediaItem, MediaType } from '@/types'
 import { repository } from '@/data/repository'
 import { filesToMedia, walkDirectoryHandle } from '@/data/scanner'
+import { fileCache } from '@/service/fileCache'
+import { toast } from '@/service/toast'
 import { usePlayerStore } from '@/service/playerService'
 import { debounce } from '@/utils/debounce'
 import MediaList from '@/ui/components/MediaList.vue'
+import EmptyState from '@/ui/components/EmptyState.vue'
 
 const player = usePlayerStore()
 const route = useRoute()
@@ -16,12 +19,20 @@ const router = useRouter()
 
 type Tab = 'all' | 'audio' | 'video' | 'favorite' | 'history'
 
+const TAB_LABELS: Record<Tab, string> = {
+  all: '全部',
+  audio: '音频',
+  video: '视频',
+  favorite: '我喜欢',
+  history: '最近播放',
+}
+
 const tab = computed<Tab>(() => (route.params.tab as Tab) ?? 'all')
 const search = ref('')
 const items = ref<MediaItem[]>([])
 const scanning = ref(false)
-const scanMsg = ref('')
 const dropHover = ref(false)
+const totalCount = ref(0)
 const supportsDirPicker = typeof window.showDirectoryPicker === 'function'
 
 function tabToType(t: Tab): MediaType | undefined {
@@ -32,15 +43,19 @@ function tabToType(t: Tab): MediaType | undefined {
 
 async function reload() {
   if (search.value.trim()) {
-    items.value = await repository.searchMedia(search.value)
+    items.value = fileCache.hydrateAll(await repository.searchMedia(search.value))
     return
   }
-  if (tab.value === 'favorite') items.value = await repository.listFavorites()
-  else if (tab.value === 'history') items.value = await repository.listHistory()
-  else items.value = await repository.listMedia(tabToType(tab.value))
+  if (tab.value === 'favorite') {
+    items.value = fileCache.hydrateAll(await repository.listFavorites())
+  } else if (tab.value === 'history') {
+    items.value = fileCache.hydrateAll(await repository.listHistory())
+  } else {
+    items.value = fileCache.hydrateAll(await repository.listMedia(tabToType(tab.value)))
+  }
+  totalCount.value = (await repository.listMedia()).length
 }
 
-/** search 变化节流重查 */
 const reloadDebounced = debounce(reload, 220)
 watch(search, () => reloadDebounced())
 watch(tab, reload)
@@ -61,35 +76,49 @@ async function onFilesPicked(e: Event) {
 
 async function importFiles(files: File[], source: MediaItem['source']) {
   scanning.value = true
-  scanMsg.value = `正在解析 ${files.length} 个文件...`
+  const total = files.length
+  const toastId = toast.info(`正在解析 ${total} 个文件...`, 0)
   try {
     const list = await filesToMedia(files, source)
     if (list.length) await repository.addMediaBatch(list)
-    scanMsg.value = `已导入 ${list.length} 条 · 忽略 ${files.length - list.length} 个不支持文件`
+    toast.dismiss(toastId)
+    const ignored = total - list.length
+    if (list.length) {
+      toast.success(
+        ignored > 0
+          ? `已导入 ${list.length} 条，忽略 ${ignored} 个不支持文件`
+          : `已导入 ${list.length} 条曲目`,
+        2600,
+      )
+    } else {
+      toast.warn('未找到支持的音视频文件')
+    }
     await reload()
   } catch (e) {
-    scanMsg.value = `导入失败：${String(e)}`
+    toast.dismiss(toastId)
+    toast.error(`导入失败：${String(e)}`)
   } finally {
     scanning.value = false
-    setTimeout(() => (scanMsg.value = ''), 3200)
   }
 }
 
 async function pickDirectory() {
-  if (!window.showDirectoryPicker) {
-    alert('当前浏览器不支持选择目录（File System Access API）。请使用「选择文件」或拖拽目录。')
+  if (!supportsDirPicker) {
+    toast.warn('当前浏览器不支持目录选择，请使用「选择文件」或拖拽')
     return
   }
   try {
-    const dir = await window.showDirectoryPicker({ mode: 'read' })
+    const dir = await window.showDirectoryPicker!({ mode: 'read' })
     scanning.value = true
-    scanMsg.value = '正在扫描目录...'
+    const toastId = toast.info('正在扫描目录...', 0)
     const files: File[] = []
     for await (const f of walkDirectoryHandle(dir)) files.push(f)
+    toast.dismiss(toastId)
     await importFiles(files, 'directory')
   } catch (e: unknown) {
     if ((e as { name?: string })?.name !== 'AbortError') {
       console.error(e)
+      toast.error('目录读取失败')
     }
     scanning.value = false
   }
@@ -100,7 +129,10 @@ function onDragOver(e: DragEvent) {
   e.preventDefault()
   dropHover.value = true
 }
-function onDragLeave() { dropHover.value = false }
+function onDragLeave(e: DragEvent) {
+  // 只有真正离开根 dropzone 才清除
+  if (e.currentTarget === e.target) dropHover.value = false
+}
 
 async function onDrop(e: DragEvent) {
   e.preventDefault()
@@ -109,6 +141,7 @@ async function onDrop(e: DragEvent) {
   if (!dt) return
   const files = await collectDroppedFiles(dt)
   if (files.length) await importFiles(files, 'dropped')
+  else toast.warn('拖入的文件未识别')
 }
 
 async function collectDroppedFiles(dt: DataTransfer): Promise<File[]> {
@@ -143,7 +176,6 @@ function filePromise(entry: FileSystemFileEntry): Promise<File | null> {
 
 async function walkEntry(entry: FileSystemDirectoryEntry, out: File[]): Promise<void> {
   const reader = entry.createReader()
-  // 浏览器一次最多返回 100 条，必须循环读完
   while (true) {
     const batch = await new Promise<FileSystemEntry[]>((res, rej) =>
       reader.readEntries(res, rej),
@@ -167,27 +199,59 @@ function switchTab(t: Tab) {
 
 function play(index: number) {
   // 用当前列表作为队列
+  const target = items.value[index]
+  if (!target) return
+  if (!target.file && !fileCache.has(target.id) && !target.externalUrl) {
+    toast.warn(`"${target.title}" 文件已失效，请重新导入`)
+    return
+  }
   player.loadQueue(items.value, index, true)
 }
+
+const emptyIsFullLibrary = computed(
+  () => totalCount.value === 0 && !search.value.trim() && tab.value !== 'favorite' && tab.value !== 'history',
+)
+
+const emptyText = computed(() => {
+  if (search.value) return `无匹配 "${search.value}" 的结果`
+  if (tab.value === 'favorite') return '尚未收藏任何曲目'
+  if (tab.value === 'history') return '暂无播放历史'
+  if (tab.value === 'audio') return '媒体库中还没有音频'
+  if (tab.value === 'video') return '媒体库中还没有视频'
+  return '媒体库为空'
+})
 </script>
 
 <template>
-  <div class="library">
-    <div class="toolbar">
-      <div class="tabs">
-        <button :class="{ active: tab === 'all' }" @click="switchTab('all')">全部</button>
-        <button :class="{ active: tab === 'audio' }" @click="switchTab('audio')">音频</button>
-        <button :class="{ active: tab === 'video' }" @click="switchTab('video')">视频</button>
-        <span class="sep" />
-        <button :class="{ active: tab === 'favorite' }" @click="switchTab('favorite')">我喜欢</button>
-        <button :class="{ active: tab === 'history' }" @click="switchTab('history')">历史</button>
+  <div
+    class="library"
+    :class="{ 'drag-over': dropHover }"
+    @dragover="onDragOver"
+    @dragleave="onDragLeave"
+    @drop="onDrop"
+  >
+    <!-- 顶部：标题 + 搜索 -->
+    <header class="page-header">
+      <div class="title-area">
+        <h2>{{ TAB_LABELS[tab] }}</h2>
+        <span class="count" v-if="items.length">{{ items.length }} 项</span>
       </div>
-      <input class="search" placeholder="搜索标题 / 艺术家 / 专辑..." v-model="search" />
-      <div class="actions">
-        <button class="primary" @click="pickDirectory" :title="supportsDirPicker ? '' : '当前浏览器仅支持文件选择'">
-          📁 导入目录
+      <div class="header-actions">
+        <input
+          type="search"
+          class="search"
+          placeholder="搜索标题 / 艺术家 / 专辑..."
+          v-model="search"
+          aria-label="搜索"
+        />
+        <button class="btn-primary" @click="pickDirectory" :disabled="scanning">
+          <span>📁</span>
+          <span class="btn-text">导入目录</span>
         </button>
-        <button @click="pickFiles">📄 导入文件</button>
+        <button class="btn-secondary" @click="pickFiles" :disabled="scanning">
+          <span>📄</span>
+          <span class="btn-text">导入文件</span>
+        </button>
         <input
           ref="fileInputRef"
           type="file"
@@ -197,98 +261,220 @@ function play(index: number) {
           @change="onFilesPicked"
         />
       </div>
+    </header>
+
+    <!-- Tab 切换 -->
+    <div class="tabs">
+      <button :class="{ active: tab === 'all' }" @click="switchTab('all')">全部</button>
+      <button :class="{ active: tab === 'audio' }" @click="switchTab('audio')">
+        <span class="dot" />音频
+      </button>
+      <button :class="{ active: tab === 'video' }" @click="switchTab('video')">
+        <span class="dot" />视频
+      </button>
+      <span class="tab-sep" />
+      <button :class="{ active: tab === 'favorite' }" @click="switchTab('favorite')">♥ 我喜欢</button>
+      <button :class="{ active: tab === 'history' }" @click="switchTab('history')">⟲ 最近</button>
     </div>
 
-    <div
-      class="dropzone"
-      :class="{ hover: dropHover }"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-      @drop="onDrop"
-    >
-      <div v-if="dropHover" class="drop-tip">松开导入</div>
-
+    <!-- 列表区 / 空库引导 -->
+    <div class="list-area">
+      <EmptyState
+        v-if="emptyIsFullLibrary"
+        @importDir="pickDirectory"
+        @importFile="pickFiles"
+      />
       <MediaList
+        v-else
         :items="items"
-        :empty-text="search ? '无匹配结果' : tab === 'favorite' ? '尚未收藏任何曲目' : tab === 'history' ? '暂无播放历史' : '媒体库为空 · 点击右上角导入'"
+        :empty-text="emptyText"
         @play="play"
+        @reload="reload"
       />
     </div>
 
-    <div v-if="scanMsg" class="status" :class="{ running: scanning }">{{ scanMsg }}</div>
+    <!-- 拖拽覆盖提示层 -->
+    <Transition name="drop-fade">
+      <div v-if="dropHover" class="drop-overlay">
+        <div class="drop-tip glass">
+          <div class="emoji">📁</div>
+          <div>松开导入</div>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
 .library {
-  padding: 20px;
+  padding: 24px;
+  padding-bottom: 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   min-height: 100%;
+  position: relative;
 }
-.toolbar {
-  display: flex; flex-wrap: wrap; gap: 10px;
-  align-items: center;
-}
-.tabs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.tabs button {
-  padding: 6px 14px;
-  border-radius: 999px;
-  color: var(--text-sub);
-  background: var(--bg-elev);
-  font-size: 13px;
-}
-.tabs button.active { background: var(--accent); color: #fff; }
-.tabs .sep { width: 1px; height: 20px; background: var(--border); margin: 0 6px; }
 
+/* ---- 顶部 ---- */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.title-area {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.title-area h2 {
+  background: linear-gradient(135deg, var(--text) 0%, var(--text-sub) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.count { color: var(--text-mute); font-size: var(--fs-sm); }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 0;
+}
 .search {
   flex: 1;
-  min-width: 180px;
-  padding: 8px 14px;
+  max-width: 320px;
+  min-width: 120px;
+  padding: 8px 16px;
   background: var(--bg-elev);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   color: var(--text);
-  font-size: 13px;
-  outline: none;
+  font-size: var(--fs-sm);
 }
-.search:focus { border-color: var(--accent); }
+.search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
 
-.actions { display: flex; gap: 8px; }
-.actions button {
-  padding: 7px 14px;
+.btn-primary, .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all .18s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.45);
+}
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.btn-secondary {
   background: var(--bg-elev);
   color: var(--text-sub);
-  border-radius: 8px;
-  font-size: 13px;
+  border: 1px solid var(--border);
 }
-.actions button:hover { background: var(--hover); color: var(--text); }
-.actions button.primary { background: var(--accent); color: #fff; }
-.actions button.primary:hover { background: var(--accent-strong); color: #fff; }
+.btn-secondary:hover:not(:disabled) {
+  background: var(--hover);
+  color: var(--text);
+}
 
-.dropzone {
+/* ---- Tab ---- */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.tabs button {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  color: var(--text-sub);
+  background: transparent;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tabs button:hover:not(.active) {
+  background: var(--hover);
+  color: var(--text);
+}
+.tabs button.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+.tabs .dot {
+  width: 6px; height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: .5;
+}
+.tab-sep {
+  width: 1px; height: 16px;
+  background: var(--border);
+  margin: 0 6px;
+}
+
+/* ---- 列表区 ---- */
+.list-area {
   flex: 1;
-  position: relative;
-  border-radius: var(--radius);
-  transition: outline-color .2s;
-  outline: 2px dashed transparent;
-  outline-offset: -4px;
-}
-.dropzone.hover { outline-color: var(--accent); background: var(--accent-soft); }
-.drop-tip {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--accent); font-size: 18px; font-weight: 600;
-  pointer-events: none; z-index: 2;
+  min-height: 300px;
+  animation: fade-in .3s ease;
 }
 
-.status {
-  padding: 8px 14px;
-  background: var(--bg-elev);
-  border-radius: 8px;
-  color: var(--text-sub);
-  font-size: 12px;
+/* ---- 拖拽覆盖层 ---- */
+.library.drag-over { outline: 2px dashed var(--accent); outline-offset: -8px; border-radius: var(--radius-lg); }
+.drop-overlay {
+  position: absolute;
+  inset: 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgba(139, 92, 246, 0.08);
+  border-radius: var(--radius-lg);
 }
-.status.running { color: var(--accent); }
+.drop-tip {
+  padding: 40px 60px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  color: var(--accent);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  box-shadow: var(--shadow-xl);
+}
+.drop-tip .emoji { font-size: 48px; margin-bottom: 12px; }
+.drop-fade-enter-active, .drop-fade-leave-active { transition: all .18s; }
+.drop-fade-enter-from, .drop-fade-leave-to { opacity: 0; transform: scale(.96); }
+
+/* ---- 响应式 ---- */
+@media (max-width: 820px) {
+  .btn-text { display: none; }
+  .btn-primary, .btn-secondary { padding: 8px 12px; }
+  .search { max-width: 180px; }
+}
+@media (max-width: 640px) {
+  .library { padding: 16px 12px; }
+  .page-header { gap: 10px; }
+  .search { max-width: none; min-width: 100%; order: 10; }
+  .header-actions { flex-wrap: wrap; gap: 8px; }
+}
 </style>

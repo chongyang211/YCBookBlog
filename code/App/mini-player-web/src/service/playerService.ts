@@ -9,11 +9,17 @@
 //   2. 事件翻译在 attachAudioElement 里一次性接完，store 外无需关心 DOM
 //   3. 进度条顺滑靠 rAF 插值；timeupdate 只做校准
 //   4. play() 的 Promise 必须 catch——否则一次拒绝就卡死 UI（§04 BUG 现场）
+//
+// 2026-10-29 修复：
+//   以前 loadIntoElement 只从 item.file 读 File → 从 db reload 回来的 items 无 file → 判为"文件已失效"
+//   现在优先从 fileCache 内存池取 File，自动 hydrate；真的没有才提示"重新导入"
 
 import { defineStore } from 'pinia'
 import { shallowRef, markRaw, ref, computed, watch } from 'vue'
 import type { MediaItem, LoopMode, PlaybackStatus } from '@/types'
 import { repository } from '@/data/repository'
+import { fileCache } from './fileCache'
+import { toast } from './toast'
 
 const POSITION_RECORD_INTERVAL = 5000  // 每 5 秒持久化一次断点
 
@@ -32,6 +38,8 @@ export const usePlayerStore = defineStore('player', () => {
   const muted = ref(false)
   const loopMode = ref<LoopMode>('order')
   const errorMessage = ref('')
+  /** 首次需要用户手势时的提示标志（autoplay policy） */
+  const needsUserGesture = ref(false)
 
   // 可见与否：用来做"视频页/音频页"的渲染层切换
   const mediaType = computed(() => current.value?.type ?? 'audio')
@@ -70,7 +78,10 @@ export const usePlayerStore = defineStore('player', () => {
     el.addEventListener('loadedmetadata', () => {
       duration.value = Math.floor(el.duration * 1000) || current.value?.duration || 0
     })
-    el.addEventListener('play', () => { status.value = 'playing'; startTicker() })
+    el.addEventListener('canplay', () => {
+      if (status.value === 'loading') status.value = 'ready'
+    })
+    el.addEventListener('play', () => { status.value = 'playing'; needsUserGesture.value = false; startTicker() })
     el.addEventListener('pause', () => {
       if (status.value !== 'ended') status.value = 'paused'
       stopTicker()
@@ -88,7 +99,15 @@ export const usePlayerStore = defineStore('player', () => {
     })
     el.addEventListener('error', () => {
       const err = el.error
-      errorMessage.value = err ? `媒体错误 ${err.code}` : '未知错误'
+      const code = err?.code
+      const codeMap: Record<number, string> = {
+        1: '加载已被中断',
+        2: '网络错误',
+        3: '解码失败（格式可能不被支持）',
+        4: '媒体源不可用',
+      }
+      errorMessage.value = code ? codeMap[code] ?? `媒体错误 ${code}` : '未知错误'
+      toast.error(errorMessage.value)
       status.value = 'error'
       stopTicker()
     })
@@ -137,7 +156,11 @@ export const usePlayerStore = defineStore('player', () => {
           current.value = cur
           const lastPos = await repository.getLastPosition(cur.id)
           position.value = lastPos
-          loadIntoElement(cur, /*autoplay*/ false, lastPos)
+          // 从 fileCache 补 file（关浏览器后 cache 为空 → 保持错误态由用户感知）
+          const hydrated = fileCache.hydrate(cur)
+          if (hydrated.file) {
+            loadIntoElement(hydrated, /*autoplay*/ false, lastPos)
+          }
         }
       }
     }
@@ -166,15 +189,21 @@ export const usePlayerStore = defineStore('player', () => {
       if (el.src && el.src.startsWith('blob:')) URL.revokeObjectURL(el.src)
     } catch {/* noop */}
 
+    // 关键：优先从 fileCache 内存池取 File——store 外统一入口
+    const effectiveFile = item.file ?? fileCache.get(item.id)
+
     let src = ''
-    if (item.file) {
-      src = URL.createObjectURL(item.file)
+    if (effectiveFile) {
+      src = URL.createObjectURL(effectiveFile)
+      // 顺手把 File 挂回 item，避免下次又走 cache 查询
+      item.file = effectiveFile
     } else if (item.externalUrl) {
       src = item.externalUrl
     } else {
       // 没文件、也没 URL：触发错误态
       status.value = 'error'
-      errorMessage.value = '文件已失效，请重新导入'
+      errorMessage.value = '文件已失效，请重新导入此曲目'
+      toast.warn(`"${item.title}" 文件已失效，请重新导入`)
       return
     }
 
@@ -196,8 +225,12 @@ export const usePlayerStore = defineStore('player', () => {
       // play() 返回 Promise——必须 catch，不然浏览器拒绝一次就卡死
       el.play().catch(err => {
         status.value = 'paused'
-        if (err?.name !== 'AbortError') {
-          errorMessage.value = `需要用户手势才能播放：${err?.message ?? err}`
+        if (err?.name === 'NotAllowedError') {
+          needsUserGesture.value = true
+          toast.info('浏览器拦截了自动播放，点一下播放按钮即可', 4200)
+        } else if (err?.name !== 'AbortError') {
+          errorMessage.value = `播放失败：${err?.message ?? err}`
+          toast.error(errorMessage.value)
         }
       })
     }
@@ -206,9 +239,20 @@ export const usePlayerStore = defineStore('player', () => {
   function play() {
     const el = activeElement()
     if (!el || !current.value) return
+    // 若还没 src（恢复队列但未补 file 的情况），再尝试一次
+    if (!el.src) {
+      loadIntoElement(current.value, true)
+      return
+    }
     el.play().catch(err => {
       status.value = 'paused'
-      errorMessage.value = `播放失败：${err?.message ?? err}`
+      if (err?.name === 'NotAllowedError') {
+        needsUserGesture.value = true
+        toast.info('浏览器拦截了自动播放，再点一次播放即可', 3200)
+      } else if (err?.name !== 'AbortError') {
+        errorMessage.value = `播放失败：${err?.message ?? err}`
+        toast.error(errorMessage.value)
+      }
     })
   }
 
@@ -237,6 +281,7 @@ export const usePlayerStore = defineStore('player', () => {
 
   function setVolume(v: number) {
     volume.value = Math.max(0, Math.min(1, v))
+    if (muted.value && v > 0) muted.value = false   // 拖动音量自动取消静音
     applyVolume()
     repository.saveSettings({ volume: volume.value })
   }
@@ -309,10 +354,40 @@ export const usePlayerStore = defineStore('player', () => {
     persistQueue()
   }
 
+  /** 从队列移除某项（如果是当前曲目则切下一首） */
+  function removeFromQueue(id: string) {
+    const idx = queue.value.findIndex(m => m.id === id)
+    if (idx < 0) return
+    const isCurrent = current.value?.id === id
+    queue.value.splice(idx, 1)
+    if (isCurrent) {
+      if (queue.value.length === 0) {
+        pause()
+        current.value = null
+      } else {
+        const nextIdx = Math.min(idx, queue.value.length - 1)
+        const target = queue.value[nextIdx]
+        current.value = target
+        position.value = 0
+        loadIntoElement(target, isPlaying.value)
+      }
+    }
+    persistQueue()
+  }
+
+  /** 清空队列 */
+  function clearQueue() {
+    pause()
+    queue.value = []
+    current.value = null
+    persistQueue()
+  }
+
   async function toggleFavorite() {
     if (!current.value) return
     const favored = await repository.toggleFavorite(current.value.id)
     favoriteOf.value[current.value.id] = favored
+    toast.success(favored ? '已加入收藏' : '已取消收藏', 1600)
   }
 
   async function maybeRecordPosition() {
@@ -342,7 +417,7 @@ export const usePlayerStore = defineStore('player', () => {
     audioEl, videoEl,
     current, queue, status, position, duration,
     playbackRate, volume, muted, loopMode, errorMessage,
-    seeking, favoriteOf,
+    seeking, favoriteOf, needsUserGesture,
     // getters
     mediaType, isPlaying,
     // actions
@@ -351,6 +426,7 @@ export const usePlayerStore = defineStore('player', () => {
     play, pause, togglePlay, seek,
     setPlaybackRate, setVolume, toggleMute, setLoopMode,
     next, previous, toggleFavorite,
+    removeFromQueue, clearQueue,
   }
 })
 
