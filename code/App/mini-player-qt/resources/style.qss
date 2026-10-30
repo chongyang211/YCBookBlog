@@ -1,0 +1,346 @@
+/* ============================================================================
+ * MiniPlayer · Qt QSS 全局样式
+ * ============================================================================
+ * 深浅色切换方式：ThemeManager 给 QApplication / 根 QWidget 设置 property("theme", "dark"|"light"),
+ *   选择器 [theme="dark"] 命中——与 Web 端 html[data-theme] 心智一致。
+ *
+ * QSS 不是完整 CSS：
+ *   - 不支持 var(--xxx) 变量 → 这里只能把颜色硬编码
+ *   - 不支持 flex/grid     → 布局靠 QHBoxLayout/QVBoxLayout/QGridLayout
+ *   - :hover/:pressed/:disabled 伪态都支持
+ *   - 自定义属性可用 [prop="val"] 选择器匹配
+ * ========================================================================== */
+
+/* ---------------- 全局字体 ---------------- */
+* {
+    font-family: -apple-system, "SF Pro Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    outline: 0;
+}
+
+QMainWindow,
+QDialog,
+QWidget {
+    background: #f5f6fa;
+    color: #0f172a;
+}
+
+/* ---------------- 深色主题（跟随 ThemeManager::setDark） ---------------- */
+QMainWindow[theme="dark"],
+QDialog[theme="dark"],
+QWidget[theme="dark"] {
+    background: #0b0d12;
+    color: #f1f5f9;
+}
+
+/* 深色主题下的子控件背景 */
+QWidget[theme="dark"] QFrame#sidebar,
+QWidget[theme="dark"] QFrame#playerBar {
+    background: rgba(16, 19, 26, 0.92);
+    border-color: #2a303c;
+}
+QWidget[theme="dark"] QFrame#card,
+QWidget[theme="dark"] #libraryToolbar,
+QWidget[theme="dark"] QListView {
+    background: #171a22;
+    border-color: #2a303c;
+}
+QWidget[theme="dark"] QLineEdit,
+QWidget[theme="dark"] QSpinBox {
+    background: #171a22;
+    color: #f1f5f9;
+    border-color: #2a303c;
+}
+QWidget[theme="dark"] QPushButton {
+    background: #1c2029;
+    color: #cbd5e1;
+    border-color: #2a303c;
+}
+QWidget[theme="dark"] QPushButton:hover {
+    background: #262b36;
+}
+QWidget[theme="dark"] QLabel {
+    color: #cbd5e1;
+}
+QWidget[theme="dark"] QLabel#titleLabel,
+QWidget[theme="dark"] QLabel#pageTitle {
+    color: #f1f5f9;
+}
+QWidget[theme="dark"] QLabel#artistLabel,
+QWidget[theme="dark"] QLabel#muteLabel,
+QWidget[theme="dark"] QLabel#timeLabel {
+    color: #94a3b8;
+}
+QWidget[theme="dark"] QListView::item {
+    color: #cbd5e1;
+}
+QWidget[theme="dark"] QListView::item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+QWidget[theme="dark"] QListView::item:selected,
+QWidget[theme="dark"] QListView::item[isPlaying="true"] {
+    background: rgba(139, 92, 246, 0.18);
+    color: #c4b5fd;
+}
+QWidget[theme="dark"] QScrollBar:vertical {
+    background: transparent;
+}
+QWidget[theme="dark"] QScrollBar::handle:vertical {
+    background: #2a303c;
+}
+
+/* ---------------- 侧栏 ---------------- */
+QFrame#sidebar {
+    background: rgba(255, 255, 255, 0.72);
+    border-right: 1px solid #e2e8f0;
+}
+QFrame#sidebar QLabel#logo {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 6px 10px 20px 10px;
+}
+QPushButton[navItem="true"] {
+    background: transparent;
+    border: none;
+    text-align: left;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 500;
+}
+QPushButton[navItem="true"]:hover {
+    background: rgba(15, 23, 42, 0.05);
+    color: #0f172a;
+}
+QPushButton[navItem="true"][selected="true"] {
+    background: rgba(139, 92, 246, 0.14);
+    color: #7c3aed;
+    font-weight: 600;
+}
+QWidget[theme="dark"] QPushButton[navItem="true"] {
+    color: #cbd5e1;
+}
+QWidget[theme="dark"] QPushButton[navItem="true"]:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #f1f5f9;
+}
+QWidget[theme="dark"] QPushButton[navItem="true"][selected="true"] {
+    background: rgba(139, 92, 246, 0.22);
+    color: #c4b5fd;
+}
+
+/* ---------------- 卡片/工具条 ---------------- */
+QFrame#card,
+#libraryToolbar {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+
+/* ---------------- 按钮 ---------------- */
+QPushButton {
+    background: #ffffff;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+QPushButton:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+QPushButton:disabled {
+    opacity: .4;
+    color: #94a3b8;
+}
+QPushButton[primary="true"] {
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    font-weight: 500;
+}
+QPushButton[primary="true"]:hover {
+    background: #7c3aed;
+}
+QPushButton[danger="true"] {
+    background: #ef4444;
+    color: white;
+    border: none;
+}
+QPushButton[danger="true"]:hover {
+    background: #dc2626;
+}
+QPushButton[flat="true"] {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    padding: 6px 10px;
+    border-radius: 10px;
+}
+QPushButton[flat="true"]:hover {
+    background: rgba(15, 23, 42, 0.06);
+    color: #0f172a;
+}
+QWidget[theme="dark"] QPushButton[flat="true"]:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+}
+
+/* 圆形小图标按钮 */
+QPushButton[iconBtn="true"] {
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 18px;
+    min-width: 36px; max-width: 36px;
+    min-height: 36px; max-height: 36px;
+    color: #475569;
+    font-size: 15px;
+}
+QPushButton[iconBtn="true"]:hover {
+    background: rgba(15, 23, 42, 0.07);
+    color: #0f172a;
+}
+QWidget[theme="dark"] QPushButton[iconBtn="true"] { color: #cbd5e1; }
+QWidget[theme="dark"] QPushButton[iconBtn="true"]:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+}
+
+/* 大主按钮（播放） */
+QPushButton[playMain="true"] {
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    min-width: 44px; max-width: 44px;
+    min-height: 44px; max-height: 44px;
+    border-radius: 22px;
+    font-size: 16px;
+}
+QPushButton[playMain="true"]:hover {
+    background: #7c3aed;
+}
+
+/* ---------------- 输入框 ---------------- */
+QLineEdit, QSpinBox {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    selection-background-color: #c4b5fd;
+}
+QLineEdit:focus, QSpinBox:focus {
+    border-color: #8b5cf6;
+}
+
+/* ---------------- QListView 媒体列表 ---------------- */
+QListView {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    outline: none;
+}
+QListView::item {
+    padding: 6px 10px;
+    color: #0f172a;
+}
+QListView::item:hover {
+    background: rgba(15, 23, 42, 0.04);
+}
+QListView::item:selected {
+    background: rgba(139, 92, 246, 0.14);
+    color: #7c3aed;
+}
+
+/* ---------------- QTabBar (Library 的 Tab) ---------------- */
+QTabWidget::pane {
+    border: none;
+    top: 0;
+}
+QTabBar::tab {
+    background: transparent;
+    color: #475569;
+    padding: 7px 16px;
+    margin-right: 4px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+}
+QTabBar::tab:hover {
+    background: rgba(15, 23, 42, 0.06);
+    color: #0f172a;
+}
+QTabBar::tab:selected {
+    background: rgba(139, 92, 246, 0.14);
+    color: #7c3aed;
+    font-weight: 600;
+}
+QWidget[theme="dark"] QTabBar::tab { color: #cbd5e1; }
+QWidget[theme="dark"] QTabBar::tab:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: #f1f5f9;
+}
+QWidget[theme="dark"] QTabBar::tab:selected {
+    background: rgba(139, 92, 246, 0.22);
+    color: #c4b5fd;
+}
+
+/* ---------------- ScrollBar ---------------- */
+QScrollBar:vertical {
+    background: transparent;
+    width: 10px;
+    margin: 0;
+}
+QScrollBar::handle:vertical {
+    background: #cbd5e1;
+    border-radius: 5px;
+    min-height: 24px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #94a3b8;
+}
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical { background: none; height: 0; }
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical { background: none; }
+
+/* ---------------- PlayerBar 底部 ---------------- */
+QFrame#playerBar {
+    background: rgba(255, 255, 255, 0.86);
+    border-top: 1px solid #e2e8f0;
+}
+QLabel#titleLabel {
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 600;
+}
+QLabel#artistLabel {
+    color: #64748b;
+    font-size: 12px;
+}
+QLabel#timeLabel {
+    color: #64748b;
+    font-size: 11px;
+}
+
+/* 原生 QSlider（音量条）仅做美化；进度条用自绘 ProgressSlider */
+QSlider::groove:horizontal {
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+}
+QSlider::sub-page:horizontal {
+    background: #8b5cf6;
+    border-radius: 2px;
+}
+QSlider::handle:horizontal {
+    background: white;
+    border: 2px solid #8b5cf6;
+    width: 12px; height: 12px;
+    margin: -5px 0;
+    border-radius: 7px;
+}
+QWidget[theme="dark"] QSlider::groove:horizontal { background: #2a303c; }
