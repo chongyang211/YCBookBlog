@@ -11,6 +11,7 @@
 
 #include "JsonExceptions.h"
 
+
 // 【当前为空】：五个异常类的构造函数均在头文件内联完成（消息拼接很轻，
 // 内联无代价）；若日后新增如 JsonIoError::fromErrno() 之类的工厂方法，写在这里。
 
