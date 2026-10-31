@@ -7,7 +7,6 @@
 class QSpinBox;
 class QLabel;
 class QPushButton;
-class QTimer;
 
 namespace mp {
 
@@ -40,7 +39,6 @@ private:
     QLabel*     m_remainLabel;
     QPushButton* m_startBtn;
     QPushButton* m_cancelBtn;
-    QTimer*     m_uiTick;
 };
 
 } // namespace mp

@@ -110,8 +110,9 @@ void ProgressSlider::paintEvent(QPaintEvent*) {
         const QString txt = QStringLiteral("%1:%2").arg(mm, 1, 10, QChar('0')).arg(ss, 2, 10, QChar('0'));
         QFont f = p.font(); f.setPixelSize(11); p.setFont(f);
         const QFontMetrics fm(f);
-        const QRectF bubble(qBound(0, int(m_hoverPos.x() - 24), W - 48),
-                            qMax(0, railY - 24), 48, 20);
+        const int tipW = qMax(44, fm.horizontalAdvance(txt) + 14);   // 用实际字宽决定气泡宽
+        const QRectF bubble(qBound(0, int(m_hoverPos.x() - tipW / 2.0), W - tipW),
+                            qMax(0, railY - 24), tipW, 20);
         QPainterPath bp;
         bp.addRoundedRect(bubble, 6, 6);
         p.fillPath(bp, QColor(255, 255, 255, 240));

@@ -3,6 +3,7 @@
 #pragma once
 
 #include <QWidget>
+#include "types/MediaItem.h"   // 槽签名用到 QVector<mp::MediaItem>，moc 需要完整类型
 
 class QLineEdit;
 class QTabWidget;

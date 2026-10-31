@@ -39,7 +39,7 @@ find_package(Qt6 6.4 REQUIRED COMPONENTS
     Core Gui Widgets Multimedia MultimediaWidgets Sql
 )
 
-if(LINUX)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")   # 内置变量 LINUX 要 CMake 3.25+，此处兼容 3.21
     find_package(Qt6 QUIET COMPONENTS DBus)
 endif()
 
@@ -129,7 +129,7 @@ target_link_libraries(MiniPlayer PRIVATE
 )
 
 # ---------------- 平台特化（§09 预留；当前全部走 Stub） ----------------
-if(LINUX)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     # TODO §09: target_sources(MiniPlayer PRIVATE src/platform/linux/MprisAdapter.cpp)
     # if(Qt6DBus_FOUND)
     #     target_link_libraries(MiniPlayer PRIVATE Qt6::DBus)

@@ -118,6 +118,22 @@ mini-player-qt/
 | N / P | 下一首 / 上一首 |
 | Tab + ←→ | 聚焦进度条后微调 5% |
 
+## 质量保证
+
+v0.1 代码落定后做了一次完整**静态核查**（见文档 §01 "工程纪实"卡片），修复了：
+
+- 🔴 `LibraryPage.h` 槽签名用 `mp::MediaItem` 却未 include（AUTOMOC 会直接炸）
+- 🟡 `qRegisterMetaType<QVector<mp::MediaItem>>` 补齐（跨线程 payload 容器）
+- 🟡 `ThemeManager.cpp` Qt 6.4 回退分支补 `#include <QColor> <QPalette>`
+- 🟡 CMake `if(LINUX)` → `if(CMAKE_SYSTEM_NAME STREQUAL "Linux")`（兼容 3.21-3.24）
+- 🟡 `PlayerBar` 手型光标 UX 一致性
+- 🟡 `SettingsPage::m_uiTick` 死代码清理
+- 🟢 `ProgressSlider` unused `QFontMetrics` → 用它决定气泡宽
+- 🟢 `LyricsParser` 支持 `[offset:+200]` 加号前缀
+- 🟢 `MediaRepository::removeById` 冗余三目简化
+
+本机 `cmake -S . -B build` configure 全程无错，走到 `find_package(Qt6)` 后因未装 Qt 退出（预期行为）。
+
 ## 关键设计（对照文档）
 
 ### 1. 为什么用 Qt Widgets 而不是 QML？

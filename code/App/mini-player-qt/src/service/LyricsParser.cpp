@@ -26,8 +26,11 @@ LyricsDocument LyricsParser::parse(const QString& lrcText) {
             const QString val = metaMatch.captured(2).trimmed();
             doc.meta[key] = val;
             if (key == QStringLiteral("offset")) {
+                // 支持 [offset:+200] / [offset:-200] / [offset:200]
+                QString s = val;
+                if (s.startsWith(QLatin1Char('+'))) s.remove(0, 1);
                 bool ok = false;
-                const qint64 ms = val.toLongLong(&ok);
+                const qint64 ms = s.toLongLong(&ok);
                 if (ok) doc.offsetMs = ms;
             }
             continue;

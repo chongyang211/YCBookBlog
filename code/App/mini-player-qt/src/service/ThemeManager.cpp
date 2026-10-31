@@ -6,6 +6,8 @@
 #include <QSettings>
 #include <QWidget>
 #include <QStyle>
+#include <QColor>     // Qt 6.4 回退分支需要
+#include <QPalette>
 
 namespace mp {
 

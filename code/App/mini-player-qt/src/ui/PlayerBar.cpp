@@ -52,7 +52,7 @@ PlayerBar::PlayerBar(PlayerService* player, QWidget* parent)
     auto leftW = new QWidget(this);
     leftW->setLayout(leftBox);
     leftW->setFixedWidth(300);
-    leftW->setCursor(Qt::PointingHandCursor);
+    // 手型光标只给 m_cover 挂（见上方 setCursor），避免"整条可点"的 UX 误导
 
     // --- 中：按钮 + 进度条 ---
     m_loopBtn = new QPushButton(QStringLiteral("🔁"), this);

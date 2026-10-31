@@ -14,7 +14,6 @@
 #include <QSpinBox>
 #include <QMessageBox>
 #include <QButtonGroup>
-#include <QTimer>
 #include <QFrame>
 
 namespace mp {
@@ -101,9 +100,7 @@ SettingsPage::SettingsPage(PlayerService* player, MediaRepository* repo, QWidget
         m_remainLabel->setText(tr("剩余: %1:%2").arg(m).arg(s, 2, 10, QChar('0')));
     });
 
-    m_uiTick = new QTimer(this);
-    m_uiTick->setInterval(500);
-    m_uiTick->start();
+    // 剩余时间显示完全由 SleepTimer::stateChanged（500ms 一跳）驱动，无需额外轮询。
 
     // ---- 媒体库 ----
     auto libCard = makeCard(this, tr("媒体库"), tr("本地 SQLite 存储（WAL 模式）"));

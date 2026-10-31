@@ -20,6 +20,10 @@ int main(int argc, char* argv[]) {
     qRegisterMetaType<mp::MediaItem>("mp::MediaItem");
     qRegisterMetaType<mp::PlaybackState>("mp::PlaybackState");
     qRegisterMetaType<mp::LoopMode>("mp::LoopMode");
+    // Scanner 跨 QThread 用 Qt::QueuedConnection 投递 QVector<MediaItem>——
+    // Qt 6 的 QVector 已是 QList 别名；两种名字都注册一遍更稳
+    qRegisterMetaType<QList<mp::MediaItem>>("QList<mp::MediaItem>");
+    qRegisterMetaType<QVector<mp::MediaItem>>("QVector<mp::MediaItem>");
 
     QApplication app(argc, argv);
     QCoreApplication::setOrganizationName("YCCoding");
