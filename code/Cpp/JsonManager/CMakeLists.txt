@@ -29,4 +29,5 @@ add_executable(JsonManager main.cpp
         JsonWriter.cpp
         JsonWriter.h
         KvDatabase.cpp
-        KvDatabase.h)
+        KvDatabase.h
+        Test.cpp)

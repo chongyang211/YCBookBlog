@@ -1,4 +1,4 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /Users/ugit/YCBookBlog/code/Cpp/JsonManager -B /Users/ugit/YCBookBlog/code/Cpp/JsonManager/cmake-build-debug
--- Configuring done (0.2s)
+-- Configuring done (0.1s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/ugit/YCBookBlog/code/Cpp/JsonManager/cmake-build-debug
