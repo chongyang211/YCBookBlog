@@ -25,13 +25,13 @@ poslink-desktop-demo (Electron)          pos_link/c_api
 
 | 篇 | 文件 | 状态 | 主题 |
 |---|---|---|---|
-| 01 | 《01.PosLink桌面上位机全流程分析.md》 | ✅ | 快速通读：连接→握手→刷掌识别的端到端调用链 |
-| 02 | 《02.总览与架构.md》 | ✅ | 系列总览：三层架构、组件表、S1/S2 分工边界 |
-| 03 | 《03.C_API契约与ABI设计.md》 | ✅ | 17 个 `pl_*` 导出、ABI 指纹断言、符号门禁、构建与产物 |
+| 01 | 《01.上位机全流程分析.md》 | ✅ | 快速通读：连接→握手→刷掌识别的端到端调用链 |
+| 02 | 《02.系统总览与架构.md》 | ✅ | 系列总览：三层架构、组件表、S1/S2 分工边界 |
+| 03 | 《03.C契约与ABI设计.md》 | ✅ | 17 个 `pl_*` 导出、ABI 指纹断言、符号门禁、构建与产物 |
 | 04 | 《04.线程模型与内存契约.md》 | ✅ | Asio io 线程、回调 StrPool、one-shot io_context、同步拷贝铁律 |
-| 05 | 《05.原生桥接层.md》 | ✅ | `electron/sdk/`：koffi 声明、回调桥、worker/client、ABI 校验、native staging |
+| 05 | 《05.原生桥接层设计.md》 | ✅ | `electron/sdk/`：koffi 声明、回调桥、worker/client、ABI 校验、native staging |
 | 06 | 《06.IPC与进程模型.md》 | ✅ | main/preload/renderer 划分、IPC 通道全表、单实例锁、worker 重生 |
-| 07 | 《07.业务流程与前端状态机.md》 | ✅ | 连接梯、识别流程、AppError 错误模型、ret_code 映射、日志导出 |
+| 07 | 《07.业务流程与状态机.md》 | ✅ | 连接梯、识别流程、AppError 错误模型、ret_code 映射、日志导出 |
 | 08 | 《08.协议字典与TS镜像.md》 | ✅ | `protocols/index.ts` 与 C 头文件逐节对应、镜像同步规则 |
 | 09 | 《09.测试与质量门禁.md》 | ✅ | 四层门禁全景、PTY 双真实栈集成、无头 e2e、audit 扫描器、`release:check` 链、已知缺口 |
 | 10 | 《10.风险与遗留事项.md》 | ⬜ | 平台覆盖现状、已知限制、手工同步风险点 |
