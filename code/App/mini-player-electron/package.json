@@ -1,0 +1,50 @@
+{
+  "name": "mini-player-electron",
+  "version": "0.1.0",
+  "description": "MiniPlayer Electron desktop · React + TypeScript + 自写 C++ 共享库（koffi FFI） · Linux/macOS/Windows 三端一体",
+  "author": {
+    "name": "杨充",
+    "url": "https://yccoding.com/"
+  },
+  "license": "MIT",
+  "main": "out/main/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "build": "electron-vite build",
+    "native:build": "node scripts/build-native.cjs",
+    "native:clean": "node scripts/build-native.cjs --clean",
+    "smoke": "node scripts/smoke-test.cjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "dist": "pnpm build && electron-builder",
+    "dist:linux": "pnpm build && electron-builder --linux",
+    "dist:mac": "pnpm build && electron-builder --mac",
+    "dist:win": "pnpm build && electron-builder --win"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "koffi": "^2.15.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^6.30.0",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "electron": "^40.8.0",
+    "electron-builder": "^26.8.1",
+    "electron-vite": "^3.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}

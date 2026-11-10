@@ -1,0 +1,25 @@
+# Node
+node_modules/
+*.log
+.pnpm-store/
+
+# Electron-Vite 构建产物
+out/
+dist/
+
+# C++ 构建产物
+native/build/
+native/.cache/
+
+# 平台原生库最终存放位置（由 scripts/build-native.cjs 填充）
+resources/native/*.so
+resources/native/*.dylib
+resources/native/*.dll
+resources/native/*.pdb
+!resources/native/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store

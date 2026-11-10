@@ -1,0 +1,56 @@
+# electron-builder 三端打包配置
+# 关键：extraResources 把 CMake 产出的 .so/.dylib/.dll 一并打包
+appId: com.ycbook.miniplayer.electron
+productName: MiniPlayer
+asar: true
+copyright: Copyright © 2026 杨充
+
+directories:
+  buildResources: build
+  output: dist
+
+files:
+  - out/**/*
+  - package.json
+
+extraResources:
+  - from: resources/native
+    to: native
+    filter:
+      - "**/*"
+
+mac:
+  category: public.app-category.music
+  target:
+    - target: dmg
+      arch:
+        - universal
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  # 公证所需 entitlements（示例，实际使用需签入证书）
+  # entitlements: build/entitlements.mac.plist
+  # entitlementsInherit: build/entitlements.mac.plist
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  requestedExecutionLevel: asInvoker
+
+linux:
+  target:
+    - AppImage
+    - deb
+  category: AudioVideo
+  maintainer: 杨充 <https://yccoding.com/>
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+
+deb:
+  depends:
+    - libdbus-1-3
+    - libtag1v5
