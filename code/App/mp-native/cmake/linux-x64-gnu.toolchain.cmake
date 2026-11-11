@@ -1,6 +1,8 @@
 # cmake/linux-x64-gnu.toolchain.cmake
 # 在 ARM64 Linux 容器内交叉编译 x86_64 版 libmp_native.so
 # 依赖：apt install g++-x86-64-linux-gnu（Ubuntu arm64 ports 有此交叉包）
+#
+# 用途：远程/云上的 ARM Docker 引擎也能产出 linux-x64 产物（见 build.cjs multi）。
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR x86_64)
 

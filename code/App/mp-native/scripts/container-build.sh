@@ -15,6 +15,9 @@
 # ======================================================================
 set -eu
 cd /work
+# 注：此处所有构建均为 Stub 模式（不传 MP_WITH_TAGLIB/SYSMEDIA）——
+#     MinGW 无法链 windowsapp/容器内 TagLib 需额外配置；全功能版由
+#     桌面宿主机构建（见 build.cjs package --taglib --sysmedia）。
 
 echo "[container] toolchain: $(g++ --version | head -1)"
 HOST_ARCH=$(uname -m)

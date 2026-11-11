@@ -1,3 +1,7 @@
+# mp-nativeConfig.cmake.in —— CMake 包入口模板
+# cmake --install 时由 configure_package_config_file() 展开为
+# out/dist/lib/cmake/mp-native/mp-nativeConfig.cmake，
+# 供消费方 find_package(mp-native) → 引入 mp::mp_native 目标。
 @PACKAGE_INIT@
 
 include("${CMAKE_CURRENT_LIST_DIR}/mp-nativeTargets.cmake")

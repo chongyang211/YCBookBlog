@@ -1,17 +1,15 @@
-# native/CMakeLists.txt
-# ======================================================================
 # mp_native —— 独立跨平台原生库工程
-#
+# ======================================================================
 # 定位：不依赖 Electron 也可独立构建/安装/分发的 C++ 共享库。
-#   1. 嵌入模式（默认）  ：产物直出 ../resources/native，供本仓 Electron 工程加载
-#   2. 独立模式          ：MP_EMBED_OUTPUT=OFF，标准 build/ + cmake --install
-#                          产出可 zip 分发的 include/ + lib/，任何 C ABI 消费方可用
+#   1. 嵌入模式（默认）：产物直出消费工程的 resources/native（Electron 开发流）
+#   2. 独立模式        ：MP_EMBED_OUTPUT=OFF → 标准 build + install（out/dist）
 #
 # 快速上手：
-#   cmake --preset release            # 见 CMakePresets.json
-#   cmake --build build -j
-#   cmake --install build --prefix dist
+#   cmake --preset release                     # 独立模式（见 CMakePresets.json）
+#   cmake --build --preset release -j
+#   cmake --install out/build-standalone --prefix out/dist
 #
+# 模块结构：core(kv/log，零依赖) + media(嗅探/元数据/LRC) + extras(sysmedia)
 # ======================================================================
 cmake_minimum_required(VERSION 3.26)
 project(mp_native VERSION 1.0.0 LANGUAGES C CXX)
@@ -33,11 +31,15 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # ========== 用户可选项 ==========
+# extras 依赖（默认全关 → 零第三方依赖，任何平台开箱即编）
 option(MP_WITH_TAGLIB       "Link TagLib for real metadata reading"            OFF)
 option(MP_WITH_SYSMEDIA     "System media control (MPRIS/MPNowPlaying/SMTC)"   OFF)
+# 构建内容
 option(MP_BUILD_EXAMPLES    "Build the pure-C smoke example"                   OFF)
+option(MP_BUILD_TESTS       "Build core module tests (ctest)"                  OFF)
 option(MP_UNIVERSAL_MACOS   "macOS universal binary (arm64 + x86_64)"          OFF)
-option(MP_EMBED_OUTPUT      "Write artifacts into ../resources/native (Electron dev)" ON)
+# 产物去向（嵌入 = 直出消费工程 resources/native；独立 = 标准 build + install）
+option(MP_EMBED_OUTPUT      "Write artifacts into consumer's resources/native" ON)
 
 # macOS universal（分发模式常用）
 if(MP_UNIVERSAL_MACOS AND APPLE)
@@ -141,7 +143,6 @@ if(MP_BUILD_EXAMPLES)
 endif()
 
 # ========== 核心模块测试（kv / log）==========
-option(MP_BUILD_TESTS "Build core module tests" OFF)
 if(MP_BUILD_TESTS)
   enable_testing()
   add_executable(mp_core_test tests/core_test.c)

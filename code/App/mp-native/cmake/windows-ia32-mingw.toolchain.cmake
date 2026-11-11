@@ -1,6 +1,8 @@
 # cmake/windows-ia32-mingw.toolchain.cmake
 # 在 Linux 容器内用 MinGW-w64 交叉编译 Windows 32 位版 mp_native.dll
 # 依赖：apt install g++-mingw-w64-i686
+#
+# 与 x64 版仅编译器三元组不同（i686-w64-mingw32）。
 set(CMAKE_SYSTEM_NAME Windows)
 set(CMAKE_SYSTEM_PROCESSOR i686)
 

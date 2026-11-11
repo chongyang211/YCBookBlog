@@ -34,6 +34,7 @@ const LIBNAME =
 
 /* ---------- 通用工具 ---------- */
 
+/** 同步执行并回显；非零退出直接终止（fail-fast，等价 bash set -e） */
 function run(cmd, args = [], opts = {}) {
   console.log(`\n$ ${cmd} ${args.join(' ')}`);
   const r = spawnSync(cmd, args, { stdio: 'inherit', cwd: ROOT, ...opts });
@@ -43,6 +44,7 @@ function run(cmd, args = [], opts = {}) {
   }
 }
 
+/** 静默执行，成功返回 stdout，失败返回 null（用于 best-effort 检查） */
 function runCapture(cmd, args, opts = {}) {
   const r = spawnSync(cmd, args, { cwd: ROOT, encoding: 'utf8', ...opts });
   return r.status === 0 ? r.stdout : null;
