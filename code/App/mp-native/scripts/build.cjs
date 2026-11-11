@@ -203,11 +203,8 @@ function cmdMulti() {
         'set -eu',
         'export DEBIAN_FRONTEND=noninteractive',
         'apt-get update -qq',
-        'apt-get install -y -qq --no-install-recommends',
-        '    g++ make cmake file',
-        '    g++-mingw-w64-x86-64 g++-mingw-w64-i686',
-        '    g++-x86-64-linux-gnu > /dev/null',
-      ].join(' ')]);
+        'apt-get install -y -qq --no-install-recommends g++ make cmake file pkg-config libtag1-dev libdbus-1-dev g++-mingw-w64-x86-64 g++-mingw-w64-i686 g++-x86-64-linux-gnu > /dev/null',
+      ].join(' && ')]);
 
       /* 注入源码 */
       execFileSync('docker', ['exec', cid, 'mkdir', '-p',
