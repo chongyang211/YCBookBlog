@@ -17,9 +17,18 @@ const path = require('node:path');
 const os = require('node:os');
 
 const ROOT       = path.resolve(__dirname, '..');
-const NATIVE_DIR = path.join(ROOT, 'native');
+// 独立库工程位置：默认取同级 ../mp-native，可用环境变量 MP_NATIVE_DIR 覆盖
+// （库将来迁去独立仓库时，只需设置该变量，应用侧零改动）
+const NATIVE_DIR = process.env.MP_NATIVE_DIR || path.resolve(ROOT, '..', 'mp-native');
 const BUILD_DIR  = path.join(NATIVE_DIR, 'build');
 const OUT_DIR    = path.join(ROOT, 'resources', 'native');
+
+if (!fs.existsSync(path.join(NATIVE_DIR, 'CMakeLists.txt'))) {
+  console.error(`[build-native] 未找到库工程: ${NATIVE_DIR}`);
+  console.error(`  默认约定与 Electron 工程同级（code/App/mp-native），`);
+  console.error(`  或设置环境变量 MP_NATIVE_DIR 指向 mp-native 工程根。`);
+  process.exit(1);
+}
 
 const argv = process.argv.slice(2);
 const WANT_CLEAN    = argv.includes('--clean');
@@ -59,7 +68,11 @@ ensureDir(BUILD_DIR);
 const isWin = process.platform === 'win32';
 
 // --- Configure ---
-const cmakeArgs = ['-B', 'build', '-S', '.'];
+const cmakeArgs = [
+  '-B', 'build', '-S', '.',
+  // 嵌入模式：产物直出本工程 resources/native（路径由库工程的 CMakeLists 接收）
+  `-DMP_EMBED_OUTPUT_DIR=${OUT_DIR}`,
+];
 
 if (WANT_TAGLIB)   cmakeArgs.push('-DMP_WITH_TAGLIB=ON');
 if (WANT_SYSMEDIA) cmakeArgs.push('-DMP_WITH_SYSMEDIA=ON');

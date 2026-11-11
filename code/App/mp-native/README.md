@@ -1,10 +1,8 @@
 # mp_native —— 独立跨平台原生库
 
-> MiniPlayer 的 C++ 原生扩展库，**可独立于 Electron 工程构建、安装、分发**。
-> 产出一份 C ABI 头文件 + 三平台共享库（`.so` / `.dylib` / `.dll`），供任何能调 C 的语言消费。
->
-> 对应文档：`packages/website/10.Apps/05.综合音视频案例/06.Electron篇.md` §04
-> 版本：`1.0.0`（语义化版本，与 `mp_version()` 返回值一致）
+MiniPlayer 的 C++ 原生扩展库，**可独立于 Electron 工程构建、安装、分发**。
+
+产出一份 C ABI 头文件 + 三平台共享库（`.so` / `.dylib` / `.dll`），供任何能调 C 的语言消费。
 
 ---
 
@@ -33,7 +31,7 @@
 ### 模式 A：嵌入 Electron（默认，本仓开发流）
 
 ```bash
-# 从 Electron 工程根目录（mini-player-electron/）
+# 从 Electron 工程根目录（mini-player-electron/，与本库工程同级）
 pnpm native:build          # 产物自动落在 resources/native/
 pnpm smoke                 # Node/koffi 直接加载验证
 ```
@@ -46,9 +44,9 @@ pnpm smoke                 # Node/koffi 直接加载验证
 cd native
 
 # 方式一：CMakePresets（推荐）
-cmake --preset release                 # 独立模式（不入 resources/）
+cmake --preset release                 # 独立模式（构建目录 build-standalone/，不入 resources/）
 cmake --build --preset release -j
-cmake --install build --prefix dist    # → dist/{include,lib,bin}
+cmake --install build-standalone --prefix dist    # → dist/{include,lib,bin}
 ctest --preset smoke                   # 需 --preset examples 构建
 
 # 方式二：一键打包脚本
@@ -56,9 +54,9 @@ bash scripts/package-native.sh --taglib      # Linux / macOS
 .\scripts\package-native.ps1 -TagLib         # Windows
 
 # 方式三：手工 cmake（与预设等价）
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DMP_EMBED_OUTPUT=OFF
-cmake --build build -j
-cmake --install build --prefix dist
+cmake -S . -B build-standalone -DCMAKE_BUILD_TYPE=Release -DMP_EMBED_OUTPUT=OFF
+cmake --build build-standalone -j
+cmake --install build-standalone --prefix dist
 ```
 
 **dist 布局**（安装后的标准目录，可直接 zip 分发）：
@@ -76,6 +74,36 @@ dist/
 ├── bin/mp_native.dll                # Windows 运行时
 └── mp-native-1.0.0-<平台>-<架构>.zip
 ```
+
+---
+
+## 多平台产物（multi/）
+
+一条命令产出 Electron 生态惯例的 platform-arch 目录（本机 darwin 双架构 + Docker 容器产出 linux/windows）：
+
+```bash
+bash scripts/multi-platform.sh             # 全平台（需要 Docker）
+bash scripts/multi-platform.sh --no-docker # 只构建 darwin 两平台
+```
+
+```text
+native/multi/
+├── darwin-arm64/libmp_native.dylib    # Mach-O arm64（本机原生）
+├── darwin-x64/libmp_native.dylib      # Mach-O x86_64（AppleClang 交叉）
+├── linux-arm64/libmp_native.so        # ELF aarch64（容器本机架构）
+├── linux-x64/libmp_native.so          # ELF x86-64（容器内交叉，ARM 容器也适用）
+├── win32-x64/mp_native.dll            # PE32+ x64（MinGW-w64 交叉，静态链接 C++ 运行时）
+├── win32-ia32/mp_native.dll           # PE32 i386（MinGW-w64 i686 交叉）
+└── mp-native-<版本>-<平台>.zip         # 每平台一个分发包
+```
+
+**实现要点**：
+- Docker 侧用 `docker cp` 注入源码（**不依赖 bind mount**，本地/远程 Docker 引擎通用）
+- ARM 容器会自动附带产出 `linux-arm64`；x86 容器则产出 `linux-x64`，目录名跟随实际架构
+- MinGW 产物已 `-static-libgcc -static-libstdc++`，dll 自包含，目标机器无需额外运行时
+- 此布局可直接对接 electron-builder / koffi 的 `process.platform-arch` 目录约定
+
+**CI 替代方案**（无本机 Docker 时）：GitHub Actions matrix（ubuntu 出 linux-x64、windows 出两个 dll、macos 出两个 dylib），上传 artifact 汇聚成同样的 multi/ 布局。
 
 ---
 
@@ -105,7 +133,7 @@ const mp_version = lib.func('mp_version', 'string', []);
 console.log(mp_version());   // "mp_native 1.0.0"
 ```
 
-完整绑定层参考 `../src/main/native/bindings.ts`（结构体镜像 + 所有权规则）。
+完整绑定层参考 Electron 工程 `../mini-player-electron/src/main/native/bindings.ts`（结构体镜像 + 所有权规则）。
 
 ### 3. 其他 FFI 语言（同一条 C ABI）
 

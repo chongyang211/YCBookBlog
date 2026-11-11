@@ -12,7 +12,7 @@
 #   cmake --build build -j
 #   cmake --install build --prefix dist
 #
-# 对应文档：packages/website/10.Apps/05.综合音视频案例/06.Electron篇.md §04
+# 对应文档：packages/website/10.Apps/05.综合音视频案例/06.Electron桌面篇.md §04
 # ======================================================================
 cmake_minimum_required(VERSION 3.26)
 project(mp_native VERSION 1.0.0 LANGUAGES C CXX)
@@ -74,6 +74,8 @@ target_include_directories(mp_native
     $<INSTALL_INTERFACE:include>)
 
 target_compile_definitions(mp_native PRIVATE MP_NATIVE_EXPORTS)
+# 版本号单一来源：project(VERSION) → 编译期注入 → mp_version() 返回值
+target_compile_definitions(mp_native PRIVATE MP_NATIVE_VERSION="${PROJECT_VERSION}")
 
 # ========== 依赖链接 ==========
 if(MP_WITH_TAGLIB)
@@ -97,11 +99,24 @@ if(MP_WITH_SYSMEDIA)
   endif()
 endif()
 
+# ========== MinGW（容器交叉编译 Windows）适配 ==========
+if(MINGW)
+  # 产物名与 MSVC 一致：mp_native.dll（无 lib 前缀）
+  set_target_properties(mp_native PROPERTIES PREFIX "")
+  # 静态链接 C++ 运行时 → dll 自包含，消费方机器无需 libstdc++-6.dll 等
+  target_link_options(mp_native PRIVATE -static-libgcc -static-libstdc++)
+  target_link_libraries(mp_native PRIVATE -Wl,-Bstatic,-lwinpthread,-Bdynamic)
+endif()
+
 # ========== 产物输出 ==========
 if(MP_EMBED_OUTPUT)
-  set(MP_MODE_LABEL "embedded (output → ../resources/native)")
-  # 嵌入模式：直出 Electron 可加载位置（scripts/build-native.cjs 依赖此行为）
-  set(MP_OUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../resources/native)
+  # 嵌入输出目录：由消费方工程显式传入（如 Electron 的 build-native.cjs）；
+  # 缺省回退旧约定（库工程与消费工程同级时 ../resources/native 仍可用）
+  if(NOT MP_EMBED_OUTPUT_DIR)
+    set(MP_EMBED_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../resources/native)
+  endif()
+  set(MP_MODE_LABEL "embedded (output → ${MP_EMBED_OUTPUT_DIR})")
+  set(MP_OUT_DIR ${MP_EMBED_OUTPUT_DIR})
   set_target_properties(mp_native PROPERTIES
     OUTPUT_NAME mp_native
     LIBRARY_OUTPUT_DIRECTORY ${MP_OUT_DIR}

@@ -1,0 +1,13 @@
+# CMake 构建目录（各预设/脚本各自命名）
+build/
+build-standalone/
+build-dist/
+build-multi/
+
+# 打包输出
+dist/
+multi/
+
+# 编辑器/系统
+.cache/
+.DS_Store

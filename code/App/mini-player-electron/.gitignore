@@ -7,17 +7,18 @@ node_modules/
 out/
 dist/
 
-# C++ 构建产物
-native/build/
-native/build-dist/
-native/dist/
-native/.cache/
-
-# 平台原生库最终存放位置（由 scripts/build-native.cjs 填充）
+# 平台原生库最终存放位置（由 scripts/fetch-native.cjs / build-native.cjs 填充；
+# mp-native 库工程已拆分至同级 ../mp-native，其产物经 fetch-native 接入）
 resources/native/*.so
 resources/native/*.dylib
 resources/native/*.dll
 resources/native/*.pdb
+resources/native/darwin-arm64/
+resources/native/darwin-x64/
+resources/native/linux-arm64/
+resources/native/linux-x64/
+resources/native/win32-ia32/
+resources/native/win32-x64/
 !resources/native/.gitkeep
 
 # IDE

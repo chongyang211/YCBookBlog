@@ -1,0 +1,12 @@
+# clangd 配置
+# 注意：不要在这里加 -std=... —— CMake 的 compile_commands.json 已按
+# 语言（C17/C++17）分别传参；这里全局加会殃及 .c 文件（mp_native.h / smoke.c）。
+# 首次构建后（cmake -S . -B build）clangd 自动读取 build/compile_commands.json。
+CompileFlags:
+  Add:
+    - -I${workspaceFolder}/include
+    - -I./include
+    - -Wall
+    - -Wextra
+Diagnostics:
+  UnusedIncludes: Strict

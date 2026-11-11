@@ -10,17 +10,21 @@
   "main": "out/main/index.js",
   "type": "module",
   "scripts": {
-    "dev": "electron-vite dev",
-    "start": "electron-vite preview",
+    "dev": "node scripts/fetch-native.cjs && electron-vite dev",
+    "start": "node scripts/fetch-native.cjs && electron-vite preview",
     "build": "electron-vite build",
+    "prepare:native": "node scripts/fetch-native.cjs",
+    "prepare:native:universal": "node scripts/fetch-native.cjs --universal",
+    "prepare:native:all": "node scripts/fetch-native.cjs --all",
     "native:build": "node scripts/build-native.cjs",
+    "native:multi": "bash ../mp-native/scripts/multi-platform.sh",
     "native:clean": "node scripts/build-native.cjs --clean",
     "smoke": "node scripts/smoke-test.cjs",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",
-    "dist": "pnpm build && electron-builder",
-    "dist:linux": "pnpm build && electron-builder --linux",
-    "dist:mac": "pnpm build && electron-builder --mac",
-    "dist:win": "pnpm build && electron-builder --win"
+    "dist": "node scripts/fetch-native.cjs && pnpm build && electron-builder",
+    "dist:linux": "node scripts/fetch-native.cjs && pnpm build && electron-builder --linux",
+    "dist:mac": "node scripts/fetch-native.cjs --universal && pnpm build && electron-builder --mac",
+    "dist:win": "node scripts/fetch-native.cjs && pnpm build && electron-builder --win"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
