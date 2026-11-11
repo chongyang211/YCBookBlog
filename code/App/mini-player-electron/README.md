@@ -112,7 +112,7 @@ code/App/
 │   ├── include/mp_native.h              # ⭐ C ABI 唯一契约头
 │   ├── src/                             # version/probe/metadata/lrc + sysmedia
 │   ├── examples/smoke.c                 # 纯 C 消费示例（ctest）
-│   ├── scripts/                         # multi-platform.sh + package-native.sh/.ps1
+│   ├── scripts/                         # build.cjs（统一入口）+ container-build.sh（容器内部件）
 │   └── out/multi/                       # ⭐ 多平台产物（六平台，每平台一个目录）
 │   └── README.md                        # 库的构建/消费/版本策略文档
 │

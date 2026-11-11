@@ -72,7 +72,7 @@ const dirs = multiDirs();
 // ============ --all：携带全部平台 ============
 if (WANT_ALL) {
   if (dirs.length === 0) {
-    console.error('[fetch-native] --all 需要 native/multi/（先跑 native/scripts/multi-platform.sh）');
+    console.error('[fetch-native] --all 需要 native 产物（先跑: node ../mp-native/scripts/build.cjs multi）');
     process.exit(1);
   }
   // 整目录照搬（含所有 OS 的库）：stub 库每个 ~50KB，全带上体积可忽略；

@@ -144,9 +144,8 @@ cmake --build --preset release -j
 cmake --install out/build-standalone --prefix out/dist    # → out/dist/{include,lib,bin}
 ctest --preset smoke                   # 需 --preset examples 构建
 
-# 方式二：一键打包脚本
-bash scripts/package-native.sh --taglib      # Linux / macOS
-.\scripts\package-native.ps1 -TagLib         # Windows
+# 方式二：统一入口脚本（跨平台，Windows 同样可用）
+node scripts/build.cjs package --taglib      # Linux / macOS / Windows
 
 # 方式三：手工 cmake（与预设等价）
 cmake -S . -B out/build-standalone -DCMAKE_BUILD_TYPE=Release -DMP_EMBED_OUTPUT=OFF
@@ -177,8 +176,8 @@ out/dist/
 一条命令产出 Electron 生态惯例的 platform-arch 目录（本机 darwin 双架构 + Docker 容器产出 linux/windows）：
 
 ```bash
-bash scripts/multi-platform.sh             # 全平台（需要 Docker）
-bash scripts/multi-platform.sh --no-docker # 只构建 darwin 两平台
+node scripts/build.cjs multi             # 全平台（需要 Docker）
+node scripts/build.cjs multi --no-docker # 只构建本机平台
 ```
 
 ```text
@@ -295,10 +294,8 @@ mp-native/
 ├── tests/
 │   └── core_test.c             # core 模块回归测试
 ├── scripts/
-│   ├── multi-platform.sh       # 六平台一键构建
-│   ├── container-build.sh      # 容器内构建（被 multi-platform 调用）
-│   ├── package-native.sh       # Linux/macOS 独立分发打包
-│   └── package-native.ps1      # Windows 独立分发打包
+│   ├── build.cjs               # ⭐ 统一构建入口（package / multi / smoke 三命令）
+│   └── container-build.sh      # 容器内构建（由 build.cjs multi 经 docker exec 调用）
 └── out/                        # ⭐ 全部输出统一收敛（gitignore 单条 out/）
     ├── build/                  # 嵌入模式 CMake 构建
     ├── build-standalone/       # 预设独立构建
@@ -312,15 +309,15 @@ mp-native/
 
 ## CI 分发流水线（建议）
 
-三平台 matrix 各跑 `package-native.*`，上传 `out/dist` 目录 artifact，打 tag 时发 GitHub Release：
+三平台 matrix 各跑 `build.cjs package`，上传 `out/dist` 目录 artifact，打 tag 时发 GitHub Release：
 
 ```yaml
 strategy:
   matrix:
     include:
-      - { os: ubuntu-24.04, script: bash scripts/package-native.sh --taglib --sysmedia }
-      - { os: macos-14,     script: bash scripts/package-native.sh --taglib --sysmedia --universal }
-      - { os: windows-2022, script: pwsh scripts/package-native.ps1 -TagLib -SysMedia }
+      - { os: ubuntu-24.04, script: node scripts/build.cjs package --taglib --sysmedia }
+      - { os: macos-14,     script: node scripts/build.cjs package --taglib --sysmedia --universal }
+      - { os: windows-2022, script: node scripts/build.cjs package --taglib --sysmedia }
 ```
 
 > macOS universal 产物建议在本篇 §11 的公证流水线中对 `.dylib` 单独签名后再分发。

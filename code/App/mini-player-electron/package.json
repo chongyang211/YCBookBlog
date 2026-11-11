@@ -17,7 +17,7 @@
     "prepare:native:universal": "node scripts/fetch-native.cjs --universal",
     "prepare:native:all": "node scripts/fetch-native.cjs --all",
     "native:build": "node scripts/build-native.cjs",
-    "native:multi": "bash ../mp-native/scripts/multi-platform.sh",
+    "native:multi": "node ../mp-native/scripts/build.cjs multi",
     "native:clean": "node scripts/build-native.cjs --clean",
     "smoke": "node scripts/smoke-test.cjs",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",

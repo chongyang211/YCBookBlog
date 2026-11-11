@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ======================================================================
 # native/scripts/container-build.sh —— 在 Linux 容器内构建 linux/windows 产物
-# 由 multi-platform.sh 通过 `docker exec` 调用（docker cp 注入源码，
+# 由 build.cjs 的 multi 命令通过 `docker exec` 调用（docker cp 注入源码，
 # 不依赖 bind mount，本地/远程 Docker 引擎通用）。
 #
-# 容器内依赖（multi-platform.sh 已安装）：
+# 容器内依赖（build.cjs multi 已安装）：
 #   g++ make cmake file g++-mingw-w64-x86-64 g++-mingw-w64-i686
 #   [可选] g++-x86-64-linux-gnu  ← ARM 容器交叉出 x64 Linux 库
 #
