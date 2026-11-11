@@ -5,7 +5,7 @@
     {
       "name": "base",
       "hidden": true,
-      "binaryDir": "${sourceDir}/build-standalone",
+      "binaryDir": "${sourceDir}/out/build-standalone",
       "cacheVariables": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
@@ -59,9 +59,12 @@
     },
     {
       "name": "examples",
-      "displayName": "含纯 C 消费示例 mp_smoke",
+      "displayName": "含纯 C 示例 mp_smoke + core 测试",
       "inherits": "release",
-      "cacheVariables": { "MP_BUILD_EXAMPLES": "ON" }
+      "cacheVariables": {
+        "MP_BUILD_EXAMPLES": "ON",
+        "MP_BUILD_TESTS": "ON"
+      }
     }
   ],
   "buildPresets": [

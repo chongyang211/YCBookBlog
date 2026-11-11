@@ -20,7 +20,7 @@ pnpm install
 # 2. 准备当前平台的 mp_native 产物（dev 命令也会自动执行）
 pnpm prepare:native
 # 解析优先级：
-#   ① native/multi/<platform-arch>/  的多平台预编译产物（推荐，见下文「产物接入」）
+#   ① ../mp-native/out/multi/<platform-arch>/  的多平台预编译产物（推荐，见下文「产物接入」）
 #   ② 回退源码构建（等价于 pnpm native:build，需要 CMake 工具链）
 # 产物落到 resources/native/
 
@@ -55,7 +55,7 @@ pnpm dist:mac     # 自动 lipo 合并 arm64+x64 → dist/MiniPlayer-0.1.0-unive
 pnpm dist:win     # 自动取 win32-x64 产物 → dist/MiniPlayer Setup 0.1.0.exe
 ```
 
-> dist 前会自动执行 `fetch-native`：优先取 `native/multi/`，缺失时回退源码构建——所以 **CI 上只要有对应平台的产物（或工具链）就能打包，本机不需要全平台 CMake 工具链**。
+> dist 前会自动执行 `fetch-native`：优先取 `mp-native/out/multi/`，缺失时回退源码构建——所以 **CI 上只要有对应平台的产物（或工具链）就能打包，本机不需要全平台 CMake 工具链**。
 
 > ⚠ **macOS 公证**：若要分发给其他用户，还需对 `.app` 和内嵌的 `.dylib` 分别 codesign + notarize。详见文档 [§5 阶段⑨](../../packages/website/10.Apps/05.综合音视频案例/06.Electron桌面篇.md)。
 
@@ -70,12 +70,12 @@ pnpm dist:win     # 自动取 win32-x64 产物 → dist/MiniPlayer Setup 0.1.0.e
 1. **原子变更**：改一个 C ABI 签名 → 头文件、koffi 绑定层、消费代码在同一次 commit 里，永不出现"库和应用版本错位"
 2. **构建脚本复用**：`build-native.cjs` 直接知道产物该落到哪、以什么名字
 3. **边界依然清晰**：`native/` 是**可独立构建/安装/分发的自洽子工程**（有自己的 CMakePresets / install 规则 / README），拆出去的成本随时为零
-4. 拆成独立库仓库的正确时机：多个应用消费同一个库、或 C++ 侧要独立发版——届时应用侧只需把 `native/multi/` 换成"下载 Release zip"，`fetch-native.cjs` 的接口不变
+4. 拆成独立库仓库的正确时机：多个应用消费同一个库、或 C++ 侧要独立发版——届时应用侧只需把 `MP_NATIVE_MULTI_DIR` 指向"下载解压后的产物目录"，`fetch-native.cjs` 的接口不变
 
 ### 产物接入流程（fetch-native）
 
 ```text
-native/multi/                       ← 独立库工程的多平台产物（源）
+mp-native/out/multi/                ← 独立库工程的多平台产物（源）
     darwin-arm64/libmp_native.dylib      │
     darwin-x64/libmp_native.dylib        │  目录名 = Electron 的
     linux-arm64/libmp_native.so          │  ${process.platform}-${process.arch}
@@ -112,8 +112,8 @@ code/App/
 │   ├── include/mp_native.h              # ⭐ C ABI 唯一契约头
 │   ├── src/                             # version/probe/metadata/lrc + sysmedia
 │   ├── examples/smoke.c                 # 纯 C 消费示例（ctest）
-│   ├── scripts/                         # package-native.sh/.ps1 + multi-platform.sh
-│   ├── multi/                           # ⭐ 多平台产物（六平台 + 每平台 zip）
+│   ├── scripts/                         # multi-platform.sh + package-native.sh/.ps1
+│   └── out/multi/                       # ⭐ 多平台产物（六平台 + 每平台 zip）
 │   └── README.md                        # 库的构建/消费/版本策略文档
 │
 └── mini-player-electron/                # ⭐ 工程二：Electron 应用（本目录）
@@ -149,7 +149,7 @@ code/App/
 | 环境变量 | 作用 | 默认值 |
 |---------|------|-------|
 | `MP_NATIVE_DIR` | 源码构建回退时的库工程根 | `../mp-native` |
-| `MP_NATIVE_MULTI_DIR` | 预编译产物目录 | `../mp-native/multi` |
+| `MP_NATIVE_MULTI_DIR` | 预编译产物目录 | `../mp-native/out/multi` |
 
 ---
 

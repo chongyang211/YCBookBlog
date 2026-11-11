@@ -8,7 +8,7 @@
 #   g++ make cmake file g++-mingw-w64-x86-64 g++-mingw-w64-i686
 #   [可选] g++-x86-64-linux-gnu  ← ARM 容器交叉出 x64 Linux 库
 #
-# 产物写入 /work/multi/：
+# 产物写入 /work/out/multi/：
 #   linux-<本机架构>/            ← 容器原生架构（x64 或 arm64）
 #   linux-x64/                   ← 若交叉编译器可用
 #   win32-x64/  win32-ia32/      ← MinGW 交叉
@@ -30,17 +30,17 @@ build_linux() {
   local tag="$1" tc="$2"
   echo "[container] building linux-$tag ..."
   if [ -n "$tc" ]; then
-    cmake -S . -B "build-multi/linux-$tag" \
+    cmake -S . -B "out/build-multi/linux-$tag" \
       -DCMAKE_TOOLCHAIN_FILE="cmake/$tc" \
       -DCMAKE_BUILD_TYPE=Release -DMP_EMBED_OUTPUT=OFF > /dev/null
   else
-    cmake -S . -B "build-multi/linux-$tag" \
+    cmake -S . -B "out/build-multi/linux-$tag" \
       -DCMAKE_BUILD_TYPE=Release -DMP_EMBED_OUTPUT=OFF > /dev/null
   fi
-  cmake --build "build-multi/linux-$tag" -j > /dev/null
-  mkdir -p "multi/linux-$tag"
-  cp "build-multi/linux-$tag/libmp_native.so" "multi/linux-$tag/"
-  file "multi/linux-$tag/libmp_native.so"
+  cmake --build "out/build-multi/linux-$tag" -j > /dev/null
+  mkdir -p "out/multi/linux-$tag"
+  cp "out/build-multi/linux-$tag/libmp_native.so" "out/multi/linux-$tag/"
+  file "out/multi/linux-$tag/libmp_native.so"
 }
 
 # ---- 1. 容器本机架构的 Linux 库 ----
@@ -53,24 +53,24 @@ fi
 
 # ---- 3. win32-x64（MinGW-w64 交叉）----
 echo "[container] building win32-x64 ..."
-cmake -S . -B build-multi/win32-x64 \
+cmake -S . -B out/build-multi/win32-x64 \
   -DCMAKE_TOOLCHAIN_FILE=cmake/windows-x64-mingw.toolchain.cmake \
   -DCMAKE_BUILD_TYPE=Release \
   -DMP_EMBED_OUTPUT=OFF > /dev/null
-cmake --build build-multi/win32-x64 -j > /dev/null
-mkdir -p multi/win32-x64
-cp build-multi/win32-x64/mp_native.dll multi/win32-x64/
-file multi/win32-x64/mp_native.dll
+cmake --build out/build-multi/win32-x64 -j > /dev/null
+mkdir -p out/multi/win32-x64
+cp out/build-multi/win32-x64/mp_native.dll out/multi/win32-x64/
+file out/multi/win32-x64/mp_native.dll
 
 # ---- 4. win32-ia32（MinGW-w64 i686 交叉）----
 echo "[container] building win32-ia32 ..."
-cmake -S . -B build-multi/win32-ia32 \
+cmake -S . -B out/build-multi/win32-ia32 \
   -DCMAKE_TOOLCHAIN_FILE=cmake/windows-ia32-mingw.toolchain.cmake \
   -DCMAKE_BUILD_TYPE=Release \
   -DMP_EMBED_OUTPUT=OFF > /dev/null
-cmake --build build-multi/win32-ia32 -j > /dev/null
-mkdir -p multi/win32-ia32
-cp build-multi/win32-ia32/mp_native.dll multi/win32-ia32/
-file multi/win32-ia32/mp_native.dll
+cmake --build out/build-multi/win32-ia32 -j > /dev/null
+mkdir -p out/multi/win32-ia32
+cp out/build-multi/win32-ia32/mp_native.dll out/multi/win32-ia32/
+file out/multi/win32-ia32/mp_native.dll
 
 echo "[container] all done"

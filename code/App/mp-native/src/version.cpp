@@ -24,3 +24,15 @@ extern "C" const char* mp_version(void) {
 extern "C" void mp_free(void* ptr) {
   if (ptr) std::free(ptr);
 }
+
+extern "C" const char* mp_error_string(int32_t code) {
+  switch (code) {
+    case MP_OK:            return "ok";
+    case MP_ERR_ARGS:      return "invalid argument";
+    case MP_ERR_IO:        return "io error";
+    case MP_ERR_NOT_FOUND: return "not found";
+    case MP_ERR_STATE:     return "invalid state";
+    case MP_ERR_OOM:       return "out of memory";
+    default:               return "unknown error";
+  }
+}

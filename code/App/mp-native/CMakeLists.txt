@@ -48,6 +48,10 @@ endif()
 # ========== 平台源文件分流 ==========
 set(SRC
   src/version.cpp
+  # core 模块：零依赖基础能力（全平台，始终编译）
+  src/core/kv.cpp
+  src/core/log.cpp
+  # media 模块：MiniPlayer 业务能力
   src/probe.cpp
   src/metadata.cpp
   src/lrc.cpp
@@ -135,8 +139,18 @@ endif()
 if(MP_BUILD_EXAMPLES)
   add_executable(mp_smoke examples/smoke.c)
   target_link_libraries(mp_smoke PRIVATE mp_native)
+endif()
+
+# ========== 核心模块测试（kv / log）==========
+option(MP_BUILD_TESTS "Build core module tests" OFF)
+if(MP_BUILD_TESTS)
   enable_testing()
-  add_test(NAME smoke COMMAND mp_smoke)
+  add_executable(mp_core_test tests/core_test.c)
+  target_link_libraries(mp_core_test PRIVATE mp_native)
+  add_test(NAME core COMMAND mp_core_test)
+  set_tests_properties(core PROPERTIES
+    ENVIRONMENT "TMPDIR=$ENV{TMPDIR}"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 # ========== 安装规则（独立分发的核心）==========
@@ -151,7 +165,12 @@ install(TARGETS mp_native EXPORT mp-nativeTargets
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}    # Windows .dll
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}    # Linux .so / macOS .dylib
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})   # Windows .lib / 符号链接
-install(FILES include/mp_native.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES
+  include/mp_native.h
+  include/mp_def.h
+  include/mp_kv.h
+  include/mp_log.h
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT mp-nativeTargets
   NAMESPACE mp::

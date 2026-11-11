@@ -1,12 +1,11 @@
-# CMake 构建目录（各预设/脚本各自命名）
-build/
-build-standalone/
-build-dist/
-build-multi/
-
-# 打包输出
-dist/
-multi/
+# 全部构建/打包输出统一收敛在 out/ 下：
+#   out/build/               嵌入模式 CMake 构建（应用侧 build-native.cjs）
+#   out/build-standalone/    预设独立构建（cmake --preset release 等）
+#   out/build-multi/         多平台脚本中间产物
+#   out/build-dist/          独立分发包构建
+#   out/dist/                install 树（include/ lib/ cmake 包）
+#   out/multi/               ⭐ 最终六平台产物 + 每平台 zip（消费方接口）
+out/
 
 # 编辑器/系统
 .cache/

@@ -10,14 +10,7 @@
 #ifndef MP_NATIVE_H
 #define MP_NATIVE_H
 
-#include <stdint.h>
-#include <stddef.h>
-
-#ifdef _WIN32
-  #define MP_API __declspec(dllexport)
-#else
-  #define MP_API __attribute__((visibility("default")))
-#endif
+#include "mp_def.h"
 
 #ifdef __cplusplus
 extern "C" {

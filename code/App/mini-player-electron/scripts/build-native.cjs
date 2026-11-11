@@ -20,7 +20,7 @@ const ROOT       = path.resolve(__dirname, '..');
 // 独立库工程位置：默认取同级 ../mp-native，可用环境变量 MP_NATIVE_DIR 覆盖
 // （库将来迁去独立仓库时，只需设置该变量，应用侧零改动）
 const NATIVE_DIR = process.env.MP_NATIVE_DIR || path.resolve(ROOT, '..', 'mp-native');
-const BUILD_DIR  = path.join(NATIVE_DIR, 'build');
+const BUILD_DIR  = path.join(NATIVE_DIR, 'out', 'build');
 const OUT_DIR    = path.join(ROOT, 'resources', 'native');
 
 if (!fs.existsSync(path.join(NATIVE_DIR, 'CMakeLists.txt'))) {
@@ -69,7 +69,7 @@ const isWin = process.platform === 'win32';
 
 // --- Configure ---
 const cmakeArgs = [
-  '-B', 'build', '-S', '.',
+  '-B', BUILD_DIR, '-S', '.',
   // 嵌入模式：产物直出本工程 resources/native（路径由库工程的 CMakeLists 接收）
   `-DMP_EMBED_OUTPUT_DIR=${OUT_DIR}`,
 ];
@@ -93,7 +93,7 @@ if (isWin) {
 run('cmake', cmakeArgs);
 
 // --- Build ---
-const buildArgs = ['--build', 'build', '-j', String(os.cpus().length)];
+const buildArgs = ['--build', BUILD_DIR, '-j', String(os.cpus().length)];
 if (isWin) buildArgs.push('--config', 'Release');
 run('cmake', buildArgs);
 

@@ -23,7 +23,7 @@ const ROOT = path.resolve(__dirname, '..');
 // 独立库工程的 multi/ 产物目录：默认取同级 ../mp-native/multi，
 // 可用环境变量 MP_NATIVE_MULTI_DIR 覆盖（库迁独立仓库时零改动）
 const MULTI = process.env.MP_NATIVE_MULTI_DIR
-  || path.resolve(ROOT, '..', 'mp-native', 'multi');
+  || path.resolve(ROOT, '..', 'mp-native', 'out', 'multi');
 const DEST = path.join(ROOT, 'resources', 'native');
 
 const argv = process.argv.slice(2);
