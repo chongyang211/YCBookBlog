@@ -6,7 +6,7 @@
 //   3. 所有权显式：谁分配谁释放（本库分配必通过 mp_free* 释放）
 //
 // 对应文档：
-//   docs/06.前端桌面端实现(Electron).md §3 C++ 原生扩展设计
+//   packages/website/10.Apps/05.综合音视频案例/06.Electron篇.md §3 C++ 原生扩展设计
 #ifndef MP_NATIVE_H
 #define MP_NATIVE_H
 

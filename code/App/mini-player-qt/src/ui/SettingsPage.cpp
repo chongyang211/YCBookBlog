@@ -121,7 +121,7 @@ SettingsPage::SettingsPage(PlayerService* player, MediaRepository* repo, QWidget
     for (const QString& line : {
         QStringLiteral("MiniPlayer · Qt 桌面端  v0.1.0"),
         QStringLiteral("C++17 · Qt 6 · QMediaPlayer · QSqlDatabase"),
-        QStringLiteral("配套：书中 10.Apps/07.综合音视频案例/05.Qt桌面端实现(C++三端共用).md")
+        QStringLiteral("配套：书中 10.Apps/05.综合音视频案例/05.Qt桌面三端版.md")
     }) {
         auto l = new QLabel(line, this);
         l->setStyleSheet(QStringLiteral("color:#64748b; font-size:12px;"));

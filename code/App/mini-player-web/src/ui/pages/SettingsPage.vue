@@ -181,7 +181,7 @@ function setRate(r: number) {
       <div class="card-header"><h3>关于</h3></div>
       <p>MiniPlayer · Web 端 <b>v0.2.0</b></p>
       <p class="mut">Vue 3 · TypeScript · Pinia · Dexie · Web Audio</p>
-      <p class="mut">配套：书中 10.Apps/07.综合音视频案例/04.Web 端实现(Vue3)</p>
+      <p class="mut">配套：书中 10.Apps/05.综合音视频案例/04.网页端Vue3实现.md</p>
     </div>
   </section>
 </template>

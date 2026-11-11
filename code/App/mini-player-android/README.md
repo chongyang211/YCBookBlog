@@ -1,6 +1,6 @@
 # MiniPlayer · Android 端配套工程 (v0.1)
 
-> 对应文档：`packages/website/10.Apps/05.综合音视频案例/02.Android端实现(Java+AndroidX).md`
+> 对应文档：`packages/website/10.Apps/05.综合音视频案例/02.安卓端Java实现.md`
 > 本工程是 MiniPlayer "**5 端 × 6 平台**" 教学案例中 Android 篇的 **v0.1 最小闭环**：
 > **纯 Java + AndroidX**，覆盖阶段①-④（MVP → MediaStore 扫描 → ExoPlayer 播放控制 → Room 持久化）。
 

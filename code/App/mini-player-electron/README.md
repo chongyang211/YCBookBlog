@@ -1,6 +1,6 @@
 # MiniPlayer · Electron 桌面端配套工程 (v0.1)
 
-> 对应文档：[06.前端桌面端实现(Electron).md](../../packages/website/10.Apps/07.综合音视频案例/06.前端桌面端实现(Electron).md)
+> 对应文档：[06.Electron篇.md](../../packages/website/10.Apps/05.综合音视频案例/06.Electron篇.md)
 > 本工程是 MiniPlayer "**5 端 × 6 平台**" 教学案例中 Electron 篇的 **v0.1 最小闭环**，演示：
 > - **Electron 三进程模型**（main / preload / renderer）
 > - **自写 C++ 共享库 `mp_native`**（CMake 产出 Linux `.so` / macOS `.dylib` / Windows `.dll`）
@@ -91,7 +91,7 @@ pnpm dist:mac     # dist/MiniPlayer-0.1.0-universal.dmg
 pnpm dist:win     # dist/MiniPlayer Setup 0.1.0.exe
 ```
 
-> ⚠ **macOS 公证**：若要分发给其他用户，还需对 `.app` 和内嵌的 `.dylib` 分别 codesign + notarize。详见文档 [§5 阶段⑨](../../packages/website/10.Apps/07.综合音视频案例/06.前端桌面端实现(Electron).md)。
+> ⚠ **macOS 公证**：若要分发给其他用户，还需对 `.app` 和内嵌的 `.dylib` 分别 codesign + notarize。详见文档 [§5 阶段⑨](../../packages/website/10.Apps/05.综合音视频案例/06.Electron篇.md)。
 
 ---
 
@@ -142,7 +142,7 @@ mini-player-electron/
 
 ## FFI 边界三条铁律（必读）
 
-对应文档 [§3.3](../../packages/website/10.Apps/07.综合音视频案例/06.前端桌面端实现(Electron).md)：
+对应文档 [§3.3](../../packages/website/10.Apps/05.综合音视频案例/06.Electron篇.md)：
 
 1. **所有权显式**：本库返回的堆内存必须通过 `mp_free` / `mp_metadata_release` / `mp_lrc_release` 释放
 2. **变长数据三件套**：指针 + 长度 + 释放函数（禁止 `\0` 结尾字符串夹二进制数据）
@@ -196,7 +196,7 @@ Windows 的 C++ 库生态碎片严重，vcpkg 是微软官方跨编译器包管�
 若你全家用 MinGW，也可以用 pacman 装 taglib，但 CMake 的 `find_package(TagLib)` 需要有相应的 CMake config 文件。
 
 ### Q: 为什么没用 node-addon-api（N-API）而用 koffi FFI？
-两条路线各有优劣，详见文档 [§7 挑战题 1](../../packages/website/10.Apps/07.综合音视频案例/06.前端桌面端实现(Electron).md)。
+两条路线各有优劣，详见文档 [§7 挑战题 1](../../packages/website/10.Apps/05.综合音视频案例/06.Electron篇.md)。
 简言之：**koffi 调用没有编译期绑定**（库换了不用重编 Node 侧），**N-API 性能略好且异常传播更自然**。本案例优先 koffi 是为了演示 "**C ABI 作为通用桥**" 的工程哲学。
 
 ---

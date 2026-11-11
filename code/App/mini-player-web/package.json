@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "MiniPlayer · Web 端实现（Vue 3 + TypeScript） —— 对应书中 10.Apps/07.综合音视频案例/04.Web端实现",
+  "description": "MiniPlayer · Web 端实现（Vue 3 + TypeScript） —— 对应书中 10.Apps/05.综合音视频案例/04.网页端Vue3实现",
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc -b && vite build",
