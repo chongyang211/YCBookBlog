@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MiniPlayer</string>
+    <string name="empty_hint">授权媒体权限后\n自动扫描设备音乐库</string>
+    <string name="play_pause">播放/暂停</string>
+    <string name="prev">上一首</string>
+    <string name="next">下一首</string>
+    <string name="audio_tab">音频</string>
+    <string name="video_tab">视频</string>
+</resources>

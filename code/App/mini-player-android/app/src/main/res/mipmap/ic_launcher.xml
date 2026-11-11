@@ -1,0 +1,13 @@
+<!-- API 24-25 兜底图标（vector）；API 26+ 走 mipmap-anydpi-v26 的自适应版本 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#A855F7"
+        android:pathData="M54,54m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M62,36L48,39.2v18.1c-1.1,-0.6 -2.4,-0.9 -3.8,-0.9c-3.9,0 -7,2.5 -7,5.6s3.1,5.6 7,5.6s7,-2.5 7,-5.6V45.3l10.8,-2.5v12.5c-1.1,-0.6 -2.4,-0.9 -3.8,-0.9c-3.9,0 -7,2.5 -7,5.6s3.1,5.6 7,5.6s7,-2.5 7,-5.6V36z" />
+</vector>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- item_media.xml · 列表条目：封面 + 标题/艺术家 + 时长 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null"
+        tools:src="@mipmap/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="15sp"
+            tools:text="夜曲" />
+
+        <TextView
+            android:id="@+id/tv_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp"
+            tools:text="周杰伦" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="12sp"
+        tools:text="3:49" />
+</LinearLayout>

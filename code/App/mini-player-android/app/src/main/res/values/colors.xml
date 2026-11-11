@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 品牌色：紫粉渐变系（与 Web/Qt/Electron 端一致） -->
+    <color name="brand_primary">#A855F7</color>
+    <color name="brand_pink">#EC4899</color>
+
+    <!-- 浅色主题（values/） -->
+    <color name="bg_light">#FAFAFA</color>
+    <color name="fg_light">#0F172A</color>
+    <color name="surface_light">#FFFFFF</color>
+</resources>

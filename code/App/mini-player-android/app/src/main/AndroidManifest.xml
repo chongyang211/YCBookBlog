@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ============ 媒体读取权限（三代分叉） ============ -->
+    <!-- API <= 32：整包共享存储 -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <!-- API 33+：细粒度 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MiniPlayer">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            TODO v0.2（§06 后台播放）：PlaybackService
+            <service
+                android:name=".service.PlaybackService"
+                android:exported="false"
+                android:foregroundServiceType="mediaPlayback">
+                <intent-filter>
+                    <action android:name="android.intent.action.MEDIA_BUTTON" />
+                </intent-filter>
+            </service>
+        -->
+    </application>
+</manifest>

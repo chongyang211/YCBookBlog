@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深色主题（values-night/ 同名覆盖，系统自动切换 · 文档 §08.3） -->
+    <color name="bg_light">#0F172A</color>
+    <color name="fg_light">#E2E8F0</color>
+    <color name="surface_light">#1E293B</color>
+</resources>

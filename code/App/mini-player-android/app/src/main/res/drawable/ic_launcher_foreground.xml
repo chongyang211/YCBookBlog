@@ -1,0 +1,13 @@
+<!-- 启动图标：简化音符矢量（教学工程用，正式发布建议出 mipmap 全套） -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#A855F7"
+        android:pathData="M54,54m-30,0a30,30 0,1 1,60 0a30,30 0,1 1,-60 0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M62,36L48,39.2v18.1c-1.1,-0.6 -2.4,-0.9 -3.8,-0.9c-3.9,0 -7,2.5 -7,5.6s3.1,5.6 7,5.6s7,-2.5 7,-5.6V45.3l10.8,-2.5v12.5c-1.1,-0.6 -2.4,-0.9 -3.8,-0.9c-3.9,0 -7,2.5 -7,5.6s3.1,5.6 7,5.6s7,-2.5 7,-5.6V36z" />
+</vector>
