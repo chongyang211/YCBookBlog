@@ -12,7 +12,6 @@
 #   out/dist/include/mp_native.h
 #   out/dist/lib/libmp_native.{so|dylib}
 #   out/dist/lib/cmake/mp-native/*                 # find_package 支持
-#   out/mp-native-<版本>-<平台>-<架构>.zip
 #
 # 兼容性：macOS 自带 bash 3.2（无关联数组/空数组展开陷阱），全部用基础语法。
 # ======================================================================
@@ -33,21 +32,13 @@ for arg in "$@"; do
   esac
 done
 
-# ---- 版本号：从 CMakeLists 提取 ----
-VERSION=$(grep -m1 'project(mp_native VERSION' CMakeLists.txt \
-  | sed -E 's/.*VERSION ([0-9.]+).*/\1/')
-
-# ---- 平台与架构 ----
+# ---- 平台 ----
 OS=$(uname -s)
-ARCH=$(uname -m)
 case "$OS" in
   Linux*) PLATFORM="linux" ;;
   Darwin) PLATFORM="macos" ;;
   *) echo "unsupported OS: $OS"; exit 1 ;;
 esac
-if [ "$UNIVERSAL" = "1" ] && [ "$PLATFORM" = "macos" ]; then
-  ARCH="universal"
-fi
 
 # ---- 清理 ----
 rm -rf out/build-dist out/dist
@@ -81,11 +72,7 @@ case "$PLATFORM" in
     ;;
 esac
 
-# ---- zip 打包 ----
-ZIP_NAME="mp-native-${VERSION}-${PLATFORM}-${ARCH}.zip"
-cd out/dist && zip -rq "../${ZIP_NAME}" . && cd ..
-
 echo
-echo "✓ packaged: mp-native/out/${ZIP_NAME}"
+echo "✓ packaged: out/dist/"
 echo "  contents:"
-unzip -l "${ZIP_NAME}"
+find out/dist -type f

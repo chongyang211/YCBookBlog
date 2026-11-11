@@ -8,7 +8,6 @@
 #   out/multi/linux-x64/libmp_native.so         ← Docker ubuntu:24.04
 #   out/multi/win32-x64/mp_native.dll           ← Docker + MinGW-w64
 #   out/multi/win32-ia32/mp_native.dll          ← Docker + MinGW-w64 (i686)
-#   out/multi/mp-native-<版本>-<平台>.zip        ← 每平台一个 zip
 #
 # 全部输出统一收敛在 out/ 下（构建中间产物 out/build-multi、最终产物 out/multi）
 #
@@ -31,8 +30,6 @@ for arg in "$@"; do
   esac
 done
 
-VERSION=$(grep -m1 'project(mp_native VERSION' CMakeLists.txt \
-  | sed -E 's/.*VERSION ([0-9.]+).*/\1/')
 OUT=out/multi
 BUILD_ROOT=out/build-multi
 DOCKER_IMAGE=ubuntu:24.04
@@ -51,7 +48,7 @@ cmake -S . -B "$BUILD_ROOT/darwin-arm64" \
   -DMP_EMBED_OUTPUT=OFF > /dev/null
 cmake --build "$BUILD_ROOT/darwin-arm64" -j > /dev/null
 mkdir -p "$OUT/darwin-arm64"
-cp build-multi/darwin-arm64/libmp_native.dylib "$OUT/darwin-arm64/"
+cp "$BUILD_ROOT/darwin-arm64/libmp_native.dylib" "$OUT/darwin-arm64/"
 lipo -info "$OUT/darwin-arm64/libmp_native.dylib"
 
 # ======================================================================
@@ -64,7 +61,7 @@ cmake -S . -B "$BUILD_ROOT/darwin-x64" \
   -DMP_EMBED_OUTPUT=OFF > /dev/null
 cmake --build "$BUILD_ROOT/darwin-x64" -j > /dev/null
 mkdir -p "$OUT/darwin-x64"
-cp build-multi/darwin-x64/libmp_native.dylib "$OUT/darwin-x64/"
+cp "$BUILD_ROOT/darwin-x64/libmp_native.dylib" "$OUT/darwin-x64/"
 lipo -info "$OUT/darwin-x64/libmp_native.dylib"
 
 # ======================================================================
@@ -109,18 +106,6 @@ if [ "$WITH_DOCKER" = "1" ]; then
 else
   echo "▷ 跳过 linux/windows（--no-docker）"
 fi
-
-# ======================================================================
-# 每平台一个 zip（动态发现 multi/ 下所有非空平台目录）
-# ======================================================================
-echo "──────────────────────────────────────────────"
-for dir in "$OUT"/*/; do
-  [ -d "$dir" ] || continue
-  [ -n "$(ls -A "$dir" 2>/dev/null)" ] || continue
-  p=$(basename "$dir")
-  (cd "$dir" && zip -qrg "../mp-native-${VERSION}-${p}.zip" .)
-  echo "  ✓ $p → mp-native-${VERSION}-${p}.zip"
-done
 
 # ======================================================================
 # 最终清点

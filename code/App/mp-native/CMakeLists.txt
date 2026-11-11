@@ -12,7 +12,6 @@
 #   cmake --build build -j
 #   cmake --install build --prefix dist
 #
-# 对应文档：packages/website/10.Apps/05.综合音视频案例/06.Electron桌面篇.md §04
 # ======================================================================
 cmake_minimum_required(VERSION 3.26)
 project(mp_native VERSION 1.0.0 LANGUAGES C CXX)

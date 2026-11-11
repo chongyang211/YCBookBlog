@@ -154,7 +154,7 @@ cmake --build out/build-standalone -j
 cmake --install out/build-standalone --prefix out/dist
 ```
 
-**out/dist 布局**（安装后的标准目录，可直接 zip 分发）：
+**out/dist 布局**（安装后的标准目录，目录级分发）：
 
 ```text
 out/dist/
@@ -167,7 +167,7 @@ out/dist/
 │       ├── mp-nativeConfigVersion.cmake
 │       └── mp-nativeTargets.cmake
 ├── bin/mp_native.dll                # Windows 运行时
-└── mp-native-1.0.0-<平台>-<架构>.zip
+└── （目录整体即分发单元；如需压缩请消费方自行处理）
 ```
 
 ---
@@ -189,7 +189,7 @@ out/multi/
 ├── linux-x64/libmp_native.so          # ELF x86-64（容器内交叉，ARM 容器也适用）
 ├── win32-x64/mp_native.dll            # PE32+ x64（MinGW-w64 交叉，静态链接 C++ 运行时）
 ├── win32-ia32/mp_native.dll           # PE32 i386（MinGW-w64 i686 交叉）
-└── mp-native-<版本>-<平台>.zip         # 每平台一个分发包
+└── （每个平台目录即分发单元，无额外打包文件）
 ```
 
 **实现要点**：
@@ -267,7 +267,7 @@ Rust (`extern "C"`)、Go (cgo)、C# (P/Invoke) 均可按 `mp_native.h` 直接声
 - **语义化版本**：`project(mp_native VERSION 1.0.0)` 与 `mp_version()` 返回值保持同步
 - **C ABI 兼容承诺**：MAJOR 版本内，已有符号签名不变、只增不删
 - **CMake 包兼容**：`SameMajorVersion`——消费方 `find_package(mp-native 1.0)` 在 1.x 内通用
-- **无 ELF/Dylib 版本号后缀**：产物文件名固定为 `libmp_native.so/.dylib`（避免 Electron `extraResources` 打包符号链接失效的坑）；版本追溯靠 zip 文件名 + `mp_version()`
+- **无 ELF/Dylib 版本号后缀**：产物文件名固定为 `libmp_native.so/.dylib`（避免 Electron `extraResources` 打包符号链接失效的坑）；版本追溯靠 `mp_version()`
 
 ---
 
@@ -305,14 +305,14 @@ mp-native/
     ├── build-multi/            # 多平台脚本中间产物
     ├── build-dist/             # 独立分发包构建
     ├── dist/                   # install 树（include/ lib/ cmake 包）
-    └── multi/                  # ⭐ 最终六平台产物 + 每平台 zip（消费方接口）
+    └── multi/                  # ⭐ 最终六平台产物（消费方接口）
 ```
 
 ---
 
 ## CI 分发流水线（建议）
 
-三平台 matrix 各跑 `package-native.*`，上传 zip artifact，打 tag 时发 GitHub Release：
+三平台 matrix 各跑 `package-native.*`，上传 `out/dist` 目录 artifact，打 tag 时发 GitHub Release：
 
 ```yaml
 strategy:
