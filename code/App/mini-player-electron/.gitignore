@@ -9,6 +9,8 @@ dist/
 
 # C++ 构建产物
 native/build/
+native/build-dist/
+native/dist/
 native/.cache/
 
 # 平台原生库最终存放位置（由 scripts/build-native.cjs 填充）

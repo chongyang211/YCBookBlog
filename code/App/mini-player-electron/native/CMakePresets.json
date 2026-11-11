@@ -1,0 +1,83 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": { "major": 3, "minor": 26, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "dev",
+      "displayName": "开发默认（嵌入 Electron，快速验证）",
+      "inherits": "base"
+    },
+    {
+      "name": "release",
+      "displayName": "独立分发 Release（不入 resources/）",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "MP_EMBED_OUTPUT": "OFF"
+      }
+    },
+    {
+      "name": "release-taglib",
+      "displayName": "独立分发 + TagLib 真实元数据",
+      "inherits": "release",
+      "cacheVariables": { "MP_WITH_TAGLIB": "ON" }
+    },
+    {
+      "name": "full",
+      "displayName": "全功能（TagLib + 系统媒体控制）",
+      "inherits": "release",
+      "cacheVariables": {
+        "MP_WITH_TAGLIB": "ON",
+        "MP_WITH_SYSMEDIA": "ON"
+      }
+    },
+    {
+      "name": "universal-macos",
+      "displayName": "macOS Universal（arm64 + x86_64）",
+      "inherits": "full",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" },
+      "cacheVariables": { "MP_UNIVERSAL_MACOS": "ON" }
+    },
+    {
+      "name": "win-x64",
+      "displayName": "Windows x64（需 VCPKG_ROOT，含 TagLib）",
+      "inherits": "release",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": {
+        "MP_WITH_TAGLIB": "ON",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      },
+      "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "examples",
+      "displayName": "含纯 C 消费示例 mp_smoke",
+      "inherits": "release",
+      "cacheVariables": { "MP_BUILD_EXAMPLES": "ON" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "dev", "configurePreset": "dev" },
+    { "name": "release", "configurePreset": "release" },
+    { "name": "release-taglib", "configurePreset": "release-taglib" },
+    { "name": "full", "configurePreset": "full" },
+    { "name": "universal-macos", "configurePreset": "universal-macos" },
+    { "name": "win-x64", "configurePreset": "win-x64" },
+    { "name": "examples", "configurePreset": "examples" }
+  ],
+  "testPresets": [
+    {
+      "name": "smoke",
+      "configurePreset": "examples",
+      "output": { "outputOnFailure": true }
+    }
+  ]
+}
