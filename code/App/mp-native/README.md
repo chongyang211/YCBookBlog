@@ -44,6 +44,18 @@ mp_kv_get(db, "key", &v, &n);                    // 堆返回 → mp_free 释放
 mp_kv_close(db);
 ```
 
+## C ABI 接口总览（26 个符号，6 组）
+
+| 组 | 符号（`mp_` 前缀） | 状态管理 | 所有权约定 |
+|----|-------------------|---------|-----------|
+| 基础 ×3 | `version` `free` `error_string` | 无 | 静态字符串不释放 / 唯一释放口 |
+| kv ×10 | `kv_open/put/get/get_str/delete/has/count/foreach/compact/close` | 不透明句柄 `mp_kv*` | `get` 堆返回 → `mp_free`；`open/close` 配对 |
+| log ×5 | `log_init/set_level/add_sink/write/shutdown` | 进程级单例 | 回调无锁调用 |
+| media ×5 | `probe` `metadata_read/release` `lrc_parse/release` | 无 | 变长返回配对释放 |
+| sysmedia ×3 | `sysmedia_init/update/shutdown` | 回调 + 平台会话 | 回调在非主线程，宿主自行 marshal |
+
+设计原则：C ABI 唯一边界 · 不透明句柄 · 所有权配对 · 长度显式传递 · 回调无锁 · 路径宿主注入 · 编译开关隔离平台 · 版本编译期注入。
+
 ## C ABI 三铁律
 
 1. **所有权显式**：本库分配的内存只用本库的 `mp_free` / `*_release` 释放（跨 CRT 堆混用必崩）

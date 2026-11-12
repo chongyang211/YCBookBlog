@@ -9,6 +9,13 @@
   "license": "MIT",
   "main": "out/main/index.js",
   "type": "module",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "better-sqlite3",
+      "esbuild"
+    ]
+  },
   "scripts": {
     "dev": "node scripts/fetch-native.cjs && electron-vite dev",
     "start": "node scripts/fetch-native.cjs && electron-vite preview",
@@ -49,6 +56,6 @@
     "vite": "^6.0.0"
   },
   "engines": {
-    "node": ">=20.11"
+    "node": ">=20.19"
   }
 }

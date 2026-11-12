@@ -9,7 +9,7 @@
 | **Linux** | `sudo apt install cmake g++ pkg-config`（可选：`libtag1-dev libdbus-1-dev`） |
 | **macOS** | `brew install cmake pkg-config`（可选：`brew install taglib`） + Xcode Command Line Tools |
 | **Windows** | VS 2022 Build Tools + CMake（可选：`vcpkg install taglib:x64-windows`，并设置环境变量 `VCPKG_ROOT`） |
-| **通用** | Node.js ≥ 20.11 + pnpm 9+ |
+| **通用** | Node.js ≥ 20.19（Electron 40 的安装脚本依赖 require(esm) 默认启用）+ pnpm 10+ |
 
 ### 三步跑起来
 
