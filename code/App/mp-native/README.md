@@ -26,11 +26,116 @@ node scripts/build.cjs multi [--no-docker] [--taglib] [--sysmedia]
 cmake --preset release && cmake --build --preset release -j
 ```
 
+## JS 调用 C ABI
+
+Electron 场景完整链路。调用要穿过 **Electron 三进程 + FFI 边界**，共四层。
+
+下面以消费方 `mini-player-electron` 的真实代码为例：读取媒体文件元数据 `mp_metadata_read`。数据流向：
+
+```text
+React 组件（renderer/App.tsx）
+   │  window.api.readMetadata(p)              ← 只能看到 preload 白名单
+   ▼
+contextBridge（preload/index.ts）
+   │  ipcRenderer.invoke('native:readMetadata', p)   ← 唯一穿越沙箱的桥
+   ▼
+ipcMain.handle（main/index.ts）                ← 参数校验、错误兜底
+   ▼
+koffi 绑定层（main/native/bindings.ts）
+   │  fn.mp_metadata_read(path, out)          ← FFI 边界：参数/返回值 marshaling
+   ▼
+mp_native.dll / .dylib / .so  →  mp_metadata_read()  ← C ABI（操作系统固化的调用约定）
+```
+
+### 四层各自怎么写（以 `mp_metadata_read` 为例）
+
+**① C 侧**（`include/mp_native.h`，已实现）：
+
+```c
+typedef struct {
+  const char* title;        // UTF-8，可能为 NULL
+  const char* artist;
+  const char* album;
+  int32_t     duration_ms;
+  int32_t     bitrate_kbps;
+  int32_t     sample_rate;
+  int32_t     channels;
+} MpMetadata;
+
+MP_API int  mp_metadata_read(const char* file_path, MpMetadata* out);
+MP_API void mp_metadata_release(MpMetadata* meta);
+```
+
+**② koffi 绑定**（`main/native/bindings.ts`，FFI 核心——翻译 C 签名）：
+
+```ts
+const lib = koffi.load(ensureNativeLibExists());      // 懒加载 .so/.dylib/.dll
+
+// ⭐ koffi struct：字段名/顺序与 C 头文件一字不差
+const MpMetadata = koffi.struct('MpMetadata', {
+  title:        'string',
+  artist:       'string',
+  album:        'string',
+  duration_ms:  'int32',
+  bitrate_kbps: 'int32',
+  sample_rate:  'int32',
+  channels:     'int32',
+});
+
+const mpMetadataRead = lib.func('mp_metadata_read',
+                         'int', ['string', koffi.out(koffi.pointer(MpMetadata))]);
+const mpMetadataRelease = lib.func('mp_metadata_release', 'void', [koffi.pointer(MpMetadata)]);
+
+export function readMetadata(path: string): NativeMetadata | null {
+  const out: any = {};                                // koffi.out 出参容器
+  const rc = mpMetadataRead(path, out);
+  if (rc !== 0) return null;
+  // ⭐ 先浅拷贝一份出来，再释放原生字段（字符串指针随 release 失效）
+  const copy = { title: out.title ?? null, artist: out.artist ?? null,
+                 album: out.album ?? null, duration_ms: out.duration_ms, /* … */ };
+  mpMetadataRelease(out);
+  return copy;
+}
+```
+
+**③ IPC 通道**（main 进程注册 + preload 白名单）：
+
+```ts
+// main/index.ts：ipcMain.handle —— try/catch 把异常翻译成可序列化错误
+ipcMain.handle('native:readMetadata', (_e, filePath: string) => {
+  try {
+    const m = getNative().readMetadata(filePath);
+    if (!m) return { ok: false, reason: 'metadata_read failed（可能未启用 TagLib）' };
+    return { ok: true, title: m.title ?? path.basename(filePath), durationMs: m.duration_ms, /* … */ };
+  } catch (e: any) {
+    return { ok: false, reason: e.message };
+  }
+});
+
+// preload/index.ts：contextBridge 白名单——renderer 能看到的全部能力就这些
+contextBridge.exposeInMainWorld('api', {
+  readMetadata: (p: string) => ipcRenderer.invoke('native:readMetadata', p),
+});
+```
+
+**④ renderer 调用**（React，类型来自 `shared/types.ts` 的 `Api` 接口）：
+
+```ts
+const m = await window.api.readMetadata(p);   // App.tsx 实际调用
+```
+
+### 三条必守规则
+
+1. **出参用 `koffi.out`**：C 的 `T* out` 在 koffi 里是 `koffi.out(koffi.pointer(T))`，调用后从容器 `deref()` 取值；**堆内字符串先复制再调 `*_release`**（铁律①所有权配对）
+2. **不透明句柄只存不碰**：`mp_kv*` 这类句柄在 JS 侧是不透明指针值，只保存、传递，永不解引用；`open/close` 必须配对
+3. **回调必须跨线程 marshal**：C 回调（如 `mp_log_sink_cb`、sysmedia 回调）在库的线程触发，Node 的 `webContents.send` 只能在主线程调——回调体先 `setImmediate` 再碰 Electron API
+
+> koffi struct 字段**顺序与 C 头文件一字不差**；字符串字段 koffi 自动 UTF-8 转换，但仅到 release 前有效。
+
 ## 消费
 
 ```cmake
 # CMake：find_package(mp-native 1.0 REQUIRED)  →  mp::mp_native
-# Node：koffi.load('<平台库路径>')  +  lib.func('mp_kv_open', ...)
 # Python/Rust/Go：按头文件声明 extern "C" 即可
 ```
 
