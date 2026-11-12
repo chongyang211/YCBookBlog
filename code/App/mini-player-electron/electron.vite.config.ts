@@ -20,7 +20,14 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
     build: {
       rollupOptions: {
-        input: resolve('src/preload/index.ts')
+        input: resolve('src/preload/index.ts'),
+        output: {
+          // sandbox: true 下 preload 只支持 CommonJS——
+          // .cjs 强制 CJS，不受 package.json "type": "module" 影响
+          format: 'cjs',
+          entryFileNames: '[name].cjs',
+          chunkFileNames: '[name]-[hash].cjs'
+        }
       }
     }
   },

@@ -19,6 +19,11 @@ export default function App() {
   const [err, setErr]           = useState<string | null>(null);
 
   useEffect(() => {
+    /* preload 未加载时（api 未注入）降级提示，避免整页崩溃 */
+    if (!window.api) {
+      setErr('preload 未加载：window.api 不可用。请检查 out/preload/ 是否存在且与 main 中配置的路径一致。');
+      return;
+    }
     window.api.getVersion().then(setVer).catch((e) => setErr(e.message));
   }, []);
 
