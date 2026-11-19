@@ -2,9 +2,9 @@
   "generatedAt": "2026-11-12T08:14:43.990Z",
   "note": "全站 permalink 占用名单。新增语义 permalink 前请先查重（避免 /pages/perf/ 式撞车）。",
   "stats": {
-    "total": 1133,
+    "total": 1135,
     "hash6": 925,
-    "semanticReserved": 181,
+    "semanticReserved": 182,
     "structural": 27
   },
   "structuralRootPaths": [
@@ -450,13 +450,18 @@
     },
     {
       "permalink": "/pages/c07r04/",
-      "file": "05.内功/07.编译与链接/04.ABI与调用约定.md",
+      "file": "05.内功/07.编译与链接/04.ABI设计与调用约定.md",
       "refs": 7
     },
     {
       "permalink": "/pages/c07r05/",
       "file": "05.内功/07.编译与链接/05.语言到机器的路线.md",
       "refs": 7
+    },
+    {
+      "permalink": "/pages/c07r06/",
+      "file": "05.内功/07.编译与链接/06.编译器与构建工具.md",
+      "refs": 1
     },
     {
       "permalink": "/pages/programming/",
@@ -1269,8 +1274,9 @@
     "/pages/c07r01/": "05.内功/07.编译与链接/01.从源码到可执行.md",
     "/pages/c07r02/": "05.内功/07.编译与链接/02.符号表与重定位.md",
     "/pages/c07r03/": "05.内功/07.编译与链接/03.静态链接与动态链接.md",
-    "/pages/c07r04/": "05.内功/07.编译与链接/04.ABI与调用约定.md",
+    "/pages/c07r04/": "05.内功/07.编译与链接/04.ABI设计与调用约定.md",
     "/pages/c07r05/": "05.内功/07.编译与链接/05.语言到机器的路线.md",
+    "/pages/c07r06/": "05.内功/07.编译与链接/06.编译器与构建工具.md",
     "/pages/ab0d7c/": "05.内功/08.性能的优化/00.README.md",
     "/pages/3f4b9e/": "05.内功/08.性能的优化/00.大纲规划.md",
     "/pages/8ef103/": "05.内功/08.性能的优化/03.内存监控与治理.md",
